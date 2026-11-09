@@ -1,0 +1,28 @@
+# dependências
+node_modules/
+
+# Next.js
+.next/
+out/
+build/
+
+# chaves e variáveis de ambiente (NUNCA no GitHub)
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Supabase local
+supabase/.temp/
+
+# sistema e editor
+.DS_Store
+Thumbs.db
+.idea/
+
+# logs
+*.log
+npm-debug.log*
+
+# outros
+.vercel
