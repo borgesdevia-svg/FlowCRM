@@ -1,7 +1,46 @@
 .formulario {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
+}
+
+/* ---------- grupos "1 Contacto" e "2 Negócio" ---------- */
+/* fieldset = grupo de campos; tiramos o contorno que o browser põe por defeito */
+.grupo {
+  border: none;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* o número do grupo num quadradinho verde, à esquerda do título */
+.tituloGrupo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  color: var(--cor-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.tituloGrupo b {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 1px solid rgba(32, 201, 107, 0.3);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.75rem;
+}
+
+/* o segundo grupo fica separado do primeiro por uma linha */
+.grupo + .grupo {
+  padding-top: 22px;
+  border-top: 1px solid var(--cor-contorno);
 }
 
 .duasColunas {
@@ -10,24 +49,59 @@
   gap: 16px;
 }
 
-/* ---------- escolha do estado (radio buttons) ---------- */
+.opcional {
+  margin-left: 4px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+/* ---------- caixa de texto com ícone dentro ---------- */
+.comIcone {
+  position: relative;
+}
+
+.icone {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-fraco);
+  pointer-events: none; /* clicar no ícone vai para a caixa */
+  transition: color 0.2s;
+}
+
+/* espaço à esquerda para o ícone (o seletor tem de ser mais forte que o ".campo input" global) */
+.comIcone input {
+  padding-left: 40px !important;
+}
+
+/* quando a caixa está selecionada, o ícone fica verde */
+.comIcone:focus-within .icone {
+  color: var(--cor-destaque);
+}
+
+.euro {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ---------- escolha da fase (radio buttons) ---------- */
 .estados {
-  border: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.estados legend {
+.rotulo {
   font-size: 0.88rem;
   font-weight: 500;
-  margin-bottom: 6px;
 }
 
-/* grelha 2x2: os 4 estados ficam sempre arrumados, em qualquer largura */
+/* as opções ocupam o espaço que houver: 4 numa linha se couberem, senão 2 */
 .opcoes {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 8px;
 }
 
@@ -49,7 +123,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 8px;
+  padding: 11px 8px;
   border-radius: var(--raio);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--cor-texto-suave);
@@ -73,10 +147,11 @@
   border-color: rgba(255, 255, 255, 0.25);
 }
 
-/* opção escolhida: contorno e fundo na cor do estado */
+/* opção escolhida: contorno, fundo e brilho na cor do estado */
 .opcao input:checked + span {
   border-color: var(--cor);
   background: color-mix(in srgb, var(--cor) 16%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--cor) 25%, transparent);
   color: var(--cor-texto);
 }
 
@@ -86,12 +161,167 @@
 
 .acoes {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  margin-top: 4px;
+  padding-top: 4px;
+}
+
+/* ============ Página "Novo cliente": formulário + pré-visualização ============ */
+.comPrevia {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+.cartaoForm {
+  padding: 26px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+/* a coluna da direita acompanha o scroll */
+.lado {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rotuloPrevia {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* cartão de pré-visualização: brilho no canto com a cor da fase */
+.previa {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--cor) 40%, var(--cor-contorno));
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--cor) 22%, transparent), transparent 60%),
+    var(--cor-cartao);
+  transition: border-color 0.3s;
+}
+
+.topoPrevia {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(32, 201, 107, 0.25);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.nomePrevia {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nomePrevia strong,
+.nomePrevia small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nomePrevia strong {
+  font-weight: 600;
+}
+
+.nomePrevia small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+/* enquanto não há nome, o texto de exemplo fica apagado */
+.vazio {
+  color: var(--cor-texto-fraco);
+}
+
+.dadosPrevia {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--cor-contorno);
+  font-size: 0.86rem;
+}
+
+.dadosPrevia div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dadosPrevia dt {
+  color: var(--cor-texto-fraco);
+}
+
+.dadosPrevia dd {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* etiqueta da fase, como na lista de clientes */
+.fase {
+  align-self: flex-start;
+  padding: 4px 11px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cor) 18%, transparent);
+  color: color-mix(in srgb, var(--cor) 50%, white);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.notaPrevia {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+/* ---------- ecrãs mais pequenos ---------- */
+@media (max-width: 960px) {
+  /* a pré-visualização passa para baixo do formulário */
+  .comPrevia {
+    grid-template-columns: 1fr;
+  }
+
+  .lado {
+    position: static;
+  }
 }
 
 @media (max-width: 600px) {
   .duasColunas {
     grid-template-columns: 1fr;
+  }
+
+  .cartaoForm {
+    padding: 18px;
   }
 }

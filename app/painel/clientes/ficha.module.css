@@ -39,19 +39,6 @@
   color: var(--cor-texto);
 }
 
-/* título da página "Adicionar cliente" */
-.pagina > h1 {
-  font-size: clamp(1.7rem, 4vw, 2.2rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  margin-bottom: 8px;
-}
-
-.subtitulo {
-  color: var(--cor-texto-suave);
-  margin-bottom: 28px;
-}
-
 /* ============ Ficha: cabeçalho grande ============ */
 /* --cor (cor do estado) vem do style: dá um brilho dessa cor no canto do cartão */
 .cabecalhoFicha {
