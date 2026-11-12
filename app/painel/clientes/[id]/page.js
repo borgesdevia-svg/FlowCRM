@@ -4,6 +4,7 @@ import { obterSessao } from "@/lib/sessao";
 import { obterEstado, formatarData } from "@/lib/estados";
 import FormCliente from "@/components/clientes/FormCliente";
 import BotaoApagarCliente from "@/components/clientes/BotaoApagarCliente";
+import Historico from "@/components/clientes/Historico";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
@@ -16,7 +17,7 @@ export default async function PaginaCliente({ params }) {
   const { id } = await params;
   if (!REGEX_UUID.test(id)) notFound();
 
-  const { supabase, eAdmin } = await obterSessao();
+  const { supabase, perfil, eAdmin } = await obterSessao();
 
   // se o cliente não existir OU for de outra empresa/de outro comercial,
   // o RLS não o devolve e mostramos a página "não encontrado"
@@ -33,6 +34,13 @@ export default async function PaginaCliente({ params }) {
     const { data } = await supabase.from("perfis").select("id, nome").order("nome");
     membros = data ?? [];
   }
+
+  // notas deste cliente, da mais recente para a mais antiga, com o nome do autor
+  const { data: interacoes } = await supabase
+    .from("interacoes")
+    .select("id, tipo, nota, criado_em, autor_id, perfis(nome)")
+    .eq("cliente_id", id)
+    .order("criado_em", { ascending: false });
 
   const est = obterEstado(cliente.estado);
 
@@ -54,14 +62,23 @@ export default async function PaginaCliente({ params }) {
         </span>
       </p>
 
-      <FormCliente cliente={cliente} membros={membros} />
-
-      <div className={styles.zonaPerigo}>
+      {/* duas colunas em ecrãs largos: dados do cliente | histórico */}
+      <div className={styles.colunas}>
         <div>
-          <strong>Apagar este cliente</strong>
-          <p>Não dá para desfazer.</p>
+          <FormCliente cliente={cliente} membros={membros} />
+
+          <div className={styles.zonaPerigo}>
+            <div>
+              <strong>Apagar este cliente</strong>
+              <p>Não dá para desfazer.</p>
+            </div>
+            <BotaoApagarCliente id={cliente.id} nome={cliente.nome} />
+          </div>
         </div>
-        <BotaoApagarCliente id={cliente.id} nome={cliente.nome} />
+
+        <div className={styles.colunaLateral}>
+          <Historico clienteId={cliente.id} interacoes={interacoes ?? []} perfilId={perfil.id} eAdmin={eAdmin} />
+        </div>
       </div>
     </div>
   );

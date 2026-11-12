@@ -24,9 +24,10 @@
   margin-bottom: 6px;
 }
 
+/* grelha 2x2: os 4 estados ficam sempre arrumados, em qualquer largura */
 .opcoes {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
@@ -54,6 +55,7 @@
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
   text-align: center;
+  white-space: nowrap;
   transition: border-color 0.15s, background 0.15s, color 0.15s;
 }
 
@@ -91,9 +93,5 @@
 @media (max-width: 600px) {
   .duasColunas {
     grid-template-columns: 1fr;
-  }
-
-  .opcoes {
-    grid-template-columns: 1fr 1fr;
   }
 }

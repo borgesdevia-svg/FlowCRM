@@ -5,6 +5,36 @@
   flex-direction: column;
 }
 
+/* a ficha de um cliente existente é mais larga, porque tem duas colunas */
+.pagina:has(.colunas) {
+  max-width: 1200px;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.colunaLateral {
+  padding-left: 40px;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 1100px) {
+  .colunas {
+    grid-template-columns: 1fr;
+  }
+
+  .colunaLateral {
+    padding-left: 0;
+    padding-top: 32px;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
 /* link para voltar à lista, com uma pequena seta desenhada em CSS */
 .voltar {
   align-self: flex-start;

@@ -1,0 +1,161 @@
+/* Estilos do histórico de notas e do formulário de nota (também usados pelas tarefas) */
+.seccao {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seccao h2 {
+  font-size: 1.15rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formulario textarea {
+  resize: vertical; /* só se pode esticar na vertical */
+}
+
+/* texto só para leitores de ecrã (a etiqueta existe, mas não se vê) */
+.escondido {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- tipo de registo (radio) ---------- */
+.tipos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tipo {
+  position: relative;
+  cursor: pointer;
+}
+
+.tipo input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tipo span {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.tipo input:checked + span {
+  border-color: var(--cor-destaque);
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--cor-texto);
+}
+
+.tipo input:focus-visible + span {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
+}
+
+/* ---------- lista (linha do tempo) ---------- */
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 6px;
+}
+
+.item {
+  position: relative;
+  padding: 0 0 18px 20px;
+}
+
+/* bolinha na linha do tempo */
+.item::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cor-fundo);
+  border: 2px solid var(--cor-destaque);
+}
+
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.etiqueta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chamada {
+  color: #93c5fd;
+}
+
+.email {
+  color: #c4b5fd;
+}
+
+.reuniao {
+  color: #fcd34d;
+}
+
+.nota {
+  color: var(--cor-texto-suave);
+}
+
+.meta {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+.apagar {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cor-texto-fraco);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.apagar:hover {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.texto {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  font-size: 0.93rem;
+}
