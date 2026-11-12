@@ -1,0 +1,60 @@
+/*
+  Estilos globais do FlowCRM.
+  As cores estão definidas uma única vez como "variáveis CSS" (--nome).
+  Em qualquer ficheiro CSS usamos var(--nome); se quisermos mudar uma cor,
+  basta mudar aqui. Paleta definida no CLAUDE.md (tema escuro, destaque verde).
+*/
+:root {
+  /* base */
+  --cor-fundo: #0a0a0a;
+  --cor-cartao: #121212;
+  --cor-contorno: #1f2a26;
+  --cor-superficie-verde: #0b2a22;
+
+  /* destaque e texto */
+  --cor-destaque: #22c55e;
+  --cor-texto: #f2f2f2;
+  --cor-texto-suave: #a3a3a3;
+
+  /* estados do cliente */
+  --cor-estado-novo: #2563eb;
+  --cor-estado-negociacao: #d97706;
+  --cor-estado-ativo: #16a34a;
+  --cor-estado-perdido: #6b7280;
+
+  /* medidas reutilizadas */
+  --raio: 10px;
+
+  /* diz ao browser que o site é escuro (barras de scroll, campos, etc.) */
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--cor-destaque);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,48 @@
+/* Estilos só da página inicial (CSS Module: os nomes não colidem com outras páginas) */
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.cartao {
+  width: 100%;
+  max-width: 480px;
+  padding: 32px;
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--raio);
+  text-align: center;
+}
+
+.titulo {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.titulo span {
+  color: var(--cor-destaque);
+}
+
+.subtitulo {
+  color: var(--cor-texto-suave);
+  margin-bottom: 24px;
+}
+
+.estado {
+  padding: 12px;
+  border-radius: var(--raio);
+  font-size: 0.9rem;
+}
+
+.ok {
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+}
+
+.erro {
+  background: #2a0b0b;
+  color: #f87171;
+}
