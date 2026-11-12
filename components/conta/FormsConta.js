@@ -4,8 +4,11 @@
 
 import { useActionState } from "react";
 import { mudarNome, mudarPassword } from "@/lib/acoes/conta";
+import Icone from "@/components/Icone";
+import CampoPassword from "@/components/CampoPassword";
 
 const estiloForm = { display: "flex", flexDirection: "column", gap: 14 };
+const estiloBotao = { alignSelf: "flex-start" };
 
 // mensagem de erro ou de sucesso devolvida pela action
 function Mensagem({ estado }) {
@@ -22,9 +25,12 @@ export function FormNome({ nomeAtual }) {
       <Mensagem estado={estado} />
       <div className="campo">
         <label htmlFor="nome">Nome</label>
-        <input id="nome" name="nome" autoComplete="name" defaultValue={estado.nome ?? nomeAtual} />
+        <div className="com-icone">
+          <Icone nome="utilizador" tamanho={17} className="icone-campo" />
+          <input id="nome" name="nome" autoComplete="name" defaultValue={estado.nome ?? nomeAtual} />
+        </div>
       </div>
-      <button type="submit" className="botao" disabled={pendente} style={{ alignSelf: "flex-start" }}>
+      <button type="submit" className="botao" disabled={pendente} style={estiloBotao}>
         {pendente ? "A guardar..." : "Guardar nome"}
       </button>
     </form>
@@ -38,19 +44,20 @@ export function FormPassword() {
     // key: depois de mudar com sucesso, os campos ficam vazios
     <form action={accao} key={estado.sucesso} style={estiloForm}>
       <Mensagem estado={estado} />
+      {/* CampoPassword: caixa escondida com botão "Mostrar" */}
       <div className="campo">
         <label htmlFor="atual">Password atual</label>
-        <input id="atual" name="atual" type="password" autoComplete="current-password" />
+        <CampoPassword id="atual" name="atual" autoComplete="current-password" />
       </div>
       <div className="campo">
         <label htmlFor="nova">Nova password</label>
-        <input id="nova" name="nova" type="password" autoComplete="new-password" placeholder="Mínimo 8 caracteres" />
+        <CampoPassword id="nova" name="nova" autoComplete="new-password" placeholder="Mínimo 8 caracteres" />
       </div>
       <div className="campo">
         <label htmlFor="confirmacao">Repete a nova password</label>
-        <input id="confirmacao" name="confirmacao" type="password" autoComplete="new-password" />
+        <CampoPassword id="confirmacao" name="confirmacao" autoComplete="new-password" />
       </div>
-      <button type="submit" className="botao" disabled={pendente} style={{ alignSelf: "flex-start" }}>
+      <button type="submit" className="botao" disabled={pendente} style={estiloBotao}>
         {pendente ? "A mudar..." : "Mudar password"}
       </button>
     </form>
