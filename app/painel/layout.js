@@ -57,11 +57,14 @@ export default async function LayoutPainel({ children }) {
         </nav>
 
         <div className={styles.utilizador}>
-          <span className={styles.avatar}>{iniciais}</span>
-          <div className={styles.dadosUtilizador}>
-            <strong>{perfil.nome}</strong>
-            <small>{eAdmin ? "Administrador" : "Comercial"}</small>
-          </div>
+          {/* o avatar e o nome levam à página "A minha conta" */}
+          <Link href="/painel/conta" className={styles.linkConta} title="A minha conta">
+            <span className={styles.avatar}>{iniciais}</span>
+            <span className={styles.dadosUtilizador}>
+              <strong>{perfil.nome}</strong>
+              <small>{eAdmin ? "Administrador" : "Comercial"}</small>
+            </span>
+          </Link>
           {/* logout: o formulário chama a Server Action "sair" */}
           <form action={sair}>
             <button type="submit" className={styles.sair} title="Terminar sessão">

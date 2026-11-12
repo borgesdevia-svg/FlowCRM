@@ -123,6 +123,23 @@ a.itemAtivo:hover {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.linkConta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px;
+  margin: -4px;
+  border-radius: 10px;
+  color: var(--cor-texto);
+  transition: background 0.2s;
+}
+
+.linkConta:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .avatar {
   flex-shrink: 0;
   width: 34px;
