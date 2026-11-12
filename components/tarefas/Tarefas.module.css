@@ -1,0 +1,154 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.linhaForm {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.tarefa {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* círculo para marcar como feita */
+.visto {
+  position: relative;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.visto:hover {
+  border-color: var(--cor-destaque);
+}
+
+.visto:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* tarefa feita: círculo verde com um visto desenhado em CSS */
+.feita .visto {
+  border-color: var(--cor-destaque);
+  background: var(--cor-destaque);
+}
+
+.feita .visto::after {
+  content: "";
+  position: absolute;
+  left: 5.5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border-right: 2px solid #052e16;
+  border-bottom: 2px solid #052e16;
+  transform: rotate(45deg);
+}
+
+.corpo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.titulo {
+  overflow-wrap: anywhere;
+  font-size: 0.93rem;
+}
+
+.feita .titulo {
+  color: var(--cor-texto-fraco);
+  text-decoration: line-through;
+}
+
+.detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+.detalhes a {
+  color: var(--cor-texto-suave);
+}
+
+.detalhes a:hover {
+  color: var(--cor-destaque);
+}
+
+.atrasada,
+.hoje {
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0 7px;
+  border-radius: 999px;
+}
+
+.atrasada {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.12);
+}
+
+.hoje {
+  color: #fcd34d;
+  background: rgba(252, 211, 77, 0.12);
+}
+
+.apagar {
+  padding: 2px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cor-texto-fraco);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+/* o "Apagar" só aparece ao passar o rato ou ao navegar com o teclado */
+.tarefa:hover .apagar,
+.apagar:focus-visible {
+  opacity: 1;
+}
+
+.apagar:hover {
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+/* em ecrãs tácteis não há "passar o rato": o botão fica sempre visível */
+@media (hover: none) {
+  .apagar {
+    opacity: 1;
+  }
+}

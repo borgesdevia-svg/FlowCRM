@@ -5,6 +5,8 @@ import { obterEstado, formatarData } from "@/lib/estados";
 import FormCliente from "@/components/clientes/FormCliente";
 import BotaoApagarCliente from "@/components/clientes/BotaoApagarCliente";
 import Historico from "@/components/clientes/Historico";
+import FormTarefa from "@/components/tarefas/FormTarefa";
+import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
@@ -42,6 +44,14 @@ export default async function PaginaCliente({ params }) {
     .eq("cliente_id", id)
     .order("criado_em", { ascending: false });
 
+  // tarefas deste cliente: primeiro as por fazer, depois por data limite
+  const { data: tarefas } = await supabase
+    .from("tarefas")
+    .select("id, cliente_id, titulo, data_limite, concluida")
+    .eq("cliente_id", id)
+    .order("concluida")
+    .order("data_limite", { ascending: true, nullsFirst: false });
+
   const est = obterEstado(cliente.estado);
 
   return (
@@ -77,6 +87,12 @@ export default async function PaginaCliente({ params }) {
         </div>
 
         <div className={styles.colunaLateral}>
+          <section className={styles.blocoTarefas}>
+            <h2>Tarefas</h2>
+            <FormTarefa clienteId={cliente.id} />
+            <ListaTarefas tarefas={tarefas ?? []} mensagemVazia="Sem tarefas para este cliente." />
+          </section>
+
           <Historico clienteId={cliente.id} interacoes={interacoes ?? []} perfilId={perfil.id} eAdmin={eAdmin} />
         </div>
       </div>

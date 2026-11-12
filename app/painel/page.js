@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
+import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import styles from "./inicio.module.css";
 
 // Rota /painel — página inicial da área privada (componente de servidor).
@@ -26,6 +27,16 @@ export default async function PaginaPainel() {
   const { count: tamanhoEquipa } = await supabase
     .from("perfis")
     .select("id", { count: "exact", head: true });
+
+  // "As minhas tarefas": as que estão por fazer e são minhas, por data limite
+  // (clientes(nome) junta o nome do cliente de cada tarefa)
+  const { data: minhasTarefas } = await supabase
+    .from("tarefas")
+    .select("id, cliente_id, titulo, data_limite, concluida, clientes(nome)")
+    .eq("responsavel_id", perfil.id)
+    .eq("concluida", false)
+    .order("data_limite", { ascending: true, nullsFirst: false })
+    .limit(8);
 
   // "Primeiros passos": cada passo fica feito quando os dados o confirmam
   const passos = [
@@ -81,6 +92,16 @@ export default async function PaginaPainel() {
             <strong>{contagem[estado.chave] ?? 0}</strong>
           </article>
         ))}
+      </section>
+
+      {/* as minhas tarefas */}
+      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "250ms" }}>
+        <h2>As minhas tarefas</h2>
+        <ListaTarefas
+          tarefas={minhasTarefas ?? []}
+          mostrarCliente
+          mensagemVazia="Não tens tarefas por fazer. Cria tarefas na ficha de cada cliente."
+        />
       </section>
 
       <section className={styles.grelha}>
