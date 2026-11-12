@@ -4,10 +4,12 @@ import { ESTADOS, formatarEuros } from "@/lib/estados";
 import { iniciais } from "@/lib/texto";
 import Icone from "@/components/Icone";
 import BotoesFase from "@/components/clientes/BotoesFase";
+import { CartaoArrastavel, ColunaArrastavel } from "@/components/pipeline/Arrastar";
 import styles from "./pipeline.module.css";
 
 // Rota /painel/pipeline — os clientes organizados por fase, em colunas.
-// Cada cartão tem botões para passar o cliente para a fase seguinte (componente BotoesFase).
+// Para mudar de fase: arrastar o cartão para outra coluna (no computador)
+// ou usar os botões do cartão (componente BotoesFase, funciona também no telemóvel).
 export const metadata = { title: "Pipeline · FlowCRM" };
 
 // soma dos valores previstos de uma lista de clientes (valores vazios contam 0)
@@ -45,7 +47,7 @@ export default async function PaginaPipeline() {
         <header className={styles.topoBloco}>
           <h2>Fases</h2>
           <small>
-            {clientes.length} {clientes.length === 1 ? "cliente" : "clientes"} · usa os botões para mudar de fase
+            {clientes.length} {clientes.length === 1 ? "cliente" : "clientes"} · arrasta os cartões ou usa os botões para mudar de fase
           </small>
         </header>
 
@@ -54,7 +56,13 @@ export default async function PaginaPipeline() {
             const daColuna = clientes.filter((c) => c.estado === estado.chave);
 
             return (
-              <section key={estado.chave} className={styles.coluna} style={{ "--cor": estado.cor }}>
+              // coluna onde se podem largar cartões (componente de cliente)
+              <ColunaArrastavel
+                key={estado.chave}
+                estado={estado.chave}
+                className={styles.coluna}
+                style={{ "--cor": estado.cor }}
+              >
                 <header className={styles.topoColuna}>
                   <h3>
                     <i aria-hidden="true"></i>
@@ -70,9 +78,11 @@ export default async function PaginaPipeline() {
                 {daColuna.map((c) => {
                   const responsavel = c.perfis?.nome;
                   return (
-                    <article key={c.id} className={styles.cartao}>
+                    // cartão que se pode arrastar para outra coluna
+                    <CartaoArrastavel key={c.id} id={c.id} estado={c.estado} className={styles.cartao}>
                       <div className={styles.linhaNome}>
-                        <Link href={`/painel/clientes/${c.id}`} className={styles.nome}>
+                        {/* draggable={false}: ao agarrar no nome, arrasta-se o cartão e não o link */}
+                        <Link href={`/painel/clientes/${c.id}`} className={styles.nome} draggable={false}>
                           {c.nome}
                         </Link>
                         <strong className={styles.valor}>
@@ -94,7 +104,7 @@ export default async function PaginaPipeline() {
 
                         <BotoesFase cliente={c} className={styles.botoes} />
                       </div>
-                    </article>
+                    </CartaoArrastavel>
                   );
                 })}
 
@@ -104,7 +114,7 @@ export default async function PaginaPipeline() {
                     <Icone nome="mais" tamanho={15} /> Novo cliente
                   </Link>
                 )}
-              </section>
+              </ColunaArrastavel>
             );
           })}
         </div>

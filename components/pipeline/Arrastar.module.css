@@ -1,0 +1,38 @@
+/* o cursor de "mão" mostra que o cartão se pode agarrar */
+.cartao {
+  cursor: grab;
+}
+
+.cartao:active {
+  cursor: grabbing;
+}
+
+/* o cartão que está a ser arrastado fica meio apagado no sítio de origem */
+.aArrastar {
+  opacity: 0.4;
+}
+
+/* coluna por baixo do rato durante o arrasto: contorno tracejado com a cor da fase (--cor) */
+.porCima {
+  outline: 2px dashed var(--cor);
+  outline-offset: -2px;
+  background: color-mix(in srgb, var(--cor) 8%, transparent) !important;
+}
+
+/* enquanto o servidor muda a fase: a coluna "pulsa" levemente */
+.aMover {
+  animation: aMover 0.9s ease-in-out infinite;
+}
+
+@keyframes aMover {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aMover {
+    animation: none;
+    opacity: 0.7;
+  }
+}
