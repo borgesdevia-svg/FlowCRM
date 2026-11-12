@@ -1,48 +1,176 @@
-/* Estilos só da página inicial (CSS Module: os nomes não colidem com outras páginas) */
-.pagina {
-  min-height: 100vh;
-  display: flex;
+/* Estilos só da landing page (CSS Module) */
+
+/* ---------- 1. Destaque ---------- */
+.destaque {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 64px 16px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr; /* texto à esquerda, ilustração à direita */
+  gap: 48px;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
 }
 
-.cartao {
-  width: 100%;
-  max-width: 480px;
-  padding: 32px;
-  background: var(--cor-cartao);
-  border: 1px solid var(--cor-contorno);
-  border-radius: var(--raio);
-  text-align: center;
+.etiqueta {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.85rem;
 }
 
-.titulo {
-  font-size: 2rem;
-  margin-bottom: 8px;
+.destaqueTexto h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem); /* tamanho adapta-se à largura do ecrã */
+  line-height: 1.15;
+  margin-bottom: 16px;
 }
 
-.titulo span {
+.destaqueTexto h1 span {
   color: var(--cor-destaque);
 }
 
-.subtitulo {
+.descricao {
+  color: var(--cor-texto-suave);
+  font-size: 1.1rem;
+  margin-bottom: 28px;
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ---------- Secções seguintes ---------- */
+.seccao {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 16px;
+  scroll-margin-top: 16px; /* espaço ao saltar para #funcionalidades */
+}
+
+.seccao h2 {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* ---------- 2. Funcionalidades ---------- */
+.grelha {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.cartao {
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--raio);
+  padding: 24px;
+}
+
+.cartao h3 {
+  font-size: 1.05rem;
+  margin: 12px 0 6px;
+}
+
+.cartao p {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+.icone {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--cor-superficie-verde);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icone svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 3. Como funciona ---------- */
+.passos {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.passos li {
+  padding: 24px;
+  border-left: 2px solid var(--cor-destaque);
+}
+
+.passos h3 {
+  font-size: 1.05rem;
+  margin: 8px 0 6px;
+}
+
+.passos p {
+  color: var(--cor-texto-suave);
+}
+
+.numero {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--cor-destaque);
+  color: #052e16;
+  font-weight: 700;
+}
+
+/* ---------- 4. Chamada final ---------- */
+.chamada {
+  text-align: center;
+  padding: 48px 24px;
+  border-radius: var(--raio);
+  border: 1px solid var(--cor-contorno);
+  background: linear-gradient(180deg, var(--cor-superficie-verde), var(--cor-cartao));
+}
+
+.chamada h2 {
+  margin-bottom: 8px;
+}
+
+.chamada p {
   color: var(--cor-texto-suave);
   margin-bottom: 24px;
 }
 
-.estado {
-  padding: 12px;
-  border-radius: var(--raio);
-  font-size: 0.9rem;
+/* ---------- Ecrãs mais pequenos (responsivo) ---------- */
+@media (max-width: 900px) {
+  .destaque {
+    grid-template-columns: 1fr; /* ilustração passa para baixo do texto */
+    padding-top: 32px;
+  }
+
+  .grelha {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .passos {
+    grid-template-columns: 1fr;
+  }
 }
 
-.ok {
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-}
-
-.erro {
-  background: #2a0b0b;
-  color: #f87171;
+@media (max-width: 560px) {
+  .grelha {
+    grid-template-columns: 1fr;
+  }
 }

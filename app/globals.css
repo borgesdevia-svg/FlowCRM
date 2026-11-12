@@ -58,3 +58,27 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* Botões reutilizados em todo o site (class="botao" ou "botao botao-secundario") */
+.botao {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1px solid var(--cor-destaque);
+  border-radius: var(--raio);
+  background: var(--cor-destaque);
+  color: #052e16;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.botao:hover {
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+.botao-secundario {
+  background: transparent;
+  color: var(--cor-texto);
+  border-color: var(--cor-contorno);
+}

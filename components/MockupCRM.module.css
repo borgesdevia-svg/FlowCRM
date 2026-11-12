@@ -1,0 +1,96 @@
+.janela {
+  background: var(--cor-cartao);
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--raio);
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(34, 197, 94, 0.08);
+}
+
+.topo {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.topo span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cor-contorno);
+}
+
+/* 3 cartões com números, lado a lado */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.numeros div {
+  background: var(--cor-superficie-verde);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.numeros strong {
+  font-size: 1.3rem;
+  color: var(--cor-destaque);
+}
+
+.numeros small {
+  font-size: 0.75rem;
+  color: var(--cor-texto-suave);
+}
+
+.lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lista li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.nome {
+  flex: 1;
+}
+
+.valor {
+  color: var(--cor-texto-suave);
+}
+
+/* etiqueta de estado: a cor vem das variáveis definidas em globals.css */
+.estado {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.novo {
+  background: var(--cor-estado-novo);
+}
+
+.negociacao {
+  background: var(--cor-estado-negociacao);
+}
+
+.ativo {
+  background: var(--cor-estado-ativo);
+}
+
+.perdido {
+  background: var(--cor-estado-perdido);
+}
