@@ -1,0 +1,38 @@
+/* Estilos partilhados pelas páginas 404 (not-found.js) e de erro (error.js) */
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+/* o "404" grande, com o contorno verde e o interior vazio */
+.codigo {
+  font-size: clamp(5rem, 18vw, 9rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--cor-destaque);
+}
+
+.pagina h1 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+}
+
+.texto {
+  max-width: 46ch;
+  color: var(--cor-texto-suave);
+  margin-bottom: 12px;
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}

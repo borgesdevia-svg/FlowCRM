@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { sair } from "@/lib/acoes/autenticacao";
+import LinkMenu from "@/components/painel/LinkMenu";
 import styles from "./painel.module.css";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
@@ -48,9 +49,9 @@ export default async function LayoutPainel({ children }) {
                 {item.texto} <small>em breve</small>
               </span>
             ) : (
-              <Link key={item.href} href={item.href} className={styles.itemMenu}>
+              <LinkMenu key={item.href} href={item.href} className={styles.itemMenu} classeAtiva={styles.itemAtivo}>
                 {item.texto}
-              </Link>
+              </LinkMenu>
             )
           )}
         </nav>

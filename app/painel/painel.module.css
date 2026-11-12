@@ -94,6 +94,14 @@ a.itemMenu:hover {
   color: var(--cor-texto);
 }
 
+/* página atual: fundo mais claro e um traço verde à esquerda */
+.itemAtivo,
+a.itemAtivo:hover {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--cor-texto);
+  box-shadow: inset 2px 0 0 var(--cor-destaque);
+}
+
 .desativado {
   opacity: 0.5;
   cursor: default;
