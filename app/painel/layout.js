@@ -6,6 +6,7 @@ import { iniciais } from "@/lib/texto";
 import LinkMenu from "@/components/painel/LinkMenu";
 import Icone from "@/components/Icone";
 import PesquisaGlobal from "@/components/painel/PesquisaGlobal";
+import Sino from "@/components/painel/Sino";
 import styles from "./painel.module.css";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
@@ -18,14 +19,25 @@ export default async function LayoutPainel({ children }) {
   // Números para os contadores do menu. As duas consultas são independentes,
   // por isso o Promise.all faz as duas ao mesmo tempo (mais rápido do que uma a seguir à outra).
   // head: true = só queremos o número, não as linhas. O RLS já filtra por empresa/comercial.
-  const [{ count: nClientes }, { count: nAtrasadas }] = await Promise.all([
+  const hoje = hojeEmPortugal();
+  const [{ count: nClientes }, { count: nAtrasadas }, { data: avisos }] = await Promise.all([
     supabase.from("clientes").select("id", { count: "exact", head: true }),
     supabase
       .from("tarefas")
       .select("id", { count: "exact", head: true })
       .eq("responsavel_id", perfil.id)
       .eq("concluida", false)
-      .lt("data_limite", hojeEmPortugal()), // lt = "less than": data limite anterior a hoje
+      .lt("data_limite", hoje), // lt = "less than": data limite anterior a hoje
+    // para o sino: as minhas tarefas por fazer em atraso OU que acabam hoje
+    // (lte = "less than or equal": até hoje, inclusive). As mais antigas primeiro.
+    supabase
+      .from("tarefas")
+      .select("id, titulo, data_limite, cliente_id, clientes(nome)")
+      .eq("responsavel_id", perfil.id)
+      .eq("concluida", false)
+      .lte("data_limite", hoje)
+      .order("data_limite", { ascending: true })
+      .limit(20),
   ]);
 
   // Menu dividido em secções. "contador" aparece à direita do item;
@@ -53,18 +65,21 @@ export default async function LayoutPainel({ children }) {
   return (
     <div className={styles.estrutura}>
       <aside className={styles.lateral}>
-        {/* cabeça: logótipo + empresa, dentro de uma caixa */}
-        <Link href="/painel" className={styles.marca}>
-          <span className={styles.simbolo} aria-hidden="true">
-            {empresa.nome[0].toUpperCase()}
-          </span>
-          <span className={styles.textoMarca}>
-            <strong>{empresa.nome}</strong>
-            <small>
-              Flow<span className={styles.crm}>CRM</span>
-            </small>
-          </span>
-        </Link>
+        {/* cabeça: logótipo + empresa numa caixa, e o sino de notificações ao lado */}
+        <div className={styles.topoMenu}>
+          <Link href="/painel" className={styles.marca}>
+            <span className={styles.simbolo} aria-hidden="true">
+              {empresa.nome[0].toUpperCase()}
+            </span>
+            <span className={styles.textoMarca}>
+              <strong>{empresa.nome}</strong>
+              <small>
+                Flow<span className={styles.crm}>CRM</span>
+              </small>
+            </span>
+          </Link>
+          <Sino tarefas={avisos ?? []} hoje={hoje} />
+        </div>
 
         {/* pesquisa global de clientes (componente de cliente) */}
         <div className={styles.zonaPesquisa}>
