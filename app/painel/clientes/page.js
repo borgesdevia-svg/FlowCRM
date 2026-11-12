@@ -70,9 +70,16 @@ export default async function PaginaClientes({ searchParams }) {
             {eAdmin ? "toda a empresa" : "só os teus"}
           </p>
         </div>
-        <Link href="/painel/clientes/novo" className="botao">
-          <Icone nome="mais" tamanho={16} /> Novo cliente
-        </Link>
+        <div className={styles.acoesTopo}>
+          {/* exporta o que está a ser visto: mesma pesquisa e mesmo filtro.
+              É um <a> normal (não <Link>) porque descarrega um ficheiro, não abre uma página. */}
+          <a href={linkFiltro(estadoValido ? estado : "").replace("/painel/clientes", "/painel/clientes/exportar")} className="botao botao-secundario">
+            <Icone nome="folha" tamanho={16} /> Exportar CSV
+          </a>
+          <Link href="/painel/clientes/novo" className="botao">
+            <Icone nome="mais" tamanho={16} /> Novo cliente
+          </Link>
+        </div>
       </header>
 
       {AVISOS[aviso] && (

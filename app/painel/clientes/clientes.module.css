@@ -34,6 +34,12 @@
   color: var(--cor-texto-fraco);
 }
 
+.acoesTopo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 /* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
 .aviso {
   animation: aviso 0.4s var(--curva);
