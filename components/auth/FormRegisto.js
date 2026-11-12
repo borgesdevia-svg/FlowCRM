@@ -4,6 +4,7 @@
 
 import { useActionState } from "react";
 import { registar } from "@/lib/acoes/autenticacao";
+import CampoPassword from "@/components/CampoPassword";
 import styles from "./Formulario.module.css";
 
 // useActionState liga o formulário à Server Action "registar":
@@ -41,11 +42,20 @@ export default function FormRegisto() {
         {erros.email && <p className="erro-campo">{erros.email}</p>}
       </div>
 
+      {/* CampoPassword: password escondida com o botão "Mostrar" */}
       <div className="campo">
         <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" autoComplete="new-password"
-          placeholder="Mínimo 8 caracteres" minLength={8} aria-invalid={!!erros.password} required />
+        <CampoPassword id="password" name="password" autoComplete="new-password"
+          placeholder="Mínimo 8 caracteres" invalido={!!erros.password} />
         {erros.password && <p className="erro-campo">{erros.password}</p>}
+      </div>
+
+      {/* escrever a password duas vezes evita criar a conta com um erro de escrita */}
+      <div className="campo">
+        <label htmlFor="confirmacao">Confirmar password</label>
+        <CampoPassword id="confirmacao" name="confirmacao" autoComplete="new-password"
+          placeholder="Escreve a mesma password" invalido={!!erros.confirmacao} />
+        {erros.confirmacao && <p className="erro-campo">{erros.confirmacao}</p>}
       </div>
 
       <button type="submit" className="botao botao-largo" disabled={pendente}>

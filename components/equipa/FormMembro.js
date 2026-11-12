@@ -49,6 +49,18 @@ export default function FormMembro() {
         {erros.password && <p className="erro-campo">{erros.password}</p>}
       </div>
 
+      <div className="campo">
+        <label htmlFor="confirmacao">Confirmar password</label>
+        <CampoPassword
+          id="confirmacao"
+          name="confirmacao"
+          autoComplete="new-password"
+          placeholder="Escreve a mesma password"
+          invalido={!!erros.confirmacao}
+        />
+        {erros.confirmacao && <p className="erro-campo">{erros.confirmacao}</p>}
+      </div>
+
       <button type="submit" className="botao botao-largo" disabled={pendente}>
         {pendente ? "A adicionar..." : (
           <>

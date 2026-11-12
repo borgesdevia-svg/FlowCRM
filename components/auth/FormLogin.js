@@ -3,6 +3,7 @@
 
 import { useActionState } from "react";
 import { entrar } from "@/lib/acoes/autenticacao";
+import CampoPassword from "@/components/CampoPassword";
 import styles from "./Formulario.module.css";
 
 export default function FormLogin() {
@@ -21,7 +22,8 @@ export default function FormLogin() {
 
       <div className="campo">
         <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" autoComplete="current-password" required />
+        {/* password escondida com o botão "Mostrar" */}
+        <CampoPassword id="password" name="password" autoComplete="current-password" />
       </div>
 
       <button type="submit" className="botao botao-largo" disabled={pendente}>
