@@ -15,7 +15,7 @@ export default async function LayoutPainel({ children }) {
     { texto: "Painel", href: "/painel" },
     { texto: "Clientes", href: "/painel/clientes", breve: true },
     // a página da equipa só aparece ao admin
-    ...(eAdmin ? [{ texto: "Equipa", href: "/painel/equipa", breve: true }] : []),
+    ...(eAdmin ? [{ texto: "Equipa", href: "/painel/equipa" }] : []),
   ];
 
   // iniciais para o "avatar" (ex.: "Ana Costa" -> "AC")
