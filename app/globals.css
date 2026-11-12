@@ -114,6 +114,87 @@ a {
   transform: translateX(3px);
 }
 
+.botao:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
+.botao-largo {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ---------- Formulários (reutilizados em todo o site) ---------- */
+/* uso: <div className="campo"><label/><input/><p className="erro-campo"/></div> */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--raio);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo input::placeholder {
+  color: var(--cor-texto-fraco);
+}
+
+/* anel verde quando o campo está selecionado (importante para quem usa teclado) */
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* campo com erro: contorno vermelho */
+.campo input[aria-invalid="true"] {
+  border-color: #f87171;
+}
+
+.erro-campo {
+  color: #f87171;
+  font-size: 0.82rem;
+}
+
+/* caixas de mensagem (erro geral ou sucesso) */
+.alerta {
+  padding: 12px 14px;
+  border-radius: var(--raio);
+  font-size: 0.9rem;
+}
+
+.alerta-erro {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #fca5a5;
+}
+
+.alerta-sucesso {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
 /* ---------- Animações ---------- */
 
 /* Entrada ao carregar a página: sobe e aparece.

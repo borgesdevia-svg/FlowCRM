@@ -1,0 +1,15 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formulario button {
+  margin-top: 4px;
+}
+
+.nota {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  text-align: center;
+}
