@@ -5,12 +5,16 @@ node_modules/
 .next/
 out/
 build/
+next-env.d.ts
+*.tsbuildinfo
 
 # chaves e variáveis de ambiente (NUNCA no GitHub)
-.env
-.env.local
-.env.*.local
-.env.production
+# .env* apanha .env, .env.local, .env.production, etc.
+.env*
+!.env.example
+
+# certificados e chaves privadas
+*.pem
 
 # Supabase local
 supabase/.temp/
@@ -26,3 +30,6 @@ npm-debug.log*
 
 # outros
 .vercel
+
+# definições pessoais do Obsidian
+docs/.obsidian/
