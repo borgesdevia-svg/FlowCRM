@@ -19,7 +19,7 @@ export default function BarraTopo() {
         <nav className={styles.menu}>
           <Link href="/#o-que-e">O que é</Link>
           <Link href="/#funcionalidades">Funcionalidades</Link>
-          <Link href="/#vantagens">Vantagens</Link>
+          <Link href="/#como-funciona">Como funciona</Link>
           <Link href="/#perguntas">Perguntas</Link>
         </nav>
 
@@ -28,7 +28,7 @@ export default function BarraTopo() {
             Entrar
           </Link>
           <Link href="/registo" className="botao">
-            Criar conta
+            Começar grátis
           </Link>
         </div>
       </div>

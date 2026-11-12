@@ -4,15 +4,23 @@
   text-align: center;
 }
 
+/* sobretítulo em "comprimido", igual à etiqueta do destaque (coerência visual) */
 .sobretitulo {
-  color: var(--cor-destaque);
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 12px;
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 5px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #86efac;
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 
 .cabecalho h2 {
-  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
   margin-bottom: 16px;
 }
 

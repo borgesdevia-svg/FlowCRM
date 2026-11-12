@@ -14,7 +14,7 @@ const passos = [
 export default function ComoFunciona() {
   return (
     <section id="como-funciona" className={styles.seccao}>
-      <CabecalhoSeccao titulo="Começar demora 3 passos" />
+      <CabecalhoSeccao sobretitulo="Como funciona" titulo="Começar demora 3 passos" />
 
       <Revelar>
         <div className={styles.trilho}>

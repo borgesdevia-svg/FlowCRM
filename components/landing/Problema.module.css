@@ -1,16 +1,19 @@
 .seccao {
-  max-width: 980px;
+  max-width: 1020px;
   margin: 0 auto;
-  padding: 96px 16px 48px;
+  padding: 112px 16px 64px;
   scroll-margin-top: 64px;
 }
 
 .tabela {
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
   overflow: hidden;
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9);
 }
 
+/* duas colunas iguais: "sem" à esquerda, "com" à direita */
 .titulos,
 .linha {
   display: grid;
@@ -18,40 +21,77 @@
 }
 
 .titulos span {
-  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 28px;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--cor-texto-suave);
-  background: rgba(255, 255, 255, 0.02);
 }
 
-.tituloDepois {
-  color: var(--cor-destaque) !important;
-  background: var(--cor-superficie-verde) !important;
+/* a coluna "com" tem fundo verde escuro de cima a baixo */
+.titulos .tituloDepois {
+  color: var(--cor-destaque);
+  background: var(--cor-superficie-verde);
 }
 
 .linha {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--cor-contorno);
 }
 
 .antes,
 .depois {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 20px 24px;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px 28px;
   font-size: 0.98rem;
 }
 
-/* o "antes" fica mais apagado; o "depois" em destaque, com fundo verde-escuro */
+.antes p,
+.depois p {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* o "sem" fica mais apagado; o "com" em destaque, sobre verde escuro */
 .antes {
   color: var(--cor-texto-suave);
 }
 
 .depois {
   color: var(--cor-texto);
-  background: rgba(11, 42, 34, 0.45);
-  border-left: 1px solid rgba(34, 197, 94, 0.25);
+  background: linear-gradient(90deg, rgba(13, 48, 32, 0.75), rgba(13, 48, 32, 0.45));
+  border-left: 1px solid rgba(32, 201, 107, 0.25);
+}
+
+/* ícone do problema: quadrado cinzento */
+.iconeAntes {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--cor-texto-fraco);
+}
+
+/* ícone da solução: visto verde num círculo com brilho */
+.iconeDepois {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: rgba(32, 201, 107, 0.15);
+  color: var(--cor-destaque);
+  box-shadow: 0 0 16px rgba(32, 201, 107, 0.25);
 }
 
 /* no computador o rótulo está no topo da coluna; no telemóvel aparece em cada frase */
@@ -63,7 +103,7 @@
 
 @media (max-width: 680px) {
   .seccao {
-    padding-top: 72px;
+    padding-top: 80px;
   }
 
   .titulos {
@@ -74,13 +114,18 @@
     grid-template-columns: 1fr;
   }
 
+  .antes,
+  .depois {
+    padding: 20px;
+  }
+
   .rotuloMovel {
     display: block;
   }
 
   .depois {
     border-left: none;
-    border-top: 1px dashed rgba(34, 197, 94, 0.25);
+    border-top: 1px dashed rgba(32, 201, 107, 0.25);
   }
 
   .depois .rotuloMovel {

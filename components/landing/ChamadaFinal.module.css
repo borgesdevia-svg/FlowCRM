@@ -7,48 +7,99 @@
 .caixa {
   position: relative;
   overflow: hidden;
-  isolation: isolate; /* o brilho (z-index -1) fica dentro da caixa */
-  padding: 80px 24px;
-  border-radius: 24px;
-  border: 1px solid rgba(34, 197, 94, 0.25);
-  background: #0c0c0c;
+  isolation: isolate; /* as decorações (z-index -1) ficam dentro da caixa, atrás do texto */
+  padding: 104px 24px 168px;
+  border-radius: 28px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
   text-align: center;
 }
 
-/* círculo de luz verde que se move lentamente de um lado para o outro */
-.brilho {
+/* grelha fina, a desvanecer para as bordas (igual à do destaque) */
+.caixa::before {
+  content: "";
   position: absolute;
-  z-index: -1;
-  width: 520px;
-  height: 520px;
-  top: -260px;
-  left: 50%;
-  margin-left: -260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.35), transparent 65%);
-  filter: blur(30px);
-  animation: vaguear 9s ease-in-out infinite alternate;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(rgba(32, 201, 107, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 201, 107, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 20%, transparent 100%);
 }
 
-@keyframes vaguear {
+/* Horizonte: a mesma técnica da janela do topo, mas virada ao contrário.
+   Um círculo enorme colorido e desfocado (.horizonte) e, por cima dele, um círculo
+   preto um pouco mais pequeno (::after) que só deixa ver a borda a brilhar. */
+.horizonte {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: calc(100% - 110px);
+  width: 2000px;
+  height: 2000px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    transparent 28%,
+    #3b82f6 38%,
+    #20c96b 48%,
+    #a3e635 54%,
+    #fb923c 64%,
+    transparent 74%
+  );
+  filter: blur(36px);
+  opacity: 0.75;
+  animation: respirar 6s ease-in-out infinite alternate;
+}
+
+.horizonte::after {
+  content: "";
+  position: absolute;
+  inset: 60px; /* 60px mais pequeno de cada lado: é esta "borda" que brilha */
+  border-radius: 50%;
+  background: var(--cor-fundo);
+  filter: blur(8px);
+}
+
+/* o brilho "respira": fica mais forte e mais fraco devagar */
+@keyframes respirar {
   from {
-    transform: translateX(-30%);
+    opacity: 0.55;
   }
   to {
-    transform: translateX(30%);
+    opacity: 0.85;
   }
+}
+
+.etiqueta {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 5px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #86efac;
+  font-size: 0.85rem;
 }
 
 .caixa h2 {
-  max-width: 640px;
-  margin: 0 auto 16px;
-  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  max-width: 15ch;
+  margin: 0 auto 18px;
+  text-wrap: balance;
+  font-size: clamp(2.1rem, 5.5vw, 3.6rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
 }
 
-.caixa p {
+.texto {
   color: var(--cor-texto-suave);
   font-size: 1.05rem;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .botoes {
@@ -58,8 +109,25 @@
   gap: 12px;
 }
 
+.botoes :global(.botao) {
+  padding: 14px 28px;
+  font-size: 1rem;
+}
+
+/* botão principal em "vidro verde", igual ao do destaque */
+.botoes .principal {
+  padding: 14px 36px;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(32, 201, 107, 0.3), rgba(32, 201, 107, 0.08));
+  border-color: rgba(74, 222, 128, 0.55);
+  box-shadow:
+    0 0 32px rgba(32, 201, 107, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 640px) {
   .caixa {
-    padding: 56px 20px;
+    padding: 64px 20px 128px;
+    border-radius: 20px;
   }
 }

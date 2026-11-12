@@ -1,368 +1,628 @@
 .seccao {
   max-width: var(--largura-max);
   margin: 0 auto;
-  padding: 96px 16px;
+  padding: 112px 16px;
   scroll-margin-top: 64px; /* espaço para a barra fixa ao saltar para #funcionalidades */
 }
 
-/* ---------- grelha bento ---------- */
-.grelha {
+/* ---------- linhas alternadas ---------- */
+.areas {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+}
+
+/* duas colunas: texto (mais estreito) + demonstração (mais larga) */
+.area {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: center;
+  gap: 64px;
 }
 
-.grande {
-  grid-column: span 2; /* ocupa 2 das 3 colunas */
+/* nas linhas "invertidas" a demonstração passa para a esquerda.
+   "order" muda a ordem visual sem mexer no HTML. */
+.invertida .texto {
+  order: 2;
 }
 
-.cartao {
-  position: relative;
-  height: 100%;
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: linear-gradient(180deg, #131313, #0e0e0e);
-  overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s var(--curva);
+.sobretitulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  color: var(--cor-destaque);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-/* brilho verde no topo do cartão que aparece ao passar o rato */
-.cartao::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(34, 197, 94, 0.12), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
+.iconeArea {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(32, 201, 107, 0.3);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
 }
 
-.cartao:hover {
-  border-color: rgba(34, 197, 94, 0.3);
-  transform: translateY(-3px);
+.texto h3 {
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  margin-bottom: 14px;
 }
 
-.cartao:hover::before {
-  opacity: 1;
-}
-
-.cartao h3 {
-  font-size: 1.15rem;
-  margin: 20px 0 8px;
-}
-
-.cartao p {
+.descricao {
   color: var(--cor-texto-suave);
-  font-size: 0.95rem;
+  font-size: 1.02rem;
+  margin-bottom: 24px;
+  max-width: 44ch;
 }
 
-/* ---------- área das mini-ilustrações ---------- */
-.visual {
-  position: relative;
-  height: 190px;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: #0a0a0a;
-  font-size: 0.78rem;
-  overflow: hidden;
+.pontos {
+  list-style: none;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* --- clientes: pesquisa com texto a ser "escrito" --- */
-.pesquisa {
+.pontos li {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  background: #111;
+  gap: 10px;
+  font-size: 0.95rem;
 }
 
-.lupa {
-  width: 11px;
-  height: 11px;
-  border: 1.5px solid var(--cor-texto-suave);
-  border-radius: 50%;
-}
-
-/* efeito máquina de escrever: a largura cresce letra a letra (steps) */
-.escrever {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 7ch;
-  border-right: 1.5px solid var(--cor-destaque);
-  animation:
-    escrever 4s steps(7) infinite,
-    cursor 0.8s step-end infinite;
-}
-
-@keyframes escrever {
-  0% {
-    width: 0;
-  }
-  40%,
-  90% {
-    width: 7ch;
-  }
-  100% {
-    width: 0;
-  }
-}
-
-@keyframes cursor {
-  50% {
-    border-color: transparent;
-  }
-}
-
-.filtros {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.filtros span {
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--cor-texto-suave);
-  font-size: 0.7rem;
-}
-
-.filtros .filtroAtivo {
-  background: var(--cor-superficie-verde);
-  border-color: rgba(34, 197, 94, 0.4);
+.pontos svg {
   color: var(--cor-destaque);
 }
 
-.resultado {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: #111;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* ---------- moldura das demonstrações ---------- */
+/* cartão com um brilho verde suave por trás (gradiente no fundo) */
+.moldura {
+  position: relative;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid var(--cor-contorno);
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(32, 201, 107, 0.12), transparent 70%),
+    var(--cor-fundo-2);
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  transition: border-color 0.3s, transform 0.4s var(--curva);
 }
 
-.resultado b {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 0.58rem;
-  background: #1c1c1c;
+.moldura:hover {
+  border-color: rgba(32, 201, 107, 0.3);
+  transform: translateY(-4px);
 }
 
-.resultado em {
-  margin-left: auto;
-  font-style: normal;
-  font-size: 0.66rem;
-  padding: 2px 8px;
-  border-radius: 999px;
-  color: #fff;
-}
-
-.apagado {
-  opacity: 0.45;
-}
-
-.novo {
-  background: var(--cor-estado-novo);
-}
-
-.negociacao {
-  background: var(--cor-estado-negociacao);
-}
-
-/* --- pipeline: 3 colunas tipo quadro --- */
-.pipeline {
-  flex-direction: row;
-  gap: 8px;
-}
-
-.coluna {
-  flex: 1;
+.demo {
+  min-height: 300px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 8px;
-  border-radius: 8px;
-  background: #111;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--cor-cartao);
+  font-size: 0.82rem;
 }
 
-.coluna small {
-  font-size: 0.66rem;
-  font-weight: 600;
-  margin-bottom: 2px;
+/* cada elemento com "entra" aparece quando a linha fica visível (classe global .visivel),
+   um a seguir ao outro, pela ordem de --i */
+.entra {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.5s var(--curva),
+    transform 0.6s var(--curva);
+  transition-delay: calc(var(--i, 0) * 90ms + 250ms);
 }
 
-.cartaoMini {
-  height: 30px;
-  border-radius: 6px;
-  background: #1a1a1a;
-  border-left: 3px solid;
+:global(.visivel) .entra {
+  opacity: 1;
+  transform: none;
 }
 
-/* o cartão que "salta" para a coluna seguinte, em ciclo */
-.aMover {
-  animation: mover 3.5s var(--curva) infinite;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-}
-
-@keyframes mover {
-  0%,
-  25% {
-    transform: none;
-  }
-  45%,
-  80% {
-    transform: translate(calc(100% + 24px), 0) rotate(-3deg);
-  }
-  100% {
-    transform: none;
-  }
-}
-
-/* --- formulário público --- */
-.link {
-  align-self: flex-start;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.7rem;
-}
-
-.campo {
-  padding: 8px 10px;
-  border-radius: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--cor-texto-fraco);
-}
-
-.enviar {
-  padding: 8px;
-  border-radius: 7px;
-  text-align: center;
-  font-weight: 600;
-  background: var(--cor-destaque);
-  color: #052e16;
-  animation: pressionar 3s ease-in-out infinite;
-}
-
-@keyframes pressionar {
-  0%,
-  70%,
-  100% {
-    transform: scale(1);
-  }
-  80% {
-    transform: scale(0.95);
-  }
-}
-
-/* --- emails: fluxo lead -> automação -> email --- */
-.fluxo {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: center;
-  gap: 8px;
-}
-
-.passoFluxo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+/* etiqueta de estado: a cor vem de --cor */
+.estado {
+  padding: 3px 9px;
   border-radius: 999px;
-  background: #111;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--cor) 20%, transparent);
+  color: color-mix(in srgb, var(--cor) 55%, white);
+  font-size: 0.7rem;
+  font-weight: 600;
   white-space: nowrap;
 }
 
-.final {
-  border-color: rgba(34, 197, 94, 0.45);
-  color: var(--cor-destaque);
+/* --- Demo 1: ficha do cliente --- */
+.cabecaCliente {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.iconeFluxo {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+.cabecaCliente strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.cabecaCliente small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+.cabecaCliente .estado {
+  margin-left: auto;
+}
+
+.avatar {
+  flex-shrink: 0;
   display: grid;
   place-items: center;
-  font-size: 0.7rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
+  font-size: 0.85rem;
 }
 
-/* linha tracejada que "corre" da esquerda para a direita */
-.linhaFluxo {
-  flex: 1;
-  min-width: 20px;
-  height: 2px;
-  background: repeating-linear-gradient(90deg, var(--cor-destaque) 0 6px, transparent 6px 12px);
-  background-size: 24px 2px;
-  animation: correr 0.8s linear infinite;
-  opacity: 0.7;
+.dados {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
-@keyframes correr {
-  to {
-    background-position: 24px 0;
-  }
-}
-
-.email {
-  width: 100%;
-  margin-top: 6px;
-  padding: 12px 14px;
+.dados div {
+  padding: 10px 12px;
   border-radius: 10px;
-  background: #111;
   border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.email small {
+.dados small {
+  display: block;
   color: var(--cor-texto-fraco);
   font-size: 0.68rem;
 }
 
-.email strong {
-  display: block;
-  margin: 2px 0;
+/* linha do tempo: um traço vertical com um ponto por interação */
+.linhaTempo {
+  position: relative;
+  padding: 6px 0 0 22px;
 }
 
-.email p {
+.linhaTempo::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  bottom: 20px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.evento {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.evento small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.7rem;
+}
+
+.ponto {
+  position: absolute;
+  left: -22px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--cor-destaque);
+  background: var(--cor-cartao);
+}
+
+/* --- Demo 2: pipeline --- */
+.pipeline {
+  --pad: 10px; /* espaço dentro de cada coluna */
+  --vao: 10px; /* espaço entre colunas */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--vao);
+  align-items: start;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--pad);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tituloColuna {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
   color: var(--cor-texto-suave);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tituloColuna span {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.tituloColuna em {
+  margin-left: auto;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--cor-texto-fraco);
+}
+
+.negocio {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #1a1c1b;
+}
+
+.negocio strong {
+  display: block;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.negocio small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+/* o cartão da Marta salta para a coluna ao lado e volta, em ciclo.
+   Distância = largura do cartão + espaço dentro das duas colunas + espaço entre elas + 2 contornos */
+.aMover {
+  position: relative;
+  z-index: 2;
+}
+
+:global(.visivel) .aMover {
+  animation: mover 5s var(--curva) 1.2s infinite;
+}
+
+@keyframes mover {
+  0%,
+  15% {
+    transform: none;
+  }
+  25% {
+    transform: translateY(-6px) rotate(-2deg);
+    box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.8);
+  }
+  40%,
+  85% {
+    transform: translateX(calc(100% + 2 * var(--pad) + var(--vao) + 2px));
+    border-color: rgba(217, 119, 6, 0.6);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* --- Demo 3: tarefas --- */
+.topoDemo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.topoDemo strong {
+  font-size: 1rem;
+}
+
+.topoDemo small {
+  color: var(--cor-texto-fraco);
+}
+
+.tarefa {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tarefa strong {
+  display: block;
+  font-weight: 500;
+  text-decoration: line-through;
+  text-decoration-color: transparent; /* o risco existe mas está invisível */
+}
+
+.tarefa small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+.caixa {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+/* o visto, desenhado com dois contornos de um retângulo rodado */
+.caixa::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 9px;
+  border-right: 2px solid #04130a;
+  border-bottom: 2px solid #04130a;
+  transform: rotate(45deg) scale(0);
+}
+
+/* nas tarefas feitas: a caixa enche-se, aparece o visto e o texto fica riscado */
+:global(.visivel) .feita .caixa {
+  animation: encher 0.3s var(--visto) forwards;
+}
+
+:global(.visivel) .feita .caixa::after {
+  animation: marcar 0.3s var(--visto) forwards;
+}
+
+:global(.visivel) .feita strong {
+  animation: riscar 0.4s var(--visto) forwards;
+}
+
+@keyframes encher {
+  to {
+    background: var(--cor-destaque);
+    border-color: var(--cor-destaque);
+  }
+}
+
+@keyframes marcar {
+  to {
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+@keyframes riscar {
+  to {
+    color: var(--cor-texto-fraco);
+    text-decoration-color: var(--cor-texto-fraco);
+  }
+}
+
+.data {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cor-texto-suave);
+  font-size: 0.7rem;
+}
+
+.atrasada {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+}
+
+/* --- Demo 4: dashboard --- */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.numero {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.numero small {
+  display: block;
+  color: var(--cor-texto-fraco);
+  font-size: 0.7rem;
+}
+
+.numero strong {
+  display: block;
+  margin: 4px 0 2px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.numero em {
+  font-style: normal;
+  color: var(--cor-destaque);
+  font-size: 0.72rem;
+}
+
+.cartaoGrafico {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cartaoGrafico > small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+.barras {
+  flex: 1;
+  min-height: 130px;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.barras div {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+}
+
+/* cada barra cresce de baixo para cima (scaleY de 0 a 1) */
+.barras span {
+  width: 100%;
+  border-radius: 5px 5px 0 0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.9s var(--curva);
+  transition-delay: calc(var(--i) * 90ms + 250ms);
+}
+
+:global(.visivel) .barras span {
+  transform: scaleY(1);
+}
+
+.barras small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
+/* ---------- cartões extra (formulário e email) ---------- */
+.extras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 120px;
+}
+
+.extra {
+  height: 100%;
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  transition: border-color 0.3s, transform 0.3s var(--curva);
+}
+
+.extra:hover {
+  border-color: rgba(32, 201, 107, 0.3);
+  transform: translateY(-3px);
+}
+
+.extra h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.extra p {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
 }
 
 /* ---------- responsivo ---------- */
 @media (max-width: 900px) {
-  .grelha {
-    grid-template-columns: 1fr 1fr;
+  .area {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  /* no telemóvel o texto vem sempre primeiro */
+  .invertida .texto {
+    order: 0;
+  }
+
+  .areas {
+    gap: 88px;
   }
 }
 
 @media (max-width: 640px) {
   .seccao {
-    padding: 72px 16px;
+    padding: 80px 16px;
   }
 
-  .grelha {
+  .moldura {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .demo {
+    min-height: 0;
+    padding: 12px;
+  }
+
+  .dados {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dados div:last-child {
+    display: none;
+  }
+
+  .pipeline {
+    --pad: 6px;
+    --vao: 6px;
+  }
+
+  .tituloColuna em,
+  .negocio small {
+    display: none;
+  }
+
+  .numero strong {
+    font-size: 1.15rem;
+  }
+
+  .barras small {
+    font-size: 0.56rem;
+  }
+
+  .extras {
     grid-template-columns: 1fr;
+    margin-top: 88px;
+  }
+}
+
+/* "menos movimento": tudo aparece logo, sem animações */
+@media (prefers-reduced-motion: reduce) {
+  .entra {
+    opacity: 1;
+    transform: none;
   }
 
-  .grande {
-    grid-column: auto;
+  .barras span {
+    transform: none;
   }
 }

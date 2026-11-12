@@ -1,27 +1,57 @@
+/* Destaque: texto e botões centrados, por cima de um fundo decorativo
+   feito só em CSS (sem imagens): um brilho verde, uma grelha fina e "estrelas". */
 .destaque {
+  --altura-barra: 64px;
   position: relative;
-  isolation: isolate; /* o fundo decorativo (z-index -1) fica dentro desta secção */
-  padding: 96px 16px 64px;
-  overflow: hidden;
+  isolation: isolate; /* as camadas com z-index: -1 ficam atrás do texto, mas dentro desta secção */
+  /* a secção sobe para trás da barra de topo (que é transparente),
+     para o fundo decorativo começar mesmo no cimo da página */
+  margin-top: calc(var(--altura-barra) * -1);
+  padding: calc(var(--altura-barra) + 80px) 16px 24px;
+  /* brilho: uma elipse verde-azulada que vai desaparecendo para as bordas */
+  background: radial-gradient(ellipse 50% 55% at 55% 30%, rgba(20, 184, 166, 0.16), transparent 100%);
 }
 
-/* Fundo: uma grelha de linhas finas que desvanece nas bordas + brilho verde no topo */
-.fundo {
+/* camada 1: grelha. Duas listras de 1px (uma horizontal, uma vertical)
+   repetidas de 56 em 56px. A "mask" faz a grelha desvanecer nas bordas. */
+.destaque::before {
+  content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(34, 197, 94, 0.22), transparent 70%),
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 100% 100%, 56px 56px, 56px 56px;
-  /* "máscara": a grelha só aparece no centro e desaparece para as bordas */
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 40%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, #000 40%, transparent 100%);
+  background-image:
+    linear-gradient(rgba(32, 201, 107, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 201, 107, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 75% 80% at 50% 45%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 80% at 50% 45%, black 30%, transparent 100%);
+}
+
+/* camada 2: estrelas. Cada linha é um pontinho (um círculo minúsculo)
+   colocado numa posição x% y% da secção. */
+.destaque::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(1.5px circle at 8% 22%, rgba(255, 255, 255, 0.5), transparent 100%),
+    radial-gradient(1.5px circle at 17% 64%, rgba(255, 255, 255, 0.35), transparent 100%),
+    radial-gradient(1px circle at 24% 38%, rgba(255, 255, 255, 0.45), transparent 100%),
+    radial-gradient(1.5px circle at 31% 82%, rgba(255, 255, 255, 0.3), transparent 100%),
+    radial-gradient(1px circle at 38% 14%, rgba(255, 255, 255, 0.4), transparent 100%),
+    radial-gradient(1.5px circle at 46% 90%, rgba(134, 239, 172, 0.5), transparent 100%),
+    radial-gradient(1px circle at 58% 9%, rgba(255, 255, 255, 0.35), transparent 100%),
+    radial-gradient(1.5px circle at 66% 76%, rgba(255, 255, 255, 0.4), transparent 100%),
+    radial-gradient(1px circle at 73% 30%, rgba(255, 255, 255, 0.5), transparent 100%),
+    radial-gradient(1.5px circle at 81% 58%, rgba(255, 255, 255, 0.3), transparent 100%),
+    radial-gradient(1px circle at 88% 18%, rgba(255, 255, 255, 0.45), transparent 100%),
+    radial-gradient(1.5px circle at 94% 70%, rgba(134, 239, 172, 0.4), transparent 100%);
 }
 
 .conteudo {
-  max-width: 820px;
+  max-width: 900px;
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -29,69 +59,67 @@
   align-items: center;
 }
 
-.conteudo h1 {
-  max-width: 17ch; /* quebra o título em 2 linhas equilibradas */
-  text-wrap: balance;
-  font-size: clamp(2.4rem, 6.5vw, 4.4rem); /* adapta-se à largura do ecrã */
-  font-weight: 700;
+/* frase curta por cima do título, dentro de um "comprimido" com contorno */
+.etiqueta {
+  margin-bottom: 24px;
+  padding: 6px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #86efac; /* verde claro: lê-se melhor em texto pequeno */
+  font-size: 0.9rem;
+}
+
+.destaque h1 {
+  max-width: 16ch;
+  text-wrap: balance; /* o browser equilibra o tamanho das duas linhas */
+  font-size: clamp(2.6rem, 6.8vw, 4.9rem); /* adapta-se à largura do ecrã */
+  font-weight: 500; /* mais fino do que o normal dos títulos, como na referência */
   letter-spacing: -0.045em;
-  line-height: 1.02;
+  line-height: 1.05;
   margin-bottom: 24px;
 }
 
 .descricao {
-  max-width: 62ch; /* linhas com menos de ~70 caracteres leem-se melhor */
+  max-width: 52ch; /* linhas curtas leem-se melhor */
   color: var(--cor-texto-suave);
-  font-size: clamp(1rem, 2.2vw, 1.18rem);
-  margin-bottom: 32px;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  margin-bottom: 36px;
 }
 
 .botoes {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-
-/* lista de garantias com um visto verde desenhado em CSS */
-.garantias {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 24px;
-  color: var(--cor-texto-suave);
-  font-size: 0.88rem;
-}
-
-.garantias li {
-  display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
-.garantias li::before {
-  content: "";
-  width: 5px;
-  height: 9px;
-  margin-top: -3px;
-  border-right: 2px solid var(--cor-destaque);
-  border-bottom: 2px solid var(--cor-destaque);
-  transform: rotate(45deg);
+.botoes :global(.botao) {
+  padding: 14px 28px;
+  font-size: 1rem;
 }
 
-.mockup {
-  max-width: 980px;
-  margin: 72px auto 0;
+/* botão principal em "vidro verde": fundo verde transparente,
+   contorno claro e brilho à volta (box-shadow) */
+.botoes .botaoVidro {
+  padding: 14px 36px;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(32, 201, 107, 0.3), rgba(32, 201, 107, 0.08));
+  border-color: rgba(74, 222, 128, 0.55);
+  box-shadow:
+    0 0 32px rgba(32, 201, 107, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.botoes .botaoVidro:hover {
+  box-shadow:
+    0 0 44px rgba(32, 201, 107, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 @media (max-width: 760px) {
   .destaque {
-    padding-top: 56px;
-  }
-
-  .mockup {
-    margin-top: 56px;
+    padding: calc(var(--altura-barra) + 40px) 16px 16px;
   }
 }

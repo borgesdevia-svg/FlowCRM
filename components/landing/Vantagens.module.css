@@ -1,52 +1,88 @@
-.seccao {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 96px 16px;
+/* faixa a toda a largura, com fundo secundário e linhas finas em cima e em baixo */
+.faixa {
+  background: var(--cor-fundo-2);
+  border-top: 1px solid var(--cor-contorno);
+  border-bottom: 1px solid var(--cor-contorno);
   scroll-margin-top: 64px;
 }
 
-/* duas colunas separadas por linhas finas */
-.lista {
-  list-style: none;
+.interior {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 112px 16px;
+}
+
+.grelha {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 48px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
-.lista li {
-  padding: 24px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+.cartao {
+  position: relative;
+  height: 100%;
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s var(--curva);
 }
 
-/* pequeno traço verde no início de cada título */
-.lista h3 {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* brilho verde no topo do cartão, que aparece ao passar o rato */
+.cartao::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(32, 201, 107, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.cartao:hover {
+  border-color: rgba(32, 201, 107, 0.3);
+  transform: translateY(-3px);
+}
+
+.cartao:hover::before {
+  opacity: 1;
+}
+
+.icone {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(32, 201, 107, 0.3);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+}
+
+.cartao h3 {
   font-size: 1.1rem;
   margin-bottom: 8px;
 }
 
-.lista h3::before {
-  content: "";
-  flex-shrink: 0;
-  width: 14px;
-  height: 2px;
-  background: var(--cor-destaque);
-}
-
-.lista p {
+.cartao p {
   color: var(--cor-texto-suave);
-  padding-left: 26px;
-  max-width: 46ch;
+  font-size: 0.95rem;
 }
 
-@media (max-width: 680px) {
-  .seccao {
-    padding: 72px 16px;
+@media (max-width: 900px) {
+  .grelha {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .interior {
+    padding: 80px 16px;
   }
 
-  .lista {
+  .grelha {
     grid-template-columns: 1fr;
   }
 }

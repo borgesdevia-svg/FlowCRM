@@ -1,0 +1,971 @@
+/* ============ Estrutura da visita guiada ============ */
+
+/* A secção é alta: o scroll "dentro" dela é o que muda as páginas.
+   --n (número de páginas) vem do JavaScript.
+   --por-pagina: quanto scroll gasta cada página, em % da altura do ecrã.
+   Valor baixo = visita rápida (antes era 85, agora 40). */
+.tour {
+  --por-pagina: 40;
+  --altura-barra: 64px; /* altura da barra de topo, que fica por cima */
+  position: relative;
+  height: calc((var(--n) * var(--por-pagina) + 100) * 1svh);
+  /* sobe a altura da barra: o espaço reservado para ela no topo da parte presa
+     fica por cima do fim do destaque (que está vazio), e a janela aparece mais cedo */
+  margin-top: calc(var(--altura-barra) * -1);
+  scroll-margin-top: 0;
+}
+
+/* esta parte fica PRESA ao ecrã enquanto a secção passa:
+   separadores em cima, janela no meio, legenda em baixo */
+.fixo {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh; /* svh = altura real no telemóvel (sem a barra do browser) */
+  overflow: hidden; /* corta o "planeta" decorativo, que é muito maior do que o ecrã */
+  padding: calc(var(--altura-barra) + 12px) 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+/* ---------- separadores (um por página da app) ---------- */
+.separadores {
+  display: flex;
+  max-width: 100%;
+  overflow-x: auto; /* no telemóvel, se não couberem, deslizam para o lado */
+  scrollbar-width: none; /* sem barra de scroll à vista */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.separadores button {
+  position: relative;
+  flex: none;
+  padding: 10px 16px;
+  border: 0;
+  background: none;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.separadores button:hover {
+  color: var(--cor-texto);
+}
+
+.separadores button:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: -2px;
+}
+
+.separadores .separadorAtivo {
+  color: var(--cor-texto);
+}
+
+/* traço verde por baixo do separador ativo */
+.separadorAtivo::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--cor-destaque);
+}
+
+/* ---------- legenda por baixo da janela ---------- */
+.legenda {
+  max-width: 620px;
+  text-align: center;
+  animation: trocar 0.6s var(--curva);
+}
+
+.legenda h2 {
+  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
+  margin-bottom: 6px;
+}
+
+.legenda p {
+  color: var(--cor-texto-suave);
+}
+
+@keyframes trocar {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------- a janela ---------- */
+.palco {
+  position: relative;
+  width: 100%;
+  max-width: 1080px;
+}
+
+/* Decoração por trás da janela: um "horizonte" com brilho, como um planeta visto de perto.
+   São dois círculos enormes, um por cima do outro (z-index: -1 = atrás da janela):
+   1) ::before — círculo colorido e desfocado (azul à esquerda, verde ao meio, laranja à direita);
+   2) ::after  — círculo preto um pouco mais pequeno, que tapa o de trás e deixa
+                 ver só a borda a brilhar. */
+.palco::before,
+.palco::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.palco::before {
+  top: -30px;
+  width: 2880px;
+  height: 2880px;
+  background: linear-gradient(
+    90deg,
+    transparent 24%,
+    #3b82f6 34%,
+    #20c96b 46%,
+    #a3e635 52%,
+    #fb923c 66%,
+    transparent 76%
+  );
+  filter: blur(40px);
+  opacity: 0.8;
+}
+
+.palco::after {
+  top: 40px;
+  width: 2800px;
+  height: 2800px;
+  background: var(--cor-fundo);
+}
+
+.janela {
+  /* nunca mais alta do que o espaço livre no ecrã (barra + separadores + legenda) */
+  height: min(590px, calc(100svh - 250px));
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  /* efeito vidro: fundo meio transparente + desfoque do brilho que está por trás */
+  background: rgba(14, 16, 15, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.85);
+}
+
+.barraJanela {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pontos {
+  display: flex;
+  gap: 6px;
+}
+
+.pontos i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2a2a2a;
+}
+
+.endereco {
+  flex: 1;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.corpo {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 170px 1fr;
+}
+
+/* ---------- menu lateral ---------- */
+.lateral {
+  padding: 16px 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.82rem;
+}
+
+.empresa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 16px;
+  font-weight: 600;
+}
+
+.empresa span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.75rem;
+}
+
+.menu {
+  position: relative;
+}
+
+.menu div {
+  position: relative; /* fica por cima do marcador */
+  height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--cor-texto-suave);
+  transition: color 0.3s;
+}
+
+.menu .itemAtivo {
+  color: var(--cor-texto);
+}
+
+/* o fundo do item ativo: desliza para cima/baixo com transform */
+.marcador {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(32, 201, 107, 0.1);
+  box-shadow: inset 2px 0 0 var(--cor-destaque);
+  transform: translateY(calc(var(--item) * 34px));
+  transition: transform 0.5s var(--curva);
+}
+
+/* ---------- páginas (uma por cima da outra; só a ativa se vê) ---------- */
+.principal {
+  position: relative;
+  overflow: hidden;
+}
+
+.ecra {
+  position: absolute;
+  inset: 0;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px) scale(0.99);
+  transition:
+    opacity 0.4s,
+    transform 0.6s var(--curva),
+    visibility 0s 0.4s;
+}
+
+.ativo {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+/* elementos que entram um a um (a ordem vem de --i) */
+.anima {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.5s var(--curva),
+    transform 0.6s var(--curva);
+}
+
+.ativo .anima {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+
+/* ---------- peças comuns ---------- */
+.topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topo small {
+  display: block;
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+}
+
+.topo strong {
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.botaoFalso {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--cor-destaque);
+  color: #04130a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cartao {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #131313;
+}
+
+.cartao > small {
+  display: block;
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+.suave {
+  color: var(--cor-texto-suave);
+}
+
+/* etiqueta de estado: a cor vem de --cor (definida no JS) */
+.estado {
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cor) 20%, transparent);
+  color: color-mix(in srgb, var(--cor) 55%, white);
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* texto que se "escreve" sozinho, letra a letra */
+.escrito {
+  display: inline-block;
+  padding-right: 2px;
+  border-right: 1.5px solid var(--cor-destaque);
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+}
+
+.ativo .escrito {
+  animation: escrever 1s steps(14) 0.7s forwards;
+}
+
+@keyframes escrever {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ============ Página 1: Painel ============ */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.numeros strong {
+  display: block;
+  margin: 4px 0 2px;
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+}
+
+.numeros em {
+  font-style: normal;
+  color: var(--cor-destaque);
+  font-size: 0.72rem;
+}
+
+.graficos {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 12px;
+}
+
+.graficoLinha {
+  display: block;
+  width: 100%;
+  height: 120px;
+  margin-top: 10px;
+}
+
+/* a linha começa "por desenhar" (dashoffset = 1) e desenha-se ao ativar */
+.traco {
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.ativo .traco {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.4s var(--curva) 0.5s;
+}
+
+.area {
+  fill: rgba(32, 201, 107, 0.08);
+  opacity: 0;
+}
+
+.ativo .area {
+  opacity: 1;
+  transition: opacity 0.8s 1.2s;
+}
+
+.barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  height: 120px;
+  margin-top: 10px;
+}
+
+.barras div {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+
+.barras span {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.8s var(--curva);
+}
+
+.ativo .barras span {
+  transform: scaleY(1);
+  transition-delay: calc(var(--i) * 80ms + 120ms);
+}
+
+.barras small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.7rem;
+}
+
+/* ============ Página 2: Clientes ============ */
+.ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+}
+
+.pesquisa {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(32, 201, 107, 0.4);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* lupa desenhada em CSS: um círculo pequeno */
+.pesquisa::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cor-texto-fraco);
+}
+
+.filtro {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto-suave);
+}
+
+.filtroAtivo {
+  border-color: rgba(32, 201, 107, 0.4);
+  background: rgba(32, 201, 107, 0.1);
+  color: var(--cor-destaque);
+}
+
+.tabela {
+  display: flex;
+  flex-direction: column;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 1.7fr 0.7fr 0.8fr 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+
+/* a linha da pesquisa fica realçada depois de o texto ser "escrito" */
+.ativo .linhaRealce {
+  animation: realcar 0.6s 1.7s forwards;
+}
+
+@keyframes realcar {
+  to {
+    background: rgba(32, 201, 107, 0.07);
+    box-shadow: inset 2px 0 0 var(--cor-destaque);
+  }
+}
+
+.cliente {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cliente b {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.62rem;
+}
+
+/* ============ Página 3: Ficha do cliente ============ */
+.ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cabecaFicha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cabecaFicha strong {
+  display: block;
+  font-size: 1.15rem;
+}
+
+.cabecaFicha small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+}
+
+.cabecaFicha .estado {
+  margin-left: auto;
+}
+
+.avatarGrande {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.9rem;
+}
+
+.colunasFicha {
+  display: grid;
+  grid-template-columns: 0.8fr 1.7fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.dados span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.84rem;
+}
+
+/* linha do tempo: um traço vertical com um ponto por interação */
+.linhaTempo {
+  position: relative;
+  padding-left: 22px;
+}
+
+.linhaTempo::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  bottom: 44px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.evento {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.ponto {
+  position: absolute;
+  left: -22px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--cor-destaque);
+  background: #0e0e0e;
+}
+
+.evento small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.7rem;
+}
+
+.evento p {
+  font-size: 0.84rem;
+}
+
+.novaNota {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 8px 8px 12px;
+  border-radius: 8px;
+  border: 1px dashed rgba(32, 201, 107, 0.35);
+  font-size: 0.82rem;
+}
+
+.novaNota .escrito {
+  animation-delay: 1.3s !important;
+}
+
+/* ============ Página 4: Pipeline ============ */
+.pipeline {
+  --pad: 10px; /* espaço dentro de cada coluna */
+  --vao: 10px; /* espaço entre colunas */
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--vao);
+  flex: 1;
+  min-height: 0;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--pad);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.tituloColuna {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+  color: var(--cor-texto-suave);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tituloColuna span {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.negocio {
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #161616;
+}
+
+.negocio strong {
+  display: block;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.negocio small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+/* o cartão da Marta salta para a coluna ao lado.
+   Distância = a largura do cartão (100%) + o espaço dentro das duas colunas
+   + o espaço entre elas + os 2 contornos de 1px. */
+.aMover {
+  position: relative;
+  z-index: 2;
+}
+
+.ativo .aMover {
+  animation: mover 1.2s var(--curva) 1.2s forwards;
+}
+
+@keyframes mover {
+  25% {
+    transform: translateY(-6px) rotate(-2deg);
+    box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.8);
+  }
+  100% {
+    transform: translateX(calc(100% + 2 * var(--pad) + var(--vao) + 2px));
+    border-color: rgba(217, 119, 6, 0.6);
+  }
+}
+
+/* ============ Página 5: Tarefas ============ */
+.tarefas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tarefa {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #131313;
+}
+
+.tarefa strong {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: line-through;
+  text-decoration-color: transparent; /* o risco existe mas está invisível */
+}
+
+.tarefa small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+}
+
+.caixa {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+}
+
+/* o visto (desenhado com dois contornos rodados) */
+.caixa::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 9px;
+  border-right: 2px solid #04130a;
+  border-bottom: 2px solid #04130a;
+  transform: rotate(45deg) scale(0);
+}
+
+/* nas tarefas feitas, a caixa enche-se, aparece o visto e o texto é riscado,
+   cada uma no seu momento (--visto, definido no JS) */
+.ativo .feita .caixa {
+  animation: encher 0.3s var(--visto) forwards;
+}
+
+.ativo .feita .caixa::after {
+  animation: visto 0.3s var(--visto) forwards;
+}
+
+.ativo .feita strong {
+  animation: riscar 0.4s var(--visto) forwards;
+}
+
+@keyframes encher {
+  to {
+    background: var(--cor-destaque);
+    border-color: var(--cor-destaque);
+  }
+}
+
+@keyframes visto {
+  to {
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+@keyframes riscar {
+  to {
+    color: var(--cor-texto-fraco);
+    text-decoration-color: var(--cor-texto-fraco);
+  }
+}
+
+.data {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cor-texto-suave);
+  font-size: 0.7rem;
+}
+
+/* ============ Telemóvel ============ */
+@media (max-width: 760px) {
+  .fixo {
+    gap: 14px;
+  }
+
+  .separadores button {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .legenda p {
+    font-size: 0.9rem;
+  }
+
+  .janela {
+    height: min(440px, calc(100svh - 280px));
+    border-radius: 16px;
+  }
+
+  /* sem menu lateral: a página ocupa a janela toda */
+  .corpo {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    display: none;
+  }
+
+  .ecra {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .numeros {
+    gap: 8px;
+  }
+
+  .numeros .cartao {
+    padding: 10px;
+  }
+
+  .numeros strong {
+    font-size: 1.1rem;
+  }
+
+  .numeros em {
+    display: none;
+  }
+
+  .graficos {
+    grid-template-columns: 1fr;
+  }
+
+  .graficos .cartao:last-child {
+    display: none;
+  }
+
+  .ferramentas .filtro:nth-child(n + 4) {
+    display: none;
+  }
+
+  .linha {
+    grid-template-columns: 1fr auto;
+  }
+
+  .linha .suave {
+    display: none;
+  }
+
+  .colunasFicha {
+    grid-template-columns: 1fr;
+  }
+
+  .dados {
+    display: none;
+  }
+
+  .cabecaFicha .estado {
+    display: none;
+  }
+
+  .pipeline {
+    --pad: 6px;
+    --vao: 6px;
+  }
+
+  .tituloColuna {
+    font-size: 0.62rem;
+  }
+
+  .negocio {
+    padding: 7px;
+  }
+
+  .negocio small {
+    display: none;
+  }
+
+  .negocio strong {
+    font-size: 0.7rem;
+  }
+}
+
+/* "menos movimento": as animações saltam logo para o fim */
+@media (prefers-reduced-motion: reduce) {
+  .tour * {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
