@@ -1,0 +1,68 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { obterSessao } from "@/lib/sessao";
+import { obterEstado, formatarData } from "@/lib/estados";
+import FormCliente from "@/components/clientes/FormCliente";
+import BotaoApagarCliente from "@/components/clientes/BotaoApagarCliente";
+import styles from "../ficha.module.css";
+
+// Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
+// Ex.: /painel/clientes/3f2a...  ->  params.id = "3f2a..."
+export const metadata = { title: "Cliente · FlowCRM" };
+
+const REGEX_UUID = /^[0-9a-f-]{36}$/i;
+
+export default async function PaginaCliente({ params }) {
+  const { id } = await params;
+  if (!REGEX_UUID.test(id)) notFound();
+
+  const { supabase, eAdmin } = await obterSessao();
+
+  // se o cliente não existir OU for de outra empresa/de outro comercial,
+  // o RLS não o devolve e mostramos a página "não encontrado"
+  const { data: cliente } = await supabase
+    .from("clientes")
+    .select("id, nome, email, telefone, estado, valor_previsto, responsavel_id, origem, criado_em")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (!cliente) notFound();
+
+  let membros = null;
+  if (eAdmin) {
+    const { data } = await supabase.from("perfis").select("id, nome").order("nome");
+    membros = data ?? [];
+  }
+
+  const est = obterEstado(cliente.estado);
+
+  return (
+    <div className={styles.pagina}>
+      <Link href="/painel/clientes" className={styles.voltar}>
+        Clientes
+      </Link>
+
+      <h1>{cliente.nome}</h1>
+      <p className={styles.meta}>
+        <span className={styles.estado}>
+          <i style={{ background: est.cor }}></i>
+          {est.texto}
+        </span>
+        <span>
+          {cliente.origem === "formulario" ? "Chegou pelo formulário público" : "Adicionado à mão"} em{" "}
+          {formatarData(cliente.criado_em)}
+        </span>
+      </p>
+
+      <FormCliente cliente={cliente} membros={membros} />
+
+      <div className={styles.zonaPerigo}>
+        <div>
+          <strong>Apagar este cliente</strong>
+          <p>Não dá para desfazer.</p>
+        </div>
+        <BotaoApagarCliente id={cliente.id} nome={cliente.nome} />
+      </div>
+    </div>
+  );
+}

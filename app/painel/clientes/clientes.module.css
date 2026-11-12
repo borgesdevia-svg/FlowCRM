@@ -1,0 +1,269 @@
+.pagina {
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cabecalho h1 {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  margin-bottom: 4px;
+}
+
+.subtitulo {
+  color: var(--cor-texto-suave);
+}
+
+/* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
+.aviso {
+  animation: aviso 0.4s var(--curva);
+}
+
+@keyframes aviso {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* ---------- barra de distribuição + filtros ---------- */
+.distribuicao {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.barra {
+  display: flex;
+  gap: 3px;
+  height: 10px;
+}
+
+/* cada segmento cresce conforme o "flex-grow" (= nº de clientes nesse estado) */
+.barra span {
+  flex-basis: 0;
+  border-radius: 3px;
+  transition: opacity 0.3s;
+}
+
+.barra .apagado {
+  opacity: 0.2;
+}
+
+.barraVazia {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.filtro,
+.filtroAtivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filtro:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cor-texto);
+}
+
+.filtroAtivo {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto);
+}
+
+.filtro i,
+.filtroAtivo i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.filtro span,
+.filtroAtivo span {
+  color: var(--cor-texto-fraco);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- pesquisa ---------- */
+.pesquisa {
+  display: flex;
+  gap: 8px;
+}
+
+.pesquisa input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border-radius: var(--raio);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+.pesquisa input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* ---------- tabela ---------- */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.tabela th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.82rem;
+  color: var(--cor-texto-fraco);
+  padding: 0 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tabela td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+/* a linha fica "posicionada" para o link do nome a poder cobrir toda */
+.tabela tbody tr {
+  position: relative;
+  transition: background 0.15s;
+}
+
+.tabela tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.linkCliente {
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+/* truque: um pseudo-elemento do link estica-se por cima da linha inteira */
+.linkCliente::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.linkCliente:focus-visible {
+  outline: none;
+}
+
+.linkCliente:focus-visible::after {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+
+.tabela td small {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.82rem;
+}
+
+.origem {
+  font-style: normal;
+  font-size: 0.72rem;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+}
+
+.colValor {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums; /* algarismos com a mesma largura: colunas alinhadas */
+  white-space: nowrap;
+}
+
+.colTelefone {
+  color: var(--cor-texto-suave);
+  white-space: nowrap;
+}
+
+.semResponsavel {
+  color: var(--cor-estado-negociacao);
+  font-size: 0.85rem;
+}
+
+.estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.estado i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ---------- lista vazia ---------- */
+.vazio {
+  padding: 48px 24px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.vazio h2 {
+  font-size: 1.15rem;
+}
+
+.vazio p {
+  color: var(--cor-texto-suave);
+  margin-bottom: 8px;
+}
+
+/* ---------- ecrãs pequenos: escondem-se colunas secundárias ---------- */
+@media (max-width: 900px) {
+  .colTelefone,
+  .colResponsavel {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .colValor {
+    display: none;
+  }
+
+  .tabela td,
+  .tabela th {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}

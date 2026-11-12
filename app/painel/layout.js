@@ -13,7 +13,7 @@ export default async function LayoutPainel({ children }) {
   // itens do menu; "breve" = ainda não feito (fases seguintes)
   const menu = [
     { texto: "Painel", href: "/painel" },
-    { texto: "Clientes", href: "/painel/clientes", breve: true },
+    { texto: "Clientes", href: "/painel/clientes" },
     // a página da equipa só aparece ao admin
     ...(eAdmin ? [{ texto: "Equipa", href: "/painel/equipa" }] : []),
   ];

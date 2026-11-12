@@ -1,0 +1,99 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.duasColunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ---------- escolha do estado (radio buttons) ---------- */
+.estados {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.estados legend {
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.opcoes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.opcao {
+  position: relative;
+  cursor: pointer;
+}
+
+/* o círculo do radio fica invisível mas continua a funcionar (teclado incluído) */
+.opcao input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.opcao span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border-radius: var(--raio);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+/* bolinha com a cor do estado (--cor vem do style do <label>) */
+.opcao span::before {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+
+.opcao:hover span {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* opção escolhida: contorno e fundo na cor do estado */
+.opcao input:checked + span {
+  border-color: var(--cor);
+  background: color-mix(in srgb, var(--cor) 16%, transparent);
+  color: var(--cor-texto);
+}
+
+.opcao input:focus-visible + span {
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .duasColunas {
+    grid-template-columns: 1fr;
+  }
+
+  .opcoes {
+    grid-template-columns: 1fr 1fr;
+  }
+}
