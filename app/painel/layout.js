@@ -5,6 +5,7 @@ import { hojeEmPortugal } from "@/lib/datas";
 import { iniciais } from "@/lib/texto";
 import LinkMenu from "@/components/painel/LinkMenu";
 import Icone from "@/components/Icone";
+import PesquisaGlobal from "@/components/painel/PesquisaGlobal";
 import styles from "./painel.module.css";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
@@ -64,6 +65,11 @@ export default async function LayoutPainel({ children }) {
             </small>
           </span>
         </Link>
+
+        {/* pesquisa global de clientes (componente de cliente) */}
+        <div className={styles.zonaPesquisa}>
+          <PesquisaGlobal />
+        </div>
 
         <nav className={styles.menu}>
           {seccoes.map((seccao) => (

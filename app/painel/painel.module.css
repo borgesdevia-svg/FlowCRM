@@ -76,6 +76,13 @@
   color: var(--cor-destaque);
 }
 
+/* a caixa de pesquisa fica por baixo da marca, separada do menu por uma linha */
+.zonaPesquisa {
+  padding-bottom: 20px;
+  margin-bottom: -4px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
 /* ---------- itens do menu ---------- */
 .menu {
   flex: 1;
@@ -275,6 +282,15 @@
 
   .marca {
     padding: 6px 10px 6px 6px;
+  }
+
+  /* no telemóvel a pesquisa ocupa uma linha inteira, por baixo da marca */
+  .zonaPesquisa {
+    order: 2;
+    flex-basis: 100%;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
   }
 
   .simbolo {
