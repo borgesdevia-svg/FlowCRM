@@ -1,0 +1,70 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* tirado do ecrã (mas continua no HTML, onde os robôs o encontram) */
+.armadilha {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.opcional {
+  color: var(--cor-texto-fraco);
+  font-weight: 400;
+}
+
+.privacidade {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+/* ---------- confirmação depois de enviar ---------- */
+.confirmacao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  animation: surgir 0.5s var(--curva);
+}
+
+.confirmacao h2 {
+  font-size: 1.4rem;
+}
+
+.confirmacao p {
+  color: var(--cor-texto-suave);
+}
+
+/* círculo verde com um visto desenhado em CSS */
+.visto {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: var(--cor-destaque);
+}
+
+.visto::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 11px;
+  width: 10px;
+  height: 18px;
+  border-right: 3px solid #052e16;
+  border-bottom: 3px solid #052e16;
+  transform: rotate(45deg);
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import styles from "./inicio.module.css";
 
@@ -69,8 +70,11 @@ export default async function PaginaPainel() {
             Partilha este link (site, redes sociais, email). Quem o preencher entra
             automaticamente como cliente &quot;Novo&quot;.
           </p>
-          <code className={styles.link}>{linkFormulario}</code>
-          <small className={styles.nota}>A página do formulário fica pronta na Fase 5.</small>
+          {/* target="_blank" abre num separador novo, para o painel continuar aberto */}
+          <Link href={linkFormulario} target="_blank" className={styles.link}>
+            {linkFormulario}
+          </Link>
+          <small className={styles.nota}>Abre o link para veres o formulário como um visitante.</small>
         </article>
 
         {/* primeiros passos */}

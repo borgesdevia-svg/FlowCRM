@@ -1,0 +1,57 @@
+/* Página pública: a protagonista é a empresa, não o FlowCRM.
+   Por isso é sóbria e o nome da empresa é o título. */
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 48px 16px;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(34, 197, 94, 0.1), transparent 70%);
+}
+
+.cartao {
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111;
+}
+
+/* inicial da empresa, como um pequeno "logótipo" */
+.inicial {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.cartao h1 {
+  font-size: clamp(1.5rem, 5vw, 1.9rem);
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+.subtitulo {
+  color: var(--cor-texto-suave);
+  margin-bottom: 24px;
+}
+
+.marca {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 480px) {
+  .cartao {
+    padding: 24px 20px;
+  }
+}
