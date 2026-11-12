@@ -1,0 +1,22 @@
+.cabecalho {
+  max-width: 640px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.sobretitulo {
+  color: var(--cor-destaque);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.cabecalho h2 {
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  margin-bottom: 16px;
+}
+
+.subtitulo {
+  color: var(--cor-texto-suave);
+  font-size: 1.05rem;
+}

@@ -1,0 +1,65 @@
+.seccao {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 48px 16px 112px;
+}
+
+.caixa {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate; /* o brilho (z-index -1) fica dentro da caixa */
+  padding: 80px 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: #0c0c0c;
+  text-align: center;
+}
+
+/* círculo de luz verde que se move lentamente de um lado para o outro */
+.brilho {
+  position: absolute;
+  z-index: -1;
+  width: 520px;
+  height: 520px;
+  top: -260px;
+  left: 50%;
+  margin-left: -260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.35), transparent 65%);
+  filter: blur(30px);
+  animation: vaguear 9s ease-in-out infinite alternate;
+}
+
+@keyframes vaguear {
+  from {
+    transform: translateX(-30%);
+  }
+  to {
+    transform: translateX(30%);
+  }
+}
+
+.caixa h2 {
+  max-width: 640px;
+  margin: 0 auto 16px;
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+}
+
+.caixa p {
+  color: var(--cor-texto-suave);
+  font-size: 1.05rem;
+  margin-bottom: 32px;
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .caixa {
+    padding: 56px 20px;
+  }
+}

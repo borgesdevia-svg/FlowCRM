@@ -1,7 +1,83 @@
 .rodape {
-  border-top: 1px solid var(--cor-contorno);
-  padding: 24px 16px;
-  text-align: center;
-  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.9rem;
+}
+
+.interior {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 56px 16px 40px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 32px;
+}
+
+.marca p {
+  max-width: 320px;
+  margin-top: 12px;
   color: var(--cor-texto-suave);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--cor-texto);
+}
+
+.crm {
+  color: var(--cor-destaque);
+}
+
+.simbolo {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #4ade80, #15803d);
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.coluna h4 {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.coluna a {
+  color: var(--cor-texto-suave);
+  transition: color 0.2s;
+}
+
+.coluna a:hover {
+  color: var(--cor-texto);
+}
+
+.fundo {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 20px 16px 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 640px) {
+  .interior {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .marca {
+    grid-column: span 2;
+  }
 }

@@ -1,0 +1,368 @@
+.seccao {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 96px 16px;
+  scroll-margin-top: 64px; /* espaço para a barra fixa ao saltar para #funcionalidades */
+}
+
+/* ---------- grelha bento ---------- */
+.grelha {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.grande {
+  grid-column: span 2; /* ocupa 2 das 3 colunas */
+}
+
+.cartao {
+  position: relative;
+  height: 100%;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: linear-gradient(180deg, #131313, #0e0e0e);
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s var(--curva);
+}
+
+/* brilho verde no topo do cartão que aparece ao passar o rato */
+.cartao::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(34, 197, 94, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.cartao:hover {
+  border-color: rgba(34, 197, 94, 0.3);
+  transform: translateY(-3px);
+}
+
+.cartao:hover::before {
+  opacity: 1;
+}
+
+.cartao h3 {
+  font-size: 1.15rem;
+  margin: 20px 0 8px;
+}
+
+.cartao p {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+/* ---------- área das mini-ilustrações ---------- */
+.visual {
+  position: relative;
+  height: 190px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #0a0a0a;
+  font-size: 0.78rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- clientes: pesquisa com texto a ser "escrito" --- */
+.pesquisa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: #111;
+}
+
+.lupa {
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid var(--cor-texto-suave);
+  border-radius: 50%;
+}
+
+/* efeito máquina de escrever: a largura cresce letra a letra (steps) */
+.escrever {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 7ch;
+  border-right: 1.5px solid var(--cor-destaque);
+  animation:
+    escrever 4s steps(7) infinite,
+    cursor 0.8s step-end infinite;
+}
+
+@keyframes escrever {
+  0% {
+    width: 0;
+  }
+  40%,
+  90% {
+    width: 7ch;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes cursor {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.filtros {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filtros span {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto-suave);
+  font-size: 0.7rem;
+}
+
+.filtros .filtroAtivo {
+  background: var(--cor-superficie-verde);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: var(--cor-destaque);
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.resultado b {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.58rem;
+  background: #1c1c1c;
+}
+
+.resultado em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 0.66rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.apagado {
+  opacity: 0.45;
+}
+
+.novo {
+  background: var(--cor-estado-novo);
+}
+
+.negociacao {
+  background: var(--cor-estado-negociacao);
+}
+
+/* --- pipeline: 3 colunas tipo quadro --- */
+.pipeline {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.coluna {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #111;
+}
+
+.coluna small {
+  font-size: 0.66rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.cartaoMini {
+  height: 30px;
+  border-radius: 6px;
+  background: #1a1a1a;
+  border-left: 3px solid;
+}
+
+/* o cartão que "salta" para a coluna seguinte, em ciclo */
+.aMover {
+  animation: mover 3.5s var(--curva) infinite;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes mover {
+  0%,
+  25% {
+    transform: none;
+  }
+  45%,
+  80% {
+    transform: translate(calc(100% + 24px), 0) rotate(-3deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* --- formulário público --- */
+.link {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.7rem;
+}
+
+.campo {
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto-fraco);
+}
+
+.enviar {
+  padding: 8px;
+  border-radius: 7px;
+  text-align: center;
+  font-weight: 600;
+  background: var(--cor-destaque);
+  color: #052e16;
+  animation: pressionar 3s ease-in-out infinite;
+}
+
+@keyframes pressionar {
+  0%,
+  70%,
+  100% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(0.95);
+  }
+}
+
+/* --- emails: fluxo lead -> automação -> email --- */
+.fluxo {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  gap: 8px;
+}
+
+.passoFluxo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.final {
+  border-color: rgba(34, 197, 94, 0.45);
+  color: var(--cor-destaque);
+}
+
+.iconeFluxo {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+}
+
+/* linha tracejada que "corre" da esquerda para a direita */
+.linhaFluxo {
+  flex: 1;
+  min-width: 20px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--cor-destaque) 0 6px, transparent 6px 12px);
+  background-size: 24px 2px;
+  animation: correr 0.8s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes correr {
+  to {
+    background-position: 24px 0;
+  }
+}
+
+.email {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.email small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.68rem;
+}
+
+.email strong {
+  display: block;
+  margin: 2px 0;
+}
+
+.email p {
+  color: var(--cor-texto-suave);
+  font-size: 0.74rem;
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width: 900px) {
+  .grelha {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .seccao {
+    padding: 72px 16px;
+  }
+
+  .grelha {
+    grid-template-columns: 1fr;
+  }
+
+  .grande {
+    grid-column: auto;
+  }
+}

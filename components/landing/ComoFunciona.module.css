@@ -1,0 +1,134 @@
+.seccao {
+  max-width: var(--largura-max);
+  margin: 0 auto;
+  padding: 96px 16px;
+  scroll-margin-top: 64px;
+}
+
+/* contentor da linha + lista (a linha posiciona-se em relação a ele) */
+.trilho {
+  position: relative;
+}
+
+.passos {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+
+/* Linha horizontal atrás dos números. Começa com largura 0 (scaleX(0))
+   e cresce até ao fim quando o <Revelar> à volta ganha a classe global "visivel". */
+.linha {
+  position: absolute;
+  top: 22px;
+  left: 16.6%;
+  right: 16.6%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cor-destaque), rgba(34, 197, 94, 0.2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--curva) 0.3s;
+}
+
+:global(.visivel) .linha {
+  transform: scaleX(1);
+}
+
+/* cada passo aparece um a seguir ao outro (atraso em --atraso) */
+.passos li {
+  position: relative;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--curva), transform 0.7s var(--curva);
+  transition-delay: var(--atraso);
+}
+
+:global(.visivel) .passos li {
+  opacity: 1;
+  transform: none;
+}
+
+.numero {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--cor-fundo);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: var(--cor-destaque);
+  font-weight: 700;
+  box-shadow: 0 0 24px rgba(34, 197, 94, 0.25);
+}
+
+.passos h3 {
+  font-size: 1.15rem;
+  margin: 20px 0 8px;
+}
+
+.passos p {
+  max-width: 300px;
+  margin: 0 auto;
+  color: var(--cor-texto-suave);
+}
+
+/* no telemóvel: passos em coluna, alinhados à esquerda, com a linha vertical
+   do lado esquerdo a ligar os números (assim não passa por cima do texto) */
+@media (max-width: 760px) {
+  .seccao {
+    padding: 72px 16px;
+  }
+
+  .passos {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    text-align: left;
+  }
+
+  .passos li {
+    padding-left: 64px;
+  }
+
+  .numero {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .passos h3 {
+    margin-top: 10px;
+  }
+
+  .passos p {
+    margin: 0;
+  }
+
+  .linha {
+    top: 23px;
+    bottom: 40px;
+    left: 22px;
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--cor-destaque), rgba(34, 197, 94, 0.2));
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  :global(.visivel) .linha {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .passos li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .linha {
+    transform: none;
+  }
+}
