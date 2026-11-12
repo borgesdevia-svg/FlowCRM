@@ -17,8 +17,10 @@ export default function BarraTopo() {
 
         {/* links para secções da própria landing (#id) — escondidos no telemóvel */}
         <nav className={styles.menu}>
+          <Link href="/#o-que-e">O que é</Link>
           <Link href="/#funcionalidades">Funcionalidades</Link>
-          <Link href="/#como-funciona">Como funciona</Link>
+          <Link href="/#vantagens">Vantagens</Link>
+          <Link href="/#perguntas">Perguntas</Link>
         </nav>
 
         <div className={styles.acoes}>

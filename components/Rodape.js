@@ -6,8 +6,10 @@ const colunas = [
   {
     titulo: "Produto",
     links: [
+      { texto: "O que é", href: "/#o-que-e" },
       { texto: "Funcionalidades", href: "/#funcionalidades" },
-      { texto: "Como funciona", href: "/#como-funciona" },
+      { texto: "Vantagens", href: "/#vantagens" },
+      { texto: "Perguntas frequentes", href: "/#perguntas" },
     ],
   },
   {
@@ -50,7 +52,7 @@ export default function Rodape() {
 
       <div className={styles.fundo}>
         <p>© {ano} FlowCRM</p>
-        <p>Projeto PAP · Técnico de Gestão e Programação de Sistemas Informáticos</p>
+        <p>Projeto PAP do curso Técnico de Gestão e Programação de Sistemas Informáticos</p>
       </div>
     </footer>
   );

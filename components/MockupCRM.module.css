@@ -261,8 +261,6 @@
   border-top: none;
   color: var(--cor-texto-fraco);
   font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   animation-delay: 1s;
 }
 

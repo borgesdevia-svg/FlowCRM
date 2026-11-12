@@ -11,11 +11,11 @@ export default function ChamadaFinal() {
           {/* brilho animado atrás do conteúdo */}
           <div className={styles.brilho} aria-hidden="true"></div>
 
-          <h2>Pronto para pôr as vendas em piloto automático?</h2>
-          <p>Cria a conta da tua empresa e recebe o primeiro lead ainda hoje.</p>
+          <h2>Organiza os clientes da tua equipa a partir de hoje</h2>
+          <p>Criar a conta é grátis e demora dois minutos.</p>
           <div className={styles.botoes}>
             <Link href="/registo" className="botao">
-              Criar conta grátis <span className="seta">→</span>
+              Criar conta grátis
             </Link>
             <Link href="/login" className="botao botao-secundario">
               Já tenho conta

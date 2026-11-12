@@ -1,0 +1,52 @@
+.seccao {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 96px 16px;
+  scroll-margin-top: 64px;
+}
+
+/* duas colunas separadas por linhas finas */
+.lista {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 48px;
+}
+
+.lista li {
+  padding: 24px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* pequeno traço verde no início de cada título */
+.lista h3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.lista h3::before {
+  content: "";
+  flex-shrink: 0;
+  width: 14px;
+  height: 2px;
+  background: var(--cor-destaque);
+}
+
+.lista p {
+  color: var(--cor-texto-suave);
+  padding-left: 26px;
+  max-width: 46ch;
+}
+
+@media (max-width: 680px) {
+  .seccao {
+    padding: 72px 16px;
+  }
+
+  .lista {
+    grid-template-columns: 1fr;
+  }
+}

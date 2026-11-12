@@ -6,7 +6,7 @@ import styles from "./CabecalhoSeccao.module.css";
 export default function CabecalhoSeccao({ sobretitulo, titulo, subtitulo }) {
   return (
     <Revelar className={styles.cabecalho}>
-      <p className={styles.sobretitulo}>{sobretitulo}</p>
+      {sobretitulo && <p className={styles.sobretitulo}>{sobretitulo}</p>}
       <h2>{titulo}</h2>
       {/* o subtítulo é opcional: só aparece se for passado */}
       {subtitulo && <p className={styles.subtitulo}>{subtitulo}</p>}

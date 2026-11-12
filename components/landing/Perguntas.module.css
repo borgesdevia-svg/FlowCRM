@@ -1,0 +1,76 @@
+.seccao {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 96px 16px 48px;
+  scroll-margin-top: 64px;
+}
+
+.lista {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* a pergunta: clicável, com um "+" à direita que roda para "×" quando abre */
+.item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 4px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none; /* tira o triângulo por defeito */
+}
+
+.item summary::-webkit-details-marker {
+  display: none;
+}
+
+.item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--cor-destaque);
+  transition: transform 0.25s var(--curva);
+}
+
+.item[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.item summary:hover {
+  color: var(--cor-destaque);
+}
+
+.item summary:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* a resposta aparece a deslizar quando se abre (resposta a um clique) */
+.item p {
+  padding: 0 4px 20px;
+  max-width: 62ch;
+  color: var(--cor-texto-suave);
+  animation: abrir 0.3s var(--curva);
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 680px) {
+  .seccao {
+    padding-top: 72px;
+  }
+}

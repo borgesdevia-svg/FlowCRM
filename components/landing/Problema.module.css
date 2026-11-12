@@ -1,0 +1,89 @@
+.seccao {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 96px 16px 48px;
+  scroll-margin-top: 64px;
+}
+
+.tabela {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.titulos,
+.linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.titulos span {
+  padding: 14px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tituloDepois {
+  color: var(--cor-destaque) !important;
+  background: var(--cor-superficie-verde) !important;
+}
+
+.linha {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.antes,
+.depois {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+  font-size: 0.98rem;
+}
+
+/* o "antes" fica mais apagado; o "depois" em destaque, com fundo verde-escuro */
+.antes {
+  color: var(--cor-texto-suave);
+}
+
+.depois {
+  color: var(--cor-texto);
+  background: rgba(11, 42, 34, 0.45);
+  border-left: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+/* no computador o rótulo está no topo da coluna; no telemóvel aparece em cada frase */
+.rotuloMovel {
+  display: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+@media (max-width: 680px) {
+  .seccao {
+    padding-top: 72px;
+  }
+
+  .titulos {
+    display: none;
+  }
+
+  .linha {
+    grid-template-columns: 1fr;
+  }
+
+  .rotuloMovel {
+    display: block;
+  }
+
+  .depois {
+    border-left: none;
+    border-top: 1px dashed rgba(34, 197, 94, 0.25);
+  }
+
+  .depois .rotuloMovel {
+    color: var(--cor-destaque);
+  }
+}

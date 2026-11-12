@@ -123,9 +123,8 @@ export default function Funcionalidades() {
   return (
     <section id="funcionalidades" className={styles.seccao}>
       <CabecalhoSeccao
-        sobretitulo="Funcionalidades"
-        titulo="Tudo o que a tua equipa precisa para vender mais"
-        subtitulo="Sem folhas de Excel perdidas nem emails esquecidos. O FlowCRM trata do trabalho repetitivo."
+        titulo="O que podes fazer com o FlowCRM"
+        subtitulo="Quatro ferramentas que trabalham em conjunto, desde o primeiro contacto até ao cliente ativo."
       />
 
       <div className={styles.grelha}>
