@@ -4,6 +4,8 @@
 
 import { useActionState } from "react";
 import { criarMembro } from "@/lib/acoes/equipa";
+import Icone from "@/components/Icone";
+import CampoPassword from "@/components/CampoPassword";
 
 export default function FormMembro() {
   const [estado, accao, pendente] = useActionState(criarMembro, {});
@@ -18,24 +20,41 @@ export default function FormMembro() {
 
       <div className="campo">
         <label htmlFor="nome">Nome</label>
-        <input id="nome" name="nome" placeholder="Rui Martins" defaultValue={valores.nome} aria-invalid={!!erros.nome} />
+        <div className="com-icone">
+          <Icone nome="utilizador" tamanho={17} className="icone-campo" />
+          <input id="nome" name="nome" placeholder="Rui Martins" defaultValue={valores.nome} aria-invalid={!!erros.nome} />
+        </div>
         {erros.nome && <p className="erro-campo">{erros.nome}</p>}
       </div>
 
       <div className="campo">
         <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="rui@empresa.pt" defaultValue={valores.email} aria-invalid={!!erros.email} />
+        <div className="com-icone">
+          <Icone nome="email" tamanho={17} className="icone-campo" />
+          <input id="email" name="email" type="email" placeholder="rui@empresa.pt" defaultValue={valores.email} aria-invalid={!!erros.email} />
+        </div>
         {erros.email && <p className="erro-campo">{erros.email}</p>}
       </div>
 
       <div className="campo">
         <label htmlFor="password">Password inicial</label>
-        <input id="password" name="password" type="text" autoComplete="off" placeholder="Mínimo 8 caracteres" aria-invalid={!!erros.password} />
+        {/* escondida por defeito; o botão "Mostrar" deixa ver para a partilhar */}
+        <CampoPassword
+          id="password"
+          name="password"
+          autoComplete="new-password"
+          placeholder="Mínimo 8 caracteres"
+          invalido={!!erros.password}
+        />
         {erros.password && <p className="erro-campo">{erros.password}</p>}
       </div>
 
       <button type="submit" className="botao botao-largo" disabled={pendente}>
-        {pendente ? "A adicionar..." : "Adicionar à equipa"}
+        {pendente ? "A adicionar..." : (
+          <>
+            <Icone nome="utilizadorMais" tamanho={17} /> Adicionar à equipa
+          </>
+        )}
       </button>
     </form>
   );

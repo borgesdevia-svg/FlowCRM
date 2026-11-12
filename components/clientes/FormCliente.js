@@ -41,8 +41,8 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
         <div className="campo">
           <label htmlFor="nome">Nome</label>
           {/* caixa com um ícone dentro, à esquerda */}
-          <div className={styles.comIcone}>
-            <Icone nome="utilizador" tamanho={17} className={styles.icone} />
+          <div className="com-icone">
+            <Icone nome="utilizador" tamanho={17} className="icone-campo" />
             <input
               id="nome"
               name="nome"
@@ -60,8 +60,8 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
             <label htmlFor="email">
               Email <span className={styles.opcional}>opcional</span>
             </label>
-            <div className={styles.comIcone}>
-              <Icone nome="email" tamanho={17} className={styles.icone} />
+            <div className="com-icone">
+              <Icone nome="email" tamanho={17} className="icone-campo" />
               <input id="email" name="email" type="email" placeholder="nome@exemplo.pt" defaultValue={v.email ?? ""} aria-invalid={!!erros.email} />
             </div>
             {erros.email && <p className="erro-campo">{erros.email}</p>}
@@ -70,8 +70,8 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
             <label htmlFor="telefone">
               Telefone <span className={styles.opcional}>opcional</span>
             </label>
-            <div className={styles.comIcone}>
-              <Icone nome="telemovel" tamanho={17} className={styles.icone} />
+            <div className="com-icone">
+              <Icone nome="telemovel" tamanho={17} className="icone-campo" />
               <input id="telefone" name="telefone" type="tel" placeholder="912 345 678" defaultValue={v.telefone ?? ""} aria-invalid={!!erros.telefone} />
             </div>
             {erros.telefone && <p className="erro-campo">{erros.telefone}</p>}
@@ -106,8 +106,8 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
               Valor previsto <span className={styles.opcional}>opcional</span>
             </label>
             {/* o símbolo € fica dentro da caixa, à esquerda */}
-            <div className={styles.comIcone}>
-              <span className={`${styles.icone} ${styles.euro}`} aria-hidden="true">€</span>
+            <div className="com-icone">
+              <span className={`icone-campo ${styles.euro}`} aria-hidden="true">€</span>
               <input id="valor_previsto" name="valor_previsto" inputMode="decimal" placeholder="1500"
                 defaultValue={v.valor_previsto ?? ""} aria-invalid={!!erros.valor_previsto} />
             </div>

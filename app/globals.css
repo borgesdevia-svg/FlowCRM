@@ -179,6 +179,59 @@ a {
   font-size: 0.82rem;
 }
 
+/* caixa com um ícone dentro, à esquerda
+   uso: <div className="com-icone"><Icone className="icone-campo"/><input/></div> */
+.com-icone {
+  position: relative;
+}
+
+.icone-campo {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-fraco);
+  pointer-events: none; /* clicar no ícone vai para a caixa */
+  transition: color 0.2s;
+}
+
+.campo .com-icone input {
+  padding-left: 40px; /* espaço para o ícone */
+}
+
+/* com a caixa selecionada, o ícone fica verde */
+.com-icone:focus-within .icone-campo {
+  color: var(--cor-destaque);
+}
+
+/* botão "Mostrar" dentro da caixa da password, à direita */
+.campo .com-mostrar input {
+  padding-right: 86px;
+}
+
+.botao-mostrar {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.botao-mostrar:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto);
+}
+
 /* caixas de mensagem (erro geral ou sucesso) */
 .alerta {
   padding: 12px 14px;

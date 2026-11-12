@@ -56,31 +56,7 @@
   font-weight: 400;
 }
 
-/* ---------- caixa de texto com ícone dentro ---------- */
-.comIcone {
-  position: relative;
-}
-
-.icone {
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--cor-texto-fraco);
-  pointer-events: none; /* clicar no ícone vai para a caixa */
-  transition: color 0.2s;
-}
-
-/* espaço à esquerda para o ícone (o seletor tem de ser mais forte que o ".campo input" global) */
-.comIcone input {
-  padding-left: 40px !important;
-}
-
-/* quando a caixa está selecionada, o ícone fica verde */
-.comIcone:focus-within .icone {
-  color: var(--cor-destaque);
-}
-
+/* o símbolo € usa a classe global "icone-campo" (caixa com ícone, em globals.css) */
 .euro {
   font-size: 0.95rem;
   font-weight: 600;
