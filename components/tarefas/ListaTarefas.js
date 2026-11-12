@@ -4,10 +4,11 @@ import { alternarTarefa, apagarTarefa } from "@/lib/acoes/tarefas";
 import { formatarDiaCurto, situacaoPrazo } from "@/lib/datas";
 import styles from "./Tarefas.module.css";
 
-// Lista de tarefas, usada em dois sítios:
+// Lista de tarefas, usada em três sítios:
 //  - na ficha do cliente (mostrarCliente = false)
 //  - no painel inicial, em "As minhas tarefas" (mostrarCliente = true)
-export default function ListaTarefas({ tarefas, mostrarCliente = false, mensagemVazia }) {
+//  - na página Tarefas (mostrarCliente e, para o admin, mostrarResponsavel)
+export default function ListaTarefas({ tarefas, mostrarCliente = false, mostrarResponsavel = false, mensagemVazia }) {
   if (tarefas.length === 0) return <p className={styles.vazio}>{mensagemVazia}</p>;
 
   return (
@@ -35,6 +36,7 @@ export default function ListaTarefas({ tarefas, mostrarCliente = false, mensagem
                 {mostrarCliente && t.clientes && (
                   <Link href={`/painel/clientes/${t.cliente_id}`}>{t.clientes.nome}</Link>
                 )}
+                {mostrarResponsavel && <span>{t.perfis?.nome ?? "Sem responsável"}</span>}
                 {t.data_limite && <span>{formatarDiaCurto(t.data_limite)}</span>}
                 {situacao === "atrasada" && <span className={styles.atrasada}>Atrasada</span>}
                 {situacao === "hoje" && <span className={styles.hoje}>Hoje</span>}

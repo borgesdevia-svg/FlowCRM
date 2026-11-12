@@ -33,9 +33,10 @@ export default async function LayoutPainel({ children }) {
     {
       titulo: "Menu principal",
       itens: [
-        { texto: "Painel", href: "/painel", icone: "casa", contador: nAtrasadas || null, alerta: true },
+        { texto: "Painel", href: "/painel", icone: "casa" },
         { texto: "Clientes", href: "/painel/clientes", icone: "utilizadores", contador: nClientes ?? null },
         { texto: "Pipeline", href: "/painel/pipeline", icone: "subida" },
+        { texto: "Tarefas", href: "/painel/tarefas", icone: "lista", contador: nAtrasadas || null, alerta: true },
       ],
     },
     {

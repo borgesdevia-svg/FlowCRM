@@ -1,19 +1,22 @@
 "use client";
-// Formulário para criar uma tarefa na ficha do cliente.
+// Formulário para criar uma tarefa. Usado em dois sítios:
+//  - na ficha do cliente: recebe clienteId (o cliente já é conhecido)
+//  - na página Tarefas: recebe a lista "clientes" para escolher e,
+//    se for o admin, a lista "membros" para escolher o responsável
 
 import { useActionState } from "react";
 import { adicionarTarefa } from "@/lib/acoes/tarefas";
 import styles from "./Tarefas.module.css";
 
-export default function FormTarefa({ clienteId }) {
+export default function FormTarefa({ clienteId = null, clientes = null, membros = null, perfilId = "" }) {
   const [estado, accao, pendente] = useActionState(adicionarTarefa, {});
 
   return (
     <form action={accao} key={estado.versao ?? 0} className={styles.formulario}>
-      <input type="hidden" name="cliente_id" value={clienteId} />
+      {clienteId && <input type="hidden" name="cliente_id" value={clienteId} />}
 
       <div className={styles.linhaForm}>
-        <div className="campo" style={{ flex: 1 }}>
+        <div className="campo" style={{ flex: 1, minWidth: 200 }}>
           <label htmlFor="titulo">Tarefa</label>
           <input id="titulo" name="titulo" placeholder="Ex.: Enviar proposta" defaultValue={estado.titulo ?? ""} />
         </div>
@@ -23,6 +26,39 @@ export default function FormTarefa({ clienteId }) {
           <input id="data_limite" name="data_limite" type="date" defaultValue={estado.dataLimite ?? ""} />
         </div>
       </div>
+
+      {/* listas de escolha: só aparecem na página Tarefas */}
+      {(clientes || membros) && (
+        <div className={styles.linhaForm}>
+          {clientes && (
+            <div className="campo" style={{ flex: 1, minWidth: 200 }}>
+              <label htmlFor="cliente_id">Cliente</label>
+              <select id="cliente_id" name="cliente_id" defaultValue={estado.clienteId ?? ""}>
+                <option value="" disabled>
+                  Escolhe o cliente
+                </option>
+                {clientes.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {membros && (
+            <div className="campo" style={{ flex: 1, minWidth: 180 }}>
+              <label htmlFor="responsavel_id">Responsável</label>
+              <select id="responsavel_id" name="responsavel_id" defaultValue={perfilId}>
+                {membros.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+      )}
 
       {estado.erro && <p className="erro-campo">{estado.erro}</p>}
 
