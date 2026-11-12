@@ -11,11 +11,6 @@ const perguntas = [
       "CRM quer dizer gestão de relação com clientes. É a ferramenta onde a empresa guarda os contactos dos clientes e acompanha cada negócio, do primeiro contacto à venda.",
   },
   {
-    pergunta: "Quanto custa?",
-    resposta:
-      "Nada. O FlowCRM é um projeto escolar (Prova de Aptidão Profissional) e pode ser usado gratuitamente.",
-  },
-  {
     pergunta: "Os dados da minha empresa estão seguros?",
     resposta:
       "Sim. As passwords são guardadas encriptadas e a base de dados tem regras que separam as empresas: cada utilizador só consegue ler os clientes da sua empresa, mesmo que tente aceder de outra forma.",

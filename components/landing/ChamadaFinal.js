@@ -12,10 +12,10 @@ export default function ChamadaFinal() {
           <div className={styles.brilho} aria-hidden="true"></div>
 
           <h2>Organiza os clientes da tua equipa a partir de hoje</h2>
-          <p>Criar a conta é grátis e demora dois minutos.</p>
+          <p>Criar a conta da empresa demora dois minutos.</p>
           <div className={styles.botoes}>
             <Link href="/registo" className="botao">
-              Criar conta grátis
+              Criar conta
             </Link>
             <Link href="/login" className="botao botao-secundario">
               Já tenho conta

@@ -23,9 +23,9 @@ export default function Destaque() {
 
         <div className={`entrar ${styles.botoes}`} style={{ "--atraso": "200ms" }}>
           <Link href="/registo" className="botao">
-            Criar conta grátis
+            Criar conta
           </Link>
-          <Link href="/#como-funciona" className="botao botao-secundario">
+          <Link href="/#demonstracao" className="botao botao-secundario">
             Ver como funciona
           </Link>
         </div>

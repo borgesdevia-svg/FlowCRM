@@ -52,7 +52,7 @@ export default function Rodape() {
 
       <div className={styles.fundo}>
         <p>© {ano} FlowCRM</p>
-        <p>Projeto PAP do curso Técnico de Gestão e Programação de Sistemas Informáticos</p>
+        <p>Feito em Portugal</p>
       </div>
     </footer>
   );

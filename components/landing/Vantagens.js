@@ -37,7 +37,7 @@ export default function Vantagens() {
     <section id="vantagens" className={styles.seccao}>
       <CabecalhoSeccao
         titulo="Porquê usar o FlowCRM"
-        subtitulo="Feito para empresas pequenas que querem organizar as vendas sem pagar ferramentas complicadas."
+        subtitulo="Feito para empresas pequenas que querem organizar as vendas sem ferramentas complicadas."
       />
 
       <Revelar>
