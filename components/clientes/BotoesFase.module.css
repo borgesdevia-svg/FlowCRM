@@ -1,0 +1,52 @@
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.botao,
+.principal {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+/* versão maior, usada no cabeçalho da ficha */
+.grande .botao,
+.grande .principal {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.86rem;
+}
+
+.botao {
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+}
+
+.botao:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--cor-texto);
+}
+
+/* o passo "natural" seguinte fica em destaque (verde) */
+.principal {
+  border: 1px solid rgba(32, 201, 107, 0.35);
+  background: rgba(32, 201, 107, 0.12);
+  color: #86efac;
+  font-weight: 600;
+}
+
+.principal:hover {
+  background: rgba(32, 201, 107, 0.22);
+}
+
+.botao:focus-visible,
+.principal:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}

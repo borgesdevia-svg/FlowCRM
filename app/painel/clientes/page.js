@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
-import { ESTADOS, obterEstado, formatarEuros } from "@/lib/estados";
+import { ESTADOS, obterEstado, formatarEuros, formatarData } from "@/lib/estados";
+import { iniciais } from "@/lib/texto";
+import Icone from "@/components/Icone";
 import styles from "./clientes.module.css";
 
 // Rota /painel/clientes — lista de clientes com pesquisa e filtro por estado.
@@ -19,16 +21,20 @@ export default async function PaginaClientes({ searchParams }) {
   const { q = "", estado = "", aviso = "" } = await searchParams;
   const { supabase, eAdmin } = await obterSessao();
 
-  // 1) contagem por estado (para a barra) — todos os clientes visíveis, sem filtros
-  const { data: todos } = await supabase.from("clientes").select("estado");
+  // 1) todos os clientes visíveis, sem filtros: para as contagens e o resumo do topo
+  const { data: todos } = await supabase.from("clientes").select("estado, valor_previsto");
   const total = todos?.length ?? 0;
   const contagem = {};
-  for (const c of todos ?? []) contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
+  let valorTotal = 0;
+  for (const c of todos ?? []) {
+    contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
+    valorTotal += Number(c.valor_previsto) || 0;
+  }
 
   // 2) lista filtrada — o filtro é feito pela base de dados
   let consulta = supabase
     .from("clientes")
-    .select("id, nome, email, telefone, estado, valor_previsto, origem, perfis(nome)")
+    .select("id, nome, email, telefone, estado, valor_previsto, origem, criado_em, perfis(nome)")
     .order("criado_em", { ascending: false });
 
   const estadoValido = ESTADOS.some((e) => e.chave === estado);
@@ -52,15 +58,20 @@ export default async function PaginaClientes({ searchParams }) {
 
   return (
     <div className={styles.pagina}>
-      <header className={styles.cabecalho}>
+      {/* cabeçalho: título + resumo numa linha, igual ao Início e ao Pipeline */}
+      <header className={`entrar ${styles.cabecalho}`}>
         <div>
-          <h1>Clientes</h1>
-          <p className={styles.subtitulo}>
-            {eAdmin ? "Todos os clientes da empresa." : "Os clientes de que és responsável."}
+          <h1>Clientes.</h1>
+          <p className={styles.resumo}>
+            {total} {total === 1 ? "cliente" : "clientes"}
+            <span>·</span>
+            {formatarEuros(valorTotal)} em valor previsto
+            <span>·</span>
+            {eAdmin ? "toda a empresa" : "só os teus"}
           </p>
         </div>
         <Link href="/painel/clientes/novo" className="botao">
-          Adicionar cliente
+          <Icone nome="mais" tamanho={16} /> Novo cliente
         </Link>
       </header>
 
@@ -70,9 +81,9 @@ export default async function PaginaClientes({ searchParams }) {
         </p>
       )}
 
-      {/* Barra de distribuição: cada segmento tem largura proporcional ao nº de clientes
-          nesse estado. Os separadores por baixo filtram a lista. */}
-      <nav className={styles.distribuicao} aria-label="Filtrar por estado">
+      {/* Filtros por estado. Por cima, a barra de distribuição: cada segmento tem
+          largura proporcional ao nº de clientes nesse estado. */}
+      <nav className={`entrar ${styles.distribuicao}`} style={{ "--atraso": "60ms" }} aria-label="Filtrar por estado">
         <div className={styles.barra} aria-hidden="true">
           {total === 0 ? (
             <span className={styles.barraVazia}></span>
@@ -89,6 +100,7 @@ export default async function PaginaClientes({ searchParams }) {
           )}
         </div>
 
+        {/* "comprimido" de botões: o filtro ativo fica verde */}
         <div className={styles.filtros}>
           <Link href={linkFiltro("")} className={!estadoValido ? styles.filtroAtivo : styles.filtro}>
             Todos <span>{total}</span>
@@ -106,88 +118,120 @@ export default async function PaginaClientes({ searchParams }) {
         </div>
       </nav>
 
-      {/* pesquisa: um formulário GET normal, que só muda o URL */}
-      <form className={styles.pesquisa} role="search">
-        {estadoValido && <input type="hidden" name="estado" value={estado} />}
-        <input
-          type="search"
-          name="q"
-          defaultValue={termo}
-          placeholder="Pesquisar por nome ou email"
-          aria-label="Pesquisar clientes"
-        />
-        <button type="submit" className="botao botao-secundario">
-          Pesquisar
-        </button>
-      </form>
+      {/* bloco com a tabela (como o "Open Deals" da referência) */}
+      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "120ms" }}>
+        <header className={styles.topoBloco}>
+          <h2>
+            {estadoValido ? obterEstado(estado).texto : "Todos os clientes"}
+            <span>
+              {lista.length} {lista.length === 1 ? "resultado" : "resultados"}
+            </span>
+          </h2>
 
-      {lista.length === 0 ? (
-        <div className={styles.vazio}>
-          {total === 0 ? (
-            <>
-              <h2>Ainda não tens clientes</h2>
-              <p>Adiciona o primeiro à mão ou partilha o formulário público da empresa.</p>
-              <Link href="/painel/clientes/novo" className="botao">
-                Adicionar cliente
-              </Link>
-            </>
-          ) : (
-            <>
-              <h2>Nenhum cliente encontrado</h2>
-              <p>Experimenta outra pesquisa ou mostra todos os estados.</p>
-              <Link href="/painel/clientes" className="botao botao-secundario">
-                Limpar filtros
-              </Link>
-            </>
-          )}
-        </div>
-      ) : (
-        <table className={styles.tabela}>
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th className={styles.colTelefone}>Telefone</th>
-              {eAdmin && <th className={styles.colResponsavel}>Responsável</th>}
-              <th className={styles.colValor}>Valor previsto</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lista.map((c) => {
-              const est = obterEstado(c.estado);
-              return (
-                <tr key={c.id}>
-                  <td>
-                    {/* o link ocupa a linha toda (ver CSS) para a linha inteira ser clicável */}
-                    <Link href={`/painel/clientes/${c.id}`} className={styles.linkCliente}>
-                      {c.nome}
-                    </Link>
-                    <small>
-                      {c.email ?? "Sem email"}
-                      {c.origem === "formulario" && <em className={styles.origem}>formulário</em>}
-                    </small>
-                  </td>
-                  <td className={styles.colTelefone}>{c.telefone ?? "—"}</td>
-                  {eAdmin && (
-                    <td className={styles.colResponsavel}>
-                      {c.perfis?.nome ?? <span className={styles.semResponsavel}>Por atribuir</span>}
-                    </td>
-                  )}
-                  <td className={styles.colValor}>
-                    {c.valor_previsto !== null ? formatarEuros(c.valor_previsto) : "—"}
-                  </td>
-                  <td>
-                    <span className={styles.estado}>
-                      <i style={{ background: est.cor }}></i>
-                      {est.texto}
-                    </span>
-                  </td>
+          {/* pesquisa: um formulário GET normal, que só muda o URL */}
+          <form className={styles.pesquisa} role="search">
+            {estadoValido && <input type="hidden" name="estado" value={estado} />}
+            <Icone nome="pesquisa" tamanho={17} className={styles.lupa} />
+            <input
+              type="search"
+              name="q"
+              defaultValue={termo}
+              placeholder="Pesquisar por nome ou email…"
+              aria-label="Pesquisar clientes"
+            />
+            <button type="submit" className={styles.botaoPesquisa}>
+              Pesquisar
+            </button>
+          </form>
+        </header>
+
+        {lista.length === 0 ? (
+          <div className={styles.vazio}>
+            {total === 0 ? (
+              <>
+                <h2>Ainda não tens clientes</h2>
+                <p>Adiciona o primeiro à mão ou partilha o formulário público da empresa.</p>
+                <Link href="/painel/clientes/novo" className="botao">
+                  Adicionar cliente
+                </Link>
+              </>
+            ) : (
+              <>
+                <h2>Nenhum cliente encontrado</h2>
+                <p>Experimenta outra pesquisa ou mostra todos os estados.</p>
+                <Link href="/painel/clientes" className="botao botao-secundario">
+                  Limpar filtros
+                </Link>
+              </>
+            )}
+          </div>
+        ) : (
+          // a tabela pode deslizar para o lado em ecrãs estreitos, em vez de rebentar
+          <div className={styles.rolar}>
+            <table className={styles.tabela}>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th className={styles.colTelefone}>Telefone</th>
+                  {eAdmin && <th className={styles.colResponsavel}>Responsável</th>}
+                  <th className={styles.colValor}>Valor</th>
+                  <th>Estado</th>
+                  <th className={styles.colData}>Criado</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
+              </thead>
+              <tbody>
+                {lista.map((c, i) => {
+                  const est = obterEstado(c.estado);
+                  const responsavel = c.perfis?.nome;
+                  return (
+                    // as primeiras 12 linhas entram em cascata (as seguintes já estão fora do ecrã)
+                    <tr key={c.id} className="entrar" style={{ "--atraso": `${180 + Math.min(i, 12) * 35}ms` }}>
+                      <td>
+                        <div className={styles.cliente}>
+                          <span className={styles.avatar}>{iniciais(c.nome)}</span>
+                          <div className={styles.nomeEmail}>
+                            {/* o link ocupa a linha toda (ver CSS) para a linha inteira ser clicável */}
+                            <Link href={`/painel/clientes/${c.id}`} className={styles.linkCliente}>
+                              {c.nome}
+                            </Link>
+                            <small>
+                              {c.email ?? "Sem email"}
+                              {c.origem === "formulario" && <em className={styles.origem}>formulário</em>}
+                            </small>
+                          </div>
+                        </div>
+                      </td>
+                      <td className={styles.colTelefone}>{c.telefone ?? "—"}</td>
+                      {eAdmin && (
+                        <td className={styles.colResponsavel}>
+                          {responsavel ? (
+                            <span className={styles.responsavel}>
+                              <b>{iniciais(responsavel)}</b>
+                              {responsavel}
+                            </span>
+                          ) : (
+                            <span className={styles.semResponsavel}>Por atribuir</span>
+                          )}
+                        </td>
+                      )}
+                      <td className={styles.colValor}>
+                        {c.valor_previsto !== null ? formatarEuros(c.valor_previsto) : "—"}
+                      </td>
+                      <td>
+                        {/* etiqueta com a cor do estado (--cor) */}
+                        <span className={styles.estado} style={{ "--cor": est.cor }}>
+                          {est.texto}
+                        </span>
+                      </td>
+                      <td className={styles.colData}>{formatarData(c.criado_em)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

@@ -1,25 +1,37 @@
 .pagina {
-  max-width: 1100px;
+  max-width: 1180px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
+/* ---------- cabeçalho (igual ao do Início e do Pipeline) ---------- */
 .cabecalho {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--cor-contorno);
 }
 
 .cabecalho h1 {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  margin-bottom: 4px;
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  margin-bottom: 6px;
 }
 
-.subtitulo {
+.resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
   color: var(--cor-texto-suave);
+}
+
+.resumo span {
+  color: var(--cor-texto-fraco);
 }
 
 /* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
@@ -38,19 +50,19 @@
 .distribuicao {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .barra {
   display: flex;
   gap: 3px;
-  height: 10px;
+  height: 8px;
 }
 
 /* cada segmento cresce conforme o "flex-grow" (= nº de clientes nesse estado) */
 .barra span {
   flex-basis: 0;
-  border-radius: 3px;
+  border-radius: 999px;
   transition: opacity 0.3s;
 }
 
@@ -63,21 +75,31 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* "comprimido" à volta dos filtros, como os separadores de período da referência */
 .filtros {
+  align-self: flex-start;
+  max-width: 100%;
   display: flex;
-  flex-wrap: wrap;
   gap: 4px;
+  padding: 5px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow-x: auto; /* no telemóvel desliza para o lado */
+  scrollbar-width: none;
 }
 
 .filtro,
 .filtroAtivo {
+  flex: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
   color: var(--cor-texto-suave);
   font-size: 0.9rem;
+  white-space: nowrap;
   transition: background 0.2s, color 0.2s;
 }
 
@@ -86,9 +108,13 @@
   color: var(--cor-texto);
 }
 
+/* filtro ativo: verde com brilho, como o botão do destaque da landing */
 .filtroAtivo {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--cor-texto);
+  background: linear-gradient(180deg, rgba(32, 201, 107, 0.32), rgba(32, 201, 107, 0.14));
+  color: #fff;
+  box-shadow:
+    0 0 18px rgba(32, 201, 107, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .filtro i,
@@ -104,49 +130,132 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- pesquisa ---------- */
-.pesquisa {
+.filtroAtivo span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- bloco da tabela ---------- */
+.bloco {
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow: hidden; /* os cantos redondos cortam a tabela */
+}
+
+.topoBloco {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.topoBloco h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.topoBloco h2 span {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* ---------- pesquisa (com a lupa dentro da caixa) ---------- */
+.pesquisa {
+  position: relative;
+  flex: 0 1 380px;
+  display: flex;
+  gap: 6px;
+}
+
+.lupa {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-fraco);
+  pointer-events: none; /* clicar na lupa vai para a caixa de texto */
 }
 
 .pesquisa input {
   flex: 1;
   min-width: 0;
-  padding: 10px 14px;
-  border-radius: var(--raio);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  padding: 9px 12px 9px 38px; /* espaço à esquerda para a lupa */
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
   color: var(--cor-texto);
   font: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pesquisa input::placeholder {
+  color: var(--cor-texto-fraco);
 }
 
 .pesquisa input:focus {
   outline: none;
   border-color: var(--cor-destaque);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 0 0 3px rgba(32, 201, 107, 0.2);
+}
+
+.botaoPesquisa {
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.botaoPesquisa:hover {
+  color: var(--cor-texto);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* ---------- tabela ---------- */
+.rolar {
+  overflow-x: auto;
+}
+
 .tabela {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.92rem;
 }
 
+/* cabeçalhos em maiúsculas pequenas, como na referência */
 .tabela th {
   text-align: left;
-  font-weight: 500;
-  font-size: 0.82rem;
+  padding: 14px 22px;
   color: var(--cor-texto-fraco);
-  padding: 0 12px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--cor-fundo-2);
+  border-bottom: 1px solid var(--cor-contorno);
 }
 
 .tabela td {
-  padding: 14px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--cor-contorno);
   vertical-align: middle;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
 }
 
 /* a linha fica "posicionada" para o link do nome a poder cobrir toda */
@@ -155,13 +264,46 @@
   transition: background 0.15s;
 }
 
+/* ao passar o rato: fundo mais claro e traço verde à esquerda */
 .tabela tbody tr:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(32, 201, 107, 0.04);
+  box-shadow: inset 2px 0 0 var(--cor-destaque);
+}
+
+.cliente {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(32, 201, 107, 0.25);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.nomeEmail {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .linkCliente {
   color: var(--cor-texto);
   font-weight: 500;
+}
+
+.tabela tbody tr:hover .linkCliente {
+  color: var(--cor-destaque);
 }
 
 /* truque: um pseudo-elemento do link estica-se por cima da linha inteira */
@@ -181,32 +323,54 @@
   border-radius: 6px;
 }
 
-.tabela td small {
+.nomeEmail small {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--cor-texto-suave);
+  color: var(--cor-texto-fraco);
   font-size: 0.82rem;
 }
 
 .origem {
   font-style: normal;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   padding: 0 6px;
   border-radius: 4px;
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
 }
 
+.colTelefone,
+.colData {
+  color: var(--cor-texto-suave);
+  white-space: nowrap;
+}
+
 .colValor {
   text-align: right !important;
+  font-weight: 500;
   font-variant-numeric: tabular-nums; /* algarismos com a mesma largura: colunas alinhadas */
   white-space: nowrap;
 }
 
-.colTelefone {
-  color: var(--cor-texto-suave);
+/* responsável: iniciais num círculo pequeno + nome */
+.responsavel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   white-space: nowrap;
+  color: var(--cor-texto-suave);
+}
+
+.responsavel b {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto);
+  font-size: 0.62rem;
 }
 
 .semResponsavel {
@@ -214,24 +378,21 @@
   font-size: 0.85rem;
 }
 
+/* etiqueta de estado: fundo e texto feitos a partir da cor do estado (--cor) */
 .estado {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cor) 18%, transparent);
+  color: color-mix(in srgb, var(--cor) 50%, white);
+  font-size: 0.8rem;
+  font-weight: 500;
   white-space: nowrap;
-}
-
-.estado i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
 }
 
 /* ---------- lista vazia ---------- */
 .vazio {
-  padding: 48px 24px;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
+  padding: 56px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -249,6 +410,12 @@
 }
 
 /* ---------- ecrãs pequenos: escondem-se colunas secundárias ---------- */
+@media (max-width: 1100px) {
+  .colData {
+    display: none;
+  }
+}
+
 @media (max-width: 900px) {
   .colTelefone,
   .colResponsavel {
@@ -261,9 +428,21 @@
     display: none;
   }
 
+  .topoBloco {
+    padding: 14px;
+  }
+
+  .pesquisa {
+    flex-basis: 100%;
+  }
+
   .tabela td,
   .tabela th {
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .cliente {
+    min-width: 0;
   }
 }

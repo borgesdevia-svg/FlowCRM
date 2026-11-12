@@ -100,7 +100,7 @@
 }
 
 .papelAdmin {
-  border-color: rgba(34, 197, 94, 0.4);
+  border-color: rgba(32, 201, 107, 0.4);
   color: var(--cor-destaque);
   background: var(--cor-superficie-verde);
 }

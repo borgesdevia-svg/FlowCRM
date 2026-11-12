@@ -1,26 +1,18 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
-import { mudarEstado } from "@/lib/acoes/clientes";
+import { iniciais } from "@/lib/texto";
+import Icone from "@/components/Icone";
+import BotoesFase from "@/components/clientes/BotoesFase";
 import styles from "./pipeline.module.css";
 
 // Rota /painel/pipeline — os clientes organizados por fase, em colunas.
-// Cada cartão tem botões para passar o cliente para a fase seguinte.
+// Cada cartão tem botões para passar o cliente para a fase seguinte (componente BotoesFase).
 export const metadata = { title: "Pipeline · FlowCRM" };
 
-// Para cada estado, que botões aparecem no cartão (e para que estado levam)
-const PROXIMOS_PASSOS = {
-  novo: [
-    { para: "negociacao", texto: "Passar a negociação", principal: true },
-    { para: "perdido", texto: "Perdido" },
-  ],
-  negociacao: [
-    { para: "ativo", texto: "Fechar negócio", principal: true },
-    { para: "perdido", texto: "Perdido" },
-  ],
-  ativo: [{ para: "negociacao", texto: "Reabrir negociação" }],
-  perdido: [{ para: "novo", texto: "Reabrir" }],
-};
+// soma dos valores previstos de uma lista de clientes (valores vazios contam 0)
+const somar = (lista) => lista.reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0);
+
 
 export default async function PaginaPipeline() {
   const { supabase, eAdmin } = await obterSessao();
@@ -28,64 +20,95 @@ export default async function PaginaPipeline() {
   // o RLS já filtra: admin vê todos, comercial só os seus
   const { data } = await supabase
     .from("clientes")
-    .select("id, nome, estado, valor_previsto, perfis(nome)")
+    .select("id, nome, email, estado, valor_previsto, perfis(nome)")
     .order("criado_em", { ascending: false });
   const clientes = data ?? [];
 
+  // "em aberto" = negócios ainda por decidir (novos + em negociação)
+  const emAberto = clientes.filter((c) => c.estado === "novo" || c.estado === "negociacao");
+  const nNegociacao = clientes.filter((c) => c.estado === "negociacao").length;
+
   return (
     <div className={styles.pagina}>
-      <header>
-        <h1>Pipeline</h1>
-        <p className={styles.subtitulo}>
-          Cada coluna é uma fase do negócio. Usa os botões para mover um cliente para a fase seguinte.
+      <header className={styles.cabecalho}>
+        <h1>Pipeline.</h1>
+        <p className={styles.resumo}>
+          {formatarEuros(somar(emAberto))} em aberto em {emAberto.length}{" "}
+          {emAberto.length === 1 ? "cliente" : "clientes"}
+          <span>·</span>
+          {nNegociacao} em negociação
         </p>
       </header>
 
-      <div className={styles.quadro}>
-        {ESTADOS.map((estado) => {
-          // clientes desta coluna e soma do valor previsto
-          const daColuna = clientes.filter((c) => c.estado === estado.chave);
-          const total = daColuna.reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0);
+      {/* bloco que agrupa as colunas (como o "Stage Board" da referência) */}
+      <section className={styles.bloco}>
+        <header className={styles.topoBloco}>
+          <h2>Fases</h2>
+          <small>
+            {clientes.length} {clientes.length === 1 ? "cliente" : "clientes"} · usa os botões para mudar de fase
+          </small>
+        </header>
 
-          return (
-            <section key={estado.chave} className={styles.coluna} style={{ "--cor": estado.cor }}>
-              <header className={styles.topoColuna}>
-                <h2>
-                  {estado.texto} <span>{daColuna.length}</span>
-                </h2>
-                <small>{formatarEuros(total)}</small>
-              </header>
+        <div className={styles.quadro}>
+          {ESTADOS.map((estado) => {
+            const daColuna = clientes.filter((c) => c.estado === estado.chave);
 
-              {daColuna.length === 0 && <p className={styles.vazia}>Nenhum cliente nesta fase.</p>}
+            return (
+              <section key={estado.chave} className={styles.coluna} style={{ "--cor": estado.cor }}>
+                <header className={styles.topoColuna}>
+                  <h3>
+                    <i aria-hidden="true"></i>
+                    {estado.texto}
+                  </h3>
+                  <small>
+                    {daColuna.length} · {formatarEuros(somar(daColuna))}
+                  </small>
+                </header>
 
-              {daColuna.map((c) => (
-                <article key={c.id} className={styles.cartao}>
-                  <Link href={`/painel/clientes/${c.id}`} className={styles.nome}>
-                    {c.nome}
+                {daColuna.length === 0 && <p className={styles.vazia}>Nenhum cliente nesta fase.</p>}
+
+                {daColuna.map((c) => {
+                  const responsavel = c.perfis?.nome;
+                  return (
+                    <article key={c.id} className={styles.cartao}>
+                      <div className={styles.linhaNome}>
+                        <Link href={`/painel/clientes/${c.id}`} className={styles.nome}>
+                          {c.nome}
+                        </Link>
+                        <strong className={styles.valor}>
+                          {c.valor_previsto !== null ? formatarEuros(c.valor_previsto) : "—"}
+                        </strong>
+                      </div>
+                      {c.email && <p className={styles.email}>{c.email}</p>}
+
+                      <div className={styles.rodapeCartao}>
+                        {/* o admin vê quem é o responsável; o comercial já sabe que é ele */}
+                        {eAdmin && (
+                          <span
+                            className={responsavel ? styles.avatar : `${styles.avatar} ${styles.semAvatar}`}
+                            title={responsavel ?? "Por atribuir"}
+                          >
+                            {responsavel ? iniciais(responsavel) : "?"}
+                          </span>
+                        )}
+
+                        <BotoesFase cliente={c} className={styles.botoes} />
+                      </div>
+                    </article>
+                  );
+                })}
+
+                {/* os clientes novos entram sempre na fase "Novo" */}
+                {estado.chave === "novo" && (
+                  <Link href="/painel/clientes/novo" className={styles.adicionar}>
+                    <Icone nome="mais" tamanho={15} /> Novo cliente
                   </Link>
-                  <p className={styles.detalhes}>
-                    <span>{c.valor_previsto !== null ? formatarEuros(c.valor_previsto) : "Sem valor"}</span>
-                    {eAdmin && <span>{c.perfis?.nome ?? "Por atribuir"}</span>}
-                  </p>
-
-                  {/* um pequeno formulário por botão: envia o id e o novo estado */}
-                  <div className={styles.botoes}>
-                    {PROXIMOS_PASSOS[c.estado].map((passo) => (
-                      <form key={passo.para} action={mudarEstado}>
-                        <input type="hidden" name="id" value={c.id} />
-                        <input type="hidden" name="estado" value={passo.para} />
-                        <button type="submit" className={passo.principal ? styles.botaoPrincipal : styles.botao}>
-                          {passo.texto}
-                        </button>
-                      </form>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </section>
-          );
-        })}
-      </div>
+                )}
+              </section>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 }

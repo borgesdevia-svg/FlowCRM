@@ -1,7 +1,7 @@
 /* Estrutura do painel: menu lateral fixo à esquerda + conteúdo à direita */
 .estrutura {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 264px 1fr;
   min-height: 100vh;
 }
 
@@ -12,115 +12,154 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px 14px;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  background: #0c0c0c;
+  gap: 24px;
+  padding: 16px 14px;
+  border-right: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo-2);
+  overflow-y: auto; /* em ecrãs baixos, o menu faz scroll em vez de cortar */
 }
 
-.logo {
+/* cabeça do menu: caixa com o símbolo e o nome da empresa */
+.marca {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 8px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
   color: var(--cor-texto);
+  transition: border-color 0.2s;
+}
+
+.marca:hover {
+  border-color: rgba(32, 201, 107, 0.35);
+}
+
+/* quadrado verde com a inicial da empresa (como o logótipo da referência) */
+.simbolo {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4ade80, #15803d);
+  box-shadow:
+    0 0 18px rgba(32, 201, 107, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #052e16;
+  font-weight: 700;
+}
+
+.textoMarca {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.textoMarca strong {
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.textoMarca small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .crm {
   color: var(--cor-destaque);
 }
 
-.simbolo {
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, #4ade80, #15803d);
-  box-shadow: 0 0 14px rgba(34, 197, 94, 0.4);
-}
-
-.empresa {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  border-radius: var(--raio);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
-.logoEmpresa {
-  flex-shrink: 0;
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
-  display: grid;
-  place-items: center;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.8rem;
-}
-
-.nomeEmpresa {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+/* ---------- itens do menu ---------- */
 .menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.seccao {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
+}
+
+/* título da secção em maiúsculas pequenas, como "MAIN MENU" na referência */
+.tituloSeccao {
+  padding: 0 12px 8px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .itemMenu {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 9px 10px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
   color: var(--cor-texto-suave);
-  font-size: 0.92rem;
-  transition: background 0.2s, color 0.2s;
+  font-size: 0.93rem;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-a.itemMenu:hover {
-  background: rgba(255, 255, 255, 0.05);
+.itemMenu:hover {
+  background: rgba(255, 255, 255, 0.04);
   color: var(--cor-texto);
 }
 
-/* página atual: fundo mais claro e um traço verde à esquerda */
+.textoItem {
+  flex: 1;
+}
+
+/* página atual: caixa com contorno e texto/ícone verdes */
 .itemAtivo,
-a.itemAtivo:hover {
-  background: rgba(34, 197, 94, 0.1);
-  color: var(--cor-texto);
-  box-shadow: inset 2px 0 0 var(--cor-destaque);
+.itemAtivo:hover {
+  border-color: var(--cor-contorno);
+  background: var(--cor-cartao);
+  color: var(--cor-destaque);
 }
 
-.desativado {
-  opacity: 0.5;
-  cursor: default;
+/* contador à direita (ex.: nº de clientes) */
+.contador {
+  min-width: 26px;
+  padding: 1px 8px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-suave);
+  font-size: 0.78rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
-.desativado small {
-  font-size: 0.68rem;
-  padding: 1px 6px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* contador de alerta (tarefas em atraso): vermelho */
+.contadorAlerta {
+  background: rgba(248, 113, 113, 0.14);
+  color: #fca5a5;
+}
+
+.iconeExterno {
+  opacity: 0.6;
 }
 
 /* ---------- utilizador + sair (no fundo do menu) ---------- */
 .utilizador {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
 }
 
 .linkConta {
@@ -129,15 +168,7 @@ a.itemAtivo:hover {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px;
-  margin: -4px;
-  border-radius: 10px;
   color: var(--cor-texto);
-  transition: background 0.2s;
-}
-
-.linkConta:hover {
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .avatar {
@@ -149,7 +180,7 @@ a.itemAtivo:hover {
   place-items: center;
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
@@ -172,14 +203,19 @@ a.itemAtivo:hover {
   color: var(--cor-texto-fraco);
 }
 
+.linkConta:hover strong {
+  color: var(--cor-destaque);
+}
+
 .sair {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--cor-contorno);
   background: transparent;
   color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.8rem;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 }
@@ -191,8 +227,31 @@ a.itemAtivo:hover {
 
 /* ---------- conteúdo ---------- */
 .conteudo {
+  position: relative;
+  isolation: isolate; /* a decoração (z-index -1) fica atrás das páginas, mas dentro do conteúdo */
   min-width: 0;
-  padding: 32px clamp(16px, 4vw, 48px);
+  padding: 36px clamp(16px, 4vw, 48px) 48px;
+}
+
+/* Decoração no topo de todas as páginas do painel (igual à da landing, mais discreta):
+   brilho verde a partir do canto de cima + grelha fina que desvanece para baixo. */
+.conteudo::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0; /* colado em cima, a toda a largura */
+  height: 420px;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 60% 70% at 70% -10%, rgba(32, 201, 107, 0.1), transparent 70%),
+    linear-gradient(rgba(32, 201, 107, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 201, 107, 0.05) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    48px 48px,
+    48px 48px;
+  mask-image: linear-gradient(180deg, black 20%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, black 20%, transparent 100%);
 }
 
 /* ---------- telemóvel: o menu passa para o topo ---------- */
@@ -204,35 +263,54 @@ a.itemAtivo:hover {
   .lateral {
     position: static;
     height: auto;
+    overflow: visible;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--cor-contorno);
   }
 
-  .empresa {
-    display: none;
+  .marca {
+    padding: 6px 10px 6px 6px;
   }
 
+  .simbolo {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  /* no telemóvel os itens ficam numa só linha que desliza para o lado */
   .menu {
     order: 3;
     flex-basis: 100%;
     flex-direction: row;
+    gap: 4px;
     overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .seccao {
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .tituloSeccao {
+    display: none;
   }
 
   .itemMenu {
     white-space: nowrap;
-    gap: 6px;
+    gap: 8px;
+    padding: 8px 12px;
   }
 
   .utilizador {
     margin-left: auto;
-    padding-top: 0;
-    border-top: none;
+    padding: 6px;
   }
 
   .dadosUtilizador {

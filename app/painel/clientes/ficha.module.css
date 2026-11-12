@@ -7,45 +7,8 @@
 
 /* a ficha de um cliente existente é mais larga, porque tem duas colunas */
 .pagina:has(.colunas) {
-  max-width: 1200px;
-}
-
-.colunas {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 40px;
-  align-items: start;
-}
-
-.colunaLateral {
-  padding-left: 40px;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.blocoTarefas {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding-bottom: 28px;
-  margin-bottom: 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.blocoTarefas h2 {
-  font-size: 1.15rem;
-}
-
-@media (max-width: 1100px) {
-  .colunas {
-    grid-template-columns: 1fr;
-  }
-
-  .colunaLateral {
-    padding-left: 0;
-    padding-top: 32px;
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
+  max-width: 1240px;
+  gap: 20px;
 }
 
 /* link para voltar à lista, com uma pequena seta desenhada em CSS */
@@ -57,6 +20,10 @@
   margin-bottom: 16px;
   color: var(--cor-texto-suave);
   font-size: 0.9rem;
+}
+
+.pagina:has(.colunas) .voltar {
+  margin-bottom: 0;
 }
 
 .voltar::before {
@@ -72,10 +39,12 @@
   color: var(--cor-texto);
 }
 
-.pagina h1 {
+/* título da página "Adicionar cliente" */
+.pagina > h1 {
   font-size: clamp(1.7rem, 4vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
   margin-bottom: 8px;
-  overflow-wrap: anywhere;
 }
 
 .subtitulo {
@@ -83,41 +52,269 @@
   margin-bottom: 28px;
 }
 
-.meta {
+/* ============ Ficha: cabeçalho grande ============ */
+/* --cor (cor do estado) vem do style: dá um brilho dessa cor no canto do cartão */
+.cabecalhoFicha {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px;
+  border-radius: 20px;
+  border: 1px solid var(--cor-contorno);
+  background:
+    radial-gradient(ellipse 50% 80% at 0% 0%, color-mix(in srgb, var(--cor) 14%, transparent), transparent 70%),
+    var(--cor-cartao);
+}
+
+.identidade {
+  flex: 1 1 380px;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.avatarGrande {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  border: 1px solid rgba(32, 201, 107, 0.3);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 1.3rem;
+  font-weight: 700;
+  box-shadow: 0 0 24px rgba(32, 201, 107, 0.15);
+}
+
+.nomeMeta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.linhaNome {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 16px;
-  color: var(--cor-texto-suave);
-  font-size: 0.9rem;
-  margin-bottom: 28px;
+  gap: 8px 14px;
 }
 
-.estado {
+.linhaNome h1 {
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+/* etiqueta de estado com a cor do estado */
+.etiquetaEstado {
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cor) 18%, transparent);
+  color: color-mix(in srgb, var(--cor) 50%, white);
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.meta {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.contactos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.contacto {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--cor-texto);
+  max-width: 100%;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-.estado i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.contacto:hover {
+  color: var(--cor-destaque);
+  border-color: rgba(32, 201, 107, 0.4);
 }
 
-.zonaPerigo {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+.semContactos {
+  color: var(--cor-texto-fraco);
+  font-size: 0.86rem;
+}
+
+/* lado direito do cabeçalho */
+.resumoCliente {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.numerosCliente {
+  display: flex;
+  gap: 10px;
+}
+
+/* cada número numa caixa escura, como os cartões do Início */
+.numerosCliente > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 150px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+}
+
+.numerosCliente small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+}
+
+.numerosCliente strong {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.responsavel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.responsavel b {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.62rem;
+}
+
+.responsavel em {
+  font-style: normal;
+  color: var(--cor-estado-negociacao);
+}
+
+.fases {
+  justify-content: flex-end;
+}
+
+/* ============ Ficha: duas colunas ============ */
+.colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* cartão genérico (dados, tarefas, histórico) */
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.topoCartao h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.topoCartao h2 span {
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+  font-weight: 400;
+}
+
+/* zona de perigo: contorno vermelho discreto */
+.zonaPerigo {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  flex-wrap: wrap;
+  padding: 18px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  background: rgba(248, 113, 113, 0.03);
 }
 
 .zonaPerigo p {
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
+}
+
+/* ============ Responsivo ============ */
+@media (max-width: 1100px) {
+  .colunas {
+    grid-template-columns: 1fr;
+  }
+
+  .resumoCliente {
+    align-items: stretch;
+    flex-basis: 100%;
+  }
+
+  .fases {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .cabecalhoFicha,
+  .cartao {
+    padding: 18px;
+  }
+
+  .avatarGrande {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 1rem;
+  }
+
+  .numerosCliente > div {
+    flex: 1;
+    min-width: 0;
+  }
 }

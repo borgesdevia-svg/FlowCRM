@@ -1,82 +1,141 @@
 .pagina {
-  max-width: 1100px;
+  max-width: 1180px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
 }
 
-.data {
-  color: var(--cor-destaque);
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+/* ---------- cabeçalho ---------- */
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--cor-contorno);
 }
 
 .cabecalho h1 {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
   margin-bottom: 6px;
 }
 
-.subtitulo {
+/* linha de resumo: "12 clientes · 4 800 € em negociação · 3 tarefas" */
+.resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
   color: var(--cor-texto-suave);
+  font-size: 1rem;
+}
+
+.resumo span {
+  color: var(--cor-texto-fraco);
 }
 
 /* ---------- cartões de números ---------- */
 .numeros {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
 
 .cartao {
-  padding: 18px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: linear-gradient(180deg, #141414, #0e0e0e);
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-.cartao small {
+.rotulo {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+  padding: 0 4px;
   color: var(--cor-texto-suave);
-  font-size: 0.82rem;
+  font-size: 0.88rem;
 }
 
-.cartao strong {
-  font-size: 1.9rem;
+.rotulo svg {
+  color: var(--cor-texto-fraco);
+}
+
+/* caixa interior, mais escura, com o valor à esquerda e o extra à direita */
+.valor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+}
+
+.valor strong {
+  font-size: 1.8rem;
+  font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-.ponto {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.extra {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.positivo {
+  color: var(--cor-destaque);
+}
+
+.negativo {
+  color: #f87171;
 }
 
 /* ---------- blocos ---------- */
 .grelha {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 12px;
+  gap: 14px;
 }
 
 .bloco {
-  padding: 24px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: #101010;
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
   display: flex;
   flex-direction: column;
+  gap: 14px;
+}
+
+.topoBloco {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 12px;
 }
 
 .bloco h2 {
   font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* número pequeno ao lado do título (ex.: "As minhas tarefas 3") */
+.bloco h2 span {
+  margin-left: 6px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .bloco p {
@@ -84,6 +143,55 @@
   font-size: 0.92rem;
 }
 
+.verTudo {
+  font-size: 0.85rem;
+}
+
+/* --- clientes por estado --- */
+.estados {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* nome à esquerda, número à direita e, por baixo, a barra a toda a largura */
+.estados li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.nomeEstado {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+}
+
+.nomeEstado i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.trilho {
+  grid-column: span 2;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.trilho span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s var(--curva);
+}
+
+/* --- formulário público --- */
 .linhaLink {
   display: flex;
   flex-wrap: wrap;
@@ -102,14 +210,31 @@
   overflow-wrap: anywhere;
   padding: 8px 12px;
   border-radius: 8px;
+  border: 1px solid rgba(32, 201, 107, 0.25);
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
   font-size: 0.88rem;
 }
 
-.nota {
-  color: var(--cor-texto-fraco);
-  font-size: 0.8rem;
+/* --- primeiros passos --- */
+.percentagem {
+  font-size: 1.1rem;
+}
+
+/* barra de progresso verde com brilho */
+.progresso {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.progresso span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #15803d, var(--cor-destaque));
+  box-shadow: 0 0 12px rgba(32, 201, 107, 0.5);
 }
 
 .passos {
@@ -140,7 +265,7 @@
 .passos a {
   color: var(--cor-texto);
   text-decoration: underline;
-  text-decoration-color: rgba(34, 197, 94, 0.5);
+  text-decoration-color: rgba(32, 201, 107, 0.5);
   text-underline-offset: 3px;
 }
 
@@ -165,18 +290,20 @@
 }
 
 /* ---------- responsivo ---------- */
-@media (max-width: 1000px) {
-  .numeros {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 700px) {
+@media (max-width: 1100px) {
   .numeros {
     grid-template-columns: repeat(2, 1fr);
   }
+}
 
+@media (max-width: 760px) {
   .grelha {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .numeros {
     grid-template-columns: 1fr;
   }
 }

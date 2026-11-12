@@ -4,56 +4,103 @@
   gap: 24px;
 }
 
-.pagina h1 {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
+/* ---------- cabeçalho ---------- */
+.cabecalho {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.cabecalho h1 {
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
   margin-bottom: 6px;
 }
 
-.subtitulo {
+.resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
   color: var(--cor-texto-suave);
+}
+
+.resumo span {
+  color: var(--cor-texto-fraco);
+}
+
+/* ---------- bloco que agrupa as colunas ---------- */
+.bloco {
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo-2);
+}
+
+.topoBloco {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 18px;
+}
+
+.topoBloco h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.topoBloco small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
 }
 
 /* 4 colunas lado a lado */
 .quadro {
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(230px, 1fr));
+  gap: 14px;
   align-items: start;
 }
 
-/* cada coluna tem um traço no topo com a cor do estado (--cor vem do style) */
 .coluna {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-height: 200px;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-top: 3px solid var(--cor);
-  background: #0e0e0e;
+  gap: 10px;
+  min-height: 220px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
 }
 
 .topoColuna {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 2px 4px 6px;
+  padding: 2px 4px 4px;
 }
 
-.topoColuna h2 {
-  font-size: 0.95rem;
+.topoColuna h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.topoColuna h2 span {
-  margin-left: 4px;
-  color: var(--cor-texto-fraco);
-  font-weight: 500;
+/* ponto com a cor do estado (--cor vem do style) */
+.topoColuna h3 i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cor);
+  box-shadow: 0 0 10px var(--cor);
 }
 
 .topoColuna small {
-  color: var(--cor-texto-suave);
+  color: var(--cor-texto-fraco);
   font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -66,25 +113,34 @@
 }
 
 /* ---------- cartão de cliente ---------- */
+/* contorno tracejado discreto, como os cartões da referência */
 .cartao {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: #151515;
-  transition: border-color 0.2s;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.09);
+  background: var(--cor-fundo-2);
+  transition: border-color 0.2s, background 0.2s;
 }
 
 .cartao:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--cor) 45%, transparent);
+}
+
+.linhaNome {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .nome {
   color: var(--cor-texto);
-  font-weight: 600;
-  font-size: 0.93rem;
+  font-weight: 500;
+  font-size: 0.95rem;
   overflow-wrap: anywhere;
 }
 
@@ -92,63 +148,74 @@
   color: var(--cor-destaque);
 }
 
-.detalhes {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  color: var(--cor-texto-suave);
-  font-size: 0.8rem;
+.valor {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
-.botoes {
+.email {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rodapeCartao {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* iniciais do responsável num círculo */
+.avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.semAvatar {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-fraco);
+}
+
+/* os botões de fase (componente BotoesFase) ocupam o resto da linha, encostados à direita */
+.botoes {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* botão "+ Novo cliente" no fundo da coluna "Novo" */
+.adicionar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
-  margin-top: 4px;
-}
-
-.botao,
-.botaoPrincipal {
-  padding: 5px 10px;
-  border-radius: 999px;
-  font: inherit;
-  font-size: 0.78rem;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-}
-
-.botao {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: transparent;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
   color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-.botao:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  color: var(--cor-texto);
-}
-
-/* o passo "natural" seguinte fica em destaque */
-.botaoPrincipal {
-  border: 1px solid rgba(34, 197, 94, 0.5);
-  background: rgba(34, 197, 94, 0.12);
-  color: var(--cor-texto);
-  font-weight: 600;
-}
-
-.botaoPrincipal:hover {
-  background: rgba(34, 197, 94, 0.22);
-}
-
-.botao:focus-visible,
-.botaoPrincipal:focus-visible {
-  outline: 2px solid var(--cor-destaque);
-  outline-offset: 2px;
+.adicionar:hover {
+  border-color: rgba(32, 201, 107, 0.4);
+  color: var(--cor-destaque);
 }
 
 /* ---------- ecrãs pequenos: colunas a deslizar para o lado ---------- */
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .quadro {
     display: flex;
     overflow-x: auto;
@@ -158,7 +225,14 @@
   }
 
   .coluna {
-    flex: 0 0 min(280px, 85%);
+    flex: 0 0 min(290px, 85%);
     scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .bloco {
+    padding: 12px;
+    border-radius: 14px;
   }
 }

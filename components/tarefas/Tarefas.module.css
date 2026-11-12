@@ -1,7 +1,12 @@
+/* formulário numa caixa escura, igual ao das notas no histórico */
 .formulario {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
 }
 
 .linhaForm {

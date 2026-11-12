@@ -1,4 +1,4 @@
-/* Estilos do histórico de notas e do formulário de nota (também usados pelas tarefas) */
+/* Estilos do histórico e do formulário de nota */
 .seccao {
   display: flex;
   flex-direction: column;
@@ -6,13 +6,29 @@
 }
 
 .seccao h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
   font-size: 1.15rem;
+  font-weight: 600;
 }
 
+.seccao h2 span {
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+  font-weight: 400;
+}
+
+/* ---------- formulário de nota ---------- */
+/* fica numa caixa escura, para se distinguir da lista por baixo */
 .formulario {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
 }
 
 .formulario textarea {
@@ -51,21 +67,21 @@
 .tipo span {
   display: inline-block;
   padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid var(--cor-contorno);
   color: var(--cor-texto-suave);
   font-size: 0.85rem;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
 .tipo input:checked + span {
-  border-color: var(--cor-destaque);
-  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(32, 201, 107, 0.5);
+  background: rgba(32, 201, 107, 0.12);
   color: var(--cor-texto);
 }
 
 .tipo input:focus-visible + span {
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
+  box-shadow: 0 0 0 3px rgba(32, 201, 107, 0.35);
 }
 
 /* ---------- lista (linha do tempo) ---------- */
@@ -78,26 +94,60 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  margin-left: 6px;
+}
+
+/* cada tipo tem a sua cor (--cor), usada no ícone e na etiqueta */
+.nota {
+  --cor: #a1a1a1;
+}
+
+.chamada {
+  --cor: #60a5fa;
+}
+
+.email {
+  --cor: #a78bfa;
+}
+
+.reuniao {
+  --cor: #fbbf24;
 }
 
 .item {
   position: relative;
-  padding: 0 0 18px 20px;
+  display: flex;
+  gap: 14px;
+  padding-bottom: 20px;
 }
 
-/* bolinha na linha do tempo */
-.item::before {
+/* traço vertical que liga os ícones (não aparece depois do último) */
+.item:not(:last-child)::before {
   content: "";
   position: absolute;
-  left: -5px;
-  top: 6px;
-  width: 9px;
-  height: 9px;
+  left: 15px;
+  top: 34px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--cor-contorno);
+}
+
+/* círculo com o ícone do tipo */
+.icone {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
   border-radius: 50%;
-  background: var(--cor-fundo);
-  border: 2px solid var(--cor-destaque);
+  border: 1px solid color-mix(in srgb, var(--cor) 40%, transparent);
+  background: color-mix(in srgb, var(--cor) 12%, var(--cor-cartao));
+  color: var(--cor);
+}
+
+.corpo {
+  flex: 1;
+  min-width: 0;
+  padding-top: 4px;
 }
 
 .cabecalho {
@@ -105,31 +155,13 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .etiqueta {
-  font-size: 0.75rem;
+  color: var(--cor);
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.chamada {
-  color: #93c5fd;
-}
-
-.email {
-  color: #c4b5fd;
-}
-
-.reuniao {
-  color: #fcd34d;
-}
-
-.nota {
-  color: var(--cor-texto-suave);
 }
 
 .meta {
@@ -147,6 +179,14 @@
   font: inherit;
   font-size: 0.78rem;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+/* o "Apagar" só aparece ao passar o rato no registo ou ao navegar com o teclado */
+.item:hover .apagar,
+.apagar:focus-visible {
+  opacity: 1;
 }
 
 .apagar:hover {
@@ -154,7 +194,19 @@
   background: rgba(248, 113, 113, 0.1);
 }
 
+/* em ecrãs tácteis não há "passar o rato": o botão fica sempre visível */
+@media (hover: none) {
+  .apagar {
+    opacity: 1;
+  }
+}
+
+/* o texto do registo numa caixa, como uma mensagem */
 .texto {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo-2);
   white-space: pre-line;
   overflow-wrap: anywhere;
   font-size: 0.93rem;
