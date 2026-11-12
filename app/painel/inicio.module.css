@@ -178,48 +178,92 @@
   font-size: 0.85rem;
 }
 
-/* --- clientes por estado --- */
-.estados {
+/* --- gráficos --- */
+/* o Chart.js ocupa a altura do contentor (maintainAspectRatio: false) */
+.areaGrafico {
+  position: relative;
+  height: 220px;
+}
+
+.totalGrafico {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* donut à esquerda, legenda à direita */
+.donut {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.areaDonut {
+  position: relative;
+  flex-shrink: 0;
+  width: 180px;
+  height: 180px;
+}
+
+/* total escrito no buraco do meio do donut */
+.centroDonut {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* deixa o rato chegar ao gráfico (para as dicas) */
+}
+
+.centroDonut strong {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.centroDonut small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+}
+
+.legenda {
+  flex: 1;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-/* nome à esquerda, número à direita e, por baixo, a barra a toda a largura */
-.estados li {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px;
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cor-texto-suave);
   font-size: 0.9rem;
 }
 
-.nomeEstado {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--cor-texto-suave);
+.legenda i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
 }
 
-.nomeEstado i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.legenda strong {
+  margin-left: auto;
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
 }
 
-.trilho {
-  grid-column: span 2;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  overflow: hidden;
-}
+@media (max-width: 480px) {
+  .donut {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.trilho span {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  transition: width 0.8s var(--curva);
+  .areaDonut {
+    align-self: center;
+  }
 }
 
 /* --- formulário público --- */

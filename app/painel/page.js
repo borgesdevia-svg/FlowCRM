@@ -6,6 +6,8 @@ import BotaoCopiar from "@/components/painel/BotaoCopiar";
 import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import Icone from "@/components/Icone";
 import AtividadeRecente from "@/components/painel/AtividadeRecente";
+import Grafico from "@/components/painel/Grafico";
+import ContarNumero from "@/components/painel/ContarNumero";
 import styles from "./inicio.module.css";
 
 // Junta numa só lista os eventos para a "Atividade recente", do mais recente para o mais antigo:
@@ -43,6 +45,31 @@ function prepararAtividade(clientes, sistema) {
 
   // ordena por data (as datas ISO comparam-se como texto) e fica com os 10 mais recentes
   return eventos.sort((a, b) => (a.quando < b.quando ? 1 : -1)).slice(0, 10);
+}
+
+// Clientes novos em cada uma das últimas 8 semanas (para o gráfico de linha).
+// Cada "semana" são 7 dias seguidos a contar para trás a partir de agora.
+// Devolve { etiquetas: ["24/9", ...], valores: [2, 0, 5, ...] }, da mais antiga para a mais recente.
+const DIA = 24 * 60 * 60 * 1000; // um dia em milissegundos
+
+function leadsPorSemana(clientes) {
+  const agora = Date.now();
+  const etiquetas = [];
+  const valores = [];
+
+  for (let i = 7; i >= 0; i--) {
+    const fim = agora - i * 7 * DIA;
+    const inicio = fim - 7 * DIA;
+    const quantos = clientes.filter((c) => {
+      const t = new Date(c.criado_em).getTime();
+      return t > inicio && t <= fim;
+    }).length;
+
+    const d = new Date(inicio + DIA); // primeiro dia da semana, para a etiqueta
+    etiquetas.push(`${d.getDate()}/${d.getMonth() + 1}`);
+    valores.push(quantos);
+  }
+  return { etiquetas, valores };
 }
 
 // Rota /painel — página inicial da área privada (componente de servidor).
@@ -98,7 +125,14 @@ export default async function PaginaPainel() {
   const hoje = hojeEmPortugal();
   const atrasadas = tarefas.filter((t) => t.data_limite && t.data_limite < hoje).length;
 
-  // os 4 cartões de números: "extra" é o texto pequeno à direita do valor
+  // dados dos gráficos
+  const semanas = leadsPorSemana(lista);
+  const valorPorFase = ESTADOS.map((e) =>
+    lista.filter((c) => c.estado === e.chave).reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0)
+  );
+
+  // os 4 cartões de números: "extra" é o texto pequeno à direita do valor;
+  // "sufixo" é o que vem depois do número (ex.: "%")
   const numeros = [
     {
       rotulo: "Total de clientes",
@@ -116,7 +150,8 @@ export default async function PaginaPainel() {
     {
       rotulo: "Taxa de conversão",
       icone: "grafico",
-      valor: `${conversao}%`,
+      valor: conversao,
+      sufixo: "%",
       extra: `${contagem.ativo ?? 0} ativos`,
     },
     {
@@ -183,7 +218,9 @@ export default async function PaginaPainel() {
                   </p>
                   {/* caixa interior mais escura com o valor, como na referência */}
                   <div className={styles.valor}>
-                    <strong>{n.valor}</strong>
+                    <strong>
+                      <ContarNumero valor={n.valor} sufixo={n.sufixo} />
+                    </strong>
                     <span className={classeExtra}>{n.extra}</span>
                   </div>
                 </article>
@@ -192,21 +229,25 @@ export default async function PaginaPainel() {
           </section>
 
           <section className={styles.grelha}>
-            {/* as minhas tarefas */}
+            {/* gráfico de linha: clientes novos por semana */}
             <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "260ms" }}>
               <header className={styles.topoBloco}>
                 <h2>
-                  As minhas tarefas <span>{tarefas.length}</span>
+                  Novos clientes <span>últimas 8 semanas</span>
                 </h2>
+                <strong className={styles.totalGrafico}>{semanas.valores.reduce((a, b) => a + b, 0)}</strong>
               </header>
-              <ListaTarefas
-                tarefas={tarefas.slice(0, 8)}
-                mostrarCliente
-                mensagemVazia="Não tens tarefas por fazer. Cria tarefas na ficha de cada cliente."
-              />
+              <div className={styles.areaGrafico}>
+                <Grafico
+                  tipo="line"
+                  etiquetas={semanas.etiquetas}
+                  valores={semanas.valores}
+                  cores="var(--cor-destaque)"
+                />
+              </div>
             </article>
 
-            {/* clientes por estado: barras horizontais com largura proporcional */}
+            {/* gráfico circular: clientes por estado, com a legenda em HTML ao lado */}
             <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "300ms" }}>
               <header className={styles.topoBloco}>
                 <h2>Clientes por estado</h2>
@@ -214,25 +255,69 @@ export default async function PaginaPainel() {
                   Ver pipeline
                 </Link>
               </header>
-              <ul className={styles.estados}>
-                {ESTADOS.map((e) => {
-                  const n = contagem[e.chave] ?? 0;
-                  // percentagem do total (0 se ainda não houver clientes)
-                  const pct = lista.length ? (n / lista.length) * 100 : 0;
-                  return (
-                    <li key={e.chave}>
-                      <span className={styles.nomeEstado}>
+              {lista.length === 0 ? (
+                <p>Ainda não há clientes.</p>
+              ) : (
+                <div className={styles.donut}>
+                  <div className={styles.areaDonut}>
+                    <Grafico
+                      tipo="doughnut"
+                      etiquetas={ESTADOS.map((e) => e.texto)}
+                      valores={ESTADOS.map((e) => contagem[e.chave] ?? 0)}
+                      cores={ESTADOS.map((e) => e.cor)}
+                    />
+                    {/* total no buraco do meio */}
+                    <span className={styles.centroDonut}>
+                      <strong>{lista.length}</strong>
+                      <small>clientes</small>
+                    </span>
+                  </div>
+                  <ul className={styles.legenda}>
+                    {ESTADOS.map((e) => (
+                      <li key={e.chave}>
                         <i style={{ background: e.cor }}></i>
                         {e.texto}
-                      </span>
-                      <strong>{n}</strong>
-                      <span className={styles.trilho}>
-                        <span style={{ width: `${pct}%`, background: e.cor }}></span>
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
+                        <strong>{contagem[e.chave] ?? 0}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </article>
+          </section>
+
+          <section className={styles.grelha}>
+            {/* as minhas tarefas */}
+            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "320ms" }}>
+              <header className={styles.topoBloco}>
+                <h2>
+                  As minhas tarefas <span>{tarefas.length}</span>
+                </h2>
+                <Link href="/painel/tarefas" className={styles.verTudo}>
+                  Ver todas
+                </Link>
+              </header>
+              <ListaTarefas
+                tarefas={tarefas.slice(0, 6)}
+                mostrarCliente
+                mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada cliente."
+              />
+            </article>
+
+            {/* gráfico de barras: valor previsto em cada fase */}
+            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "340ms" }}>
+              <header className={styles.topoBloco}>
+                <h2>Valor por fase</h2>
+              </header>
+              <div className={styles.areaGrafico}>
+                <Grafico
+                  tipo="bar"
+                  etiquetas={ESTADOS.map((e) => e.texto)}
+                  valores={valorPorFase}
+                  cores={ESTADOS.map((e) => e.cor)}
+                  formato="euros"
+                />
+              </div>
             </article>
           </section>
 
