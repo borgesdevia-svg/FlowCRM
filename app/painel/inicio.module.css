@@ -1,8 +1,39 @@
 .pagina {
-  max-width: 1180px;
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+/* conteúdo principal + coluna da atividade (340px) */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+.principal {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* a atividade fica "presa" ao fazer scroll (como o menu) */
+.lateral {
+  position: sticky;
+  top: 24px;
+}
+
+@media (max-width: 1250px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    position: static;
+  }
 }
 
 /* ---------- cabeçalho ---------- */

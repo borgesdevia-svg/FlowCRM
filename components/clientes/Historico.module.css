@@ -113,6 +113,18 @@
   --cor: #fbbf24;
 }
 
+.sistema {
+  --cor: var(--cor-destaque);
+}
+
+/* os eventos automáticos são mais discretos: texto simples, sem caixa */
+.sistema .texto {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--cor-texto-suave);
+}
+
 .item {
   position: relative;
   display: flex;

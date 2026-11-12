@@ -1,0 +1,126 @@
+.atividade {
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow: hidden;
+}
+
+.topo {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.topo h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.vazio {
+  padding: 20px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.lista {
+  list-style: none;
+  padding: 8px 0;
+}
+
+/* cada tipo de evento tem a sua cor (--cor) */
+.novo {
+  --cor: var(--cor-estado-novo);
+}
+
+.fase {
+  --cor: var(--cor-estado-negociacao);
+}
+
+.tarefa {
+  --cor: var(--cor-destaque);
+}
+
+.evento {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 12px 20px;
+  transition: background 0.2s;
+  /* entrada em cascata: cada evento aparece um pouco depois do anterior */
+  animation: entrar 0.6s var(--curva) both;
+}
+
+.evento:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.evento:nth-child(2) { animation-delay: 60ms; }
+.evento:nth-child(3) { animation-delay: 120ms; }
+.evento:nth-child(4) { animation-delay: 180ms; }
+.evento:nth-child(5) { animation-delay: 240ms; }
+.evento:nth-child(n + 6) { animation-delay: 300ms; }
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+/* linha vertical que liga os ícones */
+.evento:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 34px;
+  top: 42px;
+  bottom: -12px;
+  width: 1px;
+  background: var(--cor-contorno);
+}
+
+.icone {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--cor) 40%, transparent);
+  background: color-mix(in srgb, var(--cor) 12%, var(--cor-cartao));
+  color: var(--cor);
+}
+
+.corpo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 3px;
+}
+
+.corpo p {
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.corpo strong {
+  color: var(--cor-texto);
+  font-weight: 600;
+}
+
+.cliente {
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+.cliente:hover {
+  color: var(--cor-destaque);
+}
+
+.corpo time {
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+}

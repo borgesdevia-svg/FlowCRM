@@ -13,6 +13,7 @@ const TIPOS = {
   chamada: { texto: "Chamada", icone: "telemovel" },
   email: { texto: "Email", icone: "email" },
   reuniao: { texto: "Reunião", icone: "utilizadores" },
+  sistema: { texto: "Automático", icone: "raio" }, // eventos registados pela app (ex.: mudança de fase)
 };
 
 // data e hora em português, ex.: "12 nov. 2026, 15:42"
@@ -47,8 +48,9 @@ export default function Historico({ clienteId, interacoes, perfilId, eAdmin }) {
                       {/* o autor pode ter sido removido da equipa: nesse caso fica "Ex-membro" */}
                       {i.perfis?.nome ?? "Ex-membro"} · {formatarDataHora(i.criado_em)}
                     </span>
-                    {/* só o autor ou o admin vê o botão (o RLS também o garante na base de dados) */}
-                    {(i.autor_id === perfilId || eAdmin) && (
+                    {/* só o autor ou o admin vê o botão (o RLS também o garante na base de dados);
+                        os eventos automáticos não se apagam, porque são o registo do que aconteceu */}
+                    {i.tipo !== "sistema" && (i.autor_id === perfilId || eAdmin) && (
                       <BotaoConfirmar
                         accao={apagarInteracao}
                         campos={{ id: i.id, cliente_id: clienteId }}
