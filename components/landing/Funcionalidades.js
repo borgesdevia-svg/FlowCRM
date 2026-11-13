@@ -185,7 +185,7 @@ function DemoPipeline() {
   // o cartão com "move: true" desliza para a coluna seguinte (animação em ciclo)
   const colunas = [
     { estado: "novo", valor: "3,6 k€", cartoes: [{ nome: "Padaria Central", valor: "1 200 €" }, { nome: "Marta Silva", valor: "2 400 €", move: true }] },
-    { estado: "negociacao", valor: "3,5 k€", cartoes: [{ nome: "Oficina Lopes", valor: "3 500 €" }] },
+    { estado: "negociacao", valor: "3,5 k€", vaga: true, cartoes: [{ nome: "Oficina Lopes", valor: "3 500 €" }] },
     { estado: "ativo", valor: "3,4 k€", cartoes: [{ nome: "Studio Mar", valor: "2 800 €" }, { nome: "Café Ribeira", valor: "650 €" }] },
   ];
   return (
@@ -204,6 +204,15 @@ function DemoPipeline() {
               <small>{c.valor}</small>
             </div>
           ))}
+          {/* lugar vazio onde o cartão que se move vai "aterrar". Tem o mesmo conteúdo
+              (invisível) para ter exatamente a mesma altura, e assim a coluna cresce
+              e o cartão fica dentro dela. Aparece a tracejado enquanto o cartão vem. */}
+          {col.vaga && (
+            <div className={`${styles.negocio} ${styles.vaga}`}>
+              <strong>Marta Silva</strong>
+              <small>2 400 €</small>
+            </div>
+          )}
         </div>
       ))}
     </div>

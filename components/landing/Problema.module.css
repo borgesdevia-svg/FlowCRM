@@ -28,22 +28,31 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--cor-texto-suave);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* a coluna "com" tem fundo verde escuro de cima a baixo */
 .titulos .tituloDepois {
   color: var(--cor-destaque);
   background: var(--cor-superficie-verde);
+  border-left: 1px solid rgba(32, 201, 107, 0.4);
+  border-bottom-color: rgba(32, 201, 107, 0.3);
 }
 
-.linha {
-  border-top: 1px solid var(--cor-contorno);
+/* linhas entre as frases: mais claras do que o contorno normal, para se verem bem.
+   Do lado cinzento são brancas; do lado verde são verdes. */
+.linha + .linha .antes {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.linha + .linha .depois {
+  border-top: 1px solid rgba(32, 201, 107, 0.3);
 }
 
 .antes,
 .depois {
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* ícone e texto alinhados ao meio */
   gap: 16px;
   padding: 24px 28px;
   font-size: 0.98rem;
@@ -64,10 +73,11 @@
 .depois {
   color: var(--cor-texto);
   background: linear-gradient(90deg, rgba(13, 48, 32, 0.75), rgba(13, 48, 32, 0.45));
-  border-left: 1px solid rgba(32, 201, 107, 0.25);
+  border-left: 1px solid rgba(32, 201, 107, 0.4);
 }
 
-/* ícone do problema: quadrado cinzento */
+/* os dois ícones têm o mesmo tamanho e forma (quadrado de 38px),
+   para as duas colunas ficarem equilibradas: muda só a cor */
 .iconeAntes {
   flex-shrink: 0;
   display: grid;
@@ -80,16 +90,16 @@
   color: var(--cor-texto-fraco);
 }
 
-/* ícone da solução: visto verde num círculo com brilho */
+/* ícone da solução: visto verde, com brilho */
 .iconeDepois {
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
-  margin-top: 2px;
-  border-radius: 50%;
-  background: rgba(32, 201, 107, 0.15);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(32, 201, 107, 0.35);
+  background: rgba(32, 201, 107, 0.12);
   color: var(--cor-destaque);
   box-shadow: 0 0 16px rgba(32, 201, 107, 0.25);
 }
@@ -123,9 +133,10 @@
     display: block;
   }
 
-  .depois {
+  .depois,
+  .linha + .linha .depois {
     border-left: none;
-    border-top: 1px dashed rgba(32, 201, 107, 0.25);
+    border-top: 1px dashed rgba(32, 201, 107, 0.35);
   }
 
   .depois .rotuloMovel {

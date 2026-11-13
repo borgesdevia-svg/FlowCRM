@@ -321,6 +321,33 @@
   animation: mover 5s var(--curva) 1.2s infinite;
 }
 
+/* lugar reservado na coluna seguinte: ocupa espaço (a coluna cresce),
+   mas o texto não se vê; o contorno tracejado acende quando o cartão vem */
+.vaga {
+  background: transparent;
+  border: 1px dashed transparent;
+}
+
+.vaga > * {
+  visibility: hidden;
+}
+
+:global(.visivel) .vaga {
+  animation: vaga 5s var(--curva) 1.2s infinite; /* mesmo ritmo do cartão */
+}
+
+@keyframes vaga {
+  0%,
+  15%,
+  100% {
+    border-color: transparent;
+  }
+  25%,
+  85% {
+    border-color: rgba(217, 119, 6, 0.45);
+  }
+}
+
 @keyframes mover {
   0%,
   15% {

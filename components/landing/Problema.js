@@ -64,7 +64,7 @@ export default function Problema() {
             </div>
             <div className={styles.depois}>
               <span className={styles.iconeDepois}>
-                <Icone nome="visto" tamanho={16} />
+                <Icone nome="visto" />
               </span>
               <p>
                 <span className={styles.rotuloMovel}>Com o FlowCRM</span>
