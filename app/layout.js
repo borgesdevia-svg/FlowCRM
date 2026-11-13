@@ -18,7 +18,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt" className={geistSans.variable}>
+    // data-scroll-behavior: diz ao Next que o scroll suave (globals.css) é de propósito,
+    // para ele o desligar ao mudar de página (sem isto aparece um aviso no terminal)
+    <html lang="pt" className={geistSans.variable} data-scroll-behavior="smooth">
       <body>{children}</body>
     </html>
   );

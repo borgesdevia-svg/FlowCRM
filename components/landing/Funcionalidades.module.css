@@ -26,6 +26,12 @@
   order: 2;
 }
 
+/* a coluna larga (1.15fr) tem de acompanhar a demonstração, que agora está à esquerda;
+   sem isto a demonstração ficava na coluna estreita e o texto do pipeline não cabia */
+.invertida {
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
 .sobretitulo {
   display: flex;
   align-items: center;
@@ -255,7 +261,18 @@
   color: var(--cor-texto-suave);
   font-size: 0.72rem;
   font-weight: 600;
+  flex-wrap: wrap; /* o total passa para a linha de baixo */
+  row-gap: 2px;
+}
+
+/* nome da fase: numa linha só; se não couber, corta com "..." */
+.tituloColuna b {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tituloColuna span {
@@ -266,7 +283,8 @@
 }
 
 .tituloColuna em {
-  margin-left: auto;
+  flex-basis: 100%; /* ocupa a linha toda: fica por baixo do nome */
+  padding-left: 13px; /* alinhado com o nome (bolinha 7px + espaço 6px) */
   font-style: normal;
   font-weight: 400;
   color: var(--cor-texto-fraco);

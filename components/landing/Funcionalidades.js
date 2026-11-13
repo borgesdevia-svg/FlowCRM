@@ -194,7 +194,8 @@ function DemoPipeline() {
         <div key={col.estado} className={`${styles.coluna} ${styles.entra}`} style={{ "--i": i }}>
           <div className={styles.tituloColuna}>
             <span style={{ background: ESTADOS[col.estado].cor }}></span>
-            {ESTADOS[col.estado].texto}
+            <b>{ESTADOS[col.estado].texto}</b>
+            {/* o total da coluna vai para a linha de baixo, para nunca sair da coluna */}
             <em>{col.valor}</em>
           </div>
           {col.cartoes.map((c) => (

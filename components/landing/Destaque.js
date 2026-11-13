@@ -3,8 +3,7 @@ import styles from "./Destaque.module.css";
 
 // Secção de destaque: a primeira coisa que se vê na landing.
 // Tem de responder logo a "o que é isto?" e "para quem é?".
-// O fundo (grelha, estrelas e brilho) é todo feito em CSS, sem imagens:
-// ver Destaque.module.css. Logo por baixo vem a janela da app (componente Tour).
+// O fundo é o preto da página, sem decoração. Logo por baixo vem a janela da app (componente Tour).
 // A classe global "entrar" faz cada elemento aparecer ao carregar a página;
 // a variável --atraso faz com que apareçam um a seguir ao outro.
 export default function Destaque() {

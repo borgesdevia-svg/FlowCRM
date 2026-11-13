@@ -13,6 +13,10 @@
      fica por cima do fim do destaque (que está vazio), e a janela aparece mais cedo */
   margin-top: calc(var(--altura-barra) * -1);
   scroll-margin-top: 0;
+  /* por causa da margem negativa, o topo (vazio) desta secção fica por cima dos
+     botões do destaque e "roubava" o rato. pointer-events: none deixa o rato
+     atravessar a secção; só os elementos visíveis (.fixo > *) recebem cliques. */
+  pointer-events: none;
 }
 
 /* esta parte fica PRESA ao ecrã enquanto a secção passa:
@@ -29,6 +33,10 @@
   align-items: center;
   justify-content: center;
   gap: 18px;
+}
+
+.fixo > * {
+  pointer-events: auto;
 }
 
 /* ---------- separadores (um por página da app) ---------- */

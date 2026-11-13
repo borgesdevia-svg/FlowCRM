@@ -101,3 +101,52 @@
     padding: 0 16px;
   }
 }
+
+/* telemóveis: tudo mais compacto para o logótipo e os dois botões caberem
+   numa linha. nowrap impede que "Começar grátis" parta em duas linhas. */
+@media (max-width: 480px) {
+  .interior {
+    gap: 8px;
+  }
+
+  .logo {
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+
+  .simbolo {
+    width: 20px;
+    height: 20px;
+  }
+
+  .acoes {
+    gap: 2px;
+  }
+
+  .entrar {
+    padding: 8px 10px;
+    font-size: 0.86rem;
+    white-space: nowrap;
+  }
+
+  .acoes :global(.botao) {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+}
+
+/* telemóveis muito estreitos (ex.: 320px): aperta só mais um pouco */
+@media (max-width: 360px) {
+  .interior {
+    padding: 0 12px;
+  }
+
+  .entrar {
+    padding: 8px 6px;
+  }
+
+  .acoes :global(.botao) {
+    padding: 8px 12px;
+  }
+}

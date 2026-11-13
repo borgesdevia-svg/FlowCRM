@@ -1,53 +1,10 @@
-/* Destaque: texto e botões centrados, por cima de um fundo decorativo
-   feito só em CSS (sem imagens): um brilho verde, uma grelha fina e "estrelas". */
+/* Destaque: texto e botões centrados, sobre o fundo preto da página (sem decoração). */
 .destaque {
   --altura-barra: 64px;
   position: relative;
-  isolation: isolate; /* as camadas com z-index: -1 ficam atrás do texto, mas dentro desta secção */
-  /* a secção sobe para trás da barra de topo (que é transparente),
-     para o fundo decorativo começar mesmo no cimo da página */
+  /* a secção sobe para trás da barra de topo (que é transparente) */
   margin-top: calc(var(--altura-barra) * -1);
   padding: calc(var(--altura-barra) + 80px) 16px 24px;
-  /* brilho: uma elipse verde-azulada que vai desaparecendo para as bordas */
-  background: radial-gradient(ellipse 50% 55% at 55% 30%, rgba(20, 184, 166, 0.16), transparent 100%);
-}
-
-/* camada 1: grelha. Duas listras de 1px (uma horizontal, uma vertical)
-   repetidas de 56 em 56px. A "mask" faz a grelha desvanecer nas bordas. */
-.destaque::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(rgba(32, 201, 107, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(32, 201, 107, 0.07) 1px, transparent 1px);
-  background-size: 56px 56px;
-  background-position: center top;
-  mask-image: radial-gradient(ellipse 75% 80% at 50% 45%, black 30%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 75% 80% at 50% 45%, black 30%, transparent 100%);
-}
-
-/* camada 2: estrelas. Cada linha é um pontinho (um círculo minúsculo)
-   colocado numa posição x% y% da secção. */
-.destaque::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    radial-gradient(1.5px circle at 8% 22%, rgba(255, 255, 255, 0.5), transparent 100%),
-    radial-gradient(1.5px circle at 17% 64%, rgba(255, 255, 255, 0.35), transparent 100%),
-    radial-gradient(1px circle at 24% 38%, rgba(255, 255, 255, 0.45), transparent 100%),
-    radial-gradient(1.5px circle at 31% 82%, rgba(255, 255, 255, 0.3), transparent 100%),
-    radial-gradient(1px circle at 38% 14%, rgba(255, 255, 255, 0.4), transparent 100%),
-    radial-gradient(1.5px circle at 46% 90%, rgba(134, 239, 172, 0.5), transparent 100%),
-    radial-gradient(1px circle at 58% 9%, rgba(255, 255, 255, 0.35), transparent 100%),
-    radial-gradient(1.5px circle at 66% 76%, rgba(255, 255, 255, 0.4), transparent 100%),
-    radial-gradient(1px circle at 73% 30%, rgba(255, 255, 255, 0.5), transparent 100%),
-    radial-gradient(1.5px circle at 81% 58%, rgba(255, 255, 255, 0.3), transparent 100%),
-    radial-gradient(1px circle at 88% 18%, rgba(255, 255, 255, 0.45), transparent 100%),
-    radial-gradient(1.5px circle at 94% 70%, rgba(134, 239, 172, 0.4), transparent 100%);
 }
 
 .conteudo {
