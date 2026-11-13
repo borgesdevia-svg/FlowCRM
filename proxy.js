@@ -30,10 +30,10 @@ export async function proxy(request) {
     }
   );
 
-  // getUser() confirma a sessão junto do Supabase (não confia só no cookie)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims() confirma a assinatura do token de login (não confia só no cookie)
+  // e renova a sessão se for preciso. É mais rápido do que getUser().
+  const { data: sessao } = await supabase.auth.getClaims();
+  const user = sessao?.claims?.sub ?? null;
 
   const caminho = request.nextUrl.pathname;
   const paginaPrivada = caminho.startsWith("/painel");

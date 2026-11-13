@@ -54,6 +54,7 @@
 
 .separador,
 .separadorAtivo {
+  position: relative; /* para o traço "a carregar" */
   flex: none;
   display: inline-flex;
   align-items: center;
@@ -69,6 +70,24 @@
 
 .separador:hover {
   color: var(--cor-texto);
+}
+
+/* traço verde que cresce logo ao clicar, enquanto a lista nova não chega */
+.aCarregar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--cor-destaque);
+  transform: scaleX(0);
+  opacity: 0;
+  transition: transform 0.25s var(--curva), opacity 0.15s;
+}
+
+.aCarregarAtivo {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
 .separadorAtivo {

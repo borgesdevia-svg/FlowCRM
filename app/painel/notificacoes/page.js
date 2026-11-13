@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { hojeEmPortugal, formatarDiaCurto } from "@/lib/datas";
-import { alternarTarefa } from "@/lib/acoes/tarefas";
-import base from "@/components/tarefas/Tarefas.module.css";
+import ListaNotificacoes from "@/components/painel/ListaNotificacoes";
 import styles from "./notificacoes.module.css";
 
 // Rota /painel/notificacoes — tudo o que o sino avisa, numa página inteira:
 // as MINHAS tarefas por fazer que estão em atraso ou que acabam hoje.
-// O sino do menu mostra só as primeiras; aqui aparecem todas, e cada uma
-// pode ser concluída logo (o círculo à esquerda), sem abrir o cliente.
+// O sino do menu mostra só as primeiras; aqui aparecem todas. Seleciona-se
+// uma ou várias e "Marcar como feitas" conclui-as de uma vez.
 export const metadata = { title: "Notificações · FlowCRM" };
 
 // dias entre duas datas AAAA-MM-DD ("2026-11-10" e "2026-11-13" -> 3)
@@ -22,16 +21,32 @@ export default async function PaginaNotificacoes() {
 
   const { data } = await supabase
     .from("tarefas")
-    .select("id, titulo, data_limite, cliente_id, concluida, clientes(nome)")
+    .select("id, titulo, data_limite, cliente_id, clientes(nome)")
     .eq("responsavel_id", perfil.id)
     .eq("concluida", false)
     .lte("data_limite", hoje)
     .order("data_limite", { ascending: true });
   const todas = data ?? [];
 
+  // texto do prazo: "Hoje", "Desde ontem" ou "Há 3 dias · 10 de novembro"
+  const prazo = (data) => {
+    const dias = diasEntre(data, hoje);
+    if (dias <= 0) return "Hoje";
+    if (dias === 1) return "Desde ontem";
+    return `Há ${dias} dias · ${formatarDiaCurto(data)}`;
+  };
+  // só o que a lista precisa (vai para um componente de cliente)
+  const preparar = (t) => ({
+    id: t.id,
+    titulo: t.titulo,
+    clienteId: t.cliente_id,
+    cliente: t.clientes?.nome ?? "Cliente",
+    prazo: prazo(t.data_limite),
+  });
+
   const grupos = [
-    { chave: "atrasadas", titulo: "Em atraso", tarefas: todas.filter((t) => t.data_limite < hoje) },
-    { chave: "hoje", titulo: "Acabam hoje", tarefas: todas.filter((t) => t.data_limite === hoje) },
+    { chave: "atrasadas", titulo: "Em atraso", tarefas: todas.filter((t) => t.data_limite < hoje).map(preparar) },
+    { chave: "hoje", titulo: "Acabam hoje", tarefas: todas.filter((t) => t.data_limite === hoje).map(preparar) },
   ].filter((g) => g.tarefas.length > 0);
 
   // frase do topo
@@ -59,46 +74,7 @@ export default async function PaginaNotificacoes() {
           </Link>
         </section>
       ) : (
-        grupos.map((g) => (
-          <section key={g.chave} className={styles.grupo} aria-labelledby={`grupo-${g.chave}`}>
-            <h2 id={`grupo-${g.chave}`} className={styles.tituloGrupo}>
-              <i className={styles[g.chave]}></i>
-              {g.titulo} <span>{g.tarefas.length}</span>
-            </h2>
-
-            <ul className={styles.lista}>
-              {g.tarefas.map((t) => {
-                const dias = diasEntre(t.data_limite, hoje);
-                return (
-                  <li key={t.id} className={styles.linha}>
-                    {/* concluir logo daqui: um formulário com um só botão */}
-                    <form action={alternarTarefa}>
-                      <input type="hidden" name="id" value={t.id} />
-                      <input type="hidden" name="cliente_id" value={t.cliente_id} />
-                      <input type="hidden" name="concluida" value="false" />
-                      <button type="submit" className={base.visto} aria-label={`Marcar "${t.titulo}" como feita`}></button>
-                    </form>
-
-                    <div className={styles.texto}>
-                      <strong>{t.titulo}</strong>
-                      <Link href={`/painel/clientes/${t.cliente_id}`} className={styles.cliente}>
-                        {t.clientes?.nome ?? "Cliente"}
-                      </Link>
-                    </div>
-
-                    <span className={g.chave === "atrasadas" ? styles.prazoAtrasado : styles.prazoHoje}>
-                      {g.chave === "hoje"
-                        ? "Hoje"
-                        : dias === 1
-                          ? "Desde ontem"
-                          : `Há ${dias} dias · ${formatarDiaCurto(t.data_limite)}`}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        ))
+        <ListaNotificacoes grupos={grupos} />
       )}
     </div>
   );

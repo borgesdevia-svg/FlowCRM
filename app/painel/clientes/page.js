@@ -1,4 +1,5 @@
 import Link from "next/link";
+import IndicadorLink from "@/components/painel/IndicadorLink";
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, obterEstado, formatarEuros, formatarData } from "@/lib/estados";
 import { iniciais } from "@/lib/texto";
@@ -22,12 +23,6 @@ export default async function PaginaClientes({ searchParams }) {
   const { q = "", estado = "", aviso = "" } = await searchParams;
   const { supabase, eAdmin } = await obterSessao();
 
-  // 1) todos os clientes visíveis, sem filtros: para os números de cada separador
-  const { data: todos } = await supabase.from("clientes").select("estado");
-  const total = todos?.length ?? 0;
-  const contagem = {};
-  for (const c of todos ?? []) contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
-
   // 2) lista filtrada — o filtro é feito pela base de dados
   let consulta = supabase
     .from("clientes")
@@ -41,8 +36,17 @@ export default async function PaginaClientes({ searchParams }) {
   const termo = q.replace(/[%,()]/g, "").trim();
   if (termo) consulta = consulta.or(`nome.ilike.%${termo}%,email.ilike.%${termo}%`);
 
-  const { data: clientes } = await consulta;
+  // as duas consultas vão ao mesmo tempo (mais rápido do que uma a seguir à outra):
+  //  1) o estado de todos os clientes visíveis, sem filtros: para os números de cada separador
+  //  2) a lista filtrada
+  const [{ data: todos }, { data: clientes }] = await Promise.all([
+    supabase.from("clientes").select("estado"),
+    consulta,
+  ]);
   const lista = clientes ?? [];
+  const total = todos?.length ?? 0;
+  const contagem = {};
+  for (const c of todos ?? []) contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
 
   // monta um link de filtro mantendo a pesquisa atual
   const linkFiltro = (chave) => {
@@ -93,6 +97,7 @@ export default async function PaginaClientes({ searchParams }) {
           aria-current={!estadoValido ? "page" : undefined}
         >
           Todos <span>{total}</span>
+          <IndicadorLink className={styles.aCarregar} classeAtiva={styles.aCarregarAtivo} />
         </Link>
         {ESTADOS.map((e) => (
           <Link
@@ -103,6 +108,7 @@ export default async function PaginaClientes({ searchParams }) {
           >
             <i style={{ background: e.cor }}></i>
             {e.texto} <span>{contagem[e.chave] ?? 0}</span>
+            <IndicadorLink className={styles.aCarregar} classeAtiva={styles.aCarregarAtivo} />
           </Link>
         ))}
       </nav>
