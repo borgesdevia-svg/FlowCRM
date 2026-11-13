@@ -1,0 +1,162 @@
+/* Página Notificações: uma lista larga, agrupada por "Em atraso" e "Acabam hoje" */
+.pagina {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cabecalho h1 {
+  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- grupos ---------- */
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tituloGrupo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: normal;
+}
+
+.tituloGrupo i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.tituloGrupo .atrasadas {
+  background: #ef4444;
+}
+
+.tituloGrupo .hoje {
+  background: #facc15;
+}
+
+.tituloGrupo span {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-suave);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* uma caixa com as tarefas em linhas separadas por traços finos */
+.lista {
+  list-style: none;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.linha:last-child {
+  border-bottom: none;
+}
+
+.linha form {
+  display: flex;
+}
+
+.texto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.texto strong {
+  font-size: 0.95rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.cliente {
+  align-self: flex-start;
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+.cliente:hover {
+  color: var(--cor-destaque);
+}
+
+.prazoAtrasado,
+.prazoHoje {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.prazoAtrasado {
+  color: #fca5a5;
+}
+
+.prazoHoje {
+  color: #fbbf24;
+}
+
+/* ---------- sem notificações ---------- */
+.vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.vazio h2 {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: normal;
+}
+
+.vazio p {
+  margin-bottom: 8px;
+  color: var(--cor-texto-suave);
+}
+
+/* no telemóvel o prazo passa para baixo do título */
+@media (max-width: 560px) {
+  .linha {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .prazoAtrasado,
+  .prazoHoje {
+    width: 100%;
+    padding-left: 34px; /* alinhado com o título (círculo 20px + espaço 14px) */
+    text-align: left;
+  }
+}

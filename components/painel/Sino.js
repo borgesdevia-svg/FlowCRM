@@ -5,6 +5,8 @@
 //
 // Mostra as MINHAS tarefas por fazer que estão em atraso ou que acabam hoje.
 // O número só desce quando a tarefa é concluída (não há "marcar como lida").
+// Só chegam as primeiras 5; "total" diz quantas há, e a lista inteira está
+// na página /painel/notificacoes.
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -12,7 +14,7 @@ import { formatarDiaCurto } from "@/lib/datas";
 import Icone from "@/components/Icone";
 import styles from "./Sino.module.css";
 
-export default function Sino({ tarefas, hoje }) {
+export default function Sino({ tarefas, total, hoje }) {
   const [aberto, setAberto] = useState(false);
   const refContentor = useRef(null);
 
@@ -32,8 +34,6 @@ export default function Sino({ tarefas, hoje }) {
       window.removeEventListener("keydown", tecla);
     };
   }, [aberto]);
-
-  const total = tarefas.length;
 
   return (
     <div ref={refContentor} className={styles.sino}>
@@ -87,8 +87,8 @@ export default function Sino({ tarefas, hoje }) {
             </ul>
           )}
 
-          <Link href="/painel/tarefas" className={styles.verTodas} onClick={() => setAberto(false)}>
-            Ver todas as tarefas
+          <Link href="/painel/notificacoes" className={styles.verTodas} onClick={() => setAberto(false)}>
+            {total > tarefas.length ? `Ver todas (${total})` : "Abrir notificações"}
           </Link>
         </div>
       )}

@@ -20,7 +20,7 @@ export default async function LayoutPainel({ children }) {
   // por isso o Promise.all faz as duas ao mesmo tempo (mais rápido do que uma a seguir à outra).
   // head: true = só queremos o número, não as linhas. O RLS já filtra por empresa/comercial.
   const hoje = hojeEmPortugal();
-  const [{ count: nClientes }, { count: nAtrasadas }, { data: avisos }] = await Promise.all([
+  const [{ count: nClientes }, { count: nAtrasadas }, { data: avisos, count: nAvisos }] = await Promise.all([
     supabase.from("clientes").select("id", { count: "exact", head: true }),
     supabase
       .from("tarefas")
@@ -30,14 +30,15 @@ export default async function LayoutPainel({ children }) {
       .lt("data_limite", hoje), // lt = "less than": data limite anterior a hoje
     // para o sino: as minhas tarefas por fazer em atraso OU que acabam hoje
     // (lte = "less than or equal": até hoje, inclusive). As mais antigas primeiro.
+    // Só vêm 5 (o sino é pequeno); o total vem no count e as outras estão em /painel/notificacoes
     supabase
       .from("tarefas")
-      .select("id, titulo, data_limite, cliente_id, clientes(nome)")
+      .select("id, titulo, data_limite, cliente_id, clientes(nome)", { count: "exact" })
       .eq("responsavel_id", perfil.id)
       .eq("concluida", false)
       .lte("data_limite", hoje)
       .order("data_limite", { ascending: true })
-      .limit(20),
+      .limit(5),
   ]);
 
   // Menu dividido em secções. "contador" aparece à direita do item;
@@ -50,6 +51,7 @@ export default async function LayoutPainel({ children }) {
         { texto: "Clientes", href: "/painel/clientes", icone: "utilizadores", contador: nClientes ?? null },
         { texto: "Pipeline", href: "/painel/pipeline", icone: "subida" },
         { texto: "Tarefas", href: "/painel/tarefas", icone: "lista", contador: nAtrasadas || null, alerta: true },
+        { texto: "Notificações", href: "/painel/notificacoes", icone: "sino", contador: nAvisos || null },
       ],
     },
     {
@@ -78,7 +80,7 @@ export default async function LayoutPainel({ children }) {
               </small>
             </span>
           </Link>
-          <Sino tarefas={avisos ?? []} hoje={hoje} />
+          <Sino tarefas={avisos ?? []} total={nAvisos ?? 0} hoje={hoje} />
         </div>
 
         {/* pesquisa global de clientes (componente de cliente) */}
