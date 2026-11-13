@@ -1,5 +1,6 @@
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, obterEstado } from "@/lib/estados";
+import { termoPesquisa } from "@/lib/texto";
 
 // ROUTE HANDLER: em vez de uma página, este ficheiro devolve um ficheiro CSV para descarregar.
 // Rota: GET /painel/clientes/exportar?q=...&estado=...
@@ -34,7 +35,9 @@ export async function GET(request) {
     .select("nome, email, telefone, estado, valor_previsto, origem, criado_em, perfis(nome)")
     .order("criado_em", { ascending: false });
   if (ESTADOS.some((e) => e.chave === estado)) consulta = consulta.eq("estado", estado);
-  if (termo) consulta = consulta.or(`nome.ilike.%${termo}%,email.ilike.%${termo}%`);
+  // pesquisa sem ligar a acentos nem maiúsculas (coluna "pesquisa", migração 07)
+  const procura = termoPesquisa(termo);
+  if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
 
   const { data } = await consulta;
 

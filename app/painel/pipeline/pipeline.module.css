@@ -219,6 +219,66 @@
   padding: 5px 8px;
 }
 
+/* ---------- "Mostrar mais" e "Ver todos" (colunas compridas) ---------- */
+.mais {
+  display: flex;
+  flex-direction: column;
+}
+
+.mais summary {
+  list-style: none; /* tira o triângulo do <details> */
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mais summary::-webkit-details-marker {
+  display: none;
+}
+
+.mais summary:hover,
+.mais summary:focus-visible {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto);
+}
+
+.mais[open] summary {
+  margin-bottom: 10px;
+}
+
+.fechar,
+.mais[open] .abrir {
+  display: none;
+}
+
+.mais[open] .fechar {
+  display: inline;
+}
+
+.cartoesMais {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* link para a lista de clientes, quando a fase tem mais do que o quadro mostra */
+.verTodos {
+  padding: 4px;
+  color: var(--cor-destaque);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.verTodos:hover {
+  text-decoration: underline;
+}
+
 /* botão "+ Novo cliente" no fundo da coluna "Novo" */
 .adicionar {
   display: flex;

@@ -1,11 +1,13 @@
+/* Página Clientes ao estilo das listas da Apple: título grande, controlo segmentado,
+   lista com linhas finas e uma seta no fim de cada linha. Sem caixas a mais. */
 .pagina {
   max-width: 1180px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
-/* ---------- cabeçalho (igual ao do Início e do Pipeline) ---------- */
+/* ---------- cabeçalho ---------- */
 .cabecalho {
   display: flex;
   flex-wrap: wrap;
@@ -14,20 +16,42 @@
   gap: 16px;
 }
 
+/* título grande, letras um pouco mais juntas (como os títulos da Apple) */
 .cabecalho h1 {
-  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
-  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   margin-bottom: 4px;
 }
 
 .resumo {
   color: var(--cor-texto-suave);
+  font-variant-numeric: tabular-nums;
 }
 
 .acoesTopo {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
+}
+
+/* botão só de texto (ação secundária, como os botões das barras da Apple) */
+.botaoTexto {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--cor-destaque);
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.botaoTexto:hover {
+  background: rgba(32, 201, 107, 0.1);
 }
 
 /* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
@@ -42,79 +66,7 @@
   }
 }
 
-/* ---------- separadores por estado (referência E) ---------- */
-/* uma linha fina a toda a largura; o separador ativo tem um traço verde por baixo */
-.separadores {
-  display: flex;
-  gap: 4px;
-  border-bottom: 1px solid var(--cor-contorno);
-  overflow-x: auto; /* no telemóvel desliza para o lado */
-  scrollbar-width: none;
-}
-
-.separador,
-.separadorAtivo {
-  position: relative; /* para o traço "a carregar" */
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px 12px;
-  margin-bottom: -1px; /* o traço do ativo fica por cima da linha fina */
-  border-bottom: 2px solid transparent;
-  color: var(--cor-texto-suave);
-  font-size: 0.92rem;
-  white-space: nowrap;
-  transition: color 0.2s;
-}
-
-.separador:hover {
-  color: var(--cor-texto);
-}
-
-/* traço verde que cresce logo ao clicar, enquanto a lista nova não chega */
-.aCarregar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  background: var(--cor-destaque);
-  transform: scaleX(0);
-  opacity: 0;
-  transition: transform 0.25s var(--curva), opacity 0.15s;
-}
-
-.aCarregarAtivo {
-  transform: scaleX(1);
-  opacity: 1;
-}
-
-.separadorAtivo {
-  border-bottom-color: var(--cor-destaque);
-  color: var(--cor-texto);
-  font-weight: 600;
-}
-
-.separador i,
-.separadorAtivo i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.separador span,
-.separadorAtivo span {
-  padding: 1px 7px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--cor-texto-fraco);
-  font-size: 0.78rem;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ---------- barra de ferramentas: vistas + pesquisa ---------- */
+/* ---------- barra: segmentos + pesquisa ---------- */
 .ferramentas {
   display: flex;
   flex-wrap: wrap;
@@ -123,52 +75,81 @@
   gap: 12px;
 }
 
-/* troca Tabela / Quadro, num "comprimido" */
-.vistas {
+/* controlo segmentado: uma "calha" escura com o segmento ativo em relevo */
+.segmentos {
   display: flex;
   gap: 2px;
+  max-width: 100%;
   padding: 3px;
-  border-radius: 10px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow-x: auto; /* no telemóvel desliza para o lado */
+  scrollbar-width: none;
 }
 
-.vista,
-.vistaAtiva {
+.segmento,
+.segmentoAtivo {
+  position: relative; /* para o traço "a carregar" */
+  flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 7px;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 9px;
   color: var(--cor-texto-suave);
-  font-size: 0.86rem;
-}
-
-.vista:hover {
-  color: var(--cor-texto);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.vistaAtiva {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--cor-texto);
+  font-size: 0.88rem;
   font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
 }
 
-/* ---------- bloco da tabela ---------- */
-.bloco {
-  border-radius: 16px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-  overflow: hidden; /* os cantos redondos cortam a tabela */
+.segmento:hover {
+  color: var(--cor-texto);
 }
 
-/* ---------- pesquisa (com a lupa dentro da caixa) ---------- */
+.segmentoAtivo {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  color: var(--cor-texto);
+}
+
+.segmento i,
+.segmentoAtivo i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* o número de cada estado, mais apagado */
+.segmento span,
+.segmentoAtivo span {
+  color: var(--cor-texto-fraco);
+  font-variant-numeric: tabular-nums;
+}
+
+.segmentoAtivo span {
+  color: var(--cor-texto-suave);
+}
+
+/* fundo que acende logo ao clicar, enquanto a lista nova não chega */
+.aCarregar {
+  position: absolute;
+  inset: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.aCarregarAtivo {
+  opacity: 1;
+}
+
+/* pesquisa: campo "cheio", sem contorno, com a lupa dentro */
 .pesquisa {
   position: relative;
-  flex: 0 1 380px;
-  display: flex;
-  gap: 6px;
+  flex: 0 1 320px;
 }
 
 .lupa {
@@ -181,16 +162,15 @@
 }
 
 .pesquisa input {
-  flex: 1;
-  min-width: 0;
-  padding: 9px 12px 9px 38px; /* espaço à esquerda para a lupa */
-  border-radius: 10px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-fundo);
+  width: 100%;
+  padding: 9px 12px 9px 36px; /* espaço à esquerda para a lupa */
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.06);
   color: var(--cor-texto);
   font: inherit;
   font-size: 0.92rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .pesquisa input::placeholder {
@@ -200,27 +180,17 @@
 .pesquisa input:focus {
   outline: none;
   border-color: var(--cor-destaque);
+  background: rgba(255, 255, 255, 0.04);
   box-shadow: 0 0 0 3px rgba(32, 201, 107, 0.2);
 }
 
-.botaoPesquisa {
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid var(--cor-contorno);
-  background: transparent;
-  color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+/* ---------- a lista ---------- */
+.bloco {
+  border-radius: 16px;
+  background: var(--cor-cartao);
+  overflow: hidden; /* os cantos redondos cortam a tabela */
 }
 
-.botaoPesquisa:hover {
-  color: var(--cor-texto);
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-/* ---------- tabela ---------- */
 .rolar {
   overflow-x: auto;
 }
@@ -231,47 +201,28 @@
   font-size: 0.92rem;
 }
 
-/* cabeçalhos com um ícone antes do nome (referência D) */
+/* cabeçalhos: pequenos e cinzentos, sem fundo nem ícones */
 .tabela th {
-  text-align: left;
-  padding: 12px 22px;
+  padding: 14px 20px 10px;
   color: var(--cor-texto-fraco);
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  white-space: nowrap;
-  background: var(--cor-fundo-2);
-  border-bottom: 1px solid var(--cor-contorno);
-}
-
-.th {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.th svg {
-  opacity: 0.7;
-}
-
-/* rodapé com os totais: discreto, como uma linha de soma de folha de cálculo */
-.tabela tfoot td {
-  padding: 12px 22px;
-  background: var(--cor-fundo-2);
-  border-top: 1px solid var(--cor-contorno);
-  border-bottom: none;
-  color: var(--cor-texto-fraco);
-  font-size: 0.85rem;
+  text-align: left;
   white-space: nowrap;
 }
 
 .tabela td {
-  padding: 14px 22px;
-  border-bottom: 1px solid var(--cor-contorno);
+  padding: 13px 20px;
   vertical-align: middle;
 }
 
-.tabela tbody tr:last-child td {
-  border-bottom: none;
+/* linha fina por cima de cada linha (não da primeira), como nas listas do iPhone */
+.tabela tbody tr + tr td {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tabela thead th {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* a linha fica "posicionada" para o link do nome a poder cobrir toda */
@@ -280,46 +231,20 @@
   transition: background 0.15s;
 }
 
-/* ao passar o rato: fundo mais claro e traço verde à esquerda */
 .tabela tbody tr:hover {
-  background: rgba(32, 201, 107, 0.04);
-  box-shadow: inset 2px 0 0 var(--cor-destaque);
-}
-
-.cliente {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 220px;
-}
-
-.avatar {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(32, 201, 107, 0.25);
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.72rem;
-  font-weight: 700;
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .nomeEmail {
-  min-width: 0;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
+  gap: 1px;
 }
 
 .linkCliente {
   color: var(--cor-texto);
   font-weight: 500;
-}
-
-.tabela tbody tr:hover .linkCliente {
-  color: var(--cor-destaque);
 }
 
 /* truque: um pseudo-elemento do link estica-se por cima da linha inteira */
@@ -336,7 +261,7 @@
 .linkCliente:focus-visible::after {
   outline: 2px solid var(--cor-destaque);
   outline-offset: -2px;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .nomeEmail small {
@@ -347,17 +272,16 @@
   font-size: 0.82rem;
 }
 
+/* "Formulário": o cliente chegou pelo formulário público */
 .origem {
   font-style: normal;
-  font-size: 0.7rem;
-  padding: 0 6px;
-  border-radius: 4px;
-  background: var(--cor-superficie-verde);
+  font-size: 0.72rem;
   color: var(--cor-destaque);
 }
 
 .colTelefone,
-.colData {
+.colData,
+.colResponsavel {
   color: var(--cor-texto-suave);
   white-space: nowrap;
 }
@@ -369,41 +293,83 @@
   white-space: nowrap;
 }
 
-/* responsável: iniciais num círculo pequeno + nome */
-.responsavel {
+.semResponsavel {
+  color: var(--cor-estado-negociacao);
+}
+
+/* estado: bolinha com a cor + nome, sem caixa à volta */
+.estado {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  color: var(--cor-texto-suave);
   white-space: nowrap;
+}
+
+.estado::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+
+/* seta ">" no fim da linha: diz que a linha abre outra página */
+.colSeta {
+  width: 36px;
+  padding-left: 0 !important;
+  color: rgba(255, 255, 255, 0.25);
+  text-align: right;
+}
+
+.tabela tbody tr:hover .colSeta {
   color: var(--cor-texto-suave);
 }
 
-.responsavel b {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+/* ---------- rodapé com o total e as páginas ---------- */
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.somaTotal {
+  color: var(--cor-texto-suave);
+}
+
+.paginas {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.numPagina {
+  padding: 0 6px;
+}
+
+.botaoPagina {
+  padding: 6px 12px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   color: var(--cor-texto);
-  font-size: 0.62rem;
-}
-
-.semResponsavel {
-  color: var(--cor-estado-negociacao);
-  font-size: 0.85rem;
-}
-
-/* etiqueta de estado: fundo e texto feitos a partir da cor do estado (--cor) */
-.estado {
-  display: inline-block;
-  padding: 4px 11px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--cor) 18%, transparent);
-  color: color-mix(in srgb, var(--cor) 50%, white);
-  font-size: 0.8rem;
   font-weight: 500;
-  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+a.botaoPagina:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.desligado {
+  color: var(--cor-texto-fraco);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* ---------- lista vazia ---------- */
@@ -454,7 +420,21 @@
     padding-right: 14px;
   }
 
-  .cliente {
+  .nomeEmail {
     min-width: 0;
+  }
+
+  /* estado: só a bolinha (o nome aparece ao tocar, no "title") */
+  .colEstado {
+    width: 20px;
+    font-size: 0;
+  }
+
+  .textoEstado {
+    display: none;
+  }
+
+  .somaTotal {
+    display: none;
   }
 }

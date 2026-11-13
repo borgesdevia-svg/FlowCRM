@@ -137,6 +137,16 @@ a {
   justify-content: center;
 }
 
+/* texto que só os leitores de ecrã leem (fica invisível no ecrã) */
+.so-leitores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 /* ---------- Formulários (reutilizados em todo o site) ---------- */
 /* uso: <div className="campo"><label/><input/><p className="erro-campo"/></div> */
 .campo {
