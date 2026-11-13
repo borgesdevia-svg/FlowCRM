@@ -188,3 +188,47 @@
     opacity: 1;
   }
 }
+
+/* ---------- "Mostrar mais" e "Mais tarde" (elemento <details>) ---------- */
+.mais {
+  display: flex;
+  flex-direction: column;
+}
+
+.mais summary {
+  list-style: none; /* tira o triângulo do <details> */
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px dashed var(--cor-contorno);
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.mais summary::-webkit-details-marker {
+  display: none;
+}
+
+.mais summary:hover,
+.mais summary:focus-visible {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--cor-texto);
+}
+
+/* aberto: os cartões aparecem por baixo do botão */
+.mais[open] summary {
+  margin-bottom: 8px;
+}
+
+/* o texto do botão muda quando está aberto */
+.fechar,
+.mais[open] .abrir {
+  display: none;
+}
+
+.mais[open] .fechar {
+  display: inline;
+}

@@ -1,11 +1,12 @@
 "use client";
 // Formulário para criar uma tarefa. Usado em dois sítios:
 //  - na ficha do cliente: recebe clienteId (o cliente já é conhecido)
-//  - na página Tarefas: recebe a lista "clientes" para escolher e,
+//  - na página Tarefas: recebe "clientes" (os mais recentes, sugeridos na pesquisa) e,
 //    se for o admin, a lista "membros" para escolher o responsável
 
 import { useActionState } from "react";
 import { adicionarTarefa } from "@/lib/acoes/tarefas";
+import EscolherCliente from "./EscolherCliente";
 import styles from "./Tarefas.module.css";
 
 export default function FormTarefa({ clienteId = null, clientes = null, membros = null, perfilId = "" }) {
@@ -27,22 +28,13 @@ export default function FormTarefa({ clienteId = null, clientes = null, membros 
         </div>
       </div>
 
-      {/* listas de escolha: só aparecem na página Tarefas */}
+      {/* cliente e responsável: só aparecem na página Tarefas */}
       {(clientes || membros) && (
         <div className={styles.linhaForm}>
           {clientes && (
             <div className="campo" style={{ flex: 1, minWidth: 200 }}>
               <label htmlFor="cliente_id">Cliente</label>
-              <select id="cliente_id" name="cliente_id" defaultValue={estado.clienteId ?? ""}>
-                <option value="" disabled>
-                  Escolhe o cliente
-                </option>
-                {clientes.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.nome}
-                  </option>
-                ))}
-              </select>
+              <EscolherCliente sugestoes={clientes} />
             </div>
           )}
           {membros && (

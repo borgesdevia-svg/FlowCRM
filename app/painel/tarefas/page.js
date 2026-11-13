@@ -12,37 +12,63 @@ import styles from "./tarefas.module.css";
 // O filtro por pessoa vive no URL (ex.: ?pessoa=...); ?nova=1 abre logo o formulário.
 export const metadata = { title: "Tarefas · FlowCRM" };
 
-// Quantas tarefas feitas mostramos (as mais recentes); as antigas não interessam no dia a dia
-const MAX_FEITAS = 10;
+// As feitas só ficam no quadro durante uma semana; depois saem (não são apagadas:
+// continuam na base de dados e no histórico do cliente)
+const DIAS_FEITAS = 7;
+// "Próximas" mostra a semana que vem; o que for depois fica em "Mais tarde"
+const DIAS_PROXIMAS = 7;
+
+// "2026-11-14" + 7 dias -> "2026-11-21"
+function somarDias(dataISO, dias) {
+  const d = new Date(`${dataISO}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + dias);
+  return d.toISOString().slice(0, 10);
+}
 
 export default async function PaginaTarefas({ searchParams }) {
   const { pessoa = "", nova = "" } = await searchParams;
   const { supabase, perfil, eAdmin } = await obterSessao();
 
-  // tarefas, com o nome do cliente e do responsável (o RLS já filtra pela empresa)
-  let consulta = supabase
-    .from("tarefas")
-    .select("id, cliente_id, titulo, data_limite, concluida, responsavel_id, clientes(nome), perfis(nome)")
-    .order("data_limite", { ascending: true, nullsFirst: false });
-
   // o comercial vê só as suas; o admin vê todas, ou as da pessoa escolhida
   // (o valor de "pessoa" vem do URL: só o usamos se tiver o formato de um id)
   const pessoaValida = /^[0-9a-f-]{36}$/i.test(pessoa) ? pessoa : "";
-  if (!eAdmin) consulta = consulta.eq("responsavel_id", perfil.id);
-  else if (pessoaValida) consulta = consulta.eq("responsavel_id", pessoaValida);
+  const filtrar = (consulta) => {
+    if (!eAdmin) return consulta.eq("responsavel_id", perfil.id);
+    if (pessoaValida) return consulta.eq("responsavel_id", pessoaValida);
+    return consulta;
+  };
 
-  // em paralelo: as tarefas, os clientes (para o formulário) e a equipa (só o admin precisa)
-  const [{ data: tarefas }, { data: clientes }, membrosRes] = await Promise.all([
-    consulta,
-    supabase.from("clientes").select("id, nome").order("nome"),
-    eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
-  ]);
-  const todas = tarefas ?? [];
+  const campos = "id, cliente_id, titulo, data_limite, concluida, responsavel_id, clientes(nome), perfis(nome)";
+  // datas AAAA-MM-DD no dia de Portugal (comparam-se como texto)
+  const hoje = hojeEmPortugal();
+  const desde = somarDias(hoje, -DIAS_FEITAS); // feitas a partir deste dia
+
+  // em paralelo (o RLS já filtra pela empresa):
+  //  - as tarefas por fazer (todas)
+  //  - as feitas da última semana (as antigas não vêm: assim a página não cresce com o tempo)
+  //  - quantas feitas há no total (só o número, para o contador)
+  //  - os clientes mais recentes (sugestões no formulário; os outros encontram-se a pesquisar)
+  //  - a equipa (só o admin precisa)
+  const [{ data: porFazerRes }, { data: feitasRes }, { count: totalFeitas }, { data: clientes }, membrosRes] =
+    await Promise.all([
+      filtrar(supabase.from("tarefas").select(campos).eq("concluida", false)).order("data_limite", {
+        ascending: true,
+        nullsFirst: false,
+      }),
+      filtrar(supabase.from("tarefas").select(campos).eq("concluida", true).gte("concluida_em", desde)).order(
+        "concluida_em",
+        { ascending: false }
+      ),
+      filtrar(supabase.from("tarefas").select("id", { count: "exact", head: true }).eq("concluida", true)),
+      supabase.from("clientes").select("id, nome, email, estado").order("criado_em", { ascending: false }).limit(6),
+      eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
+    ]);
+  const porFazer = porFazerRes ?? [];
   const membros = eAdmin ? (membrosRes.data ?? []) : null;
 
-  // separar as tarefas pelas colunas (as datas AAAA-MM-DD comparam-se como texto)
-  const hoje = hojeEmPortugal();
-  const porFazer = todas.filter((t) => !t.concluida);
+  // separar as tarefas pelas colunas
+  const fimSemana = somarDias(hoje, DIAS_PROXIMAS);
+  const futuras = porFazer.filter((t) => !t.data_limite || t.data_limite > hoje);
   const colunas = [
     {
       chave: "atrasadas",
@@ -59,17 +85,27 @@ export default async function PaginaTarefas({ searchParams }) {
     {
       chave: "proximas",
       titulo: "Próximas",
-      tarefas: porFazer.filter((t) => !t.data_limite || t.data_limite > hoje),
-      vazio: "Nada marcado para os próximos dias.",
+      // só os próximos 7 dias; o resto (e as sem data) fica fechado em "Mais tarde"
+      tarefas: futuras.filter((t) => t.data_limite && t.data_limite <= fimSemana),
+      maisTarde: futuras.filter((t) => !t.data_limite || t.data_limite > fimSemana),
+      vazio: "Nada para os próximos 7 dias.",
     },
     {
       chave: "feitas",
       titulo: "Feitas",
-      // as mais recentes primeiro (ordem inversa da data)
-      tarefas: todas.filter((t) => t.concluida).reverse().slice(0, MAX_FEITAS),
-      vazio: "Ainda nenhuma feita.",
+      tarefas: feitasRes ?? [], // as mais recentes primeiro
+      vazio: "Nada feito nos últimos 7 dias.",
     },
   ];
+
+  // contadores do topo: contam tudo (as Próximas incluem as de "Mais tarde",
+  // as Feitas são o total de sempre, não só as que estão no quadro)
+  const totais = {
+    atrasadas: colunas[0].tarefas.length,
+    hoje: colunas[1].tarefas.length,
+    proximas: futuras.length,
+    feitas: totalFeitas ?? 0,
+  };
 
   // link do filtro por pessoa
   const linkPessoa = (id) => (id ? `/painel/tarefas?pessoa=${id}` : "/painel/tarefas");
@@ -87,7 +123,7 @@ export default async function PaginaTarefas({ searchParams }) {
       <section className={styles.contadores} aria-label="Resumo">
         {colunas.map((c) => (
           <div key={c.chave} className={`${styles.contador} ${styles[c.chave]}`}>
-            <strong>{c.chave === "feitas" ? todas.filter((t) => t.concluida).length : c.tarefas.length}</strong>
+            <strong>{totais[c.chave]}</strong>
             <span>{c.titulo}</span>
           </div>
         ))}
