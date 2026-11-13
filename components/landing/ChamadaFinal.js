@@ -13,7 +13,6 @@ export default function ChamadaFinal() {
           {/* horizonte brilhante no fundo da caixa (só decoração) */}
           <div className={styles.horizonte} aria-hidden="true"></div>
 
-          <p className={styles.etiqueta}>Pronto para começar?</p>
           <h2>Organiza os clientes da tua equipa a partir de hoje</h2>
           <p className={styles.texto}>Criar a conta da empresa demora dois minutos. Não precisas de cartão.</p>
           <div className={styles.botoes}>

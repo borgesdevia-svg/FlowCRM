@@ -30,6 +30,11 @@ const perguntas = [
     resposta:
       "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um cliente novo.",
   },
+  {
+    pergunta: "Posso tirar os meus clientes do FlowCRM?",
+    resposta:
+      "Sim. Na página Clientes há um botão para exportar a lista em CSV, um ficheiro que abre no Excel ou no Google Sheets. Os dados são sempre da tua empresa.",
+  },
 ];
 
 export default function Perguntas() {

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Revelar from "@/components/Revelar";
 import CabecalhoSeccao from "./CabecalhoSeccao";
 import styles from "./ComoFunciona.module.css";
@@ -14,7 +15,7 @@ const passos = [
 export default function ComoFunciona() {
   return (
     <section id="como-funciona" className={styles.seccao}>
-      <CabecalhoSeccao sobretitulo="Como funciona" titulo="Começar demora 3 passos" />
+      <CabecalhoSeccao titulo="Começar demora 3 passos" />
 
       <Revelar>
         <div className={styles.trilho}>
@@ -31,6 +32,14 @@ export default function ComoFunciona() {
             ))}
           </ol>
         </div>
+      </Revelar>
+
+      {/* logo a seguir aos passos, o primeiro passo à distância de um clique */}
+      <Revelar atraso={200} className={styles.acao}>
+        <Link href="/registo" className="botao">
+          Criar a conta da empresa
+        </Link>
+        <small>Grátis, sem cartão.</small>
       </Revelar>
     </section>
   );

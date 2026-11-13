@@ -69,6 +69,14 @@ h3 {
   line-height: 1.1;
 }
 
+/* títulos principais com a letra própria do FlowCRM (Bricolage Grotesque).
+   O texto, as tabelas e os números continuam em Geist, que se lê melhor. */
+h1,
+h2 {
+  font-family: var(--font-titulo), var(--font-geist-sans), Arial, sans-serif;
+  letter-spacing: -0.02em; /* esta letra já é estreita: aperta-se menos */
+}
+
 a {
   color: var(--cor-destaque);
   text-decoration: none;
@@ -285,6 +293,15 @@ a {
 .revelar.visivel {
   opacity: 1;
   transform: none;
+}
+
+/* Acessibilidade: quem navega com o teclado (tecla Tab) vê sempre onde está.
+   :focus-visible só aparece com o teclado, não ao clicar com o rato. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 3px;
 }
 
 /* Acessibilidade: quem pediu ao sistema operativo para reduzir o movimento

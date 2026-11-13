@@ -47,7 +47,7 @@ export default function Rodape() {
               Flow<span className={styles.crm}>CRM</span>
             </span>
           </Link>
-          <p>Gestão de clientes e automação de emails para pequenas equipas comerciais.</p>
+          <p>Gestão de clientes e vendas para pequenas equipas comerciais.</p>
 
           {/* contacto: "mailto:" abre o programa de email de quem clica */}
           <a href={`mailto:${EMAIL_CONTACTO}`} className={styles.contacto}>

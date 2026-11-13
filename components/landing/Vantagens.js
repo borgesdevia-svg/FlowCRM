@@ -1,23 +1,13 @@
-import Revelar from "@/components/Revelar";
 import Icone from "@/components/Icone";
-import CabecalhoSeccao from "./CabecalhoSeccao";
 import styles from "./Vantagens.module.css";
 
-// Secção "Vantagens": as razões para uma empresa usar o FlowCRM.
-// Grelha de cartões com ícone, numa faixa com fundo ligeiramente diferente
-// (--cor-fundo-2), para separar esta secção das outras.
+// Secção "Vantagens": porque é que uma equipa pequena escolhe o FlowCRM.
+// Layout diferente do resto da página, de propósito: título à esquerda (fica preso
+// ao ecrã enquanto se lê, no computador) e uma lista à direita, separada por linhas
+// finas, sem cartões. Assim esta secção não parece mais uma grelha de caixas.
+// Só entram razões que as outras secções ainda não disseram.
 
 const vantagens = [
-  {
-    icone: "grelha",
-    titulo: "Tudo num só sítio",
-    texto: "Contactos, fase de cada negócio e valor previsto, sempre atualizados para toda a equipa.",
-  },
-  {
-    icone: "raio",
-    titulo: "Os contactos chegam sozinhos",
-    texto: "Partilhas o link do teu formulário e cada pedido entra no CRM, sem copiar nada à mão.",
-  },
   {
     icone: "olho",
     titulo: "Cada pessoa vê o que deve",
@@ -25,7 +15,7 @@ const vantagens = [
   },
   {
     icone: "cadeado",
-    titulo: "Dados protegidos",
+    titulo: "Os dados de cada empresa ficam separados",
     texto: "A base de dados separa as empresas linha a linha: nenhuma empresa vê os clientes de outra.",
   },
   {
@@ -36,7 +26,7 @@ const vantagens = [
   {
     icone: "mensagem",
     titulo: "Simples e em português",
-    texto: "Só o que uma pequena equipa precisa, com nomes claros. Não é preciso formação para começar.",
+    texto: "Nomes claros e só o que se usa todos os dias. Não é preciso formação para começar.",
   },
 ];
 
@@ -44,26 +34,25 @@ export default function Vantagens() {
   return (
     <section id="vantagens" className={styles.faixa}>
       <div className={styles.interior}>
-        <CabecalhoSeccao
-          sobretitulo="Vantagens"
-          titulo="Porquê usar o FlowCRM"
-          subtitulo="Feito para empresas pequenas que querem organizar as vendas sem ferramentas complicadas."
-        />
+        <div className={styles.cabecalho}>
+          <h2>Pensado para equipas pequenas</h2>
+          <p>
+            O FlowCRM faz menos do que os CRM das grandes empresas, de propósito: só o que uma
+            equipa de vendas pequena usa no dia a dia.
+          </p>
+        </div>
 
-        <div className={styles.grelha}>
-          {vantagens.map((v, i) => (
-            // atraso diferente por coluna (i % 3): os cartões da mesma linha aparecem em cascata
-            <Revelar key={v.titulo} atraso={(i % 3) * 100}>
-              <article className={styles.cartao}>
-                <span className={styles.icone}>
-                  <Icone nome={v.icone} />
-                </span>
+        <ul className={styles.lista}>
+          {vantagens.map((v) => (
+            <li key={v.titulo}>
+              <Icone nome={v.icone} />
+              <div>
                 <h3>{v.titulo}</h3>
                 <p>{v.texto}</p>
-              </article>
-            </Revelar>
+              </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

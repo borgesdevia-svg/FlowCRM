@@ -22,8 +22,8 @@ const AREAS = [
     icone: "subida",
     sobretitulo: "Pipeline de vendas",
     titulo: "Vê o que está para fechar",
-    texto: "Cada negócio está numa fase. Um clique e avança para a seguinte, e toda a equipa vê a mudança.",
-    pontos: ["Quatro fases claras", "Valor em cada fase", "Mudar de fase com um botão"],
+    texto: "Cada negócio está numa fase. Arrasta o cartão para a fase seguinte e toda a equipa vê a mudança.",
+    pontos: ["Quatro fases claras", "Valor total em cada fase", "Arrastar ou mudar com um botão"],
     Demo: DemoPipeline,
   },
   {
@@ -38,13 +38,14 @@ const AREAS = [
     icone: "grafico",
     sobretitulo: "Dashboard",
     titulo: "Os números da equipa, num relance",
-    texto: "Novos leads, taxa de conversão e clientes por estado, calculados a partir dos dados reais da empresa.",
-    pontos: ["Novos leads do mês", "Taxa de conversão", "Clientes por estado"],
+    texto: "Gráficos e números calculados a partir dos dados reais da empresa, logo na primeira página do painel.",
+    pontos: ["Novos clientes por semana", "Taxa de conversão e valor em negociação", "Atividade recente da equipa"],
     Demo: DemoDashboard,
   },
 ];
 
-// funcionalidades mais pequenas, mostradas em cartões no fim da secção
+// funcionalidades mais pequenas, mostradas em cartões no fim da secção.
+// Só entram aqui coisas que a app já faz de verdade.
 const EXTRAS = [
   {
     icone: "ligacao",
@@ -52,9 +53,19 @@ const EXTRAS = [
     texto: "Cada empresa tem um link próprio. Quem o preenche entra logo no CRM como lead.",
   },
   {
-    icone: "email",
-    titulo: "Email de boas-vindas",
-    texto: "Cada novo lead recebe um email automático, sem ninguém ter de o enviar.",
+    icone: "pesquisa",
+    titulo: "Pesquisa rápida",
+    texto: "Encontra qualquer cliente a partir de qualquer página do painel.",
+  },
+  {
+    icone: "sino",
+    titulo: "Avisos de tarefas",
+    texto: "O sino mostra as tarefas para hoje e as que já estão atrasadas.",
+  },
+  {
+    icone: "folha",
+    titulo: "Exportar para Excel",
+    texto: "Descarrega a lista de clientes em CSV sempre que precisares.",
   },
 ];
 
@@ -62,7 +73,6 @@ export default function Funcionalidades() {
   return (
     <section id="funcionalidades" className={styles.seccao}>
       <CabecalhoSeccao
-        sobretitulo="Funcionalidades"
         titulo="Tudo o que a tua equipa precisa para vender"
         subtitulo="Quatro áreas que trabalham em conjunto, desde o primeiro contacto até ao cliente ativo."
       />

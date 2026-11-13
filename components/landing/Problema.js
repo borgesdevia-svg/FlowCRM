@@ -1,4 +1,3 @@
-import Revelar from "@/components/Revelar";
 import Icone from "@/components/Icone";
 import CabecalhoSeccao from "./CabecalhoSeccao";
 import styles from "./Problema.module.css";
@@ -6,7 +5,6 @@ import styles from "./Problema.module.css";
 // Secção "Sem / Com o FlowCRM": explica O PROBLEMA que resolvemos,
 // comparando o dia a dia de uma equipa sem e com a aplicação.
 // Cada linha da coluna "sem" tem a resposta na mesma linha da coluna "com".
-// Cada linha aparece ao fazer scroll, um pouco depois da anterior (atraso).
 
 const comparacao = [
   {
@@ -35,7 +33,6 @@ export default function Problema() {
   return (
     <section id="o-que-e" className={styles.seccao}>
       <CabecalhoSeccao
-        sobretitulo="O problema"
         titulo="Um só sítio para os clientes da tua equipa"
         subtitulo="Um CRM (gestão de relação com clientes) é onde a empresa guarda e acompanha os seus clientes. O FlowCRM faz isso sem complicações."
       />
@@ -51,8 +48,8 @@ export default function Problema() {
         </div>
 
         {/* em cada linha: o problema à esquerda e a solução à direita */}
-        {comparacao.map((linha, i) => (
-          <Revelar key={linha.antes} atraso={i * 90} className={styles.linha}>
+        {comparacao.map((linha) => (
+          <div key={linha.antes} className={styles.linha}>
             <div className={styles.antes}>
               <span className={styles.iconeAntes}>
                 <Icone nome={linha.icone} />
@@ -71,7 +68,7 @@ export default function Problema() {
                 {linha.depois}
               </p>
             </div>
-          </Revelar>
+          </div>
         ))}
       </div>
     </section>

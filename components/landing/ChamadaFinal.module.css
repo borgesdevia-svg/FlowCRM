@@ -15,21 +15,6 @@
   text-align: center;
 }
 
-/* grelha fina, a desvanecer para as bordas (igual à do destaque) */
-.caixa::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background-image:
-    linear-gradient(rgba(32, 201, 107, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(32, 201, 107, 0.07) 1px, transparent 1px);
-  background-size: 48px 48px;
-  background-position: center;
-  mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 20%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 20%, transparent 100%);
-}
-
 /* Horizonte: a mesma técnica da janela do topo, mas virada ao contrário.
    Um círculo enorme colorido e desfocado (.horizonte) e, por cima dele, um círculo
    preto um pouco mais pequeno (::after) que só deixa ver a borda a brilhar. */
@@ -92,7 +77,7 @@
   text-wrap: balance;
   font-size: clamp(2.1rem, 5.5vw, 3.6rem);
   font-weight: 500;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.025em; /* Bricolage é estreita: menos apertado do que com o Geist */
   line-height: 1.05;
 }
 

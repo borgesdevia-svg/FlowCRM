@@ -1,7 +1,7 @@
 .seccao {
   max-width: var(--largura-max);
   margin: 0 auto;
-  padding: 112px 16px;
+  padding: 112px 16px 48px; /* em baixo menos: a secção seguinte já tem o seu espaço */
   scroll-margin-top: 64px; /* espaço para a barra fixa ao saltar para #funcionalidades */
 }
 
@@ -28,6 +28,12 @@
 
 /* a coluna larga (1.15fr) tem de acompanhar a demonstração, que agora está à esquerda;
    sem isto a demonstração ficava na coluna estreita e o texto do pipeline não cabia */
+/* o título de cada área é grande: usa a letra dos títulos */
+.texto h3 {
+  font-family: var(--font-titulo), var(--font-geist-sans), sans-serif;
+  letter-spacing: -0.02em;
+}
+
 .invertida {
   grid-template-columns: 1.15fr 0.85fr;
 }
@@ -97,13 +103,9 @@
     radial-gradient(ellipse 70% 60% at 50% 0%, rgba(32, 201, 107, 0.12), transparent 70%),
     var(--cor-fundo-2);
   box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
-  transition: border-color 0.3s, transform 0.4s var(--curva);
 }
 
-.moldura:hover {
-  border-color: rgba(32, 201, 107, 0.3);
-  transform: translateY(-4px);
-}
+/* sem efeito ao passar o rato: a moldura não é clicável, por isso não deve parecer */
 
 .demo {
   min-height: 300px;
@@ -563,9 +565,10 @@
 }
 
 /* ---------- cartões extra (formulário e email) ---------- */
+/* quatro cartões pequenos numa linha (2 x 2 em ecrãs médios, 1 coluna no telemóvel) */
 .extras {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin-top: 120px;
 }
@@ -573,18 +576,14 @@
 .extra {
   height: 100%;
   display: flex;
+  flex-direction: column; /* ícone em cima, texto em baixo: cabe melhor em cartões estreitos */
   gap: 16px;
   padding: 24px;
   border-radius: 18px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
-  transition: border-color 0.3s, transform 0.3s var(--curva);
 }
 
-.extra:hover {
-  border-color: rgba(32, 201, 107, 0.3);
-  transform: translateY(-3px);
-}
 
 .extra h3 {
   font-size: 1.1rem;
@@ -597,6 +596,12 @@
 }
 
 /* ---------- responsivo ---------- */
+@media (max-width: 1080px) {
+  .extras {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 900px) {
   .area {
     grid-template-columns: 1fr;
@@ -657,6 +662,12 @@
   .extras {
     grid-template-columns: 1fr;
     margin-top: 88px;
+  }
+
+  /* no telemóvel, ícone ao lado do texto: cartões mais baixos */
+  .extra {
+    flex-direction: row;
+    padding: 20px;
   }
 }
 
