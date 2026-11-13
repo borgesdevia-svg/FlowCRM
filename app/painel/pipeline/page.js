@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
-import { iniciais } from "@/lib/texto";
 import Icone from "@/components/Icone";
 import BotoesFase from "@/components/clientes/BotoesFase";
 import { CartaoArrastavel, ColunaArrastavel } from "@/components/pipeline/Arrastar";
@@ -14,7 +13,6 @@ export const metadata = { title: "Pipeline · FlowCRM" };
 
 // soma dos valores previstos de uma lista de clientes (valores vazios contam 0)
 const somar = (lista) => lista.reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0);
-
 
 export default async function PaginaPipeline() {
   const { supabase, eAdmin } = await obterSessao();
@@ -31,94 +29,106 @@ export default async function PaginaPipeline() {
   const nNegociacao = clientes.filter((c) => c.estado === "negociacao").length;
 
   return (
-    <div className={styles.pagina}>
+    <div className={`entrar ${styles.pagina}`}>
       <header className={styles.cabecalho}>
-        <h1>Pipeline.</h1>
-        <p className={styles.resumo}>
-          {formatarEuros(somar(emAberto))} em aberto em {emAberto.length}{" "}
-          {emAberto.length === 1 ? "cliente" : "clientes"}
-          <span>·</span>
-          {nNegociacao} em negociação
-        </p>
+        <div>
+          <h1>Pipeline</h1>
+          <p className={styles.resumo}>
+            {formatarEuros(somar(emAberto))} em aberto em {emAberto.length}{" "}
+            {emAberto.length === 1 ? "cliente" : "clientes"}, {nNegociacao} em negociação.
+          </p>
+        </div>
+        <Link href="/painel/clientes/novo" className="botao">
+          <Icone nome="mais" tamanho={16} /> Novo cliente
+        </Link>
       </header>
 
-      {/* bloco que agrupa as colunas (como o "Stage Board" da referência) */}
-      <section className={styles.bloco}>
-        <header className={styles.topoBloco}>
-          <h2>Fases</h2>
-          <small>
-            {clientes.length} {clientes.length === 1 ? "cliente" : "clientes"} · arrasta os cartões ou usa os botões para mudar de fase
-          </small>
-        </header>
-
-        <div className={styles.quadro}>
-          {ESTADOS.map((estado) => {
-            const daColuna = clientes.filter((c) => c.estado === estado.chave);
-
-            return (
-              // coluna onde se podem largar cartões (componente de cliente)
-              <ColunaArrastavel
-                key={estado.chave}
-                estado={estado.chave}
-                className={styles.coluna}
-                style={{ "--cor": estado.cor }}
-              >
-                <header className={styles.topoColuna}>
-                  <h3>
-                    <i aria-hidden="true"></i>
-                    {estado.texto}
-                  </h3>
-                  <small>
-                    {daColuna.length} · {formatarEuros(somar(daColuna))}
-                  </small>
-                </header>
-
-                {daColuna.length === 0 && <p className={styles.vazia}>Nenhum cliente nesta fase.</p>}
-
-                {daColuna.map((c) => {
-                  const responsavel = c.perfis?.nome;
-                  return (
-                    // cartão que se pode arrastar para outra coluna
-                    <CartaoArrastavel key={c.id} id={c.id} estado={c.estado} className={styles.cartao}>
-                      <div className={styles.linhaNome}>
-                        {/* draggable={false}: ao agarrar no nome, arrasta-se o cartão e não o link */}
-                        <Link href={`/painel/clientes/${c.id}`} className={styles.nome} draggable={false}>
-                          {c.nome}
-                        </Link>
-                        <strong className={styles.valor}>
-                          {c.valor_previsto !== null ? formatarEuros(c.valor_previsto) : "—"}
-                        </strong>
-                      </div>
-                      {c.email && <p className={styles.email}>{c.email}</p>}
-
-                      <div className={styles.rodapeCartao}>
-                        {/* o admin vê quem é o responsável; o comercial já sabe que é ele */}
-                        {eAdmin && (
-                          <span
-                            className={responsavel ? styles.avatar : `${styles.avatar} ${styles.semAvatar}`}
-                            title={responsavel ?? "Por atribuir"}
-                          >
-                            {responsavel ? iniciais(responsavel) : "?"}
-                          </span>
-                        )}
-
-                        <BotoesFase cliente={c} className={styles.botoes} />
-                      </div>
-                    </CartaoArrastavel>
-                  );
-                })}
-
-                {/* os clientes novos entram sempre na fase "Novo" */}
-                {estado.chave === "novo" && (
-                  <Link href="/painel/clientes/novo" className={styles.adicionar}>
-                    <Icone nome="mais" tamanho={15} /> Novo cliente
-                  </Link>
-                )}
-              </ColunaArrastavel>
-            );
-          })}
-        </div>
+      {/* contadores, um por fase: o valor em jogo e quantos clientes (como na página Tarefas) */}
+      <section className={styles.contadores} aria-label="Resumo por fase">
+        {ESTADOS.map((estado) => {
+          const daFase = clientes.filter((c) => c.estado === estado.chave);
+          return (
+            <div key={estado.chave} className={styles.contador} style={{ "--cor": estado.cor }}>
+              <span className={styles.fase}>
+                <i aria-hidden="true"></i>
+                {estado.texto}
+              </span>
+              <strong>{formatarEuros(somar(daFase))}</strong>
+              <small>
+                {daFase.length} {daFase.length === 1 ? "cliente" : "clientes"}
+              </small>
+            </div>
+          );
+        })}
       </section>
+
+      <p className={styles.dica}>Arrasta os cartões para outra coluna ou usa os botões de cada cartão.</p>
+
+      <div className={styles.quadro}>
+        {ESTADOS.map((estado) => {
+          const daColuna = clientes.filter((c) => c.estado === estado.chave);
+
+          return (
+            // coluna onde se podem largar cartões (componente de cliente)
+            <ColunaArrastavel
+              key={estado.chave}
+              estado={estado.chave}
+              className={styles.coluna}
+              style={{ "--cor": estado.cor }}
+            >
+              {/* título numa faixa com um traço da cor da fase em cima */}
+              <header className={styles.topoColuna}>
+                <h2>{estado.texto}</h2>
+                <span>{daColuna.length}</span>
+              </header>
+
+              {daColuna.length === 0 && <p className={styles.vazia}>Nenhum cliente nesta fase.</p>}
+
+              {daColuna.map((c) => {
+                const responsavel = c.perfis?.nome;
+                return (
+                  // cartão que se pode arrastar para outra coluna
+                  <CartaoArrastavel key={c.id} id={c.id} estado={c.estado} className={styles.cartao}>
+                    <div className={styles.linhaNome}>
+                      {/* draggable={false}: ao agarrar no nome, arrasta-se o cartão e não o link */}
+                      <Link href={`/painel/clientes/${c.id}`} className={styles.nome} draggable={false}>
+                        {c.nome}
+                      </Link>
+                      <strong className={styles.valor}>
+                        {c.valor_previsto !== null ? formatarEuros(c.valor_previsto) : "—"}
+                      </strong>
+                    </div>
+
+                    {/* dados em pares "nome: valor", iguais aos cartões das tarefas */}
+                    <dl className={styles.dados}>
+                      <div>
+                        <dt>Email</dt>
+                        <dd>{c.email ?? "Sem email"}</dd>
+                      </div>
+                      {/* o admin vê quem é o responsável; o comercial já sabe que é ele */}
+                      {eAdmin && (
+                        <div>
+                          <dt>Responsável</dt>
+                          <dd>{responsavel ?? "Por atribuir"}</dd>
+                        </div>
+                      )}
+                    </dl>
+
+                    <BotoesFase cliente={c} className={styles.botoes} />
+                  </CartaoArrastavel>
+                );
+              })}
+
+              {/* os clientes novos entram sempre na fase "Novo" */}
+              {estado.chave === "novo" && (
+                <Link href="/painel/clientes/novo" className={styles.adicionar}>
+                  <Icone nome="mais" tamanho={15} /> Novo cliente
+                </Link>
+              )}
+            </ColunaArrastavel>
+          );
+        })}
+      </div>
     </div>
   );
 }

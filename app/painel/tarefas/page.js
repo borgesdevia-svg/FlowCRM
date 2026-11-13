@@ -2,30 +2,21 @@ import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { hojeEmPortugal } from "@/lib/datas";
 import FormTarefa from "@/components/tarefas/FormTarefa";
-import ListaTarefas from "@/components/tarefas/ListaTarefas";
+import QuadroTarefas from "@/components/tarefas/QuadroTarefas";
+import Icone from "@/components/Icone";
 import styles from "./tarefas.module.css";
 
-// Rota /painel/tarefas — todas as tarefas num só sítio.
+// Rota /painel/tarefas — todas as tarefas num quadro (inspirado na referência H):
+// contadores em cima e uma coluna por situação (Atrasadas, Hoje, Próximas, Feitas).
 // O admin vê as da equipa toda (e pode filtrar por pessoa); o comercial vê só as suas.
-// Os filtros vivem no URL (ex.: ?filtro=atrasadas&pessoa=...), como na lista de clientes.
+// O filtro por pessoa vive no URL (ex.: ?pessoa=...); ?nova=1 abre logo o formulário.
 export const metadata = { title: "Tarefas · FlowCRM" };
 
-// Os filtros possíveis. "teste" diz se uma tarefa pertence ao filtro
-// (hoje = data de hoje no formato AAAA-MM-DD; estas datas comparam-se como texto).
-const FILTROS = [
-  { chave: "pendentes", texto: "Por fazer", teste: (t) => !t.concluida },
-  { chave: "atrasadas", texto: "Atrasadas", teste: (t, hoje) => !t.concluida && t.data_limite && t.data_limite < hoje },
-  { chave: "hoje", texto: "Hoje", teste: (t, hoje) => !t.concluida && t.data_limite === hoje },
-  {
-    chave: "proximas",
-    texto: "Próximas",
-    teste: (t, hoje) => !t.concluida && (!t.data_limite || t.data_limite > hoje),
-  },
-  { chave: "feitas", texto: "Feitas", teste: (t) => t.concluida },
-];
+// Quantas tarefas feitas mostramos (as mais recentes); as antigas não interessam no dia a dia
+const MAX_FEITAS = 10;
 
 export default async function PaginaTarefas({ searchParams }) {
-  const { filtro = "pendentes", pessoa = "" } = await searchParams;
+  const { pessoa = "", nova = "" } = await searchParams;
   const { supabase, perfil, eAdmin } = await obterSessao();
 
   // tarefas, com o nome do cliente e do responsável (o RLS já filtra pela empresa)
@@ -36,8 +27,9 @@ export default async function PaginaTarefas({ searchParams }) {
 
   // o comercial vê só as suas; o admin vê todas, ou as da pessoa escolhida
   // (o valor de "pessoa" vem do URL: só o usamos se tiver o formato de um id)
+  const pessoaValida = /^[0-9a-f-]{36}$/i.test(pessoa) ? pessoa : "";
   if (!eAdmin) consulta = consulta.eq("responsavel_id", perfil.id);
-  else if (/^[0-9a-f-]{36}$/i.test(pessoa)) consulta = consulta.eq("responsavel_id", pessoa);
+  else if (pessoaValida) consulta = consulta.eq("responsavel_id", pessoaValida);
 
   // em paralelo: as tarefas, os clientes (para o formulário) e a equipa (só o admin precisa)
   const [{ data: tarefas }, { data: clientes }, membrosRes] = await Promise.all([
@@ -48,96 +40,98 @@ export default async function PaginaTarefas({ searchParams }) {
   const todas = tarefas ?? [];
   const membros = eAdmin ? (membrosRes.data ?? []) : null;
 
-  // filtro escolhido (se o URL tiver um valor estranho, usamos "Por fazer")
+  // separar as tarefas pelas colunas (as datas AAAA-MM-DD comparam-se como texto)
   const hoje = hojeEmPortugal();
-  const ativo = FILTROS.find((f) => f.chave === filtro) ?? FILTROS[0];
-  const visiveis = todas.filter((t) => ativo.teste(t, hoje));
+  const porFazer = todas.filter((t) => !t.concluida);
+  const colunas = [
+    {
+      chave: "atrasadas",
+      titulo: "Atrasadas",
+      tarefas: porFazer.filter((t) => t.data_limite && t.data_limite < hoje),
+      vazio: "Nada em atraso.",
+    },
+    {
+      chave: "hoje",
+      titulo: "Hoje",
+      tarefas: porFazer.filter((t) => t.data_limite === hoje),
+      vazio: "Nada para hoje.",
+    },
+    {
+      chave: "proximas",
+      titulo: "Próximas",
+      tarefas: porFazer.filter((t) => !t.data_limite || t.data_limite > hoje),
+      vazio: "Nada marcado para os próximos dias.",
+    },
+    {
+      chave: "feitas",
+      titulo: "Feitas",
+      // as mais recentes primeiro (ordem inversa da data)
+      tarefas: todas.filter((t) => t.concluida).reverse().slice(0, MAX_FEITAS),
+      vazio: "Ainda nenhuma feita.",
+    },
+  ];
 
-  // nas "Feitas" mostramos as mais recentes primeiro (ordem inversa da data)
-  if (ativo.chave === "feitas") visiveis.reverse();
-
-  const nAtrasadas = todas.filter((t) => FILTROS[1].teste(t, hoje)).length;
-  const nHoje = todas.filter((t) => FILTROS[2].teste(t, hoje)).length;
-
-  // monta um link mantendo os outros filtros
-  const link = (novoFiltro, novaPessoa) => {
-    const params = new URLSearchParams();
-    if (novoFiltro !== "pendentes") params.set("filtro", novoFiltro);
-    if (novaPessoa) params.set("pessoa", novaPessoa);
-    const texto = params.toString();
-    return `/painel/tarefas${texto ? `?${texto}` : ""}`;
-  };
+  // link do filtro por pessoa
+  const linkPessoa = (id) => (id ? `/painel/tarefas?pessoa=${id}` : "/painel/tarefas");
 
   return (
-    <div className={styles.pagina}>
-      <header className={`entrar ${styles.cabecalho}`}>
-        <h1>Tarefas.</h1>
-        <p className={styles.resumo}>
-          {nHoje} para hoje
-          <span>·</span>
-          <em className={nAtrasadas ? styles.alerta : ""}>
-            {nAtrasadas} {nAtrasadas === 1 ? "atrasada" : "atrasadas"}
-          </em>
-          <span>·</span>
-          {eAdmin ? "toda a equipa" : "só as tuas"}
-        </p>
+    <div className={`entrar ${styles.pagina}`}>
+      <header className={styles.cabecalho}>
+        <div>
+          <h1>Tarefas</h1>
+          <p className={styles.resumo}>{eAdmin ? "As tarefas de toda a equipa." : "As tuas tarefas."}</p>
+        </div>
       </header>
 
-      <div className={styles.colunas}>
-        <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "60ms" }}>
-          {/* filtros por situação, num "comprimido" (igual à lista de clientes) */}
-          <nav className={styles.filtros} aria-label="Filtrar tarefas">
-            {FILTROS.map((f) => (
+      {/* contadores, um por coluna (como os números no topo da referência H) */}
+      <section className={styles.contadores} aria-label="Resumo">
+        {colunas.map((c) => (
+          <div key={c.chave} className={`${styles.contador} ${styles[c.chave]}`}>
+            <strong>{c.chave === "feitas" ? todas.filter((t) => t.concluida).length : c.tarefas.length}</strong>
+            <span>{c.titulo}</span>
+          </div>
+        ))}
+      </section>
+
+      {/* barra: filtro por pessoa (só o admin) à esquerda, nova tarefa à direita */}
+      <div className={styles.ferramentas}>
+        {eAdmin && membros.length > 1 ? (
+          <nav className={styles.pessoas} aria-label="Filtrar por responsável">
+            <Link href={linkPessoa("")} className={!pessoaValida ? styles.pessoaAtiva : styles.pessoa}>
+              Toda a equipa
+            </Link>
+            {membros.map((m) => (
               <Link
-                key={f.chave}
-                href={link(f.chave, pessoa)}
-                className={f.chave === ativo.chave ? styles.filtroAtivo : styles.filtro}
+                key={m.id}
+                href={linkPessoa(m.id)}
+                className={pessoaValida === m.id ? styles.pessoaAtiva : styles.pessoa}
               >
-                {f.texto} <span>{todas.filter((t) => f.teste(t, hoje)).length}</span>
+                {m.id === perfil.id ? "Eu" : m.nome}
               </Link>
             ))}
           </nav>
+        ) : (
+          <span></span>
+        )}
 
-          {/* filtro por pessoa: só o admin */}
-          {eAdmin && membros.length > 1 && (
-            <nav className={styles.pessoas} aria-label="Filtrar por responsável">
-              <Link href={link(ativo.chave, "")} className={!pessoa ? styles.pessoaAtiva : styles.pessoa}>
-                Toda a equipa
-              </Link>
-              {membros.map((m) => (
-                <Link
-                  key={m.id}
-                  href={link(ativo.chave, m.id)}
-                  className={pessoa === m.id ? styles.pessoaAtiva : styles.pessoa}
-                >
-                  {m.id === perfil.id ? "Eu" : m.nome}
-                </Link>
-              ))}
-            </nav>
-          )}
-
-          <ListaTarefas
-            tarefas={visiveis}
-            mostrarCliente
-            mostrarResponsavel={eAdmin}
-            mensagemVazia={
-              ativo.chave === "atrasadas" ? "Nada em atraso. Bom trabalho!" : "Não há tarefas neste filtro."
-            }
-          />
-        </section>
-
-        {/* criar tarefa: escolhendo o cliente (e o responsável, se for o admin) */}
-        <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "120ms" }}>
-          <h2>Nova tarefa</h2>
-          {(clientes ?? []).length === 0 ? (
-            <p className={styles.semClientes}>
-              Para criar tarefas precisas de clientes. <Link href="/painel/clientes/novo">Adiciona o primeiro.</Link>
-            </p>
-          ) : (
-            <FormTarefa clientes={clientes} membros={membros} perfilId={perfil.id} />
-          )}
-        </section>
+        {/* "Nova tarefa": <details> abre e fecha o formulário sem JavaScript */}
+        <details className={styles.nova} open={nova === "1"}>
+          <summary className="botao">
+            <Icone nome="mais" tamanho={16} /> Nova tarefa
+          </summary>
+          <div className={styles.painelNova}>
+            {(clientes ?? []).length === 0 ? (
+              <p className={styles.semClientes}>
+                Para criar tarefas precisas de clientes. <Link href="/painel/clientes/novo">Adiciona o primeiro.</Link>
+              </p>
+            ) : (
+              <FormTarefa clientes={clientes} membros={membros} perfilId={perfil.id} />
+            )}
+          </div>
+        </details>
       </div>
+
+      <QuadroTarefas colunas={colunas} mostrarResponsavel={eAdmin} />
     </div>
   );
 }

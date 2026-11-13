@@ -1,132 +1,159 @@
+/* Pipeline no mesmo estilo da página Tarefas: contadores em cima, quadro por baixo */
 .pagina {
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* ---------- cabeçalho ---------- */
 .cabecalho {
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--cor-contorno);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
 }
 
 .cabecalho h1 {
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .resumo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
   color: var(--cor-texto-suave);
 }
 
-.resumo span {
-  color: var(--cor-texto-fraco);
+/* ---------- contadores (um por fase) ---------- */
+.contadores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
 
-/* ---------- bloco que agrupa as colunas ---------- */
-.bloco {
-  padding: 20px;
-  border-radius: 18px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-fundo-2);
-}
-
-.topoBloco {
+.contador {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 12px;
-  margin-bottom: 18px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
 }
 
-.topoBloco h2 {
-  font-size: 1.2rem;
+/* nome da fase com o ponto da cor dela (--cor vem do style) */
+.fase {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.fase i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+
+.contador strong {
+  font-size: 1.6rem;
   font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
-.topoBloco small {
+.contador small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+}
+
+.dica {
+  margin-bottom: -6px;
   color: var(--cor-texto-fraco);
   font-size: 0.88rem;
 }
 
-/* 4 colunas lado a lado */
+/* ---------- quadro: 4 colunas ---------- */
 .quadro {
   display: grid;
-  grid-template-columns: repeat(4, minmax(230px, 1fr));
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
   gap: 14px;
   align-items: start;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
 }
 
 .coluna {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 220px;
-  padding: 14px;
+  min-height: 200px;
+  padding: 12px;
   border-radius: 16px;
   border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
+  background: var(--cor-fundo-2);
+  scroll-snap-align: start;
 }
 
+/* título da coluna numa faixa, com um traço da cor da fase em cima */
 .topoColuna {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 2px 4px 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--cor-cartao);
+  box-shadow: inset 0 2px 0 var(--cor);
 }
 
-.topoColuna h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1rem;
+.topoColuna h2 {
+  font-family: inherit;
+  font-size: 0.95rem;
   font-weight: 600;
-  white-space: nowrap;
+  letter-spacing: normal;
 }
 
-/* ponto com a cor do estado (--cor vem do style) */
-.topoColuna h3 i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--cor);
-  box-shadow: 0 0 10px var(--cor);
-}
-
-.topoColuna small {
-  color: var(--cor-texto-fraco);
+.topoColuna span {
+  min-width: 24px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor);
   font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 
 .vazia {
-  padding: 16px 4px;
+  padding: 18px 8px;
+  border: 1px dashed var(--cor-contorno);
+  border-radius: 10px;
   color: var(--cor-texto-fraco);
   font-size: 0.85rem;
+  text-align: center;
 }
 
 /* ---------- cartão de cliente ---------- */
-/* contorno tracejado discreto, como os cartões da referência */
 .cartao {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px;
+  gap: 10px;
+  padding: 12px;
   border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.09);
-  background: var(--cor-fundo-2);
-  transition: border-color 0.2s, background 0.2s;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  transition: border-color 0.2s;
 }
 
+/* o cartão arrasta-se: ao passar o rato, o contorno ganha a cor da fase */
 .cartao:hover {
-  border-style: solid;
   border-color: color-mix(in srgb, var(--cor) 45%, transparent);
 }
 
@@ -140,7 +167,8 @@
 .nome {
   color: var(--cor-texto);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.93rem;
+  line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
@@ -155,44 +183,40 @@
   font-variant-numeric: tabular-nums;
 }
 
-.email {
+/* dados em pares "nome: valor" */
+.dados {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+}
+
+.dados div {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dados dt {
+  flex-shrink: 0;
   color: var(--cor-texto-fraco);
-  font-size: 0.82rem;
+}
+
+.dados dt::after {
+  content: ":";
+}
+
+.dados dd {
+  min-width: 0;
   overflow: hidden;
+  color: var(--cor-texto-suave);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.rodapeCartao {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-/* iniciais do responsável num círculo */
-.avatar {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.62rem;
-  font-weight: 700;
-}
-
-.semAvatar {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--cor-texto-fraco);
-}
-
-/* os botões de fase (componente BotoesFase) ocupam o resto da linha, encostados à direita */
-.botoes {
-  flex: 1;
-  justify-content: flex-end;
+/* botões de fase um pouco mais justos, para caberem os dois numa linha */
+.botoes button {
+  padding: 5px 8px;
 }
 
 /* botão "+ Novo cliente" no fundo da coluna "Novo" */
@@ -203,7 +227,7 @@
   gap: 6px;
   padding: 10px;
   border-radius: 12px;
-  border: 1px solid var(--cor-contorno);
+  border: 1px dashed var(--cor-contorno);
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
   transition: border-color 0.2s, color 0.2s;
@@ -214,25 +238,17 @@
   color: var(--cor-destaque);
 }
 
-/* ---------- ecrãs pequenos: colunas a deslizar para o lado ---------- */
-@media (max-width: 1200px) {
+@media (max-width: 760px) {
+  .contadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contador strong {
+    font-size: 1.3rem;
+  }
+
+  /* no telemóvel cada coluna ocupa quase o ecrã todo e desliza-se para a seguinte */
   .quadro {
-    display: flex;
-    overflow-x: auto;
-    /* scroll snap: ao largar o dedo, o deslize pára certinho numa coluna */
-    scroll-snap-type: x mandatory;
-    padding-bottom: 8px;
-  }
-
-  .coluna {
-    flex: 0 0 min(290px, 85%);
-    scroll-snap-align: start;
-  }
-}
-
-@media (max-width: 640px) {
-  .bloco {
-    padding: 12px;
-    border-radius: 14px;
+    grid-template-columns: repeat(4, min(300px, 82vw));
   }
 }

@@ -12,26 +12,16 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--cor-contorno);
 }
 
 .cabecalho h1 {
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .resumo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
   color: var(--cor-texto-suave);
-}
-
-.resumo span {
-  color: var(--cor-texto-fraco);
 }
 
 .acoesTopo {
@@ -52,124 +42,106 @@
   }
 }
 
-/* ---------- barra de distribuição + filtros ---------- */
-.distribuicao {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.barra {
-  display: flex;
-  gap: 3px;
-  height: 8px;
-}
-
-/* cada segmento cresce conforme o "flex-grow" (= nº de clientes nesse estado) */
-.barra span {
-  flex-basis: 0;
-  border-radius: 999px;
-  transition: opacity 0.3s;
-}
-
-.barra .apagado {
-  opacity: 0.2;
-}
-
-.barraVazia {
-  flex-grow: 1;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-/* "comprimido" à volta dos filtros, como os separadores de período da referência */
-.filtros {
-  align-self: flex-start;
-  max-width: 100%;
+/* ---------- separadores por estado (referência E) ---------- */
+/* uma linha fina a toda a largura; o separador ativo tem um traço verde por baixo */
+.separadores {
   display: flex;
   gap: 4px;
-  padding: 5px;
-  border-radius: 14px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
+  border-bottom: 1px solid var(--cor-contorno);
   overflow-x: auto; /* no telemóvel desliza para o lado */
   scrollbar-width: none;
 }
 
-.filtro,
-.filtroAtivo {
+.separador,
+.separadorAtivo {
   flex: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
-  border-radius: 10px;
+  padding: 10px 14px 12px;
+  margin-bottom: -1px; /* o traço do ativo fica por cima da linha fina */
+  border-bottom: 2px solid transparent;
   color: var(--cor-texto-suave);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
+  transition: color 0.2s;
 }
 
-.filtro:hover {
-  background: rgba(255, 255, 255, 0.05);
+.separador:hover {
   color: var(--cor-texto);
 }
 
-/* filtro ativo: verde com brilho, como o botão do destaque da landing */
-.filtroAtivo {
-  background: linear-gradient(180deg, rgba(32, 201, 107, 0.32), rgba(32, 201, 107, 0.14));
-  color: #fff;
-  box-shadow:
-    0 0 18px rgba(32, 201, 107, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+.separadorAtivo {
+  border-bottom-color: var(--cor-destaque);
+  color: var(--cor-texto);
+  font-weight: 600;
 }
 
-.filtro i,
-.filtroAtivo i {
+.separador i,
+.separadorAtivo i {
   width: 8px;
   height: 8px;
   border-radius: 50%;
 }
 
-.filtro span,
-.filtroAtivo span {
+.separador span,
+.separadorAtivo span {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
   color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
-.filtroAtivo span {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* ---------- bloco da tabela ---------- */
-.bloco {
-  border-radius: 18px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-  overflow: hidden; /* os cantos redondos cortam a tabela */
-}
-
-.topoBloco {
+/* ---------- barra de ferramentas: vistas + pesquisa ---------- */
+.ferramentas {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px 20px;
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--cor-contorno);
+  gap: 12px;
 }
 
-.topoBloco h2 {
+/* troca Tabela / Quadro, num "comprimido" */
+.vistas {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 1.2rem;
-  font-weight: 600;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
 }
 
-.topoBloco h2 span {
-  color: var(--cor-texto-fraco);
-  font-size: 0.9rem;
-  font-weight: 400;
+.vista,
+.vistaAtiva {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+}
+
+.vista:hover {
+  color: var(--cor-texto);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.vistaAtiva {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+/* ---------- bloco da tabela ---------- */
+.bloco {
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow: hidden; /* os cantos redondos cortam a tabela */
 }
 
 /* ---------- pesquisa (com a lupa dentro da caixa) ---------- */
@@ -240,18 +212,37 @@
   font-size: 0.92rem;
 }
 
-/* cabeçalhos em maiúsculas pequenas, como na referência */
+/* cabeçalhos com um ícone antes do nome (referência D) */
 .tabela th {
   text-align: left;
-  padding: 14px 22px;
+  padding: 12px 22px;
   color: var(--cor-texto-fraco);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  font-size: 0.84rem;
+  font-weight: 500;
   white-space: nowrap;
   background: var(--cor-fundo-2);
   border-bottom: 1px solid var(--cor-contorno);
+}
+
+.th {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.th svg {
+  opacity: 0.7;
+}
+
+/* rodapé com os totais: discreto, como uma linha de soma de folha de cálculo */
+.tabela tfoot td {
+  padding: 12px 22px;
+  background: var(--cor-fundo-2);
+  border-top: 1px solid var(--cor-contorno);
+  border-bottom: none;
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .tabela td {
@@ -432,10 +423,6 @@
 @media (max-width: 560px) {
   .colValor {
     display: none;
-  }
-
-  .topoBloco {
-    padding: 14px;
   }
 
   .pesquisa {

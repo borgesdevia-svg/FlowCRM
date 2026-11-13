@@ -3,7 +3,7 @@ import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
 import { hojeEmPortugal } from "@/lib/datas";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
-import ListaTarefas from "@/components/tarefas/ListaTarefas";
+import TabelaTarefas from "@/components/tarefas/TabelaTarefas";
 import Icone from "@/components/Icone";
 import AtividadeRecente from "@/components/painel/AtividadeRecente";
 import Grafico from "@/components/painel/Grafico";
@@ -131,36 +131,31 @@ export default async function PaginaPainel() {
     lista.filter((c) => c.estado === e.chave).reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0)
   );
 
-  // os 4 cartões de números: "extra" é o texto pequeno à direita do valor;
-  // "sufixo" é o que vem depois do número (ex.: "%")
+
+  // os 4 cartões de números (estilo da referência B):
+  //  - "etiqueta" é o comprimido no canto (verde = bom, vermelho = atenção, cinzento = neutro)
+  //  - "detalhe" é o texto pequeno ao lado do número
   const numeros = [
     {
-      rotulo: "Total de clientes",
-      icone: "utilizadores",
+      rotulo: "Clientes",
       valor: lista.length,
-      extra: novosEsteMes ? `+${novosEsteMes} este mês` : "nenhum novo este mês",
-      positivo: novosEsteMes > 0,
+      etiqueta: { texto: `+${novosEsteMes} este mês`, tipo: novosEsteMes > 0 ? "bom" : "neutro" },
     },
     {
       rotulo: "Em negociação",
-      icone: "subida",
       valor: contagem.negociacao ?? 0,
-      extra: formatarEuros(valorNegociacao),
+      detalhe: formatarEuros(valorNegociacao),
     },
     {
-      rotulo: "Taxa de conversão",
-      icone: "grafico",
+      rotulo: "Conversão",
       valor: conversao,
       sufixo: "%",
-      extra: `${contagem.ativo ?? 0} ativos`,
+      detalhe: `${contagem.ativo ?? 0} ${(contagem.ativo ?? 0) === 1 ? "cliente ativo" : "clientes ativos"}`,
     },
     {
-      rotulo: "Tarefas por fazer",
-      icone: "lista",
+      rotulo: "Tarefas",
       valor: tarefas.length,
-      extra: atrasadas ? `${atrasadas} em atraso` : "nada em atraso",
-      negativo: atrasadas > 0,
-      positivo: atrasadas === 0,
+      etiqueta: atrasadas ? { texto: `${atrasadas} em atraso`, tipo: "mau" } : { texto: "Em dia", tipo: "bom" },
     },
   ];
 
@@ -178,193 +173,189 @@ export default async function PaginaPainel() {
     },
   ];
   const passosFeitos = passos.filter((p) => p.feito).length;
+  // quando está tudo feito, o bloco deixa de aparecer (já não ajuda ninguém)
+  const mostrarPassos = passosFeitos < passos.length;
 
   const primeiroNome = perfil.nome.split(" ")[0];
   const linkFormulario = `/f/${empresa.slug}`;
+  const totalSemanas = semanas.valores.reduce((a, b) => a + b, 0);
 
   return (
-    <div className={styles.pagina}>
-      {/* cabeçalho: título + resumo numa linha (como "Pipeline." na referência) */}
-      <header className={`entrar ${styles.cabecalho}`}>
-        <div>
-          <h1>Olá, {primeiroNome}.</h1>
-          <p className={styles.resumo}>
-            {lista.length} {lista.length === 1 ? "cliente" : "clientes"}
-            <span>·</span>
-            {formatarEuros(valorNegociacao)} em negociação
-            <span>·</span>
-            {tarefas.length} {tarefas.length === 1 ? "tarefa" : "tarefas"} por fazer
-          </p>
+    // "entrar": a página aparece de uma vez ao abrir (uma só animação, não uma por bloco)
+    <div className={`entrar ${styles.pagina}`}>
+      {/* cabeçalho: saudação à esquerda, ações à direita */}
+      <header className={styles.cabecalho}>
+        <h1>Olá, {primeiroNome}!</h1>
+        <div className={styles.acoes}>
+          {/* <a> normal (não <Link>) porque descarrega um ficheiro, não abre uma página */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/painel/clientes/exportar" className="botao botao-secundario">
+            <Icone nome="folha" tamanho={16} /> Exportar
+          </a>
+          <Link href="/painel/clientes/novo" className="botao">
+            <Icone nome="mais" tamanho={16} /> Novo cliente
+          </Link>
         </div>
-        <Link href="/painel/clientes/novo" className="botao">
-          <Icone nome="mais" tamanho={16} /> Novo cliente
-        </Link>
       </header>
 
-      {/* conteúdo principal à esquerda + atividade recente à direita */}
-      <div className={styles.layout}>
-        <div className={styles.principal}>
-          {/* cartões de números */}
-          <section className={styles.numeros}>
-            {numeros.map((n, i) => {
-              let classeExtra = styles.extra;
-              if (n.positivo) classeExtra += ` ${styles.positivo}`;
-              if (n.negativo) classeExtra += ` ${styles.negativo}`;
-              return (
-                <article key={n.rotulo} className={`entrar ${styles.cartao}`} style={{ "--atraso": `${60 + i * 50}ms` }}>
-                  <p className={styles.rotulo}>
-                    {n.rotulo}
-                    <Icone nome={n.icone} tamanho={16} />
-                  </p>
-                  {/* caixa interior mais escura com o valor, como na referência */}
-                  <div className={styles.valor}>
-                    <strong>
-                      <ContarNumero valor={n.valor} sufixo={n.sufixo} />
-                    </strong>
-                    <span className={classeExtra}>{n.extra}</span>
-                  </div>
-                </article>
-              );
-            })}
-          </section>
-
-          <section className={styles.grelha}>
-            {/* gráfico de linha: clientes novos por semana */}
-            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "260ms" }}>
-              <header className={styles.topoBloco}>
-                <h2>
-                  Novos clientes <span>últimas 8 semanas</span>
-                </h2>
-                <strong className={styles.totalGrafico}>{semanas.valores.reduce((a, b) => a + b, 0)}</strong>
-              </header>
-              <div className={styles.areaGrafico}>
-                <Grafico
-                  tipo="line"
-                  etiquetas={semanas.etiquetas}
-                  valores={semanas.valores}
-                  cores="var(--cor-destaque)"
-                />
-              </div>
-            </article>
-
-            {/* gráfico circular: clientes por estado, com a legenda em HTML ao lado */}
-            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "300ms" }}>
-              <header className={styles.topoBloco}>
-                <h2>Clientes por estado</h2>
-                <Link href="/painel/pipeline" className={styles.verTudo}>
-                  Ver pipeline
-                </Link>
-              </header>
-              {lista.length === 0 ? (
-                <p>Ainda não há clientes.</p>
-              ) : (
-                <div className={styles.donut}>
-                  <div className={styles.areaDonut}>
-                    <Grafico
-                      tipo="doughnut"
-                      etiquetas={ESTADOS.map((e) => e.texto)}
-                      valores={ESTADOS.map((e) => contagem[e.chave] ?? 0)}
-                      cores={ESTADOS.map((e) => e.cor)}
-                    />
-                    {/* total no buraco do meio */}
-                    <span className={styles.centroDonut}>
-                      <strong>{lista.length}</strong>
-                      <small>clientes</small>
-                    </span>
-                  </div>
-                  <ul className={styles.legenda}>
-                    {ESTADOS.map((e) => (
-                      <li key={e.chave}>
-                        <i style={{ background: e.cor }}></i>
-                        {e.texto}
-                        <strong>{contagem[e.chave] ?? 0}</strong>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      {/* cartões de números: nome + etiqueta em cima, número grande em baixo */}
+      <section className={styles.numeros}>
+        {numeros.map((n) => (
+          <article key={n.rotulo} className={styles.cartao}>
+            <div className={styles.topoCartao}>
+              <h2>{n.rotulo}</h2>
+              {n.etiqueta && (
+                <span className={`${styles.etiqueta} ${styles[n.etiqueta.tipo]}`}>{n.etiqueta.texto}</span>
               )}
-            </article>
-          </section>
+            </div>
+            <p className={styles.valor}>
+              <strong>
+                <ContarNumero valor={n.valor} sufixo={n.sufixo} />
+              </strong>
+              {n.detalhe && <span>{n.detalhe}</span>}
+            </p>
+          </article>
+        ))}
+      </section>
 
-          <section className={styles.grelha}>
-            {/* as minhas tarefas */}
-            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "320ms" }}>
-              <header className={styles.topoBloco}>
-                <h2>
-                  As minhas tarefas <span>{tarefas.length}</span>
-                </h2>
-                <Link href="/painel/tarefas" className={styles.verTudo}>
-                  Ver todas
-                </Link>
-              </header>
-              <ListaTarefas
-                tarefas={tarefas.slice(0, 6)}
-                mostrarCliente
-                mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada cliente."
-              />
-            </article>
+      {/* gráfico grande à esquerda + atividade recente à direita */}
+      <section className={styles.linhaPrincipal}>
+        <article className={styles.bloco}>
+          <header className={styles.topoBloco}>
+            <div>
+              <h2>Novos clientes</h2>
+              <p className={styles.subtitulo}>Nas últimas 8 semanas</p>
+            </div>
+            <p className={styles.numeroGrande}>{totalSemanas}</p>
+          </header>
+          <div className={styles.areaGrafico}>
+            <Grafico tipo="line" etiquetas={semanas.etiquetas} valores={semanas.valores} cores="var(--cor-destaque)" />
+          </div>
+        </article>
 
-            {/* gráfico de barras: valor previsto em cada fase */}
-            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "340ms" }}>
-              <header className={styles.topoBloco}>
-                <h2>Valor por fase</h2>
-              </header>
-              <div className={styles.areaGrafico}>
+        <div className={styles.atividade}>
+          <AtividadeRecente eventos={eventos} />
+        </div>
+      </section>
+
+      {/* as minhas tarefas, numa tabela a toda a largura */}
+      <article className={styles.bloco}>
+        <header className={styles.topoBloco}>
+          <div>
+            <h2>As minhas tarefas</h2>
+            <p className={styles.subtitulo}>
+              {tarefas.length === 0 ? "Nada por fazer." : "Das mais urgentes para as menos urgentes."}
+            </p>
+          </div>
+          <div className={styles.acoes}>
+            <Link href="/painel/tarefas" className={`botao botao-secundario ${styles.botaoPequeno}`}>
+              Ver todas ({tarefas.length})
+            </Link>
+            <Link href="/painel/tarefas?nova=1" className={`botao botao-secundario ${styles.botaoPequeno}`}>
+              <Icone nome="mais" tamanho={15} /> Nova tarefa
+            </Link>
+          </div>
+        </header>
+        <TabelaTarefas
+          tarefas={tarefas.slice(0, 6)}
+          mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada cliente."
+        />
+      </article>
+
+      {/* dois gráficos lado a lado */}
+      <section className={styles.grelha}>
+        <article className={styles.bloco}>
+          <header className={styles.topoBloco}>
+            <h2>Clientes por estado</h2>
+            <Link href="/painel/pipeline" className={styles.verTudo}>
+              Ver pipeline
+            </Link>
+          </header>
+          {lista.length === 0 ? (
+            <p className={styles.subtitulo}>Ainda não há clientes.</p>
+          ) : (
+            <div className={styles.donut}>
+              <div className={styles.areaDonut}>
                 <Grafico
-                  tipo="bar"
+                  tipo="doughnut"
                   etiquetas={ESTADOS.map((e) => e.texto)}
-                  valores={valorPorFase}
+                  valores={ESTADOS.map((e) => contagem[e.chave] ?? 0)}
                   cores={ESTADOS.map((e) => e.cor)}
-                  formato="euros"
                 />
+                {/* total no buraco do meio */}
+                <span className={styles.centroDonut}>
+                  <strong>{lista.length}</strong>
+                  <small>clientes</small>
+                </span>
               </div>
-            </article>
-          </section>
-
-          <section className={styles.grelha}>
-            {/* link do formulário público */}
-            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "340ms" }}>
-              <header className={styles.topoBloco}>
-                <h2>O teu formulário público</h2>
-              </header>
-              <p>
-                Partilha este link (site, redes sociais, email). Quem o preencher entra
-                automaticamente como cliente &quot;Novo&quot;.
-              </p>
-              <div className={styles.linhaLink}>
-                {/* target="_blank" abre num separador novo, para o painel continuar aberto */}
-                <Link href={linkFormulario} target="_blank" className={styles.link}>
-                  {linkFormulario}
-                </Link>
-                <BotaoCopiar caminho={linkFormulario} className="botao botao-secundario" />
-              </div>
-            </article>
-
-            {/* primeiros passos, com barra de progresso (como "Team quota" na referência) */}
-            <article className={`entrar ${styles.bloco}`} style={{ "--atraso": "380ms" }}>
-              <header className={styles.topoBloco}>
-                <h2>Primeiros passos</h2>
-                <strong className={styles.percentagem}>{Math.round((passosFeitos / passos.length) * 100)}%</strong>
-              </header>
-              <span className={styles.progresso}>
-                <span style={{ width: `${(passosFeitos / passos.length) * 100}%` }}></span>
-              </span>
-              <ul className={styles.passos}>
-                {passos.map((p) => (
-                  <li key={p.texto} className={p.feito ? styles.feito : ""}>
-                    {/* passo por fazer com página própria: vira um link para essa página */}
-                    {!p.feito && p.href ? <Link href={p.href}>{p.texto}</Link> : p.texto}
+              <ul className={styles.legenda}>
+                {ESTADOS.map((e) => (
+                  <li key={e.chave}>
+                    <i style={{ background: e.cor }}></i>
+                    {e.texto}
+                    <strong>{contagem[e.chave] ?? 0}</strong>
                   </li>
                 ))}
               </ul>
-            </article>
-          </section>
-        </div>
+            </div>
+          )}
+        </article>
 
-        <aside className={`entrar ${styles.lateral}`} style={{ "--atraso": "200ms" }}>
-          <AtividadeRecente eventos={eventos} />
-        </aside>
-      </div>
+        <article className={styles.bloco}>
+          <header className={styles.topoBloco}>
+            <h2>Valor por fase</h2>
+          </header>
+          <div className={styles.areaGrafico}>
+            <Grafico
+              tipo="bar"
+              etiquetas={ESTADOS.map((e) => e.texto)}
+              valores={valorPorFase}
+              cores={ESTADOS.map((e) => e.cor)}
+              formato="euros"
+            />
+          </div>
+        </article>
+      </section>
+
+      {/* formulário público (+ primeiros passos, enquanto não estiverem todos feitos) */}
+      <section className={mostrarPassos ? styles.grelha : undefined}>
+        <article className={`${styles.bloco} ${styles.blocoFormulario}`}>
+          <div>
+            <h2>O teu formulário público</h2>
+            <p className={styles.subtitulo}>
+              Partilha este link no site, nas redes sociais ou por email. Quem o preencher entra como cliente
+              &quot;Novo&quot;.
+            </p>
+          </div>
+          <div className={styles.linhaLink}>
+            {/* target="_blank" abre num separador novo, para o painel continuar aberto */}
+            <Link href={linkFormulario} target="_blank" className={styles.link}>
+              {linkFormulario}
+            </Link>
+            <BotaoCopiar caminho={linkFormulario} className={`botao botao-secundario ${styles.botaoPequeno}`} />
+          </div>
+        </article>
+
+        {mostrarPassos && (
+          <article className={styles.bloco}>
+            <header className={styles.topoBloco}>
+              <h2>Primeiros passos</h2>
+              <strong className={styles.percentagem}>{Math.round((passosFeitos / passos.length) * 100)}%</strong>
+            </header>
+            <span className={styles.progresso}>
+              <span style={{ width: `${(passosFeitos / passos.length) * 100}%` }}></span>
+            </span>
+            <ul className={styles.passos}>
+              {passos.map((p) => (
+                <li key={p.texto} className={p.feito ? styles.feito : ""}>
+                  {/* passo por fazer com página própria: vira um link para essa página */}
+                  {!p.feito && p.href ? <Link href={p.href}>{p.texto}</Link> : p.texto}
+                </li>
+              ))}
+            </ul>
+          </article>
+        )}
+      </section>
     </div>
   );
 }

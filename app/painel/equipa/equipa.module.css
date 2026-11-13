@@ -1,113 +1,119 @@
 .pagina {
-  max-width: 1180px;
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* ---------- cabeçalho (igual ao das outras páginas) ---------- */
-.cabecalho {
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--cor-contorno);
-}
-
 .cabecalho h1 {
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .resumo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
   color: var(--cor-texto-suave);
 }
 
-.resumo span {
-  color: var(--cor-texto-fraco);
+/* aviso em laranja: há clientes sem ninguém responsável (leva à lista) */
+.porAtribuir {
+  color: #fbbf24;
 }
 
-/* aviso em laranja: há clientes sem ninguém responsável */
-.porAtribuir {
-  font-style: normal;
-  color: #fbbf24;
+.porAtribuir:hover {
+  text-decoration: underline;
 }
 
 /* membros à esquerda, formulário à direita */
 .grelha {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 330px;
   gap: 20px;
   align-items: start;
 }
 
-/* ---------- cartões dos membros ---------- */
-/* grelha automática: tantas colunas quantas couberem (cada uma com 280px ou mais) */
-.membros {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+/* ---------- tabela dos membros (igual à lista de clientes) ---------- */
+.tabelaBloco {
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow: hidden;
+}
+
+/* a tabela desliza para o lado em ecrãs estreitos */
+.rolar {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tabela th {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--cor-contorno);
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabela td {
+  padding: 14px;
+  border-bottom: 1px solid var(--cor-contorno);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* colunas de números alinhadas à direita */
+.tabela .numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.zero {
+  color: var(--cor-texto-fraco);
+}
+
+.acoes {
+  width: 1%;
+  text-align: right;
 }
 
 .membro {
   display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding: 20px;
-  border-radius: 18px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-  transition: border-color 0.2s, transform 0.2s var(--curva);
-}
-
-.membro:hover {
-  border-color: rgba(32, 201, 107, 0.3);
-  transform: translateY(-2px);
-}
-
-.topoMembro {
-  display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 190px;
 }
 
 .avatar {
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 1px solid rgba(32, 201, 107, 0.25);
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
-/* o admin tem o avatar com brilho verde */
-.avatarAdmin {
-  background: linear-gradient(135deg, #4ade80, #15803d);
-  border: none;
-  color: #052e16;
-  box-shadow: 0 0 18px rgba(32, 201, 107, 0.3);
-}
-
 .dados {
-  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   line-height: 1.35;
-}
-
-.dados strong,
-.dados small {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .dados strong {
@@ -127,12 +133,12 @@
 
 .papel,
 .papelAdmin {
-  flex-shrink: 0;
+  display: inline-block;
   padding: 3px 10px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--cor-texto-suave);
-  font-size: 0.74rem;
+  font-size: 0.78rem;
 }
 
 .papelAdmin {
@@ -141,51 +147,13 @@
   color: var(--cor-destaque);
 }
 
-/* três números lado a lado, separados por linhas finas */
-.numeros {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-radius: 12px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-fundo-2);
-}
-
-.numeros div {
-  min-width: 0;
-  padding: 10px 12px;
-}
-
-.numeros div + div {
-  border-left: 1px solid var(--cor-contorno);
-}
-
-.numeros dt {
-  color: var(--cor-texto-fraco);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.numeros dd {
-  margin-top: 2px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.zero {
-  color: var(--cor-texto-fraco);
-}
-
-/* barra dos clientes por fase (igual à da lista de clientes) */
+/* barra dos clientes por fase, por baixo do número */
 .barra {
   display: flex;
-  gap: 3px;
-  height: 6px;
+  gap: 2px;
+  width: 64px;
+  height: 4px;
+  margin: 6px 0 0 auto;
 }
 
 .barra span {
@@ -196,19 +164,6 @@
 .barraVazia {
   flex-grow: 1;
   background: rgba(255, 255, 255, 0.06);
-}
-
-.rodapeMembro {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  min-height: 30px;
-}
-
-.rodapeMembro small {
-  color: var(--cor-texto-fraco);
-  font-size: 0.8rem;
 }
 
 .remover {
@@ -304,7 +259,7 @@
 @media (max-width: 1000px) {
   /* o formulário passa para baixo dos membros */
   .grelha {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .lado {

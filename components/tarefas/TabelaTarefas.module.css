@@ -1,0 +1,117 @@
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.rolar {
+  overflow-x: auto;
+  margin: 0 -22px -22px; /* a tabela vai até às bordas do bloco */
+}
+
+.tabela {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+/* cabeçalho numa faixa ligeiramente mais clara, como na referência */
+.tabela th {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid var(--cor-contorno);
+  border-bottom: 1px solid var(--cor-contorno);
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabela td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-suave);
+  vertical-align: middle;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela th:first-child,
+.tabela td:first-child {
+  padding-left: 22px;
+}
+
+.tabela th:last-child,
+.tabela td:last-child {
+  padding-right: 22px;
+}
+
+.colVisto {
+  width: 44px;
+}
+
+/* o formulário do círculo não acrescenta espaço */
+.colVisto form {
+  display: flex;
+}
+
+.titulo {
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+.cliente {
+  color: var(--cor-texto-suave);
+}
+
+.cliente:hover {
+  color: var(--cor-destaque);
+}
+
+.data {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* etiqueta de estado: fundo escuro da cor do estado */
+.estado {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.atrasada {
+  background: rgba(248, 113, 113, 0.14);
+  color: #fca5a5;
+}
+
+.hoje {
+  background: rgba(250, 204, 21, 0.14);
+  color: #fde047;
+}
+
+.proxima {
+  background: rgba(96, 165, 250, 0.14);
+  color: #93c5fd;
+}
+
+.semData {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-fraco);
+}
+
+/* texto só para leitores de ecrã */
+.escondido {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { obterSessao } from "@/lib/sessao";
-import { ESTADOS, formatarEuros, formatarData } from "@/lib/estados";
+import { ESTADOS, formatarEuros } from "@/lib/estados";
 import { iniciais } from "@/lib/texto";
 import FormMembro from "@/components/equipa/FormMembro";
 import BotaoRemover from "@/components/equipa/BotaoRemover";
@@ -63,100 +64,95 @@ export default async function PaginaEquipa() {
   const nComerciais = lista.length - nAdmins;
 
   return (
-    <div className={styles.pagina}>
-      {/* cabeçalho igual ao das outras páginas do painel */}
-      <header className={`entrar ${styles.cabecalho}`}>
-        <h1>Equipa.</h1>
+    <div className={`entrar ${styles.pagina}`}>
+      <header className={styles.cabecalho}>
+        <h1>Equipa</h1>
         <p className={styles.resumo}>
-          {lista.length} {lista.length === 1 ? "membro" : "membros"}
-          <span>·</span>
-          {nAdmins} {nAdmins === 1 ? "admin" : "admins"}
-          <span>·</span>
-          {nComerciais} {nComerciais === 1 ? "comercial" : "comerciais"}
+          {lista.length} {lista.length === 1 ? "membro" : "membros"}: {nAdmins}{" "}
+          {nAdmins === 1 ? "admin" : "admins"} e {nComerciais} {nComerciais === 1 ? "comercial" : "comerciais"}.
           {porAtribuir > 0 && (
             <>
-              <span>·</span>
-              <em className={styles.porAtribuir}>
-                {porAtribuir} {porAtribuir === 1 ? "cliente por atribuir" : "clientes por atribuir"}
-              </em>
+              {" "}
+              <Link href="/painel/clientes" className={styles.porAtribuir}>
+                {porAtribuir} {porAtribuir === 1 ? "cliente está por atribuir" : "clientes estão por atribuir"}.
+              </Link>
             </>
           )}
         </p>
       </header>
 
       <div className={styles.grelha}>
-        {/* ---------- cartões dos membros ---------- */}
-        <section className={styles.membros} aria-label="Membros da equipa">
-          {lista.map((m, i) => {
-            const n = numeros[m.id];
-            const eu = m.id === perfil.id;
-            return (
-              <article
-                key={m.id}
-                className={`entrar ${styles.membro}`}
-                style={{ "--atraso": `${80 + Math.min(i, 8) * 50}ms` }}
-              >
-                <header className={styles.topoMembro}>
-                  <span className={m.papel === "admin" ? `${styles.avatar} ${styles.avatarAdmin}` : styles.avatar}>
-                    {iniciais(m.nome)}
-                  </span>
-                  <div className={styles.dados}>
-                    <strong>
-                      {m.nome} {eu && <em>(tu)</em>}
-                    </strong>
-                    <small>{m.email}</small>
-                  </div>
-                  <span className={m.papel === "admin" ? styles.papelAdmin : styles.papel}>
-                    {m.papel === "admin" ? "Admin" : "Comercial"}
-                  </span>
-                </header>
-
-                {/* três números desta pessoa */}
-                <dl className={styles.numeros}>
-                  <div>
-                    <dt>Clientes</dt>
-                    <dd>{n.clientes}</dd>
-                  </div>
-                  <div>
-                    <dt>Em aberto</dt>
-                    <dd>{formatarEuros(n.emAberto)}</dd>
-                  </div>
-                  <div>
-                    <dt>Tarefas</dt>
-                    <dd className={n.tarefas ? "" : styles.zero}>{n.tarefas}</dd>
-                  </div>
-                </dl>
-
-                {/* barra com os clientes desta pessoa por fase (largura = nº de clientes) */}
-                <div className={styles.barra} aria-hidden="true">
-                  {n.clientes === 0 ? (
-                    <span className={styles.barraVazia}></span>
-                  ) : (
-                    ESTADOS.map((e) =>
-                      n.porEstado[e.chave] ? (
-                        <span
-                          key={e.chave}
-                          style={{ flexGrow: n.porEstado[e.chave], background: e.cor }}
-                          title={`${e.texto}: ${n.porEstado[e.chave]}`}
-                        ></span>
-                      ) : null
-                    )
-                  )}
-                </div>
-
-                <footer className={styles.rodapeMembro}>
-                  <small>Na equipa desde {formatarData(m.criado_em)}</small>
-                  {/* não se pode remover a si próprio */}
-                  {!eu && <BotaoRemover id={m.id} nome={m.nome} className={styles.remover} />}
-                </footer>
-              </article>
-            );
-          })}
+        {/* ---------- tabela dos membros (mesmo estilo da lista de clientes) ---------- */}
+        <section className={styles.tabelaBloco} aria-label="Membros da equipa">
+          <div className={styles.rolar}>
+            <table className={styles.tabela}>
+              <thead>
+                <tr>
+                  <th>Membro</th>
+                  <th>Papel</th>
+                  <th className={styles.numero}>Clientes</th>
+                  <th className={styles.numero}>Em aberto</th>
+                  <th className={styles.numero}>Tarefas</th>
+                  <th aria-label="Ações"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {lista.map((m) => {
+                  const n = numeros[m.id];
+                  const eu = m.id === perfil.id;
+                  return (
+                    <tr key={m.id}>
+                      <td>
+                        <div className={styles.membro}>
+                          <span className={styles.avatar}>{iniciais(m.nome)}</span>
+                          <div className={styles.dados}>
+                            <strong>
+                              {m.nome} {eu && <em>(tu)</em>}
+                            </strong>
+                            <small>{m.email}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className={m.papel === "admin" ? styles.papelAdmin : styles.papel}>
+                          {m.papel === "admin" ? "Admin" : "Comercial"}
+                        </span>
+                      </td>
+                      <td className={styles.numero}>
+                        {n.clientes}
+                        {/* barra com os clientes desta pessoa por fase (largura = nº de clientes) */}
+                        <div className={styles.barra} aria-hidden="true">
+                          {n.clientes === 0 ? (
+                            <span className={styles.barraVazia}></span>
+                          ) : (
+                            ESTADOS.map((e) =>
+                              n.porEstado[e.chave] ? (
+                                <span
+                                  key={e.chave}
+                                  style={{ flexGrow: n.porEstado[e.chave], background: e.cor }}
+                                ></span>
+                              ) : null
+                            )
+                          )}
+                        </div>
+                      </td>
+                      <td className={styles.numero}>{formatarEuros(n.emAberto)}</td>
+                      <td className={n.tarefas ? styles.numero : `${styles.numero} ${styles.zero}`}>{n.tarefas}</td>
+                      <td className={styles.acoes}>
+                        {/* não se pode remover a si próprio */}
+                        {!eu && <BotaoRemover id={m.id} nome={m.nome} className={styles.remover} />}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         {/* ---------- coluna da direita: adicionar + papéis ---------- */}
         <aside className={styles.lado}>
-          <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "120ms" }}>
+          <section className={styles.bloco}>
             <h2>
               <Icone nome="utilizadorMais" tamanho={19} /> Adicionar comercial
             </h2>
@@ -166,7 +162,7 @@ export default async function PaginaEquipa() {
             <FormMembro />
           </section>
 
-          <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "180ms" }}>
+          <section className={styles.bloco}>
             <h2>
               <Icone nome="cadeado" tamanho={18} /> Papéis
             </h2>

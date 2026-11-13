@@ -4,7 +4,7 @@
   gap: 22px;
 }
 
-/* ---------- grupos "1 Contacto" e "2 Negócio" ---------- */
+/* ---------- grupos "Contacto" e "Negócio" ---------- */
 /* fieldset = grupo de campos; tiramos o contorno que o browser põe por defeito */
 .grupo {
   border: none;
@@ -14,27 +14,12 @@
   gap: 16px;
 }
 
-/* o número do grupo num quadradinho verde, à esquerda do título */
+/* título do grupo (legend) */
 .tituloGrupo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 4px;
   color: var(--cor-texto);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
-}
-
-.tituloGrupo b {
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  border: 1px solid rgba(32, 201, 107, 0.3);
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.75rem;
 }
 
 /* o segundo grupo fica separado do primeiro por uma linha */
@@ -67,6 +52,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  /* as opções olham para a largura deste bloco (container query), não para a do ecrã */
+  container-type: inline-size;
 }
 
 .rotulo {
@@ -74,11 +61,17 @@
   font-weight: 500;
 }
 
-/* as opções ocupam o espaço que houver: 4 numa linha se couberem, senão 2 */
+/* 4 numa linha se couberem, senão 2 + 2 (nunca 3 + 1) */
 .opcoes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+@container (min-width: 540px) {
+  .opcoes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .opcao {
@@ -167,11 +160,9 @@
 }
 
 .rotuloPrevia {
-  color: var(--cor-texto-fraco);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  font-weight: 500;
 }
 
 /* cartão de pré-visualização: brilho no canto com a cor da fase */

@@ -26,41 +26,40 @@ export default async function PaginaConta() {
   const nAtivos = (meusClientes ?? []).filter((c) => c.estado === "ativo").length;
 
   const linkFormulario = `/f/${empresa.slug}`;
+  // nome da empresa no fim de uma frase: se já acabar em "." (ex.: "Lda."), não pomos outro
+  const empresaFimFrase = empresa.nome.endsWith(".") ? empresa.nome : `${empresa.nome}.`;
 
   return (
-    <div className={styles.pagina}>
-      {/* ---------- cartão de perfil ---------- */}
-      <header className={`entrar ${styles.perfil}`}>
+    <div className={`entrar ${styles.pagina}`}>
+      {/* cabeçalho igual ao das outras páginas: quem sou e em que empresa */}
+      <header className={styles.cabecalho}>
         <span className={styles.avatar}>{iniciais(perfil.nome)}</span>
-        <div className={styles.quem}>
-          <span className={eAdmin ? styles.papelAdmin : styles.papel}>
-            {eAdmin ? "Administrador" : "Comercial"}
-          </span>
-          <h1>{perfil.nome}</h1>
-          <p>
-            {perfil.email} <span>·</span> {empresa.nome}
+        <div>
+          <h1>A minha conta</h1>
+          <p className={styles.resumo}>
+            Entras com {perfil.email}, como {eAdmin ? "admin" : "comercial"} da {empresaFimFrase}
           </p>
         </div>
-
-        {/* os meus números */}
-        <dl className={styles.numeros}>
-          <div>
-            <dt>Os meus clientes</dt>
-            <dd>{nClientes}</dd>
-          </div>
-          <div>
-            <dt>Ativos</dt>
-            <dd>{nAtivos}</dd>
-          </div>
-          <div>
-            <dt>Tarefas por fazer</dt>
-            <dd>{nTarefas ?? 0}</dd>
-          </div>
-        </dl>
       </header>
 
+      {/* os meus números, como os contadores da página Tarefas */}
+      <section className={styles.contadores} aria-label="Os meus números">
+        <div className={styles.contador}>
+          <strong>{nClientes}</strong>
+          <span>Os meus clientes</span>
+        </div>
+        <div className={styles.contador}>
+          <strong>{nAtivos}</strong>
+          <span>Ativos</span>
+        </div>
+        <div className={styles.contador}>
+          <strong>{nTarefas ?? 0}</strong>
+          <span>Tarefas por fazer</span>
+        </div>
+      </section>
+
       {/* ---------- blocos: descrição à esquerda, formulário à direita ---------- */}
-      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "80ms" }}>
+      <section className={styles.bloco}>
         <div className={styles.descricao}>
           <h2>
             <Icone nome="utilizador" tamanho={18} /> Nome
@@ -70,7 +69,7 @@ export default async function PaginaConta() {
         <FormNome nomeAtual={perfil.nome} />
       </section>
 
-      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "130ms" }}>
+      <section className={styles.bloco}>
         <div className={styles.descricao}>
           <h2>
             <Icone nome="cadeado" tamanho={18} /> Password
@@ -80,12 +79,12 @@ export default async function PaginaConta() {
         <FormPassword />
       </section>
 
-      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "180ms" }}>
+      <section className={styles.bloco}>
         <div className={styles.descricao}>
           <h2>
             <Icone nome="ligacao" tamanho={18} /> Formulário público
           </h2>
-          <p>Partilha este link: quem o preencher entra como cliente novo no CRM da {empresa.nome}.</p>
+          <p>Partilha este link: quem o preencher entra como cliente novo no CRM da {empresaFimFrase}</p>
         </div>
         <div className={styles.link}>
           <code>{linkFormulario}</code>
@@ -98,7 +97,7 @@ export default async function PaginaConta() {
         </div>
       </section>
 
-      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "230ms" }}>
+      <section className={styles.bloco}>
         <div className={styles.descricao}>
           <h2>
             <Icone nome="sair" tamanho={18} /> Sessão

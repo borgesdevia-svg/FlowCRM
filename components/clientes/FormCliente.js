@@ -32,10 +32,10 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
     <>
       {estado.mensagem && <p className="alerta alerta-erro" role="alert">{estado.mensagem}</p>}
 
-      {/* ---------- 1. Contacto ---------- */}
+      {/* ---------- Contacto ---------- */}
       <fieldset className={styles.grupo}>
         <legend className={styles.tituloGrupo}>
-          <b>1</b> Contacto
+          Contacto
         </legend>
 
         <div className="campo">
@@ -79,10 +79,10 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
         </div>
       </fieldset>
 
-      {/* ---------- 2. Negócio ---------- */}
+      {/* ---------- Negócio ---------- */}
       <fieldset className={styles.grupo}>
         <legend className={styles.tituloGrupo}>
-          <b>2</b> Negócio
+          Negócio
         </legend>
 
         {/* Fase: botões de opção (radio). Só um pode estar escolhido.

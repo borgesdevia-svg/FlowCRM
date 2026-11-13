@@ -6,6 +6,7 @@ import Icone from "@/components/Icone";
 import styles from "./clientes.module.css";
 
 // Rota /painel/clientes — lista de clientes com pesquisa e filtro por estado.
+// Visual: separadores e troca Tabela/Quadro da referência E + tabela sóbria da referência D.
 // A pesquisa e o filtro vivem no URL (ex.: ?q=oficina&estado=novo):
 // assim a página é de servidor, e um link filtrado pode ser guardado ou partilhado.
 export const metadata = { title: "Clientes · FlowCRM" };
@@ -21,15 +22,11 @@ export default async function PaginaClientes({ searchParams }) {
   const { q = "", estado = "", aviso = "" } = await searchParams;
   const { supabase, eAdmin } = await obterSessao();
 
-  // 1) todos os clientes visíveis, sem filtros: para as contagens e o resumo do topo
-  const { data: todos } = await supabase.from("clientes").select("estado, valor_previsto");
+  // 1) todos os clientes visíveis, sem filtros: para os números de cada separador
+  const { data: todos } = await supabase.from("clientes").select("estado");
   const total = todos?.length ?? 0;
   const contagem = {};
-  let valorTotal = 0;
-  for (const c of todos ?? []) {
-    contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
-    valorTotal += Number(c.valor_previsto) || 0;
-  }
+  for (const c of todos ?? []) contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
 
   // 2) lista filtrada — o filtro é feito pela base de dados
   let consulta = supabase
@@ -56,24 +53,24 @@ export default async function PaginaClientes({ searchParams }) {
     return `/painel/clientes${texto ? `?${texto}` : ""}`;
   };
 
+  // soma do valor previsto dos clientes que estão a ser vistos (para o rodapé da tabela)
+  const somaVisiveis = lista.reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0);
+  const linkExportar = linkFiltro(estadoValido ? estado : "").replace("/painel/clientes", "/painel/clientes/exportar");
+
   return (
-    <div className={styles.pagina}>
-      {/* cabeçalho: título + resumo numa linha, igual ao Início e ao Pipeline */}
-      <header className={`entrar ${styles.cabecalho}`}>
+    <div className={`entrar ${styles.pagina}`}>
+      {/* cabeçalho: título à esquerda, ações à direita */}
+      <header className={styles.cabecalho}>
         <div>
-          <h1>Clientes.</h1>
+          <h1>Clientes</h1>
           <p className={styles.resumo}>
-            {total} {total === 1 ? "cliente" : "clientes"}
-            <span>·</span>
-            {formatarEuros(valorTotal)} em valor previsto
-            <span>·</span>
-            {eAdmin ? "toda a empresa" : "só os teus"}
+            {eAdmin ? "Todos os clientes da empresa." : "Os clientes por que és responsável."}
           </p>
         </div>
         <div className={styles.acoesTopo}>
           {/* exporta o que está a ser visto: mesma pesquisa e mesmo filtro.
               É um <a> normal (não <Link>) porque descarrega um ficheiro, não abre uma página. */}
-          <a href={linkFiltro(estadoValido ? estado : "").replace("/painel/clientes", "/painel/clientes/exportar")} className="botao botao-secundario">
+          <a href={linkExportar} className="botao botao-secundario">
             <Icone nome="folha" tamanho={16} /> Exportar CSV
           </a>
           <Link href="/painel/clientes/novo" className="botao">
@@ -88,70 +85,59 @@ export default async function PaginaClientes({ searchParams }) {
         </p>
       )}
 
-      {/* Filtros por estado. Por cima, a barra de distribuição: cada segmento tem
-          largura proporcional ao nº de clientes nesse estado. */}
-      <nav className={`entrar ${styles.distribuicao}`} style={{ "--atraso": "60ms" }} aria-label="Filtrar por estado">
-        <div className={styles.barra} aria-hidden="true">
-          {total === 0 ? (
-            <span className={styles.barraVazia}></span>
-          ) : (
-            ESTADOS.map((e) =>
-              contagem[e.chave] ? (
-                <span
-                  key={e.chave}
-                  style={{ flexGrow: contagem[e.chave], background: e.cor }}
-                  className={estadoValido && estado !== e.chave ? styles.apagado : ""}
-                ></span>
-              ) : null
-            )
-          )}
-        </div>
-
-        {/* "comprimido" de botões: o filtro ativo fica verde */}
-        <div className={styles.filtros}>
-          <Link href={linkFiltro("")} className={!estadoValido ? styles.filtroAtivo : styles.filtro}>
-            Todos <span>{total}</span>
+      {/* separadores por estado (referência E): o ativo fica sublinhado a verde */}
+      <nav className={styles.separadores} aria-label="Filtrar por estado">
+        <Link
+          href={linkFiltro("")}
+          className={!estadoValido ? styles.separadorAtivo : styles.separador}
+          aria-current={!estadoValido ? "page" : undefined}
+        >
+          Todos <span>{total}</span>
+        </Link>
+        {ESTADOS.map((e) => (
+          <Link
+            key={e.chave}
+            href={linkFiltro(e.chave)}
+            className={estado === e.chave ? styles.separadorAtivo : styles.separador}
+            aria-current={estado === e.chave ? "page" : undefined}
+          >
+            <i style={{ background: e.cor }}></i>
+            {e.texto} <span>{contagem[e.chave] ?? 0}</span>
           </Link>
-          {ESTADOS.map((e) => (
-            <Link
-              key={e.chave}
-              href={linkFiltro(e.chave)}
-              className={estado === e.chave ? styles.filtroAtivo : styles.filtro}
-            >
-              <i style={{ background: e.cor }}></i>
-              {e.texto} <span>{contagem[e.chave] ?? 0}</span>
-            </Link>
-          ))}
-        </div>
+        ))}
       </nav>
 
-      {/* bloco com a tabela (como o "Open Deals" da referência) */}
-      <section className={`entrar ${styles.bloco}`} style={{ "--atraso": "120ms" }}>
-        <header className={styles.topoBloco}>
-          <h2>
-            {estadoValido ? obterEstado(estado).texto : "Todos os clientes"}
-            <span>
-              {lista.length} {lista.length === 1 ? "resultado" : "resultados"}
-            </span>
-          </h2>
+      {/* barra de ferramentas: vista (Tabela / Quadro) à esquerda, pesquisa à direita */}
+      <div className={styles.ferramentas}>
+        <div className={styles.vistas} aria-label="Vista">
+          <span className={styles.vistaAtiva} aria-current="page">
+            <Icone nome="lista" tamanho={15} /> Tabela
+          </span>
+          {/* o "quadro" dos clientes é o pipeline: colunas por fase */}
+          <Link href="/painel/pipeline" className={styles.vista}>
+            <Icone nome="grelha" tamanho={15} /> Quadro
+          </Link>
+        </div>
 
-          {/* pesquisa: um formulário GET normal, que só muda o URL */}
-          <form className={styles.pesquisa} role="search">
-            {estadoValido && <input type="hidden" name="estado" value={estado} />}
-            <Icone nome="pesquisa" tamanho={17} className={styles.lupa} />
-            <input
-              type="search"
-              name="q"
-              defaultValue={termo}
-              placeholder="Pesquisar por nome ou email…"
-              aria-label="Pesquisar clientes"
-            />
-            <button type="submit" className={styles.botaoPesquisa}>
-              Pesquisar
-            </button>
-          </form>
-        </header>
+        {/* pesquisa: um formulário GET normal, que só muda o URL */}
+        <form className={styles.pesquisa} role="search">
+          {estadoValido && <input type="hidden" name="estado" value={estado} />}
+          <Icone nome="pesquisa" tamanho={17} className={styles.lupa} />
+          <input
+            type="search"
+            name="q"
+            defaultValue={termo}
+            placeholder="Pesquisar por nome ou email…"
+            aria-label="Pesquisar clientes"
+          />
+          <button type="submit" className={styles.botaoPesquisa}>
+            Pesquisar
+          </button>
+        </form>
+      </div>
 
+      {/* tabela (referência D): sóbria, com ícone em cada coluna e totais no fundo */}
+      <section className={styles.bloco}>
         {lista.length === 0 ? (
           <div className={styles.vazio}>
             {total === 0 ? (
@@ -178,21 +164,46 @@ export default async function PaginaClientes({ searchParams }) {
             <table className={styles.tabela}>
               <thead>
                 <tr>
-                  <th>Cliente</th>
-                  <th className={styles.colTelefone}>Telefone</th>
-                  {eAdmin && <th className={styles.colResponsavel}>Responsável</th>}
-                  <th className={styles.colValor}>Valor</th>
-                  <th>Estado</th>
-                  <th className={styles.colData}>Criado</th>
+                  <th>
+                    <span className={styles.th}>
+                      <Icone nome="utilizador" tamanho={15} /> Cliente
+                    </span>
+                  </th>
+                  <th className={styles.colTelefone}>
+                    <span className={styles.th}>
+                      <Icone nome="telemovel" tamanho={15} /> Telefone
+                    </span>
+                  </th>
+                  {eAdmin && (
+                    <th className={styles.colResponsavel}>
+                      <span className={styles.th}>
+                        <Icone nome="utilizadores" tamanho={15} /> Responsável
+                      </span>
+                    </th>
+                  )}
+                  <th className={styles.colValor}>
+                    <span className={styles.th}>
+                      <Icone nome="subida" tamanho={15} /> Valor
+                    </span>
+                  </th>
+                  <th>
+                    <span className={styles.th}>
+                      <Icone nome="grelha" tamanho={15} /> Estado
+                    </span>
+                  </th>
+                  <th className={styles.colData}>
+                    <span className={styles.th}>
+                      <Icone nome="lista" tamanho={15} /> Criado
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {lista.map((c, i) => {
+                {lista.map((c) => {
                   const est = obterEstado(c.estado);
                   const responsavel = c.perfis?.nome;
                   return (
-                    // as primeiras 12 linhas entram em cascata (as seguintes já estão fora do ecrã)
-                    <tr key={c.id} className="entrar" style={{ "--atraso": `${180 + Math.min(i, 12) * 35}ms` }}>
+                    <tr key={c.id}>
                       <td>
                         <div className={styles.cliente}>
                           <span className={styles.avatar}>{iniciais(c.nome)}</span>
@@ -235,6 +246,19 @@ export default async function PaginaClientes({ searchParams }) {
                   );
                 })}
               </tbody>
+              {/* rodapé com os totais do que está a ser visto (referência D) */}
+              <tfoot>
+                <tr>
+                  <td>
+                    {lista.length} {lista.length === 1 ? "cliente" : "clientes"}
+                  </td>
+                  <td className={styles.colTelefone}></td>
+                  {eAdmin && <td className={styles.colResponsavel}></td>}
+                  <td className={styles.colValor}>Soma: {formatarEuros(somaVisiveis)}</td>
+                  <td></td>
+                  <td className={styles.colData}></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         )}

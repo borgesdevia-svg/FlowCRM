@@ -18,13 +18,13 @@ export default async function PaginaNovoCliente() {
   }
 
   return (
-    <div className={styles.pagina}>
+    <div className={`entrar ${styles.pagina}`}>
       {/* cabeçalho igual ao das outras páginas do painel */}
-      <header className={`entrar ${styles.cabecalho}`}>
+      <header className={styles.cabecalho}>
         <Link href="/painel/clientes" className={styles.voltar}>
           Clientes
         </Link>
-        <h1>Novo cliente.</h1>
+        <h1>Novo cliente</h1>
         <p className={styles.resumo}>
           {eAdmin
             ? "Podes atribuí-lo já a um comercial ou deixar para depois."
@@ -32,7 +32,7 @@ export default async function PaginaNovoCliente() {
         </p>
       </header>
 
-      <div className="entrar" style={{ "--atraso": "80ms" }}>
+      <div>
         {/* por defeito o admin fica responsável pelo cliente que cria.
             comPrevia: mostra o cartão do cliente a ser preenchido enquanto se escreve */}
         <FormCliente membros={membros} cliente={eAdmin ? { responsavel_id: perfil.id } : {}} comPrevia>

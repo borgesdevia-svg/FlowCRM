@@ -1,117 +1,66 @@
+/* Página Tarefas no estilo da referência H: contadores em cima e um quadro por baixo */
 .pagina {
-  max-width: 1180px;
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* ---------- cabeçalho (igual às outras páginas do painel) ---------- */
-.cabecalho {
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--cor-contorno);
-}
-
+/* ---------- cabeçalho ---------- */
 .cabecalho h1 {
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .resumo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
   color: var(--cor-texto-suave);
 }
 
-.resumo span {
-  color: var(--cor-texto-fraco);
-}
-
-.resumo em {
-  font-style: normal;
-}
-
-.resumo .alerta {
-  color: #f87171;
-}
-
-/* ---------- lista à esquerda, formulário à direita ---------- */
-.colunas {
+/* ---------- contadores (um por coluna do quadro) ---------- */
+.contadores {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
 
-.bloco {
+.contador {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 22px;
-  border-radius: 18px;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 16px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
 
-.bloco h2 {
-  font-size: 1.15rem;
+.contador strong {
+  font-size: 2rem;
   font-weight: 600;
-}
-
-/* ---------- filtros (iguais aos da lista de clientes) ---------- */
-.filtros {
-  align-self: flex-start;
-  max-width: 100%;
-  display: flex;
-  gap: 4px;
-  padding: 5px;
-  border-radius: 14px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-fundo);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.filtro,
-.filtroAtivo {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 13px;
-  border-radius: 10px;
-  color: var(--cor-texto-suave);
-  font-size: 0.88rem;
-  white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
-}
-
-.filtro:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--cor-texto);
-}
-
-.filtroAtivo {
-  background: linear-gradient(180deg, rgba(32, 201, 107, 0.32), rgba(32, 201, 107, 0.14));
-  color: #fff;
-  box-shadow:
-    0 0 18px rgba(32, 201, 107, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.filtro span,
-.filtroAtivo span {
-  color: var(--cor-texto-fraco);
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
-.filtroAtivo span {
-  color: rgba(255, 255, 255, 0.7);
+.contador span {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
 }
 
-/* ---------- filtro por pessoa (admin) ---------- */
+/* o número das atrasadas fica vermelho, para chamar a atenção */
+.atrasadas strong {
+  color: #f87171;
+}
+
+/* ---------- barra: pessoas + nova tarefa ---------- */
+.ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* filtro por pessoa (admin) */
 .pessoas {
   display: flex;
   flex-wrap: wrap;
@@ -120,11 +69,11 @@
 
 .pessoa,
 .pessoaAtiva {
-  padding: 4px 11px;
+  padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid var(--cor-contorno);
   color: var(--cor-texto-suave);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   transition: border-color 0.2s, color 0.2s;
 }
 
@@ -139,24 +88,49 @@
   color: var(--cor-texto);
 }
 
+/* "Nova tarefa": botão que abre o formulário por baixo (elemento <details>) */
+.nova {
+  position: relative;
+}
+
+.nova summary {
+  list-style: none; /* tira o triângulo do <details> */
+}
+
+.nova summary::-webkit-details-marker {
+  display: none;
+}
+
+/* o formulário abre por cima do quadro, alinhado à direita do botão */
+.painelNova {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(420px, calc(100vw - 32px));
+  border-radius: 16px;
+  /* o formulário já traz a sua própria caixa: aqui só a sombra */
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.9);
+}
+
 .semClientes {
   color: var(--cor-texto-suave);
   font-size: 0.92rem;
 }
 
-@media (max-width: 960px) {
-  .colunas {
-    grid-template-columns: 1fr;
+@media (max-width: 760px) {
+  .contadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* no telemóvel, o formulário vem primeiro */
-  .colunas > :last-child {
-    order: -1;
+  /* no telemóvel o formulário abre no meio da página, não por cima */
+  .nova {
+    width: 100%;
   }
-}
 
-@media (max-width: 600px) {
-  .bloco {
-    padding: 16px;
+  .painelNova {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
   }
 }

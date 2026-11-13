@@ -2,111 +2,68 @@
   max-width: 900px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- cabeçalho (igual ao das outras páginas, com as iniciais ao lado) ---------- */
+.cabecalho {
+  display: flex;
+  align-items: center;
   gap: 16px;
 }
 
-/* ---------- cartão de perfil (topo) ---------- */
-/* brilho verde no canto + grelha fina, como a decoração da landing */
-.perfil {
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 20px 24px;
-  padding: 28px;
-  margin-bottom: 8px;
-  border-radius: 20px;
-  border: 1px solid var(--cor-contorno);
-  background:
-    radial-gradient(ellipse 60% 90% at 100% 0%, rgba(32, 201, 107, 0.16), transparent 70%),
-    var(--cor-cartao);
+.cabecalho h1 {
+  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
 }
 
 .avatar {
+  flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 76px;
-  height: 76px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4ade80, #15803d);
-  box-shadow:
-    0 0 30px rgba(32, 201, 107, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  color: #052e16;
-  font-size: 1.5rem;
+  border: 1px solid rgba(32, 201, 107, 0.3);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 1.05rem;
   font-weight: 700;
 }
 
-.quem {
-  min-width: 0;
-}
-
-.quem h1 {
-  margin: 8px 0 4px;
-  font-size: clamp(1.6rem, 4vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-}
-
-.quem p {
-  color: var(--cor-texto-suave);
-  overflow-wrap: anywhere; /* emails compridos partem em vez de sair do cartão */
-}
-
-.quem p span {
-  margin: 0 4px;
-  color: var(--cor-texto-fraco);
-}
-
-.papel,
-.papelAdmin {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--cor-texto-suave);
-  font-size: 0.74rem;
-}
-
-.papelAdmin {
-  border-color: rgba(32, 201, 107, 0.4);
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-}
-
-/* os três números ocupam a linha inteira, por baixo do nome */
-.numeros {
-  grid-column: 1 / -1;
+/* ---------- contadores ---------- */
+.contadores {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-radius: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contador {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: 16px;
   border: 1px solid var(--cor-contorno);
-  background: rgba(9, 9, 9, 0.5);
+  background: var(--cor-cartao);
 }
 
-.numeros div {
-  min-width: 0;
-  padding: 14px 18px;
-}
-
-.numeros div + div {
-  border-left: 1px solid var(--cor-contorno);
-}
-
-.numeros dt {
-  color: var(--cor-texto-fraco);
-  font-size: 0.72rem;
+.contador strong {
+  font-size: 2rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.numeros dd {
-  margin-top: 4px;
-  font-size: 1.5rem;
-  font-weight: 600;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
+}
+
+.contador span {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
 }
 
 /* ---------- blocos: descrição à esquerda, formulário à direita ---------- */
@@ -115,7 +72,7 @@
   grid-template-columns: 1fr 1.4fr;
   gap: 24px;
   padding: 24px;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -193,26 +150,18 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
-
-  .perfil {
-    padding: 20px;
-  }
-
-  .avatar {
-    width: 60px;
-    height: 60px;
-    font-size: 1.2rem;
-  }
 }
 
 @media (max-width: 480px) {
-  /* números um por baixo do outro */
-  .numeros {
-    grid-template-columns: 1fr;
+  .contador {
+    padding: 14px;
   }
 
-  .numeros div + div {
-    border-left: none;
-    border-top: 1px solid var(--cor-contorno);
+  .contador strong {
+    font-size: 1.5rem;
+  }
+
+  .contador span {
+    font-size: 0.8rem;
   }
 }
