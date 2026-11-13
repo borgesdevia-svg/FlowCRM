@@ -2,7 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
-import { iniciais } from "@/lib/texto";
 import FormMembro from "@/components/equipa/FormMembro";
 import BotaoRemover from "@/components/equipa/BotaoRemover";
 import Icone from "@/components/Icone";
@@ -104,7 +103,6 @@ export default async function PaginaEquipa() {
                     <tr key={m.id}>
                       <td>
                         <div className={styles.membro}>
-                          <span className={styles.avatar}>{iniciais(m.nome)}</span>
                           <div className={styles.dados}>
                             <strong>
                               {m.nome} {eu && <em>(tu)</em>}

@@ -8,8 +8,10 @@
 
 /* ---------- cabeçalho ---------- */
 .cabecalho h1 {
-  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
-  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   margin-bottom: 4px;
 }
 
@@ -60,31 +62,37 @@
   gap: 12px;
 }
 
-/* filtro por pessoa (admin) */
+/* filtro por pessoa (admin): controlo segmentado, como na página Clientes */
 .pessoas {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  gap: 2px;
+  max-width: 100%;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .pessoa,
 .pessoaAtiva {
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--cor-contorno);
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 9px;
   color: var(--cor-texto-suave);
-  font-size: 0.85rem;
-  transition: border-color 0.2s, color 0.2s;
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
 }
 
 .pessoa:hover {
-  border-color: rgba(255, 255, 255, 0.25);
   color: var(--cor-texto);
 }
 
 .pessoaAtiva {
-  border-color: rgba(32, 201, 107, 0.5);
-  background: rgba(32, 201, 107, 0.1);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   color: var(--cor-texto);
 }
 

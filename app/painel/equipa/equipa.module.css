@@ -7,8 +7,10 @@
 
 /* ---------- cabeçalho (igual ao das outras páginas) ---------- */
 .cabecalho h1 {
-  font-size: clamp(1.7rem, 3.5vw, 2.1rem);
-  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   margin-bottom: 4px;
 }
 
@@ -95,19 +97,6 @@
   min-width: 190px;
 }
 
-.avatar {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(32, 201, 107, 0.25);
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.75rem;
-  font-weight: 700;
-}
 
 .dados {
   min-width: 0;
@@ -256,13 +245,17 @@
 }
 
 /* ---------- ecrãs mais pequenos ---------- */
-@media (max-width: 1000px) {
-  /* o formulário passa para baixo dos membros */
+/* até 1360px a tabela não cabe ao lado do formulário: o formulário passa para baixo,
+   em duas colunas (adicionar + papéis) para não ficar uma coluna comprida */
+@media (max-width: 1360px) {
   .grelha {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .lado {
     position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    align-items: start;
   }
 }

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { obterSessao } from "@/lib/sessao";
 import { obterEstado, formatarData, formatarEuros } from "@/lib/estados";
-import { iniciais } from "@/lib/texto";
 import FormCliente from "@/components/clientes/FormCliente";
 import BotaoApagarCliente from "@/components/clientes/BotaoApagarCliente";
 import BotoesFase from "@/components/clientes/BotoesFase";
@@ -69,7 +68,6 @@ export default async function PaginaCliente({ params }) {
       {/* ---------- cabeçalho grande do cliente ---------- */}
       <header className={`entrar ${styles.cabecalhoFicha}`} style={{ "--cor": est.cor }}>
         <div className={styles.identidade}>
-          <span className={styles.avatarGrande}>{iniciais(cliente.nome)}</span>
           <div className={styles.nomeMeta}>
             <div className={styles.linhaNome}>
               <h1>{cliente.nome}</h1>
@@ -112,10 +110,7 @@ export default async function PaginaCliente({ params }) {
               <small>Responsável</small>
               <span className={styles.responsavel}>
                 {responsavel ? (
-                  <>
-                    <b>{iniciais(responsavel)}</b>
-                    {responsavel}
-                  </>
+                  responsavel
                 ) : (
                   <em>Por atribuir</em>
                 )}

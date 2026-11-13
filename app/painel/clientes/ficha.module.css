@@ -40,7 +40,7 @@
 }
 
 /* ============ Ficha: cabeçalho grande ============ */
-/* --cor (cor do estado) vem do style: dá um brilho dessa cor no canto do cartão */
+/* cartão simples, sem brilho: o estado já se vê na etiqueta ao lado do nome */
 .cabecalhoFicha {
   position: relative;
   overflow: hidden;
@@ -52,9 +52,7 @@
   padding: 28px;
   border-radius: 20px;
   border: 1px solid var(--cor-contorno);
-  background:
-    radial-gradient(ellipse 50% 80% at 0% 0%, color-mix(in srgb, var(--cor) 14%, transparent), transparent 70%),
-    var(--cor-cartao);
+  background: var(--cor-cartao);
 }
 
 .identidade {
@@ -63,21 +61,6 @@
   display: flex;
   align-items: flex-start;
   gap: 18px;
-}
-
-.avatarGrande {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  border: 1px solid rgba(32, 201, 107, 0.3);
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 1.3rem;
-  font-weight: 700;
-  box-shadow: 0 0 24px rgba(32, 201, 107, 0.15);
 }
 
 .nomeMeta {
@@ -95,9 +78,9 @@
 }
 
 .linhaNome h1 {
-  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: 1.1;
   overflow-wrap: anywhere;
 }
@@ -293,12 +276,6 @@
     padding: 18px;
   }
 
-  .avatarGrande {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    font-size: 1rem;
-  }
 
   .numerosCliente > div {
     flex: 1;

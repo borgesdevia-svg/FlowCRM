@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { sair } from "@/lib/acoes/autenticacao";
-import { iniciais } from "@/lib/texto";
 import { FormNome, FormPassword } from "@/components/conta/FormsConta";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
 import Icone from "@/components/Icone";
@@ -33,7 +32,6 @@ export default async function PaginaConta() {
     <div className={`entrar ${styles.pagina}`}>
       {/* cabeçalho igual ao das outras páginas: quem sou e em que empresa */}
       <header className={styles.cabecalho}>
-        <span className={styles.avatar}>{iniciais(perfil.nome)}</span>
         <div>
           <h1>A minha conta</h1>
           <p className={styles.resumo}>

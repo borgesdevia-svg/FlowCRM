@@ -1,8 +1,26 @@
-/* Estrutura do painel: menu lateral fixo à esquerda + conteúdo à direita */
+/* Estrutura do painel: menu lateral fixo à esquerda + conteúdo à direita.
+   Estilo inspirado nas apps da Apple: contornos finíssimos, cartões que se
+   distinguem pelo fundo e não por linhas, e a letra do sistema em Mac/iPhone
+   (SF Pro); nos outros sistemas fica a Geist. As variáveis definidas aqui
+   valem para tudo o que está dentro do painel. */
 .estrutura {
+  --cor-contorno: rgba(255, 255, 255, 0.07);
+  --cor-cartao: #161817;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-geist-sans), Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
   display: grid;
   grid-template-columns: 264px minmax(0, 1fr);
   min-height: 100vh;
+}
+
+/* botão secundário dentro do painel: cinzento cheio, sem contorno (como na Apple) */
+.estrutura :global(.botao-secundario) {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.estrutura :global(.botao-secundario:hover) {
+  background: rgba(255, 255, 255, 0.13);
 }
 
 /* ---------- menu lateral ---------- */
@@ -110,25 +128,24 @@
   gap: 2px;
 }
 
-/* título da secção em maiúsculas pequenas, como "MAIN MENU" na referência */
+/* título da secção: pequeno e cinzento, como nas barras laterais do macOS */
 .tituloSeccao {
-  padding: 0 12px 8px;
+  padding: 0 12px 6px;
   color: var(--cor-texto-fraco);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .itemMenu {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 9px 12px;
   border-radius: 10px;
   border: 1px solid transparent;
   color: var(--cor-texto-suave);
   font-size: 0.93rem;
+  font-weight: 500;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
@@ -141,11 +158,10 @@
   flex: 1;
 }
 
-/* página atual: caixa com contorno e texto/ícone verdes */
+/* página atual: fundo cheio com um toque de verde (como a seleção da barra lateral do macOS) */
 .itemAtivo,
 .itemAtivo:hover {
-  border-color: var(--cor-contorno);
-  background: var(--cor-cartao);
+  background: rgba(32, 201, 107, 0.14);
   color: var(--cor-destaque);
 }
 
