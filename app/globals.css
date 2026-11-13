@@ -164,6 +164,72 @@ a {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* listas de escolha: seta própria em vez da do sistema */
+.campo select {
+  appearance: none;
+  padding-right: 40px;
+  background-color: var(--cor-cartao);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23a1a1a1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+
+/* opções com as cores do site (sem isto o Windows mostra-as brancas) */
+.campo select option {
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+}
+
+/* nos browsers que já deixam desenhar a lista aberta (Chrome/Edge recentes):
+   caixa escura com contorno, como o resto do site */
+@supports (appearance: base-select) {
+  .campo select,
+  .campo select::picker(select) {
+    appearance: base-select;
+  }
+
+  .campo select::picker-icon {
+    display: none; /* já temos a seta desenhada no fundo */
+  }
+
+  .campo select::picker(select) {
+    margin-top: 6px;
+    padding: 6px;
+    border: 1px solid var(--cor-contorno);
+    border-radius: var(--raio);
+    background: var(--cor-cartao);
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.9);
+  }
+
+  .campo select option {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    cursor: pointer;
+  }
+
+  .campo select option:hover,
+  .campo select option:focus-visible {
+    outline: none;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .campo select option:checked {
+    color: var(--cor-destaque);
+  }
+
+  /* a opção "Escolhe..." não se pode escolher: fica apagada */
+  .campo select option:disabled {
+    color: var(--cor-texto-fraco);
+    cursor: default;
+  }
+
+  .campo select option:disabled::checkmark {
+    display: none;
+  }
+}
+
 .campo input::placeholder {
   color: var(--cor-texto-fraco);
 }
