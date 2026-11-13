@@ -8,6 +8,7 @@ import Icone from "@/components/Icone";
 import PesquisaGlobal from "@/components/painel/PesquisaGlobal";
 import Sino from "@/components/painel/Sino";
 import styles from "./painel.module.css";
+import SimboloLogo from "@/components/SimboloLogo";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
@@ -76,7 +77,10 @@ export default async function LayoutPainel({ children }) {
             <span className={styles.textoMarca}>
               <strong>{empresa.nome}</strong>
               <small>
-                Flow<span className={styles.crm}>CRM</span>
+                <SimboloLogo tamanho={11} />
+                <span>
+                  Flow<span className={styles.crm}>CRM</span>
+                </span>
               </small>
             </span>
           </Link>

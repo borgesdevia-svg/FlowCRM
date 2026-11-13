@@ -39,12 +39,10 @@
   color: var(--cor-destaque);
 }
 
+/* símbolo do logótipo (SVG), com um brilho verde suave */
 .simbolo {
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, #4ade80, #15803d);
-  box-shadow: 0 0 18px rgba(32, 201, 107, 0.45);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 10px rgba(32, 201, 107, 0.35));
 }
 
 .cartao {

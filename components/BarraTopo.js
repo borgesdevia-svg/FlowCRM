@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./BarraTopo.module.css";
+import SimboloLogo from "@/components/SimboloLogo";
 
 // Barra no topo das páginas públicas (landing, login, registo).
 // Fica fixa ao fazer scroll, com fundo transparente desfocado (efeito "vidro").
@@ -9,7 +10,7 @@ export default function BarraTopo() {
     <header className={styles.barra}>
       <div className={styles.interior}>
         <Link href="/" className={styles.logo}>
-          <span className={styles.simbolo} aria-hidden="true"></span>
+          <SimboloLogo tamanho={22} className={styles.simbolo} />
           <span>
             Flow<span className={styles.crm}>CRM</span>
           </span>

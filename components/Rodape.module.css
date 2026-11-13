@@ -46,11 +46,10 @@
   color: var(--cor-destaque);
 }
 
+/* símbolo do logótipo (SVG), com um brilho verde suave */
 .simbolo {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #4ade80, #15803d);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 10px rgba(32, 201, 107, 0.35));
 }
 
 .coluna {

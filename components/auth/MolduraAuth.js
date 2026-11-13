@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./MolduraAuth.module.css";
+import SimboloLogo from "@/components/SimboloLogo";
 
 // Moldura comum às páginas de login e registo:
 // fundo com grelha e brilho (igual à landing) e um cartão central.
@@ -10,7 +11,7 @@ export default function MolduraAuth({ titulo, subtitulo, children, rodape }) {
       <div className={styles.fundo} aria-hidden="true"></div>
 
       <Link href="/" className={`entrar ${styles.logo}`}>
-        <span className={styles.simbolo} aria-hidden="true"></span>
+        <SimboloLogo tamanho={26} className={styles.simbolo} />
         <span>
           Flow<span className={styles.crm}>CRM</span>
         </span>

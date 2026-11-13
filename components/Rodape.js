@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icone from "@/components/Icone";
 import styles from "./Rodape.module.css";
+import SimboloLogo from "@/components/SimboloLogo";
 
 // Rodapé das páginas públicas: marca, colunas de links, contactos e informação legal.
 // ATENÇÃO: o email de contacto é um exemplo (o domínio flowcrm.pt não é nosso).
@@ -42,7 +43,7 @@ export default function Rodape() {
       <div className={styles.interior}>
         <div className={styles.marca}>
           <Link href="/" className={styles.logo}>
-            <span className={styles.simbolo} aria-hidden="true"></span>
+            <SimboloLogo tamanho={20} className={styles.simbolo} />
             <span>
               Flow<span className={styles.crm}>CRM</span>
             </span>

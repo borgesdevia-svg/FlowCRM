@@ -75,7 +75,11 @@
   white-space: nowrap;
 }
 
+/* "FlowCRM" pequeno por baixo do nome da empresa, com o símbolo ao lado */
 .textoMarca small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   color: var(--cor-texto-fraco);
   font-size: 0.75rem;
   font-weight: 600;
