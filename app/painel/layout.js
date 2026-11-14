@@ -15,7 +15,7 @@ import SimboloLogo from "@/components/SimboloLogo";
 export const metadata = { title: "Painel · FlowCRM" };
 
 export default async function LayoutPainel({ children }) {
-  const { supabase, perfil, empresa, eAdmin } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, eDono } = await obterSessao();
 
   // Números para os contadores do menu. As duas consultas são independentes,
   // por isso o Promise.all faz as duas ao mesmo tempo (mais rápido do que uma a seguir à outra).
@@ -139,7 +139,7 @@ export default async function LayoutPainel({ children }) {
             <span className={styles.avatar}>{iniciais(perfil.nome)}</span>
             <span className={styles.dadosUtilizador}>
               <strong>{perfil.nome}</strong>
-              <small>{eAdmin ? "Administrador" : "Comercial"}</small>
+              <small>{eDono ? "Dono" : eAdmin ? "Administrador" : "Comercial"}</small>
             </span>
           </Link>
           {/* logout: o formulário chama a Server Action "sair" */}

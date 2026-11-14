@@ -4,6 +4,7 @@ import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
 import FormMembro from "@/components/equipa/FormMembro";
 import BotaoRemover from "@/components/equipa/BotaoRemover";
+import SeletorPapel from "@/components/equipa/SeletorPapel";
 import Icone from "@/components/Icone";
 import styles from "./equipa.module.css";
 
@@ -13,8 +14,12 @@ export const metadata = { title: "Equipa · FlowCRM" };
 // o que cada papel pode fazer (aparece no cartão da direita)
 const PAPEIS = [
   {
+    nome: "Dono",
+    itens: ["Quem criou a empresa no FlowCRM", "Pode fazer tudo o que um administrador faz", "Ninguém o pode remover"],
+  },
+  {
     nome: "Administrador",
-    itens: ["Vê todos os clientes da empresa", "Atribui clientes aos comerciais", "Gere a equipa"],
+    itens: ["Vê todos os clientes da empresa", "Atribui clientes aos comerciais", "Gere a equipa e personaliza o CRM"],
   },
   {
     nome: "Comercial",
@@ -23,7 +28,7 @@ const PAPEIS = [
 ];
 
 export default async function PaginaEquipa() {
-  const { supabase, perfil, eAdmin } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin } = await obterSessao();
 
   // proteção no servidor: um comercial que escreva o endereço à mão volta ao painel
   if (!eAdmin) redirect("/painel");
@@ -61,6 +66,8 @@ export default async function PaginaEquipa() {
   const lista = membros ?? [];
   const nAdmins = lista.filter((m) => m.papel === "admin").length;
   const nComerciais = lista.length - nAdmins;
+  // nome de cada papel (o dono é um administrador especial)
+  const nomePapel = (m) => (m.id === empresa.dono_id ? "Dono" : m.papel === "admin" ? "Administrador" : "Comercial");
 
   return (
     <div className={`entrar ${styles.pagina}`}>
@@ -68,7 +75,7 @@ export default async function PaginaEquipa() {
         <h1>Equipa</h1>
         <p className={styles.resumo}>
           {lista.length} {lista.length === 1 ? "membro" : "membros"}: {nAdmins}{" "}
-          {nAdmins === 1 ? "admin" : "admins"} e {nComerciais} {nComerciais === 1 ? "comercial" : "comerciais"}.
+          {nAdmins === 1 ? "administrador" : "administradores"} e {nComerciais} {nComerciais === 1 ? "comercial" : "comerciais"}.
           {porAtribuir > 0 && (
             <>
               {" "}
@@ -112,9 +119,12 @@ export default async function PaginaEquipa() {
                         </div>
                       </td>
                       <td>
-                        <span className={m.papel === "admin" ? styles.papelAdmin : styles.papel}>
-                          {m.papel === "admin" ? "Administrador" : "Comercial"}
-                        </span>
+                        {/* o papel do próprio e o do dono não se mudam aqui; os outros têm um seletor */}
+                        {eu || m.id === empresa.dono_id ? (
+                          <span className={m.papel === "admin" ? styles.papelAdmin : styles.papel}>{nomePapel(m)}</span>
+                        ) : (
+                          <SeletorPapel id={m.id} nome={m.nome} papel={m.papel} />
+                        )}
                       </td>
                       <td className={styles.numero}>
                         {n.clientes}
@@ -137,8 +147,8 @@ export default async function PaginaEquipa() {
                       <td className={styles.numero}>{formatarEuros(n.emAberto)}</td>
                       <td className={n.tarefas ? styles.numero : `${styles.numero} ${styles.zero}`}>{n.tarefas}</td>
                       <td className={styles.acoes}>
-                        {/* não se pode remover a si próprio */}
-                        {!eu && <BotaoRemover id={m.id} nome={m.nome} className={styles.remover} />}
+                        {/* ninguém se remove a si próprio, e o dono nunca é removido */}
+                        {!eu && m.id !== empresa.dono_id && <BotaoRemover id={m.id} nome={m.nome} className={styles.remover} />}
                       </td>
                     </tr>
                   );
@@ -152,7 +162,7 @@ export default async function PaginaEquipa() {
         <aside className={styles.lado}>
           <section className={styles.bloco}>
             <h2>
-              <Icone nome="utilizadorMais" tamanho={19} /> Adicionar comercial
+              <Icone nome="utilizadorMais" tamanho={19} /> Adicionar membro
             </h2>
             <p className={styles.ajuda}>
               A conta fica logo ativa. Depois, partilha o email e a password com essa pessoa.

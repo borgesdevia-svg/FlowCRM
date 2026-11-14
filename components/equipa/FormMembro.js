@@ -1,11 +1,17 @@
 "use client";
-// Formulário para o admin adicionar um comercial (componente de cliente,
+// Formulário para o administrador adicionar um membro (componente de cliente,
 // para mostrar erros e o estado "a adicionar..." sem recarregar a página).
 
 import { useActionState } from "react";
 import { criarMembro } from "@/lib/acoes/equipa";
 import Icone from "@/components/Icone";
 import CampoPassword from "@/components/CampoPassword";
+import styles from "./Equipa.module.css";
+
+const PAPEIS = [
+  { valor: "comercial", texto: "Comercial", ajuda: "Vê só os clientes de que é responsável." },
+  { valor: "admin", texto: "Administrador", ajuda: "Vê tudo e gere a equipa, como tu." },
+];
 
 export default function FormMembro() {
   const [estado, accao, pendente] = useActionState(criarMembro, {});
@@ -35,6 +41,26 @@ export default function FormMembro() {
         </div>
         {erros.email && <p className="erro-campo">{erros.email}</p>}
       </div>
+
+      {/* papel: controlo segmentado com duas opções */}
+      <fieldset className={styles.papel}>
+        <legend>Papel</legend>
+        <div className={styles.segmentos}>
+          {PAPEIS.map((p) => (
+            <label key={p.valor} className={styles.segmento}>
+              <input type="radio" name="papel" value={p.valor} defaultChecked={(valores.papel ?? "comercial") === p.valor} />
+              <span>{p.texto}</span>
+            </label>
+          ))}
+        </div>
+        <p className={styles.ajudaPapel}>
+          {PAPEIS.map((p) => (
+            <span key={p.valor} data-papel={p.valor}>
+              {p.ajuda}
+            </span>
+          ))}
+        </p>
+      </fieldset>
 
       <div className="campo">
         <label htmlFor="password">Password inicial</label>

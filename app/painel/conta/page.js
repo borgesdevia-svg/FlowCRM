@@ -10,7 +10,7 @@ import styles from "./conta.module.css";
 export const metadata = { title: "A minha conta · FlowCRM" };
 
 export default async function PaginaConta() {
-  const { supabase, perfil, empresa, eAdmin } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, eDono } = await obterSessao();
 
   // os MEUS números: clientes de que sou responsável e tarefas que tenho por fazer
   const [{ data: meusClientes }, { count: nTarefas }] = await Promise.all([
@@ -35,7 +35,7 @@ export default async function PaginaConta() {
         <div>
           <h1>A minha conta</h1>
           <p className={styles.resumo}>
-            Entras com {perfil.email}, como {eAdmin ? "administrador" : "comercial"} da {empresaFimFrase}
+            Entras com {perfil.email}, como {eDono ? "dono" : eAdmin ? "administrador" : "comercial"} da {empresaFimFrase}
           </p>
         </div>
       </header>

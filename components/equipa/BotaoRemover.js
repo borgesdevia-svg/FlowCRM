@@ -16,8 +16,9 @@ export default function BotaoRemover({ id, nome, className }) {
   return (
     <form action={removerMembro} onSubmit={confirmar}>
       <input type="hidden" name="id" value={id} />
-      <button type="submit" className={className} title={`Remover ${nome}`}>
-        <Icone nome="utilizadorSai" tamanho={15} /> Remover
+      {/* só o ícone (a tabela é estreita); o texto fica para leitores de ecrã e na dica */}
+      <button type="submit" className={className} title={`Remover ${nome}`} aria-label={`Remover ${nome}`}>
+        <Icone nome="utilizadorSai" tamanho={16} />
       </button>
     </form>
   );

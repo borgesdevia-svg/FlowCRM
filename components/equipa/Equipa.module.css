@@ -1,0 +1,132 @@
+/* ---------- escolher o papel ao adicionar ---------- */
+.papel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.papel legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* controlo segmentado (como os filtros da página Clientes) */
+.segmentos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.segmento {
+  position: relative;
+  cursor: pointer;
+}
+
+.segmento input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segmento span {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.segmento:hover span {
+  color: var(--cor-texto);
+}
+
+.segmento input:checked + span {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  color: var(--cor-texto);
+}
+
+.segmento input:focus-visible + span {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 1px;
+}
+
+/* explicação do papel escolhido (só aparece a do papel selecionado) */
+.ajudaPapel {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+.ajudaPapel span {
+  display: none;
+}
+
+.papel:has(input[value="comercial"]:checked) .ajudaPapel [data-papel="comercial"],
+.papel:has(input[value="admin"]:checked) .ajudaPapel [data-papel="admin"] {
+  display: inline;
+}
+
+/* ---------- mudar o papel na tabela ---------- */
+.seletor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seletor select {
+  appearance: none;
+  width: max-content;
+  padding: 4px 28px 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.seletor select:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.seletor select:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+.seletor select:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.seletor option {
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+}
+
+.seletorAdmin {
+  border-color: rgba(32, 201, 107, 0.4) !important;
+  background-color: var(--cor-superficie-verde) !important;
+  color: var(--cor-destaque) !important;
+}
+
+.erroPapel {
+  color: #fca5a5;
+  font-size: 0.75rem;
+  white-space: normal;
+}
