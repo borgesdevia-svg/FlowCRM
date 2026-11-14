@@ -151,7 +151,8 @@ export default async function LayoutPainel({ children }) {
         </div>
       </aside>
 
-      <main className={styles.conteudo}>{children}</main>
+      {/* "painel-conteudo": usa a animação de entrada curta (globals.css) */}
+      <main className={`painel-conteudo ${styles.conteudo}`}>{children}</main>
     </div>
   );
 }

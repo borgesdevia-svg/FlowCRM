@@ -1,0 +1,251 @@
+/* Modo fila: uma tarefa de cada vez, num cartão largo ao centro */
+.pagina {
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- cabeçalho ---------- */
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cabecalho h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+}
+
+.progresso {
+  color: var(--cor-texto);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- a tarefa ---------- */
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 28px;
+  border-radius: 20px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  /* cada tarefa nova entra com a animação curta (a key muda no cartão) */
+  animation: proxima-tarefa 0.3s var(--curva);
+}
+
+@keyframes proxima-tarefa {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.topo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.prazo {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.atrasada {
+  color: #f87171;
+}
+
+.hoje {
+  color: #facc15;
+}
+
+.proxima {
+  color: #60a5fa;
+}
+
+.semData {
+  color: var(--cor-texto-fraco);
+}
+
+.titulo {
+  font-family: inherit;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- cliente ---------- */
+.cliente {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.linhaCliente {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.nomeCliente {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.nomeCliente:hover {
+  color: var(--cor-destaque);
+}
+
+.estado {
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cor) 18%, transparent);
+  color: color-mix(in srgb, var(--cor) 50%, white);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.contactos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.contacto {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.contacto:hover {
+  color: var(--cor-destaque);
+  border-color: rgba(32, 201, 107, 0.4);
+}
+
+.fraco {
+  color: var(--cor-texto-fraco);
+  font-size: 0.86rem;
+}
+
+.ultimo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ultimo small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+}
+
+.ultimo p {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.textoRegisto {
+  color: var(--cor-texto-suave);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  /* registos compridos ficam em 4 linhas */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- registar (abre e fecha) ---------- */
+.registar summary {
+  cursor: pointer;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.registar summary:hover {
+  color: var(--cor-texto);
+}
+
+.registar[open] summary {
+  margin-bottom: 14px;
+}
+
+/* ---------- ações ---------- */
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.navegar {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* ---------- fim da fila ---------- */
+.fim {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 32px 28px;
+  border-radius: 20px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.fim h2 {
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.fim p {
+  color: var(--cor-texto-suave);
+}
+
+@media (max-width: 560px) {
+  .cartao {
+    padding: 20px;
+  }
+
+  .navegar {
+    margin-left: 0;
+  }
+}

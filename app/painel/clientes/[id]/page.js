@@ -17,8 +17,19 @@ export const metadata = { title: "Cliente · FlowCRM" };
 
 const REGEX_UUID = /^[0-9a-f-]{36}$/i;
 
-export default async function PaginaCliente({ params }) {
+// ESCALA: um cliente antigo pode ter centenas de registos e tarefas.
+// O histórico mostra HISTORICO registos de cada vez ("Ver mais antigos" pede mais, pelo URL ?historico=60);
+// das tarefas vêm as por fazer (até MAX_POR_FAZER) e só as FEITAS_RECENTES feitas mais recentes.
+const HISTORICO = 30;
+const MAX_HISTORICO = 1000;
+const MAX_POR_FAZER = 50;
+const FEITAS_RECENTES = 10;
+
+export default async function PaginaCliente({ params, searchParams }) {
   const { id } = await params;
+  const { historico = "" } = await searchParams;
+  // quantos registos mostrar: número do URL, entre HISTORICO e MAX_HISTORICO
+  const nHistorico = Math.min(MAX_HISTORICO, Math.max(HISTORICO, Number.parseInt(historico, 10) || HISTORICO));
   if (!REGEX_UUID.test(id)) notFound();
 
   const { supabase, perfil, eAdmin } = await obterSessao();
@@ -36,28 +47,34 @@ export default async function PaginaCliente({ params }) {
 
   // As consultas seguintes não dependem umas das outras: fazemo-las ao mesmo tempo.
   //  - membros da equipa (só o admin precisa, para escolher o responsável)
-  //  - interações (histórico), da mais recente para a mais antiga, com o nome do autor
-  //  - tarefas: primeiro as por fazer, depois por data limite
-  const [membrosRes, { data: interacoes }, { data: tarefas }] = await Promise.all([
+  //  - interações (histórico), da mais recente para a mais antiga, com o nome do autor, + o total
+  //  - tarefas por fazer (por data limite) + o total
+  //  - as últimas tarefas feitas + o total
+  const tarefasDoCliente = (concluida) =>
+    supabase
+      .from("tarefas")
+      .select("id, cliente_id, responsavel_id, titulo, data_limite, concluida", { count: "exact" })
+      .eq("cliente_id", id)
+      .eq("concluida", concluida);
+  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes] = await Promise.all([
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
     supabase
       .from("interacoes")
-      .select("id, tipo, nota, criado_em, autor_id, perfis(nome)")
+      .select("id, tipo, nota, criado_em, autor_id, perfis(nome)", { count: "exact" })
       .eq("cliente_id", id)
-      .order("criado_em", { ascending: false }),
-    supabase
-      .from("tarefas")
-      .select("id, cliente_id, titulo, data_limite, concluida")
-      .eq("cliente_id", id)
-      .order("concluida")
-      .order("data_limite", { ascending: true, nullsFirst: false }),
+      .order("criado_em", { ascending: false })
+      .limit(nHistorico),
+    tarefasDoCliente(false).order("data_limite", { ascending: true, nullsFirst: false }).limit(MAX_POR_FAZER),
+    tarefasDoCliente(true).order("concluida_em", { ascending: false, nullsFirst: false }).limit(FEITAS_RECENTES),
   ]);
   // a própria pessoa aparece como "(eu)" na escolha do responsável
   const membros = eAdmin
     ? (membrosRes.data ?? []).map((m) => (m.id === perfil.id ? { ...m, nome: `${m.nome} (eu)` } : m))
     : null;
-  const listaTarefas = tarefas ?? [];
-  const porFazer = listaTarefas.filter((t) => !t.concluida).length;
+  const listaTarefas = [...(porFazerRes.data ?? []), ...(feitasRes.data ?? [])];
+  const porFazer = porFazerRes.count ?? 0;
+  // tarefas que não aparecem aqui (por fazer além das 50, feitas mais antigas)
+  const tarefasEscondidas = porFazer + (feitasRes.count ?? 0) - listaTarefas.length;
 
   const est = obterEstado(cliente.estado);
   const responsavel = cliente.perfis?.nome;
@@ -158,7 +175,18 @@ export default async function PaginaCliente({ params }) {
               </h2>
             </header>
             <FormTarefa clienteId={cliente.id} />
-            <ListaTarefas tarefas={listaTarefas} mensagemVazia="Sem tarefas para este cliente." />
+            <ListaTarefas
+              tarefas={listaTarefas}
+              mensagemVazia="Sem tarefas para este cliente."
+              membros={membros}
+              perfilId={perfil.id}
+            />
+            {tarefasEscondidas > 0 && (
+              <p className={styles.notaTarefas}>
+                {tarefasEscondidas === 1 ? "Há mais 1 tarefa" : `Há mais ${tarefasEscondidas} tarefas`} deste cliente
+                (as feitas mais antigas) que não aparecem aqui.
+              </p>
+            )}
           </section>
 
           <section className={`entrar ${styles.zonaPerigo}`} style={{ "--atraso": "200ms" }}>
@@ -171,7 +199,14 @@ export default async function PaginaCliente({ params }) {
         </div>
 
         <div className={`entrar ${styles.cartao}`} style={{ "--atraso": "110ms" }}>
-          <Historico clienteId={cliente.id} interacoes={interacoes ?? []} perfilId={perfil.id} eAdmin={eAdmin} />
+          <Historico
+            clienteId={cliente.id}
+            interacoes={interacoes ?? []}
+            total={totalHistorico ?? 0}
+            linkMais={`/painel/clientes/${cliente.id}?historico=${nHistorico + HISTORICO}`}
+            perfilId={perfil.id}
+            eAdmin={eAdmin}
+          />
         </div>
       </div>
     </div>

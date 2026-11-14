@@ -1,3 +1,4 @@
+import Link from "next/link";
 import FormNota from "./FormNota";
 import BotaoConfirmar from "@/components/BotaoConfirmar";
 import Icone from "@/components/Icone";
@@ -20,11 +21,13 @@ const TIPOS = {
 const formatarDataHora = (data) =>
   new Intl.DateTimeFormat("pt-PT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(data));
 
-export default function Historico({ clienteId, interacoes, perfilId, eAdmin }) {
+// "total" é quantos registos o cliente tem; se for mais do que os que vieram,
+// aparece no fim o link "Ver mais antigos" (linkMais), que pede mais à página.
+export default function Historico({ clienteId, interacoes, total, linkMais, perfilId, eAdmin }) {
   return (
     <section className={styles.seccao}>
       <h2>
-        Histórico <span>{interacoes.length} {interacoes.length === 1 ? "registo" : "registos"}</span>
+        Histórico <span>{total} {total === 1 ? "registo" : "registos"}</span>
       </h2>
       <FormNota clienteId={clienteId} />
 
@@ -68,6 +71,12 @@ export default function Historico({ clienteId, interacoes, perfilId, eAdmin }) {
             );
           })}
         </ol>
+      )}
+      {/* scroll: false = a página não salta para o topo ao carregar os mais antigos */}
+      {total > interacoes.length && (
+        <Link href={linkMais} scroll={false} className={`botao botao-secundario ${styles.verMais}`}>
+          Ver mais antigos ({total - interacoes.length})
+        </Link>
       )}
     </section>
   );

@@ -359,6 +359,40 @@ a {
   }
 }
 
+/* Dentro do painel a entrada é curta e sem desfoque: quem usa o CRM todos os dias
+   não deve esperar pela animação (a de cima fica para a landing e o login). */
+.painel-conteudo .entrar {
+  animation-name: aparecer-leve;
+  animation-duration: 0.3s;
+}
+
+@keyframes aparecer-leve {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Roda a girar dentro de um botão enquanto espera (ex.: "A entrar") */
+.roda {
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Revelar ao fazer scroll (usado pelo componente <Revelar>).
    Começa invisível; quando o componente acrescenta a classe "visivel", aparece. */
 .revelar {

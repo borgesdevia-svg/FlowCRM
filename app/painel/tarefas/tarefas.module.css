@@ -1,12 +1,20 @@
-/* Página Tarefas no estilo da referência H: contadores em cima e um quadro por baixo */
+/* Página Tarefas: separadores com contagem + tabela com páginas (como a página Clientes) */
 .pagina {
-  max-width: 1400px;
+  max-width: 1280px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
-/* ---------- cabeçalho ---------- */
+/* ---------- cabeçalho: título à esquerda, Lista | Calendário | Fila à direita ---------- */
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .cabecalho h1 {
   font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 700;
@@ -17,66 +25,44 @@
 
 .resumo {
   color: var(--cor-texto-suave);
-}
-
-/* ---------- contadores (um por coluna do quadro) ---------- */
-.contadores {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.contador {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 18px 20px;
-  border-radius: 16px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-}
-
-.contador strong {
-  font-size: 2rem;
-  font-weight: 600;
-  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
-.contador span {
-  color: var(--cor-texto-suave);
-  font-size: 0.9rem;
-}
-
-/* o número das atrasadas fica vermelho, para chamar a atenção */
-.atrasadas strong {
-  color: #f87171;
-}
-
-/* ---------- barra: pessoas + nova tarefa ---------- */
+/* ---------- barra: separadores + pesquisa, pessoa e nova tarefa ---------- */
 .ferramentas {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-/* filtro por pessoa (admin): controlo segmentado, como na página Clientes */
-.pessoas {
+.direita {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* separadores: controlo segmentado (igual aos estados da página Clientes) */
+.segmentos {
   display: flex;
   gap: 2px;
   max-width: 100%;
   padding: 3px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
-  overflow-x: auto;
+  overflow-x: auto; /* no telemóvel desliza para o lado */
   scrollbar-width: none;
 }
 
-.pessoa,
-.pessoaAtiva {
+.segmento,
+.segmentoAtivo {
+  position: relative; /* para o fundo "a carregar" */
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 7px 14px;
   border-radius: 9px;
   color: var(--cor-texto-suave);
@@ -86,14 +72,84 @@
   transition: color 0.2s, background 0.2s;
 }
 
-.pessoa:hover {
+.segmento:hover {
   color: var(--cor-texto);
 }
 
-.pessoaAtiva {
+.segmentoAtivo {
   background: rgba(255, 255, 255, 0.14);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   color: var(--cor-texto);
+}
+
+/* a contagem de cada separador, mais apagada */
+.segmento span,
+.segmentoAtivo span {
+  color: var(--cor-texto-fraco);
+  font-variant-numeric: tabular-nums;
+}
+
+.segmentoAtivo span {
+  color: var(--cor-texto-suave);
+}
+
+/* contagem das atrasadas, quando há alguma */
+.segmento .alerta,
+.segmentoAtivo .alerta {
+  color: #f87171;
+}
+
+/* fundo que acende logo ao clicar, enquanto a lista nova não chega */
+.aCarregar {
+  position: absolute;
+  inset: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.aCarregarAtivo {
+  opacity: 1;
+}
+
+/* pesquisa: campo "cheio", sem contorno, com a lupa dentro */
+.pesquisa {
+  position: relative;
+  flex: 0 1 280px;
+}
+
+.lupa {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-fraco);
+  pointer-events: none;
+}
+
+.pesquisa input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.pesquisa input::placeholder {
+  color: var(--cor-texto-fraco);
+}
+
+.pesquisa input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 0 3px rgba(32, 201, 107, 0.2);
 }
 
 /* "Nova tarefa": botão que abre o formulário por baixo (elemento <details>) */
@@ -109,7 +165,7 @@
   display: none;
 }
 
-/* o formulário abre por cima do quadro, alinhado à direita do botão */
+/* o formulário abre por cima da tabela, alinhado à direita do botão */
 .painelNova {
   position: absolute;
   z-index: 20;
@@ -117,21 +173,107 @@
   right: 0;
   width: min(420px, calc(100vw - 32px));
   border-radius: 16px;
-  /* o formulário já traz a sua própria caixa: aqui só a sombra */
   box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.9);
 }
 
 .semClientes {
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--cor-cartao);
   color: var(--cor-texto-suave);
   font-size: 0.92rem;
 }
 
+/* ---------- a tabela ---------- */
+/* o padding de 22px é o que a TabelaTarefas espera (ela estica-se até às bordas) */
+.bloco {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 22px 0;
+  border-radius: 16px;
+  background: var(--cor-cartao);
+  /* clip (e não hidden): corta os cantos sem estragar a barra presa ao topo (sticky) */
+  overflow: clip;
+}
+
+/* a barra das ações fica presa ao topo enquanto se desce a tabela */
+.bloco > [role="region"] {
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+}
+
+/* rodapé com o total e as páginas */
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 22px -22px 0;
+  padding: 12px 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.paginas {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.numPagina {
+  padding: 0 6px;
+}
+
+.botaoPagina {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cor-texto);
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+a.botaoPagina:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.desligado {
+  color: var(--cor-texto-fraco);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ---------- separador vazio ---------- */
+.vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 34px 24px 56px;
+  text-align: center;
+  color: var(--cor-texto-suave);
+}
+
+.vazio h2 {
+  font-size: 1.15rem;
+  color: var(--cor-texto);
+}
+
+.vazio p {
+  margin-bottom: 8px;
+}
+
+/* ---------- telemóvel ---------- */
 @media (max-width: 760px) {
-  .contadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .direita,
+  .pesquisa {
+    flex: 1 1 100%;
   }
 
-  /* no telemóvel o formulário abre no meio da página, não por cima */
+  /* o formulário abre no meio da página, não por cima */
   .nova {
     width: 100%;
   }

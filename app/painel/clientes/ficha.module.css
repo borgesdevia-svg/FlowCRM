@@ -317,3 +317,9 @@
     min-width: 0;
   }
 }
+
+/* aviso por baixo das tarefas quando há mais do que as que aparecem */
+.notaTarefas {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}

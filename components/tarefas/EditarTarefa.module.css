@@ -1,0 +1,78 @@
+/* o título da tarefa é um botão que parece texto */
+.abrir {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+/* sublinha ao passar o rato: diz que abre alguma coisa */
+.abrir:hover {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+}
+
+/* ---------- o painel ---------- */
+.dialogo {
+  width: min(460px, calc(100vw - 32px));
+  margin: auto;
+  padding: 0; /* o espaço fica no formulário: assim clicar fora dele = clicar no fundo */
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9);
+}
+
+.dialogo[open] {
+  animation: abrir 0.2s var(--curva);
+}
+
+.dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  text-align: left;
+  font-weight: 400;
+}
+
+.formulario h2 {
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.linha > * {
+  flex: 1 1 160px;
+}
+
+.botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}

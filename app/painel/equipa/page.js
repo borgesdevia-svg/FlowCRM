@@ -35,32 +35,35 @@ export default async function PaginaEquipa() {
 
   // Três consultas independentes, feitas ao mesmo tempo.
   // O RLS garante que só vêm dados da empresa do admin.
-  const [{ data: membros }, { data: clientes }, { data: tarefas }] = await Promise.all([
+  // ESCALA: os clientes e as tarefas vêm já contados pela base de dados (migração 12),
+  // uma linha por pessoa e estado, em vez de virem todos (o que falhava acima de 1000).
+  const [{ data: membros }, { data: resumo }, { data: tarefas }] = await Promise.all([
     supabase.from("perfis").select("id, nome, email, papel, criado_em").order("criado_em"),
-    supabase.from("clientes").select("responsavel_id, estado, valor_previsto"),
-    supabase.from("tarefas").select("responsavel_id").eq("concluida", false),
+    supabase.rpc("resumo_equipa"),
+    supabase.rpc("tarefas_por_pessoa"),
   ]);
 
   // Números de cada membro. Começamos com tudo a zero e depois
-  // percorremos os clientes e as tarefas uma vez, somando a quem pertencem.
+  // somamos cada linha do resumo à pessoa a quem pertence.
   const numeros = {};
   for (const m of membros ?? []) {
     numeros[m.id] = { clientes: 0, porEstado: {}, emAberto: 0, tarefas: 0 };
   }
   let porAtribuir = 0;
-  for (const c of clientes ?? []) {
-    const n = numeros[c.responsavel_id];
+  for (const r of resumo ?? []) {
+    const quantos = Number(r.n);
+    const n = numeros[r.responsavel_id];
     if (!n) {
-      porAtribuir++; // cliente sem responsável
+      porAtribuir += quantos; // clientes sem responsável
       continue;
     }
-    n.clientes++;
-    n.porEstado[c.estado] = (n.porEstado[c.estado] ?? 0) + 1;
+    n.clientes += quantos;
+    n.porEstado[r.estado] = (n.porEstado[r.estado] ?? 0) + quantos;
     // "em aberto" = negócios ainda por decidir (novo + em negociação)
-    if (c.estado === "novo" || c.estado === "negociacao") n.emAberto += Number(c.valor_previsto) || 0;
+    if (r.estado === "novo" || r.estado === "negociacao") n.emAberto += Number(r.soma) || 0;
   }
   for (const t of tarefas ?? []) {
-    if (numeros[t.responsavel_id]) numeros[t.responsavel_id].tarefas++;
+    if (numeros[t.responsavel_id]) numeros[t.responsavel_id].tarefas = Number(t.n);
   }
 
   const lista = membros ?? [];

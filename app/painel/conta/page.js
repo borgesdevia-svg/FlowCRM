@@ -13,16 +13,14 @@ export default async function PaginaConta() {
   const { supabase, perfil, empresa, eAdmin, eDono } = await obterSessao();
 
   // os MEUS números: clientes de que sou responsável e tarefas que tenho por fazer
-  const [{ data: meusClientes }, { count: nTarefas }] = await Promise.all([
-    supabase.from("clientes").select("estado").eq("responsavel_id", perfil.id),
-    supabase
-      .from("tarefas")
-      .select("id", { count: "exact", head: true })
-      .eq("responsavel_id", perfil.id)
-      .eq("concluida", false),
+  // (só números: count + head, sem trazer os clientes, para funcionar com milhares)
+  const meus = (tabela) =>
+    supabase.from(tabela).select("id", { count: "exact", head: true }).eq("responsavel_id", perfil.id);
+  const [{ count: nClientes }, { count: nAtivos }, { count: nTarefas }] = await Promise.all([
+    meus("clientes"),
+    meus("clientes").eq("estado", "ativo"),
+    meus("tarefas").eq("concluida", false),
   ]);
-  const nClientes = meusClientes?.length ?? 0;
-  const nAtivos = (meusClientes ?? []).filter((c) => c.estado === "ativo").length;
 
   const linkFormulario = `/f/${empresa.slug}`;
   // nome da empresa no fim de uma frase: se já acabar em "." (ex.: "Lda."), não pomos outro
@@ -43,11 +41,11 @@ export default async function PaginaConta() {
       {/* os meus números, como os contadores da página Tarefas */}
       <section className={styles.contadores} aria-label="Os meus números">
         <div className={styles.contador}>
-          <strong>{nClientes}</strong>
+          <strong>{nClientes ?? 0}</strong>
           <span>Os meus clientes</span>
         </div>
         <div className={styles.contador}>
-          <strong>{nAtivos}</strong>
+          <strong>{nAtivos ?? 0}</strong>
           <span>Ativos</span>
         </div>
         <div className={styles.contador}>

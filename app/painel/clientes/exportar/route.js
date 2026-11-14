@@ -30,20 +30,30 @@ export async function GET(request) {
   const estado = parametros.get("estado") ?? "";
   const termo = (parametros.get("q") ?? "").replace(/[%,()]/g, "").trim();
 
-  let consulta = supabase
-    .from("clientes")
-    .select("nome, email, telefone, estado, valor_previsto, origem, criado_em, perfis(nome)")
-    .order("criado_em", { ascending: false });
-  if (ESTADOS.some((e) => e.chave === estado)) consulta = consulta.eq("estado", estado);
-  // pesquisa sem ligar a acentos nem maiúsculas (coluna "pesquisa", migração 07)
-  const procura = termoPesquisa(termo);
-  if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
+  // ESCALA: o Supabase devolve no máximo 1000 linhas por pedido. Para exportar TODOS
+  // os clientes, pedimos em blocos de BLOCO (0-999, 1000-1999, ...) até vir um bloco incompleto.
+  // A ordem tem desempate pelo id, para nenhum cliente saltar ou repetir entre blocos.
+  const BLOCO = 1000;
+  const procura = termoPesquisa(termo); // pesquisa sem ligar a acentos nem maiúsculas (migração 07)
+  const data = [];
+  for (let inicio = 0; ; inicio += BLOCO) {
+    let consulta = supabase
+      .from("clientes")
+      .select("nome, email, telefone, estado, valor_previsto, origem, criado_em, perfis(nome)")
+      .order("criado_em", { ascending: false })
+      .order("id", { ascending: true });
+    if (ESTADOS.some((e) => e.chave === estado)) consulta = consulta.eq("estado", estado);
+    if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
 
-  const { data } = await consulta;
+    const { data: bloco, error } = await consulta.range(inicio, inicio + BLOCO - 1);
+    if (error) return new Response("Não foi possível exportar os clientes.", { status: 500 });
+    data.push(...bloco);
+    if (bloco.length < BLOCO) break;
+  }
 
   // uma linha de títulos + uma linha por cliente; colunas separadas por ";"
   const titulos = ["Nome", "Email", "Telefone", "Estado", "Valor previsto (€)", "Responsável", "Origem", "Criado em"];
-  const linhas = (data ?? []).map((c) =>
+  const linhas = data.map((c) =>
     [
       c.nome,
       c.email,

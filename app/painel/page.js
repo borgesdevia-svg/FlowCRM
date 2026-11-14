@@ -47,29 +47,27 @@ function prepararAtividade(clientes, sistema) {
   return eventos.sort((a, b) => (a.quando < b.quando ? 1 : -1)).slice(0, 10);
 }
 
-// Clientes novos em cada uma das últimas 8 semanas (para o gráfico de linha).
+// As últimas 8 semanas, para o gráfico "Novos clientes".
 // Cada "semana" são 7 dias seguidos a contar para trás a partir de agora.
-// Devolve { etiquetas: ["24/9", ...], valores: [2, 0, 5, ...] }, da mais antiga para a mais recente.
+// Devolve [{ inicio, fim, etiqueta: "24/9" }, ...], da mais antiga para a mais recente;
+// a página pede à base de dados quantos clientes entraram em cada uma.
 const DIA = 24 * 60 * 60 * 1000; // um dia em milissegundos
+const SEMANAS = 8;
 
-function leadsPorSemana(clientes) {
+function ultimasSemanas() {
   const agora = Date.now();
-  const etiquetas = [];
-  const valores = [];
-
-  for (let i = 7; i >= 0; i--) {
+  const semanas = [];
+  for (let i = SEMANAS - 1; i >= 0; i--) {
     const fim = agora - i * 7 * DIA;
     const inicio = fim - 7 * DIA;
-    const quantos = clientes.filter((c) => {
-      const t = new Date(c.criado_em).getTime();
-      return t > inicio && t <= fim;
-    }).length;
-
     const d = new Date(inicio + DIA); // primeiro dia da semana, para a etiqueta
-    etiquetas.push(`${d.getDate()}/${d.getMonth() + 1}`);
-    valores.push(quantos);
+    semanas.push({
+      inicio: new Date(inicio).toISOString(),
+      fim: new Date(fim).toISOString(),
+      etiqueta: `${d.getDate()}/${d.getMonth() + 1}`,
+    });
   }
-  return { etiquetas, valores };
+  return semanas;
 }
 
 // Rota /painel — página inicial da área privada (componente de servidor).
@@ -78,67 +76,87 @@ function leadsPorSemana(clientes) {
 
 export default async function PaginaPainel() {
   const { supabase, perfil, empresa, eAdmin } = await obterSessao();
+  const hoje = hojeEmPortugal();
+  // clientes criados desde o dia 1 deste mês ("2026-11-01")
+  const inicioMes = hoje.slice(0, 7) + "-01";
+  const semanas = ultimasSemanas();
 
-  // Três consultas independentes, feitas ao mesmo tempo com Promise.all:
-  //  1) os clientes (só os campos precisos para as contas)
-  //  2) quantas pessoas há na equipa (head: true = só o número)
-  //  3) as minhas tarefas por fazer, por data limite (clientes(nome) junta o nome do cliente)
-  //  4) os últimos eventos automáticos (para a atividade recente)
-  const [{ data: clientes }, { data: equipa, count: tamanhoEquipa }, { data: minhasTarefas }, { data: sistema }] =
-    await Promise.all([
-    supabase.from("clientes").select("id, nome, estado, origem, valor_previsto, criado_em"),
-    // a equipa toda (só id, nome e papel): o tamanho e os nomes dos administradores
+  // ESCALA: a página não lê os clientes todos (com milhares, o Supabase corta em 1000 linhas
+  // e os números ficavam errados). Cada número é pedido já contado à base de dados:
+  // count: "exact" + head: true devolve só o número, sem as linhas.
+  const contarClientes = () => supabase.from("clientes").select("id", { count: "exact", head: true });
+
+  // tudo ao mesmo tempo com Promise.all (o RLS já filtra: o admin conta a empresa, o comercial os seus)
+  const [
+    { data: resumo }, // quantos clientes e que valor em cada fase (função resumo_clientes)
+    { count: novosEsteMes },
+    { data: doFormulario }, // há pelo menos um cliente vindo do formulário? (para os primeiros passos)
+    { data: recentes }, // os 10 clientes mais recentes (para a atividade recente)
+    { data: equipa, count: tamanhoEquipa }, // a equipa (id, nome e papel)
+    { data: minhasTarefas, count: totalTarefas }, // as 6 tarefas mais urgentes + quantas há
+    { count: atrasadas }, // quantas das minhas estão em atraso
+    { data: sistema }, // os últimos eventos automáticos (mudanças de fase, tarefas feitas)
+    ...porSemana // um número por semana, para o gráfico
+  ] = await Promise.all([
+    supabase.rpc("resumo_clientes", { termo: "" }),
+    contarClientes().gte("criado_em", inicioMes),
+    supabase.from("clientes").select("id").eq("origem", "formulario").limit(1),
+    supabase
+      .from("clientes")
+      .select("id, nome, origem, criado_em")
+      .order("criado_em", { ascending: false })
+      .limit(10),
     supabase.from("perfis").select("id, nome, papel", { count: "exact" }),
     supabase
       .from("tarefas")
-      .select("id, cliente_id, titulo, data_limite, concluida, clientes(nome)")
+      .select("id, cliente_id, responsavel_id, titulo, data_limite, concluida, clientes(nome)", { count: "exact" })
       .eq("responsavel_id", perfil.id)
       .eq("concluida", false)
-      .order("data_limite", { ascending: true, nullsFirst: false }),
+      .order("data_limite", { ascending: true, nullsFirst: false })
+      .limit(6),
+    supabase
+      .from("tarefas")
+      .select("id", { count: "exact", head: true })
+      .eq("responsavel_id", perfil.id)
+      .eq("concluida", false)
+      .lt("data_limite", hoje), // as datas AAAA-MM-DD comparam-se como texto
     supabase
       .from("interacoes")
       .select("id, nota, criado_em, cliente_id, clientes(nome), perfis(nome)")
       .eq("tipo", "sistema")
       .order("criado_em", { ascending: false })
       .limit(10),
+    ...semanas.map((s) => contarClientes().gt("criado_em", s.inicio).lte("criado_em", s.fim)),
   ]);
-  const lista = clientes ?? [];
+
   const tarefas = minhasTarefas ?? [];
   // nomes dos administradores ("Ana e Rui"), para o comercial saber a quem pedir clientes
   const nomesAdmins = (equipa ?? []).filter((m) => m.papel === "admin").map((m) => m.nome);
   const quemAtribui =
     nomesAdmins.length <= 1 ? nomesAdmins[0] ?? "o administrador" : `${nomesAdmins.slice(0, -1).join(", ")} e ${nomesAdmins.at(-1)}`;
-  // comercial ainda sem clientes: os gráficos estariam todos a zero, por isso não aparecem
-  const semDados = !eAdmin && lista.length === 0;
-  const eventos = prepararAtividade(lista, sistema ?? []);
+  const eventos = prepararAtividade(recentes ?? [], sistema ?? []);
 
-  // ---------- contas ----------
-  // quantos clientes há em cada estado: { novo: 3, ativo: 1, ... }
+  // ---------- contas (a partir do resumo por fase) ----------
+  // quantos clientes e que valor há em cada estado: { novo: 3, ativo: 1, ... }
   const contagem = {};
-  for (const c of lista) contagem[c.estado] = (contagem[c.estado] ?? 0) + 1;
-
-  // clientes criados desde o dia 1 deste mês ("2026-11-01")
-  const inicioMes = hojeEmPortugal().slice(0, 7) + "-01";
-  const novosEsteMes = lista.filter((c) => c.criado_em >= inicioMes).length;
+  const valorFase = {};
+  for (const r of resumo ?? []) {
+    contagem[r.estado] = Number(r.n);
+    valorFase[r.estado] = Number(r.soma);
+  }
+  const totalClientes = Object.values(contagem).reduce((a, b) => a + b, 0);
+  // comercial ainda sem clientes: os gráficos estariam todos a zero, por isso não aparecem
+  const semDados = !eAdmin && totalClientes === 0;
 
   // valor total dos clientes em negociação
-  const valorNegociacao = lista
-    .filter((c) => c.estado === "negociacao")
-    .reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0);
+  const valorNegociacao = valorFase.negociacao ?? 0;
 
   // taxa de conversão = clientes ativos ÷ total de clientes (em %)
-  const conversao = lista.length ? Math.round(((contagem.ativo ?? 0) / lista.length) * 100) : 0;
-
-  // tarefas em atraso: data limite anterior a hoje (as datas AAAA-MM-DD comparam-se como texto)
-  const hoje = hojeEmPortugal();
-  const atrasadas = tarefas.filter((t) => t.data_limite && t.data_limite < hoje).length;
+  const conversao = totalClientes ? Math.round(((contagem.ativo ?? 0) / totalClientes) * 100) : 0;
 
   // dados dos gráficos
-  const semanas = leadsPorSemana(lista);
-  const valorPorFase = ESTADOS.map((e) =>
-    lista.filter((c) => c.estado === e.chave).reduce((soma, c) => soma + (Number(c.valor_previsto) || 0), 0)
-  );
-
+  const valoresSemanas = porSemana.map((r) => r.count ?? 0);
+  const valorPorFase = ESTADOS.map((e) => valorFase[e.chave] ?? 0);
 
   // os 4 cartões de números (estilo da referência B):
   //  - "etiqueta" é o comprimido no canto (verde = bom, vermelho = atenção, cinzento = neutro)
@@ -146,8 +164,8 @@ export default async function PaginaPainel() {
   const numeros = [
     {
       rotulo: "Clientes",
-      valor: lista.length,
-      etiqueta: { texto: `+${novosEsteMes} este mês`, tipo: novosEsteMes > 0 ? "bom" : "neutro" },
+      valor: totalClientes,
+      etiqueta: { texto: `+${novosEsteMes ?? 0} este mês`, tipo: novosEsteMes > 0 ? "bom" : "neutro" },
     },
     {
       rotulo: "Em negociação",
@@ -162,7 +180,7 @@ export default async function PaginaPainel() {
     },
     {
       rotulo: "Tarefas",
-      valor: tarefas.length,
+      valor: totalTarefas ?? 0,
       etiqueta: atrasadas ? { texto: `${atrasadas} em atraso`, tipo: "mau" } : { texto: "Em dia", tipo: "bom" },
     },
   ];
@@ -174,10 +192,10 @@ export default async function PaginaPainel() {
     ...(eAdmin
       ? [{ texto: "Adicionar a equipa comercial", feito: (tamanhoEquipa ?? 1) > 1, href: "/painel/equipa" }]
       : []),
-    { texto: "Registar o primeiro cliente", feito: lista.length > 0, href: "/painel/clientes/novo" },
+    { texto: "Registar o primeiro cliente", feito: totalClientes > 0, href: "/painel/clientes/novo" },
     {
       texto: "Receber o primeiro contacto pelo formulário",
-      feito: lista.some((c) => c.origem === "formulario"),
+      feito: (doFormulario ?? []).length > 0,
     },
   ];
   const passosFeitos = passos.filter((p) => p.feito).length;
@@ -187,7 +205,7 @@ export default async function PaginaPainel() {
 
   const primeiroNome = perfil.nome.split(" ")[0];
   const linkFormulario = `/f/${empresa.slug}`;
-  const totalSemanas = semanas.valores.reduce((a, b) => a + b, 0);
+  const totalSemanas = valoresSemanas.reduce((a, b) => a + b, 0);
 
   return (
     // "entrar": a página aparece de uma vez ao abrir (uma só animação, não uma por bloco)
@@ -222,7 +240,7 @@ export default async function PaginaPainel() {
             <h2>Estás no CRM da {empresa.nome}</h2>
             <p>
               Entraste como comercial da equipa. Vês os clientes e as tarefas de que és responsável.
-              {lista.length === 0 && ` Ainda não tens clientes: pede a ${quemAtribui} para te atribuir, ou adiciona um novo.`}
+              {totalClientes === 0 && ` Ainda não tens clientes: pede a ${quemAtribui} para te atribuir, ou adiciona um novo.`}
             </p>
           </div>
           <span className={styles.papelEmpresa}>Comercial</span>
@@ -261,7 +279,7 @@ export default async function PaginaPainel() {
               <p className={styles.numeroGrande}>{totalSemanas}</p>
             </header>
             <div className={styles.areaGrafico}>
-              <Grafico tipo="line" etiquetas={semanas.etiquetas} valores={semanas.valores} cores="var(--cor-destaque)" />
+              <Grafico tipo="line" etiquetas={semanas.map((s) => s.etiqueta)} valores={valoresSemanas} cores="var(--cor-destaque)" />
             </div>
           </article>
 
@@ -281,8 +299,12 @@ export default async function PaginaPainel() {
             </p>
           </div>
           <div className={styles.acoes}>
-            <Link href="/painel/tarefas" className={`botao botao-secundario ${styles.botaoPequeno}`}>
-              Ver todas ({tarefas.length})
+            {/* o admin vê a equipa toda na página Tarefas: aqui abre já filtrada nas tarefas dele */}
+            <Link
+              href={eAdmin ? `/painel/tarefas?pessoa=${perfil.id}` : "/painel/tarefas"}
+              className={`botao botao-secundario ${styles.botaoPequeno}`}
+            >
+              Ver todas ({totalTarefas ?? 0})
             </Link>
             <Link href="/painel/tarefas?nova=1" className={`botao botao-secundario ${styles.botaoPequeno}`}>
               <Icone nome="mais" tamanho={15} /> Nova tarefa
@@ -290,7 +312,9 @@ export default async function PaginaPainel() {
           </div>
         </header>
         <TabelaTarefas
-          tarefas={tarefas.slice(0, 6)}
+          tarefas={tarefas}
+          membros={eAdmin ? (equipa ?? []) : null}
+          perfilId={perfil.id}
           hoje={hoje}
           mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada cliente."
         />
@@ -306,7 +330,7 @@ export default async function PaginaPainel() {
                 Ver pipeline
               </Link>
             </header>
-            {lista.length === 0 ? (
+            {totalClientes === 0 ? (
               <p className={styles.subtitulo}>Ainda não há clientes.</p>
             ) : (
               <div className={styles.donut}>
@@ -319,7 +343,7 @@ export default async function PaginaPainel() {
                   />
                   {/* total no buraco do meio */}
                   <span className={styles.centroDonut}>
-                    <strong>{lista.length}</strong>
+                    <strong>{totalClientes}</strong>
                     <small>clientes</small>
                   </span>
                 </div>

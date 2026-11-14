@@ -4,10 +4,11 @@
 // quando há tarefas selecionadas:
 //   - "Marcar como feita"  (se alguma das selecionadas estiver por fazer)
 //   - "Pôr por fazer"      (se alguma das selecionadas já estiver feita)
+//   - "Adiar"              (abre duas escolhas: para amanhã ou daqui a uma semana)
 //   - "Apagar"             (pede confirmação no próprio botão)
 
 import { useState, useTransition } from "react";
-import { apagarTarefas, concluirTarefas, reabrirTarefas } from "@/lib/acoes/tarefas";
+import { adiarTarefas, apagarTarefas, concluirTarefas, reabrirTarefas } from "@/lib/acoes/tarefas";
 import styles from "./Selecao.module.css";
 
 // Guarda as tarefas selecionadas. "tarefas" = as que estão no ecrã agora:
@@ -50,7 +51,8 @@ export function Caixa({ id, marcada, onChange, rotulo }) {
 }
 
 export function BarraSelecao({ selecao, className = "" }) {
-  const [confirmar, setConfirmar] = useState(false);
+  // o que está aberto na barra: null, "apagar" (a pedir confirmação) ou "adiar" (a mostrar as escolhas)
+  const [aberto, setAberto] = useState(null);
   const [acaoAtual, setAcaoAtual] = useState(null);
   const [pendente, iniciar] = useTransition();
 
@@ -63,7 +65,7 @@ export function BarraSelecao({ selecao, className = "" }) {
   const ids = escolhidas.map((t) => t.id);
 
   function cancelar() {
-    setConfirmar(false);
+    setAberto(null);
     limpar();
   }
 
@@ -71,7 +73,7 @@ export function BarraSelecao({ selecao, className = "" }) {
     setAcaoAtual(nome);
     iniciar(async () => {
       await acao(ids);
-      setConfirmar(false);
+      setAberto(null);
       limpar();
     });
   }
@@ -88,7 +90,7 @@ export function BarraSelecao({ selecao, className = "" }) {
           Cancelar
         </button>
 
-        {confirmar ? (
+        {aberto === "apagar" ? (
           <button
             type="button"
             className={styles.apagarConfirmar}
@@ -98,10 +100,42 @@ export function BarraSelecao({ selecao, className = "" }) {
             {ocupado("apagar") ? "A apagar…" : n === 1 ? "Sim, apagar" : `Sim, apagar ${n}`}
           </button>
         ) : (
-          <button type="button" className={styles.apagar} onClick={() => setConfirmar(true)} disabled={pendente}>
+          <button type="button" className={styles.apagar} onClick={() => setAberto("apagar")} disabled={pendente}>
             Apagar
           </button>
         )}
+
+        {/* adiar só faz sentido para as que estão por fazer */}
+        {porFazer > 0 &&
+          (aberto === "adiar" ? (
+            <>
+              <button
+                type="button"
+                className={`botao botao-secundario ${styles.botao}`}
+                onClick={() => executar("amanha", (lista) => adiarTarefas(lista, 1))}
+                disabled={pendente}
+              >
+                {ocupado("amanha") ? "A adiar…" : "Para amanhã"}
+              </button>
+              <button
+                type="button"
+                className={`botao botao-secundario ${styles.botao}`}
+                onClick={() => executar("semana", (lista) => adiarTarefas(lista, 7))}
+                disabled={pendente}
+              >
+                {ocupado("semana") ? "A adiar…" : "Daqui a uma semana"}
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className={`botao botao-secundario ${styles.botao}`}
+              onClick={() => setAberto("adiar")}
+              disabled={pendente}
+            >
+              Adiar
+            </button>
+          ))}
 
         {feitas > 0 && (
           <button

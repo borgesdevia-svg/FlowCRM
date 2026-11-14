@@ -232,3 +232,10 @@
   overflow-wrap: anywhere;
   font-size: 0.93rem;
 }
+
+/* link para carregar os registos mais antigos */
+.verMais {
+  align-self: center;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+}

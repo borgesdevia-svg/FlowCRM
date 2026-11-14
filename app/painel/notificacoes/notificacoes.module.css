@@ -286,3 +286,14 @@
     text-align: left;
   }
 }
+
+/* aviso no fim quando há mais tarefas do que as que aparecem */
+.mais {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.mais a {
+  color: var(--cor-destaque);
+}

@@ -121,10 +121,70 @@
   margin-bottom: 14px;
 }
 
-.titulo label {
-  cursor: pointer;
+/* tarefa feita: título riscado e mais apagado */
+.tituloFeito {
+  color: var(--cor-texto-fraco);
+  text-decoration: line-through;
+}
+
+/* "· há 3 dias" ao lado da data */
+.relativa {
+  color: var(--cor-texto-fraco);
+}
+
+.responsavel {
+  white-space: nowrap;
 }
 
 .linhaMarcada td {
   background: rgba(32, 201, 107, 0.06);
+}
+
+/* ---------- telemóvel: cada linha vira um bloco (sem deslizar para o lado) ---------- */
+@media (max-width: 640px) {
+  .rolar {
+    overflow: visible;
+  }
+
+  .tabela {
+    min-width: 0;
+  }
+
+  /* os títulos das colunas deixam de fazer sentido: cada valor fica por baixo do título */
+  .tabela thead {
+    display: none;
+  }
+
+  .tabela tbody tr {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    padding: 12px 22px 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .tabela td {
+    padding: 2px 0 !important;
+    border: none;
+  }
+
+  /* a caixa fica à esquerda, a ocupar a altura do bloco */
+  .tabela td.colVisto {
+    grid-row: 1 / span 5;
+    padding-left: 22px !important;
+    padding-top: 3px !important;
+  }
+
+  .tabela td:not(.colVisto) {
+    grid-column: 2;
+    font-size: 0.86rem;
+  }
+
+  .tabela td.titulo {
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
+
+  .tabela td:has(.estado) {
+    margin-top: 4px;
+  }
 }

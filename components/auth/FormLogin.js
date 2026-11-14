@@ -27,7 +27,15 @@ export default function FormLogin() {
       </div>
 
       <button type="submit" className="botao botao-largo" disabled={pendente}>
-        {pendente ? "A entrar..." : "Entrar"}
+        {/* enquanto o servidor confirma a password e prepara o painel, a roda gira
+            (o botão continua com o mesmo tamanho, para nada saltar) */}
+        {pendente ? (
+          <>
+            <span className="roda" aria-hidden="true"></span> A entrar
+          </>
+        ) : (
+          "Entrar"
+        )}
       </button>
     </form>
   );

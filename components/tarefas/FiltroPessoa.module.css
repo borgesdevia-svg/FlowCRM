@@ -1,0 +1,21 @@
+.filtro {
+  min-width: 170px;
+}
+
+/* o rótulo só existe para os leitores de ecrã */
+.escondido {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* mais baixa do que nos formulários, para ficar à altura da pesquisa */
+.filtro select {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
