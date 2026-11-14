@@ -409,3 +409,78 @@
     flex: 1 1 320px;
   }
 }
+
+/* ---------- comercial: em que CRM está ---------- */
+.cartaoEmpresa {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(32, 201, 107, 0.25);
+  background: linear-gradient(120deg, rgba(32, 201, 107, 0.12), rgba(32, 201, 107, 0.03) 60%), var(--cor-cartao);
+}
+
+.logoEmpresa,
+.inicialEmpresa {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+}
+
+.logoEmpresa {
+  padding: 5px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.inicialEmpresa {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #4ade80, #15803d);
+  color: #052e16;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.textoEmpresa {
+  flex: 1;
+  min-width: 0;
+}
+
+.textoEmpresa h2 {
+  margin-bottom: 4px;
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.textoEmpresa p {
+  max-width: 640px;
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+}
+
+.papelEmpresa {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cor-texto-suave);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .cartaoEmpresa {
+    flex-wrap: wrap;
+    padding: 18px;
+  }
+
+  .papelEmpresa {
+    order: -1;
+    margin-left: auto;
+  }
+}

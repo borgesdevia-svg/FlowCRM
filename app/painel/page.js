@@ -84,9 +84,11 @@ export default async function PaginaPainel() {
   //  2) quantas pessoas há na equipa (head: true = só o número)
   //  3) as minhas tarefas por fazer, por data limite (clientes(nome) junta o nome do cliente)
   //  4) os últimos eventos automáticos (para a atividade recente)
-  const [{ data: clientes }, { count: tamanhoEquipa }, { data: minhasTarefas }, { data: sistema }] = await Promise.all([
+  const [{ data: clientes }, { data: equipa, count: tamanhoEquipa }, { data: minhasTarefas }, { data: sistema }] =
+    await Promise.all([
     supabase.from("clientes").select("id, nome, estado, origem, valor_previsto, criado_em"),
-    supabase.from("perfis").select("id", { count: "exact", head: true }),
+    // a equipa toda (só id, nome e papel): o tamanho e os nomes dos administradores
+    supabase.from("perfis").select("id, nome, papel", { count: "exact" }),
     supabase
       .from("tarefas")
       .select("id, cliente_id, titulo, data_limite, concluida, clientes(nome)")
@@ -102,6 +104,12 @@ export default async function PaginaPainel() {
   ]);
   const lista = clientes ?? [];
   const tarefas = minhasTarefas ?? [];
+  // nomes dos administradores ("Ana e Rui"), para o comercial saber a quem pedir clientes
+  const nomesAdmins = (equipa ?? []).filter((m) => m.papel === "admin").map((m) => m.nome);
+  const quemAtribui =
+    nomesAdmins.length <= 1 ? nomesAdmins[0] ?? "o administrador" : `${nomesAdmins.slice(0, -1).join(", ")} e ${nomesAdmins.at(-1)}`;
+  // comercial ainda sem clientes: os gráficos estariam todos a zero, por isso não aparecem
+  const semDados = !eAdmin && lista.length === 0;
   const eventos = prepararAtividade(lista, sistema ?? []);
 
   // ---------- contas ----------
@@ -173,8 +181,9 @@ export default async function PaginaPainel() {
     },
   ];
   const passosFeitos = passos.filter((p) => p.feito).length;
+  // só o administrador monta a empresa, por isso só ele vê os "Primeiros passos";
   // quando está tudo feito, o bloco deixa de aparecer (já não ajuda ninguém)
-  const mostrarPassos = passosFeitos < passos.length;
+  const mostrarPassos = eAdmin && passosFeitos < passos.length;
 
   const primeiroNome = perfil.nome.split(" ")[0];
   const linkFormulario = `/f/${empresa.slug}`;
@@ -198,6 +207,28 @@ export default async function PaginaPainel() {
         </div>
       </header>
 
+      {/* comercial: cartão que diz em que CRM está, com que papel e a quem pedir clientes */}
+      {!eAdmin && (
+        <section className={styles.cartaoEmpresa} aria-label={`CRM da ${empresa.nome}`}>
+          {empresa.logo_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={empresa.logo_url} alt="" className={styles.logoEmpresa} />
+          ) : (
+            <span className={styles.inicialEmpresa} aria-hidden="true">
+              {empresa.nome[0].toUpperCase()}
+            </span>
+          )}
+          <div className={styles.textoEmpresa}>
+            <h2>Estás no CRM da {empresa.nome}</h2>
+            <p>
+              Entraste como comercial da equipa. Vês os clientes e as tarefas de que és responsável.
+              {lista.length === 0 && ` Ainda não tens clientes: pede a ${quemAtribui} para te atribuir, ou adiciona um novo.`}
+            </p>
+          </div>
+          <span className={styles.papelEmpresa}>Comercial</span>
+        </section>
+      )}
+
       {/* cartões de números: nome + etiqueta em cima, número grande em baixo */}
       <section className={styles.numeros}>
         {numeros.map((n) => (
@@ -219,24 +250,26 @@ export default async function PaginaPainel() {
       </section>
 
       {/* gráfico grande à esquerda + atividade recente à direita */}
-      <section className={styles.linhaPrincipal}>
-        <article className={styles.bloco}>
-          <header className={styles.topoBloco}>
-            <div>
-              <h2>Novos clientes</h2>
-              <p className={styles.subtitulo}>Nas últimas 8 semanas</p>
+      {!semDados && (
+        <section className={styles.linhaPrincipal}>
+          <article className={styles.bloco}>
+            <header className={styles.topoBloco}>
+              <div>
+                <h2>Novos clientes</h2>
+                <p className={styles.subtitulo}>Nas últimas 8 semanas</p>
+              </div>
+              <p className={styles.numeroGrande}>{totalSemanas}</p>
+            </header>
+            <div className={styles.areaGrafico}>
+              <Grafico tipo="line" etiquetas={semanas.etiquetas} valores={semanas.valores} cores="var(--cor-destaque)" />
             </div>
-            <p className={styles.numeroGrande}>{totalSemanas}</p>
-          </header>
-          <div className={styles.areaGrafico}>
-            <Grafico tipo="line" etiquetas={semanas.etiquetas} valores={semanas.valores} cores="var(--cor-destaque)" />
-          </div>
-        </article>
+          </article>
 
-        <div className={styles.atividade}>
-          <AtividadeRecente eventos={eventos} />
-        </div>
-      </section>
+          <div className={styles.atividade}>
+            <AtividadeRecente eventos={eventos} />
+          </div>
+        </section>
+      )}
 
       {/* as minhas tarefas, numa tabela a toda a largura */}
       <article className={styles.bloco}>
@@ -264,65 +297,67 @@ export default async function PaginaPainel() {
       </article>
 
       {/* dois gráficos lado a lado */}
-      <section className={styles.grelha}>
-        <article className={styles.bloco}>
-          <header className={styles.topoBloco}>
-            <h2>Clientes por estado</h2>
-            <Link href="/painel/pipeline" className={styles.verTudo}>
-              Ver pipeline
-            </Link>
-          </header>
-          {lista.length === 0 ? (
-            <p className={styles.subtitulo}>Ainda não há clientes.</p>
-          ) : (
-            <div className={styles.donut}>
-              <div className={styles.areaDonut}>
-                <Grafico
-                  tipo="doughnut"
-                  etiquetas={ESTADOS.map((e) => e.texto)}
-                  valores={ESTADOS.map((e) => contagem[e.chave] ?? 0)}
-                  cores={ESTADOS.map((e) => e.cor)}
-                />
-                {/* total no buraco do meio */}
-                <span className={styles.centroDonut}>
-                  <strong>{lista.length}</strong>
-                  <small>clientes</small>
-                </span>
+      {!semDados && (
+        <section className={styles.grelha}>
+          <article className={styles.bloco}>
+            <header className={styles.topoBloco}>
+              <h2>Clientes por estado</h2>
+              <Link href="/painel/pipeline" className={styles.verTudo}>
+                Ver pipeline
+              </Link>
+            </header>
+            {lista.length === 0 ? (
+              <p className={styles.subtitulo}>Ainda não há clientes.</p>
+            ) : (
+              <div className={styles.donut}>
+                <div className={styles.areaDonut}>
+                  <Grafico
+                    tipo="doughnut"
+                    etiquetas={ESTADOS.map((e) => e.texto)}
+                    valores={ESTADOS.map((e) => contagem[e.chave] ?? 0)}
+                    cores={ESTADOS.map((e) => e.cor)}
+                  />
+                  {/* total no buraco do meio */}
+                  <span className={styles.centroDonut}>
+                    <strong>{lista.length}</strong>
+                    <small>clientes</small>
+                  </span>
+                </div>
+                <ul className={styles.legenda}>
+                  {ESTADOS.map((e) => (
+                    <li key={e.chave}>
+                      <i style={{ background: e.cor }}></i>
+                      {e.texto}
+                      <strong>{contagem[e.chave] ?? 0}</strong>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className={styles.legenda}>
-                {ESTADOS.map((e) => (
-                  <li key={e.chave}>
-                    <i style={{ background: e.cor }}></i>
-                    {e.texto}
-                    <strong>{contagem[e.chave] ?? 0}</strong>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </article>
+            )}
+          </article>
 
-        <article className={styles.bloco}>
-          <header className={styles.topoBloco}>
-            <h2>Valor por fase</h2>
-          </header>
-          <div className={styles.areaGrafico}>
-            <Grafico
-              tipo="bar"
-              etiquetas={ESTADOS.map((e) => e.texto)}
-              valores={valorPorFase}
-              cores={ESTADOS.map((e) => e.cor)}
-              formato="euros"
-            />
-          </div>
-        </article>
-      </section>
+          <article className={styles.bloco}>
+            <header className={styles.topoBloco}>
+              <h2>Valor por fase</h2>
+            </header>
+            <div className={styles.areaGrafico}>
+              <Grafico
+                tipo="bar"
+                etiquetas={ESTADOS.map((e) => e.texto)}
+                valores={valorPorFase}
+                cores={ESTADOS.map((e) => e.cor)}
+                formato="euros"
+              />
+            </div>
+          </article>
+        </section>
+      )}
 
       {/* formulário público (+ primeiros passos, enquanto não estiverem todos feitos) */}
       <section className={mostrarPassos ? styles.grelha : undefined}>
         <article className={`${styles.bloco} ${styles.blocoFormulario}`}>
           <div>
-            <h2>O teu formulário público</h2>
+            <h2>{eAdmin ? "O teu formulário público" : `Formulário da ${empresa.nome}`}</h2>
             <p className={styles.subtitulo}>
               Partilha este link no site, nas redes sociais ou por email. Quem o preencher entra como cliente
               &quot;Novo&quot;.
