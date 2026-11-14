@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
 // Configuração do Next.js.
-// Desligámos "cacheComponents" e "partialPrefetching" (vinham ligados por defeito)
-// para usar o modelo clássico, mais simples: as páginas que leem a sessão
-// são geradas no servidor a cada pedido, sem precisarem de <Suspense> obrigatório.
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    serverActions: {
+      // o logótipo da empresa pode ter até 1 MB; deixamos folga para o resto do pedido
+      bodySizeLimit: "2mb",
+    },
+  },
+};
 
 export default nextConfig;

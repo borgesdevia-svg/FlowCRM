@@ -5,10 +5,11 @@ import { useActionState } from "react";
 import { enviarLead } from "@/lib/acoes/formulario";
 import styles from "./FormLead.module.css";
 
-export default function FormLead({ slug, nomeEmpresa }) {
+export default function FormLead({ slug, nomeEmpresa, perguntas = [] }) {
   const [estado, accao, pendente] = useActionState(enviarLead, {});
   const erros = estado.erros ?? {};
   const valores = estado.valores ?? {};
+  const respostas = estado.respostas ?? {};
 
   // depois de enviar com sucesso, o formulário dá lugar a uma confirmação
   if (estado.sucesso) {
@@ -53,6 +54,11 @@ export default function FormLead({ slug, nomeEmpresa }) {
         {erros.telefone && <p className="erro-campo">{erros.telefone}</p>}
       </div>
 
+      {/* perguntas extra, escolhidas pela empresa em "Personalizar" */}
+      {perguntas.map((p) => (
+        <Pergunta key={p.id} pergunta={p} valor={respostas[p.id]} erro={erros[`resposta_${p.id}`]} />
+      ))}
+
       <button type="submit" className="botao botao-largo" disabled={pendente}>
         {pendente ? "A enviar..." : "Enviar pedido de contacto"}
       </button>
@@ -61,5 +67,44 @@ export default function FormLead({ slug, nomeEmpresa }) {
         Os teus dados só são usados para te contactarmos.
       </p>
     </form>
+  );
+}
+
+// uma pergunta extra: resposta curta, longa ou escolha entre opções
+function Pergunta({ pergunta: p, valor, erro }) {
+  const nome = `resposta_${p.id}`;
+  const etiqueta = (
+    <>
+      {p.texto} {!p.obrigatoria && <span className={styles.opcional}>(opcional)</span>}
+    </>
+  );
+
+  if (p.tipo === "escolha") {
+    return (
+      <div className="campo">
+        <fieldset className={styles.escolha} aria-invalid={!!erro}>
+          <legend>{etiqueta}</legend>
+          {(p.opcoes ?? []).map((o) => (
+            <label key={o} className={styles.opcaoEscolha}>
+              <input type="radio" name={nome} value={o} defaultChecked={valor === o} />
+              {o}
+            </label>
+          ))}
+        </fieldset>
+        {erro && <p className="erro-campo">{erro}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="campo">
+      <label htmlFor={nome}>{etiqueta}</label>
+      {p.tipo === "texto_longo" ? (
+        <textarea id={nome} name={nome} rows={4} maxLength={2000} defaultValue={valor} aria-invalid={!!erro} />
+      ) : (
+        <input id={nome} name={nome} maxLength={500} defaultValue={valor} aria-invalid={!!erro} />
+      )}
+      {erro && <p className="erro-campo">{erro}</p>}
+    </div>
   );
 }

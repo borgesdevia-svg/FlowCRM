@@ -18,6 +18,49 @@
   font-weight: 400;
 }
 
+/* pergunta de escolha: as opções umas por baixo das outras */
+.escolha {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.escolha legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.opcaoEscolha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--raio);
+  border: 1px solid var(--cor-contorno);
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.opcaoEscolha:hover {
+  border-color: rgba(32, 201, 107, 0.4);
+}
+
+.opcaoEscolha:has(input:checked) {
+  border-color: var(--cor-destaque);
+  background: var(--cor-superficie-verde);
+}
+
+.opcaoEscolha input {
+  accent-color: var(--cor-destaque);
+  margin: 0;
+}
+
 .privacidade {
   color: var(--cor-texto-fraco);
   font-size: 0.82rem;

@@ -14,7 +14,8 @@ export default async function PaginaNovoCliente() {
   let membros = null;
   if (eAdmin) {
     const { data } = await supabase.from("perfis").select("id, nome").order("nome");
-    membros = data ?? [];
+    // a própria pessoa aparece como "(eu)", para não se confundir com outro membro
+    membros = (data ?? []).map((m) => (m.id === perfil.id ? { ...m, nome: `${m.nome} (eu)` } : m));
   }
 
   return (

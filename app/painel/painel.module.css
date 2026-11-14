@@ -79,6 +79,17 @@
   font-weight: 700;
 }
 
+/* logótipo enviado pela empresa: cabe inteiro na caixa, sem ser cortado */
+.logoEmpresa {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  padding: 3px;
+  background: #fff; /* fundo claro: logótipos escuros também se veem */
+  object-fit: contain;
+}
+
 .textoMarca {
   min-width: 0;
   display: flex;
@@ -306,7 +317,8 @@
     border-bottom: none;
   }
 
-  .simbolo {
+  .simbolo,
+  .logoEmpresa {
     width: 30px;
     height: 30px;
     border-radius: 8px;

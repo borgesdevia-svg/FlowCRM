@@ -13,7 +13,7 @@ export const metadata = { title: "Equipa · FlowCRM" };
 // o que cada papel pode fazer (aparece no cartão da direita)
 const PAPEIS = [
   {
-    nome: "Admin",
+    nome: "Administrador",
     itens: ["Vê todos os clientes da empresa", "Atribui clientes aos comerciais", "Gere a equipa"],
   },
   {
@@ -113,7 +113,7 @@ export default async function PaginaEquipa() {
                       </td>
                       <td>
                         <span className={m.papel === "admin" ? styles.papelAdmin : styles.papel}>
-                          {m.papel === "admin" ? "Admin" : "Comercial"}
+                          {m.papel === "admin" ? "Administrador" : "Comercial"}
                         </span>
                       </td>
                       <td className={styles.numero}>

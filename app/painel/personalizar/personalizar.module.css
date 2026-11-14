@@ -1,0 +1,83 @@
+.pagina {
+  max-width: 1180px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- cabeçalho (igual ao das outras páginas) ---------- */
+.cabecalho h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+}
+
+/* bloco do logótipo: descrição à esquerda, formulário à direita (como na Conta) */
+.bloco {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+/* bloco das perguntas: a toda a largura, editor e pré-visualização lado a lado */
+.blocoLargo {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.topoBloco {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.topoBloco .descricao {
+  max-width: 560px;
+}
+
+.descricao h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.descricao h2 svg {
+  color: var(--cor-destaque);
+}
+
+.descricao p {
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 700px) {
+  .bloco {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .bloco,
+  .blocoLargo {
+    padding: 18px;
+  }
+}

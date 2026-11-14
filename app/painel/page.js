@@ -258,6 +258,7 @@ export default async function PaginaPainel() {
         </header>
         <TabelaTarefas
           tarefas={tarefas.slice(0, 6)}
+          hoje={hoje}
           mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada cliente."
         />
       </article>

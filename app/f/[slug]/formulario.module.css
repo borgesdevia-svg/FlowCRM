@@ -34,6 +34,18 @@
   font-weight: 700;
 }
 
+/* logótipo da empresa (fundo claro: logótipos escuros também se veem) */
+.logo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 20px;
+  padding: 5px;
+  border-radius: 14px;
+  background: #fff;
+  object-fit: contain;
+}
+
 .cartao h1 {
   font-size: clamp(1.5rem, 5vw, 1.9rem);
   margin-bottom: 8px;

@@ -28,7 +28,7 @@ export default async function PaginaCliente({ params }) {
   // perfis(nome) junta o nome do responsável.
   const { data: cliente } = await supabase
     .from("clientes")
-    .select("id, nome, email, telefone, estado, valor_previsto, responsavel_id, origem, criado_em, perfis(nome)")
+    .select("id, nome, email, telefone, estado, valor_previsto, responsavel_id, origem, respostas, criado_em, perfis(nome)")
     .eq("id", id)
     .maybeSingle();
 
@@ -52,7 +52,10 @@ export default async function PaginaCliente({ params }) {
       .order("concluida")
       .order("data_limite", { ascending: true, nullsFirst: false }),
   ]);
-  const membros = eAdmin ? (membrosRes.data ?? []) : null;
+  // a própria pessoa aparece como "(eu)" na escolha do responsável
+  const membros = eAdmin
+    ? (membrosRes.data ?? []).map((m) => (m.id === perfil.id ? { ...m, nome: `${m.nome} (eu)` } : m))
+    : null;
   const listaTarefas = tarefas ?? [];
   const porFazer = listaTarefas.filter((t) => !t.concluida).length;
 
@@ -124,6 +127,23 @@ export default async function PaginaCliente({ params }) {
       {/* ---------- duas colunas: dados + tarefas | histórico ---------- */}
       <div className={styles.colunas}>
         <div className={styles.coluna}>
+          {/* respostas às perguntas extra do formulário público (se o cliente veio de lá) */}
+          {cliente.respostas?.length > 0 && (
+            <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "60ms" }}>
+              <header className={styles.topoCartao}>
+                <h2>Respostas do formulário</h2>
+              </header>
+              <dl className={styles.respostas}>
+                {cliente.respostas.map((r, i) => (
+                  <div key={i}>
+                    <dt>{r.pergunta}</dt>
+                    <dd>{r.resposta}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )}
+
           <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "80ms" }}>
             <header className={styles.topoCartao}>
               <h2>Dados do cliente</h2>

@@ -35,7 +35,7 @@ export default async function PaginaConta() {
         <div>
           <h1>A minha conta</h1>
           <p className={styles.resumo}>
-            Entras com {perfil.email}, como {eAdmin ? "admin" : "comercial"} da {empresaFimFrase}
+            Entras com {perfil.email}, como {eAdmin ? "administrador" : "comercial"} da {empresaFimFrase}
           </p>
         </div>
       </header>

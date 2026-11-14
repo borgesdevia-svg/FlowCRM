@@ -58,8 +58,13 @@ export default async function LayoutPainel({ children }) {
     {
       titulo: "Empresa",
       itens: [
-        // a página da equipa só aparece ao admin
-        ...(eAdmin ? [{ texto: "Equipa", href: "/painel/equipa", icone: "utilizadorMais" }] : []),
+        // as páginas Equipa e Personalizar só aparecem ao administrador
+        ...(eAdmin
+          ? [
+              { texto: "Equipa", href: "/painel/equipa", icone: "utilizadorMais" },
+              { texto: "Personalizar", href: "/painel/personalizar", icone: "pincel" },
+            ]
+          : []),
         { texto: "A minha conta", href: "/painel/conta", icone: "utilizador" },
       ],
     },
@@ -71,9 +76,15 @@ export default async function LayoutPainel({ children }) {
         {/* cabeça: logótipo + empresa numa caixa, e o sino de notificações ao lado */}
         <div className={styles.topoMenu}>
           <Link href="/painel" className={styles.marca}>
-            <span className={styles.simbolo} aria-hidden="true">
-              {empresa.nome[0].toUpperCase()}
-            </span>
+            {/* logótipo da empresa (se o administrador o enviou) ou a inicial do nome */}
+            {empresa.logo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={empresa.logo_url} alt="" className={styles.logoEmpresa} />
+            ) : (
+              <span className={styles.simbolo} aria-hidden="true">
+                {empresa.nome[0].toUpperCase()}
+              </span>
+            )}
             <span className={styles.textoMarca}>
               <strong>{empresa.nome}</strong>
               <small>

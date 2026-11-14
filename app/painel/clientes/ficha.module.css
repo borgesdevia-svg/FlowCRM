@@ -236,6 +236,41 @@
   font-weight: 400;
 }
 
+/* respostas do formulário: pergunta pequena e cinzenta, resposta por baixo */
+.respostas {
+  display: flex;
+  flex-direction: column;
+}
+
+.respostas div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 0;
+}
+
+.respostas div + div {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.respostas div:first-child {
+  padding-top: 0;
+}
+
+.respostas div:last-child {
+  padding-bottom: 0;
+}
+
+.respostas dt {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+.respostas dd {
+  white-space: pre-line; /* respeita as mudanças de linha das respostas longas */
+  overflow-wrap: anywhere;
+}
+
 /* zona de perigo: contorno vermelho discreto */
 .zonaPerigo {
   display: flex;

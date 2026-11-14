@@ -1,0 +1,482 @@
+/* ============ Logótipo ============ */
+.formLogo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.linhaLogo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* moldura onde se vê o logótipo (fundo claro: logótipos escuros também se veem) */
+.moldura {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  padding: 8px;
+  border-radius: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.moldura img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* sem logótipo: a inicial, como no menu */
+.moldura span {
+  display: grid;
+  place-items: center;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  margin: -8px;
+  background: linear-gradient(135deg, #4ade80, #15803d);
+  color: #052e16;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.escolherLogo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.escolherLogo label {
+  cursor: pointer;
+}
+
+/* o campo de ficheiro está escondido: o foco do teclado aparece no botão */
+.escolherLogo:has(input:focus-visible) label {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+.escolherLogo small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+.acoesLogo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.botaoRemover {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #fca5a5;
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.botaoRemover:hover {
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.botaoRemover:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* ============ Editor de perguntas ============ */
+.editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.colunaEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.semPerguntas {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.perguntas {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.perguntas:empty {
+  display: none;
+}
+
+.pergunta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.topoPergunta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.numero {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.botoesPergunta {
+  display: flex;
+  gap: 2px;
+}
+
+.botoesPergunta button,
+.tirarOpcao {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.botoesPergunta button:hover:not(:disabled),
+.tirarOpcao:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--cor-texto);
+}
+
+.botoesPergunta button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.botoesPergunta .apagarPergunta:hover {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+}
+
+.linhaTipo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+
+.linhaTipo :global(.campo) {
+  flex: 1 1 220px;
+}
+
+/* interruptor (switch) */
+.interruptor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.interruptor input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interruptor span {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  transition: background 0.2s;
+}
+
+.interruptor span::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s var(--curva);
+}
+
+.interruptor input:checked + span {
+  background: var(--cor-destaque);
+}
+
+.interruptor input:checked + span::after {
+  transform: translateX(16px);
+}
+
+.interruptor input:focus-visible + span {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* opções de uma pergunta de escolha */
+.opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 4px;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bolinha {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.opcao input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.opcao input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+}
+
+.botaoTexto {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cor-destaque);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.botaoTexto:hover {
+  background: rgba(32, 201, 107, 0.1);
+}
+
+.adicionar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.adicionar:hover {
+  border-color: rgba(32, 201, 107, 0.5);
+  color: var(--cor-destaque);
+}
+
+/* barra de guardar: com alterações por guardar, fica presa ao fundo do ecrã */
+.guardar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 10px 10px 10px 16px;
+  border-radius: 14px;
+  background: var(--cor-fundo-2);
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+}
+
+.guardarAtivo {
+  position: sticky;
+  bottom: 16px;
+  z-index: 2;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  color: var(--cor-texto-suave);
+}
+
+.erro {
+  color: #fca5a5;
+}
+
+.ok {
+  color: var(--cor-destaque);
+}
+
+/* ============ Pré-visualização ============ */
+.previa {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tituloPrevia {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+}
+
+.cartaoPrevia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-height: 640px;
+  padding: 24px 20px;
+  border-radius: 18px;
+  background: var(--cor-fundo);
+  overflow-y: auto;
+}
+
+.logoPrevia,
+.inicialPrevia {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.logoPrevia {
+  padding: 4px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.inicialPrevia {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #4ade80, #15803d);
+  color: #052e16;
+  font-weight: 700;
+}
+
+.nomePrevia {
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.camposPrevia {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.campoPrevia {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.caixa,
+.caixaLonga {
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.caixaLonga {
+  height: 64px;
+}
+
+.opcoesPrevia {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.opcoesPrevia span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto);
+}
+
+.opcoesPrevia i {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.botaoPrevia {
+  align-self: stretch;
+  margin-top: 6px;
+  padding: 9px;
+  border-radius: 10px;
+  background: var(--cor-destaque);
+  color: #052e16;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 960px) {
+  .editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .previa {
+    position: static;
+  }
+}
