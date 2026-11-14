@@ -23,12 +23,12 @@ const perguntas = [
   {
     pergunta: "Como junto a minha equipa?",
     resposta:
-      "Quem cria a conta fica como administrador. Na página Equipa, o administrador adiciona os comerciais com o email e uma password inicial.",
+      "Quem cria a conta fica como dono da empresa. Na página Equipa adicionas cada pessoa com o email e uma password inicial, e escolhes se é administrador ou comercial.",
   },
   {
     pergunta: "Como funciona o formulário público?",
     resposta:
-      "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um cliente novo.",
+      "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um cliente novo. Na página Personalizar podes juntar as tuas perguntas e o logótipo da empresa.",
   },
   {
     pergunta: "Posso tirar os meus clientes do FlowCRM?",

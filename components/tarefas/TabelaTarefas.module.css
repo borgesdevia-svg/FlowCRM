@@ -116,43 +116,9 @@
 }
 
 /* ---------- seleção ---------- */
-/* caixa quadrada com as cores do site (escolhe; não conclui logo) */
-.caixa {
-  appearance: none;
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  border-radius: 5px;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  background: transparent;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.caixa:hover {
-  border-color: var(--cor-destaque);
-}
-
-.caixa:focus-visible {
-  outline: 2px solid var(--cor-destaque);
-  outline-offset: 2px;
-}
-
-.caixa:checked {
-  border-color: var(--cor-destaque);
-  background: var(--cor-destaque);
-}
-
-.caixa:checked::after {
-  content: "";
-  width: 4px;
-  height: 9px;
-  margin-top: -2px;
-  border-right: 2px solid #052e16;
-  border-bottom: 2px solid #052e16;
-  transform: rotate(45deg);
+/* a barra de ações (Selecao.js) fica por cima da tabela */
+.barra {
+  margin-bottom: 14px;
 }
 
 .titulo label {
@@ -161,92 +127,4 @@
 
 .linhaMarcada td {
   background: rgba(32, 201, 107, 0.06);
-}
-
-/* barra que aparece por cima da tabela quando há tarefas selecionadas */
-.barra {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 14px;
-  padding: 8px 8px 8px 16px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  animation: barra 0.25s var(--curva);
-}
-
-@keyframes barra {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .barra {
-    animation: none;
-  }
-}
-
-.contagem {
-  color: var(--cor-texto);
-  font-size: 0.9rem;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.acoes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.botaoTexto,
-.botaoApagar,
-.botaoApagarConfirmar {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.botaoTexto:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--cor-texto);
-}
-
-.botaoApagar {
-  color: #fca5a5;
-}
-
-.botaoApagar:hover {
-  background: rgba(248, 113, 113, 0.1);
-}
-
-.botaoApagarConfirmar {
-  background: #dc2626;
-  color: #fff;
-}
-
-.botaoApagarConfirmar:hover {
-  background: #b91c1c;
-}
-
-.acoes :global(.botao).botaoFeita {
-  padding: 8px 16px;
-  font-size: 0.88rem;
-}
-
-.acoes button:disabled {
-  opacity: 0.55;
-  cursor: default;
 }

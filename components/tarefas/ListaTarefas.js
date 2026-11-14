@@ -1,59 +1,52 @@
+"use client";
+// Lista de tarefas da ficha do cliente.
+// A caixa de cada tarefa só SELECIONA; as ações (Marcar como feita, Pôr por fazer,
+// Apagar) aparecem numa barra por cima da lista quando há tarefas selecionadas.
+
 import Link from "next/link";
-import BotaoConfirmar from "@/components/BotaoConfirmar";
-import { alternarTarefa, apagarTarefa } from "@/lib/acoes/tarefas";
 import { formatarDiaCurto, situacaoPrazo } from "@/lib/datas";
+import { BarraSelecao, Caixa, useSelecao } from "./Selecao";
 import styles from "./Tarefas.module.css";
 
-// Lista de tarefas, usada em três sítios:
-//  - na ficha do cliente (mostrarCliente = false)
-//  - no painel inicial, em "As minhas tarefas" (mostrarCliente = true)
-//  - na página Tarefas (mostrarCliente e, para o admin, mostrarResponsavel)
 export default function ListaTarefas({ tarefas, mostrarCliente = false, mostrarResponsavel = false, mensagemVazia }) {
+  const selecao = useSelecao(tarefas);
+
   if (tarefas.length === 0) return <p className={styles.vazio}>{mensagemVazia}</p>;
 
   return (
-    <ul className={styles.lista}>
-      {tarefas.map((t) => {
-        const situacao = situacaoPrazo(t.data_limite, t.concluida);
+    <div className={styles.comSelecao}>
+      <BarraSelecao selecao={selecao} />
 
-        return (
-          <li key={t.id} className={t.concluida ? `${styles.tarefa} ${styles.feita}` : styles.tarefa}>
-            {/* círculo para marcar/desmarcar: é um formulário com um só botão */}
-            <form action={alternarTarefa}>
-              <input type="hidden" name="id" value={t.id} />
-              <input type="hidden" name="cliente_id" value={t.cliente_id} />
-              <input type="hidden" name="concluida" value={String(t.concluida)} />
-              <button
-                type="submit"
-                className={styles.visto}
-                aria-label={t.concluida ? `Marcar "${t.titulo}" como por fazer` : `Marcar "${t.titulo}" como feita`}
-              ></button>
-            </form>
+      <ul className={styles.lista}>
+        {tarefas.map((t) => {
+          const situacao = situacaoPrazo(t.data_limite, t.concluida);
+          const marcada = selecao.marcada(t.id);
+          const classes = [styles.tarefa, t.concluida && styles.feita, marcada && styles.marcada].filter(Boolean).join(" ");
 
-            <div className={styles.corpo}>
-              <span className={styles.titulo}>{t.titulo}</span>
-              <span className={styles.detalhes}>
-                {mostrarCliente && t.clientes && (
-                  <Link href={`/painel/clientes/${t.cliente_id}`}>{t.clientes.nome}</Link>
-                )}
-                {mostrarResponsavel && <span>{t.perfis?.nome ?? "Sem responsável"}</span>}
-                {t.data_limite && <span>{formatarDiaCurto(t.data_limite)}</span>}
-                {situacao === "atrasada" && <span className={styles.atrasada}>Atrasada</span>}
-                {situacao === "hoje" && <span className={styles.hoje}>Hoje</span>}
-              </span>
-            </div>
+          return (
+            <li key={t.id} className={classes}>
+              <Caixa id={`lista-${t.id}`} marcada={marcada} onChange={() => selecao.alternar(t.id)} />
 
-            <BotaoConfirmar
-              accao={apagarTarefa}
-              campos={{ id: t.id, cliente_id: t.cliente_id }}
-              pergunta="Apagar esta tarefa?"
-              className={styles.apagar}
-            >
-              Apagar
-            </BotaoConfirmar>
-          </li>
-        );
-      })}
-    </ul>
+              <div className={styles.corpo}>
+                {/* o título é a etiqueta da caixa: clicar nele também seleciona */}
+                <label htmlFor={`lista-${t.id}`} className={styles.titulo}>
+                  {t.titulo}
+                </label>
+                <span className={styles.detalhes}>
+                  {mostrarCliente && t.clientes && (
+                    <Link href={`/painel/clientes/${t.cliente_id}`}>{t.clientes.nome}</Link>
+                  )}
+                  {mostrarResponsavel && <span>{t.perfis?.nome ?? "Sem responsável"}</span>}
+                  {t.concluida && <span className={styles.feitaTexto}>Feita</span>}
+                  {t.data_limite && <span>{formatarDiaCurto(t.data_limite)}</span>}
+                  {situacao === "atrasada" && <span className={styles.atrasada}>Atrasada</span>}
+                  {situacao === "hoje" && <span className={styles.hoje}>Hoje</span>}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

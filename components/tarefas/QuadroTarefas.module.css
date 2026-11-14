@@ -100,18 +100,34 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding-right: 48px; /* espaço para o "Apagar" no canto */
 }
 
-.linhaTitulo form {
-  display: flex;
+/* a caixa fica alinhada com a primeira linha do título */
+.linhaTitulo input {
+  margin-top: 1px;
 }
 
 .titulo {
+  cursor: pointer;
   overflow-wrap: anywhere;
   font-size: 0.93rem;
   font-weight: 500;
   line-height: 1.35;
+}
+
+/* cartão selecionado */
+.marcado {
+  border-color: rgba(32, 201, 107, 0.45);
+  background: color-mix(in srgb, var(--cor-destaque) 6%, var(--cor-cartao));
+}
+
+/* barra das ações por cima do quadro: fica presa ao topo ao descer */
+.barra {
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+  background: var(--cor-fundo-2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 /* tarefa feita: título riscado e mais apagado */
@@ -125,7 +141,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-left: 30px; /* alinhado com o título (círculo 20px + espaço 10px) */
+  padding-left: 28px; /* alinhado com o título (caixa 18px + espaço 10px) */
   font-size: 0.8rem;
 }
 
@@ -154,39 +170,6 @@
 
 .dados a:hover {
   color: var(--cor-destaque);
-}
-
-/* "Apagar" no canto: só aparece ao passar o rato ou com o teclado */
-.apagar {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 2px 8px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cor-texto-fraco);
-  font: inherit;
-  font-size: 0.75rem;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-
-.cartao:hover .apagar,
-.apagar:focus-visible {
-  opacity: 1;
-}
-
-.apagar:hover {
-  color: #fca5a5;
-  background: rgba(248, 113, 113, 0.1);
-}
-
-@media (hover: none) {
-  .apagar {
-    opacity: 1;
-  }
 }
 
 /* ---------- "Mostrar mais" e "Mais tarde" (elemento <details>) ---------- */

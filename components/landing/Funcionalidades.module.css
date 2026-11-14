@@ -38,32 +38,10 @@
   grid-template-columns: 1.15fr 0.85fr;
 }
 
-.sobretitulo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  color: var(--cor-destaque);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.iconeArea {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid rgba(32, 201, 107, 0.3);
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-}
-
 .texto h3 {
   font-size: clamp(1.6rem, 3.2vw, 2.2rem);
-  font-weight: 500;
-  letter-spacing: -0.035em;
+  font-weight: 650;
+  letter-spacing: -0.02em;
   margin-bottom: 14px;
 }
 
@@ -566,42 +544,49 @@
 
 /* ---------- cartões extra (formulário e email) ---------- */
 /* quatro cartões pequenos numa linha (2 x 2 em ecrãs médios, 1 coluna no telemóvel) */
+/* funcionalidades mais pequenas: uma lista com linhas finas em duas colunas,
+   como as listas do iPhone (sem cartões iguais nem ícones em quadrados) */
 .extras {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 56px;
   margin-top: 120px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.extras > * {
+  border-bottom: 1px solid var(--cor-contorno);
 }
 
 .extra {
   height: 100%;
   display: flex;
-  flex-direction: column; /* ícone em cima, texto em baixo: cabe melhor em cartões estreitos */
+  align-items: flex-start;
   gap: 16px;
-  padding: 24px;
-  border-radius: 18px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
+  padding: 26px 0;
 }
 
+/* ícone simples, na cor de destaque */
+.iconeArea {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--cor-destaque);
+}
 
 .extra h3 {
   font-size: 1.1rem;
-  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .extra p {
+  max-width: 42ch;
   color: var(--cor-texto-suave);
   font-size: 0.95rem;
 }
 
 /* ---------- responsivo ---------- */
-@media (max-width: 1080px) {
-  .extras {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 @media (max-width: 900px) {
   .area {
     grid-template-columns: 1fr;
@@ -664,10 +649,8 @@
     margin-top: 88px;
   }
 
-  /* no telemóvel, ícone ao lado do texto: cartões mais baixos */
   .extra {
-    flex-direction: row;
-    padding: 20px;
+    padding: 20px 0;
   }
 }
 

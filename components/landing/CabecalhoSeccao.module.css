@@ -18,9 +18,9 @@
 }
 
 .cabecalho h2 {
-  font-size: clamp(1.9rem, 4.5vw, 2.9rem);
-  font-weight: 500;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 4.8vw, 3.1rem);
+  font-weight: 650; /* títulos firmes e compactos, como no painel */
+  letter-spacing: -0.02em;
   margin-bottom: 16px;
 }
 

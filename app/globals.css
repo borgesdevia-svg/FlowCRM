@@ -9,7 +9,7 @@
   --cor-fundo: #090909;
   --cor-fundo-2: #101211; /* fundo secundário: secções que precisam de se distinguir */
   --cor-cartao: #141615;
-  --cor-contorno: #252925;
+  --cor-contorno: rgba(255, 255, 255, 0.09); /* contornos finíssimos, ao estilo Apple */
   --cor-superficie-verde: #0d3020;
 
   /* destaque e texto */
@@ -57,7 +57,8 @@ body {
   min-height: 100vh;
   color: var(--cor-texto);
   background: var(--cor-fundo);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* letra do sistema em Mac/iPhone (SF Pro); Geist nos outros */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-geist-sans), Arial, Helvetica, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }

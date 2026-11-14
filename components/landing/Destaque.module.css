@@ -31,8 +31,8 @@
   max-width: 16ch;
   text-wrap: balance; /* o browser equilibra o tamanho das duas linhas */
   font-size: clamp(2.6rem, 6.8vw, 4.9rem); /* adapta-se à largura do ecrã */
-  font-weight: 500; /* mais fino do que o normal dos títulos, como na referência */
-  letter-spacing: -0.025em; /* Bricolage é estreita: menos apertado do que com o Geist */
+  font-weight: 650; /* firme e compacto, como os títulos do painel */
+  letter-spacing: -0.02em; /* Bricolage já é estreita: aperta-se pouco */
   line-height: 1.05;
   margin-bottom: 24px;
 }

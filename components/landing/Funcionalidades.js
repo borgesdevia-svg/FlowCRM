@@ -11,32 +11,24 @@ import styles from "./Funcionalidades.module.css";
 
 const AREAS = [
   {
-    icone: "utilizadores",
-    sobretitulo: "Gestão de clientes",
     titulo: "Cada cliente com a sua história",
     texto: "Contactos, empresa, valor previsto e todas as interações num só ecrã. Qualquer colega sabe onde o negócio ficou.",
     pontos: ["Pesquisa e filtro por estado", "Notas e histórico partilhados", "Responsável por cada cliente"],
     Demo: DemoClientes,
   },
   {
-    icone: "subida",
-    sobretitulo: "Pipeline de vendas",
     titulo: "Vê o que está para fechar",
     texto: "Cada negócio está numa fase. Arrasta o cartão para a fase seguinte e toda a equipa vê a mudança.",
     pontos: ["Quatro fases claras", "Valor total em cada fase", "Arrastar ou mudar com um botão"],
     Demo: DemoPipeline,
   },
   {
-    icone: "lista",
-    sobretitulo: "Tarefas e atividades",
     titulo: "Nada fica esquecido",
     texto: "Lembretes com data ligados a cada cliente. A equipa sabe o que tem de fazer hoje e o que está atrasado.",
-    pontos: ["Data limite em cada tarefa", "Atrasadas em destaque", "Marcar como feita num clique"],
+    pontos: ["Data limite em cada tarefa", "Atrasadas em destaque", "Selecionar várias e marcar como feitas"],
     Demo: DemoTarefas,
   },
   {
-    icone: "grafico",
-    sobretitulo: "Dashboard",
     titulo: "Os números da equipa, num relance",
     texto: "Gráficos e números calculados a partir dos dados reais da empresa, logo na primeira página do painel.",
     pontos: ["Novos clientes por semana", "Taxa de conversão e valor em negociação", "Atividade recente da equipa"],
@@ -44,13 +36,23 @@ const AREAS = [
   },
 ];
 
-// funcionalidades mais pequenas, mostradas em cartões no fim da secção.
+// funcionalidades mais pequenas, numa lista com linhas finas no fim da secção.
 // Só entram aqui coisas que a app já faz de verdade.
 const EXTRAS = [
   {
     icone: "ligacao",
     titulo: "Formulário público",
-    texto: "Cada empresa tem um link próprio. Quem o preenche entra logo no CRM como lead.",
+    texto: "Cada empresa tem um link próprio, com as suas perguntas. Quem o preenche entra logo no CRM como lead.",
+  },
+  {
+    icone: "pincel",
+    titulo: "Com o teu logótipo",
+    texto: "O logótipo da empresa aparece no menu do CRM e no topo do formulário.",
+  },
+  {
+    icone: "utilizadorMais",
+    titulo: "Papéis na equipa",
+    texto: "Administradores veem tudo; cada comercial vê só os seus clientes.",
   },
   {
     icone: "pesquisa",
@@ -81,12 +83,6 @@ export default function Funcionalidades() {
         {AREAS.map((a, i) => (
           <Revelar key={a.titulo} className={i % 2 === 1 ? `${styles.area} ${styles.invertida}` : styles.area}>
             <div className={styles.texto}>
-              <p className={styles.sobretitulo}>
-                <span className={styles.iconeArea}>
-                  <Icone nome={a.icone} tamanho={18} />
-                </span>
-                {a.sobretitulo}
-              </p>
               <h3>{a.titulo}</h3>
               <p className={styles.descricao}>{a.texto}</p>
               <ul className={styles.pontos}>

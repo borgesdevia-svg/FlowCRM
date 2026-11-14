@@ -34,47 +34,6 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* círculo para marcar como feita */
-.visto {
-  position: relative;
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin-top: 1px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  background: transparent;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.visto:hover {
-  border-color: var(--cor-destaque);
-}
-
-.visto:focus-visible {
-  outline: 2px solid var(--cor-destaque);
-  outline-offset: 2px;
-}
-
-/* tarefa feita: círculo verde com um visto desenhado em CSS */
-.feita .visto {
-  border-color: var(--cor-destaque);
-  background: var(--cor-destaque);
-}
-
-.feita .visto::after {
-  content: "";
-  position: absolute;
-  left: 5.5px;
-  top: 2px;
-  width: 5px;
-  height: 10px;
-  border-right: 2px solid #052e16;
-  border-bottom: 2px solid #052e16;
-  transform: rotate(45deg);
-}
-
 .corpo {
   flex: 1;
   min-width: 0;
@@ -86,6 +45,7 @@
 .titulo {
   overflow-wrap: anywhere;
   font-size: 0.93rem;
+  cursor: pointer;
 }
 
 .feita .titulo {
@@ -127,33 +87,26 @@
   background: rgba(252, 211, 77, 0.12);
 }
 
-.apagar {
-  padding: 2px 8px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cor-texto-fraco);
-  font: inherit;
-  font-size: 0.78rem;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s;
+/* ---------- seleção (ficha do cliente) ---------- */
+.comSelecao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* o "Apagar" só aparece ao passar o rato ou ao navegar com o teclado */
-.tarefa:hover .apagar,
-.apagar:focus-visible {
-  opacity: 1;
+/* a caixa fica alinhada com a primeira linha do título */
+.tarefa > input {
+  margin-top: 2px;
 }
 
-.apagar:hover {
-  color: #fca5a5;
-  background: rgba(248, 113, 113, 0.1);
+.marcada {
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+  background: rgba(32, 201, 107, 0.06);
 }
 
-/* em ecrãs tácteis não há "passar o rato": o botão fica sempre visível */
-@media (hover: none) {
-  .apagar {
-    opacity: 1;
-  }
+.feitaTexto {
+  color: var(--cor-destaque);
 }

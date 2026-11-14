@@ -1,88 +1,102 @@
-import Link from "next/link";
-import BotaoConfirmar from "@/components/BotaoConfirmar";
-import { alternarTarefa, apagarTarefa } from "@/lib/acoes/tarefas";
-import { formatarDiaCurto } from "@/lib/datas";
-import base from "./Tarefas.module.css";
-import styles from "./QuadroTarefas.module.css";
-
+"use client";
 // Quadro de tarefas (inspirado na referência H): uma coluna por situação,
 // com um cartão por tarefa. Recebe as colunas já preparadas pela página:
-// [{ chave, titulo, tarefas, maisTarde?, vazio }]. Componente de servidor.
+// [{ chave, titulo, tarefas, maisTarde?, vazio }].
 // Não há arrastar: a coluna de uma tarefa depende da data, não de uma escolha.
 //
+// Cada cartão tem uma caixa que só SELECIONA; as ações (Marcar como feita,
+// Pôr por fazer, Apagar) ficam na barra por cima do quadro (Selecao.js).
+//
 // Para o quadro não crescer sem fim, cada coluna mostra no máximo MAX_VISIVEIS
-// cartões; o resto abre num "Mostrar mais" (<details>, funciona sem JavaScript).
-// Na coluna Próximas, o que é para depois da semana fica em "Mais tarde", fechado.
+// cartões; o resto abre num "Mostrar mais". Na coluna Próximas, o que é para
+// depois da semana fica em "Mais tarde", fechado.
+
+import Link from "next/link";
+import { formatarDiaCurto } from "@/lib/datas";
+import { BarraSelecao, Caixa, useSelecao } from "./Selecao";
+import base from "./Tarefas.module.css";
+import styles from "./QuadroTarefas.module.css";
 
 const MAX_VISIVEIS = 5;
 
 export default function QuadroTarefas({ colunas, mostrarResponsavel = false }) {
+  const todas = colunas.flatMap((c) => [...c.tarefas, ...(c.maisTarde ?? [])]);
+  const selecao = useSelecao(todas);
+
   // lista de cartões (usada para os visíveis e para os que abrem em "Mostrar mais")
   const cartoes = (lista) => (
     <ul className={styles.cartoes}>
       {lista.map((t) => (
-        <Cartao key={t.id} t={t} mostrarResponsavel={mostrarResponsavel} />
+        <Cartao
+          key={t.id}
+          t={t}
+          mostrarResponsavel={mostrarResponsavel}
+          marcada={selecao.marcada(t.id)}
+          alternar={() => selecao.alternar(t.id)}
+        />
       ))}
     </ul>
   );
 
   return (
-    // em ecrãs estreitos as colunas deslizam para o lado
-    <div className={styles.quadro}>
-      {colunas.map((col) => {
-        const visiveis = col.tarefas.slice(0, MAX_VISIVEIS);
-        const resto = col.tarefas.slice(MAX_VISIVEIS);
-        const maisTarde = col.maisTarde ?? [];
+    <>
+      {/* barra das ações: presa ao topo enquanto se desce o quadro */}
+      <BarraSelecao selecao={selecao} className={styles.barra} />
 
-        return (
-          <section key={col.chave} className={`${styles.coluna} ${styles[col.chave]}`} aria-label={col.titulo}>
-            <header className={styles.topoColuna}>
-              <h2>{col.titulo}</h2>
-              <span>{col.tarefas.length + maisTarde.length}</span>
-            </header>
+      {/* em ecrãs estreitos as colunas deslizam para o lado */}
+      <div className={styles.quadro}>
+        {colunas.map((col) => {
+          const visiveis = col.tarefas.slice(0, MAX_VISIVEIS);
+          const resto = col.tarefas.slice(MAX_VISIVEIS);
+          const maisTarde = col.maisTarde ?? [];
 
-            {col.tarefas.length === 0 ? <p className={styles.vazio}>{col.vazio}</p> : cartoes(visiveis)}
+          return (
+            <section key={col.chave} className={`${styles.coluna} ${styles[col.chave]}`} aria-label={col.titulo}>
+              <header className={styles.topoColuna}>
+                <h2>{col.titulo}</h2>
+                <span>{col.tarefas.length + maisTarde.length}</span>
+              </header>
 
-            {resto.length > 0 && (
-              <details className={styles.mais}>
-                <summary>
-                  <span className={styles.abrir}>Mostrar mais {resto.length}</span>
-                  <span className={styles.fechar}>Mostrar menos</span>
-                </summary>
-                {cartoes(resto)}
-              </details>
-            )}
+              {col.tarefas.length === 0 ? <p className={styles.vazio}>{col.vazio}</p> : cartoes(visiveis)}
 
-            {maisTarde.length > 0 && (
-              <details className={styles.mais}>
-                <summary>Mais tarde ({maisTarde.length})</summary>
-                {cartoes(maisTarde)}
-              </details>
-            )}
-          </section>
-        );
-      })}
-    </div>
+              {resto.length > 0 && (
+                <details className={styles.mais}>
+                  <summary>
+                    <span className={styles.abrir}>Mostrar mais {resto.length}</span>
+                    <span className={styles.fechar}>Mostrar menos</span>
+                  </summary>
+                  {cartoes(resto)}
+                </details>
+              )}
+
+              {maisTarde.length > 0 && (
+                <details className={styles.mais}>
+                  <summary>Mais tarde ({maisTarde.length})</summary>
+                  {cartoes(maisTarde)}
+                </details>
+              )}
+            </section>
+          );
+        })}
+      </div>
+    </>
   );
 }
 
-// um cartão de tarefa: visto para marcar, título, dados e "Apagar"
-function Cartao({ t, mostrarResponsavel }) {
+// um cartão de tarefa: caixa para selecionar, título e dados
+function Cartao({ t, mostrarResponsavel, marcada, alternar }) {
+  const classes = [styles.cartao, t.concluida && styles.feita, t.concluida && base.feita, marcada && styles.marcado]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <li className={t.concluida ? `${styles.cartao} ${styles.feita} ${base.feita}` : styles.cartao}>
+    <li className={classes}>
       <div className={styles.linhaTitulo}>
-        {/* círculo para marcar/desmarcar: um formulário com um só botão */}
-        <form action={alternarTarefa}>
-          <input type="hidden" name="id" value={t.id} />
-          <input type="hidden" name="cliente_id" value={t.cliente_id} />
-          <input type="hidden" name="concluida" value={String(t.concluida)} />
-          <button
-            type="submit"
-            className={base.visto}
-            aria-label={t.concluida ? `Marcar "${t.titulo}" como por fazer` : `Marcar "${t.titulo}" como feita`}
-          ></button>
-        </form>
-        <span className={styles.titulo}>{t.titulo}</span>
+        <Caixa id={`quadro-${t.id}`} marcada={marcada} onChange={alternar} />
+        {/* o título é a etiqueta da caixa: clicar nele também seleciona */}
+        <label htmlFor={`quadro-${t.id}`} className={styles.titulo}>
+          {t.titulo}
+        </label>
       </div>
 
       <dl className={styles.dados}>
@@ -103,15 +117,6 @@ function Cartao({ t, mostrarResponsavel }) {
           </div>
         )}
       </dl>
-
-      <BotaoConfirmar
-        accao={apagarTarefa}
-        campos={{ id: t.id, cliente_id: t.cliente_id }}
-        pergunta="Apagar esta tarefa?"
-        className={styles.apagar}
-      >
-        Apagar
-      </BotaoConfirmar>
     </li>
   );
 }
