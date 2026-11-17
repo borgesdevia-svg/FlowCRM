@@ -1,0 +1,87 @@
+/* Cartão do formulário público (também usado na pré-visualização do Personalizar). */
+.cartao {
+  width: 100%;
+  max-width: 480px;
+  padding: 36px 32px 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111;
+  color: var(--cor-texto);
+}
+
+/* os botões do formulário usam a cor escolhida; as letras ficam claras ou escuras
+   conforme a cor (ver CORES em lib/formulario.js) */
+.cartao :global(.botao) {
+  color: var(--cor-texto-botao, #052e16);
+}
+
+.cartao :global(.botao:hover) {
+  box-shadow: 0 8px 30px -8px color-mix(in srgb, var(--cor-destaque) 60%, transparent);
+}
+
+/* ---------- cabeça: logótipo grande, nome pequeno, título e texto ---------- */
+.cabeca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* logótipo em destaque (fundo claro: logótipos escuros também se veem) */
+.logo {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 14px;
+  padding: 8px;
+  border-radius: 22px;
+  background: #fff;
+  object-fit: contain;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
+/* sem logótipo: a primeira letra do nome, na cor do formulário */
+.inicial {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 14px;
+  border-radius: 22px;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.nome {
+  margin-bottom: 18px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.titulo {
+  margin-bottom: 8px;
+  font-size: clamp(1.5rem, 5vw, 1.85rem);
+  overflow-wrap: anywhere;
+}
+
+.texto {
+  max-width: 380px;
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .cartao {
+    padding: 28px 20px 24px;
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+}

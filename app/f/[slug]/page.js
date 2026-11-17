@@ -4,12 +4,14 @@ import { notFound } from "next/navigation";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { papelNaEmpresaDoFormulario } from "@/lib/sessao";
 import FormLead from "@/components/formulario/FormLead";
+import CartaoFormulario from "@/components/formulario/CartaoFormulario";
+import { obterCor } from "@/lib/formulario";
 import styles from "./formulario.module.css";
 
 // Rota PÚBLICA /f/[slug] — o formulário de contacto de cada empresa.
 // Não precisa de login. O [slug] identifica a empresa (ex.: /f/padaria-central).
 
-// lê o nome, o logótipo e as perguntas da empresa com a função pública "formulario_publico",
+// lê o nome, o logótipo, a cor, os textos e as perguntas da empresa com a função pública "formulario_publico",
 // que só devolve isso (nunca outros dados da empresa). cache(): a página e o título
 // do separador pedem a mesma coisa, assim só vai uma vez à base de dados.
 const obterFormulario = cache(async function obterFormulario(slug) {
@@ -39,20 +41,15 @@ export default async function PaginaFormulario({ params }) {
   const papel = await papelNaEmpresaDoFormulario(supabase, slug);
 
   return (
-    <main className={styles.pagina}>
-      <div className={styles.cartao}>
-        {formulario.logo_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={formulario.logo_url} alt={`Logótipo da ${nomeEmpresa}`} className={styles.logo} />
-        ) : (
-          <span className={styles.inicial} aria-hidden="true">
-            {nomeEmpresa[0].toUpperCase()}
-          </span>
-        )}
-        <h1>{nomeEmpresa}</h1>
-        <p className={styles.subtitulo}>
-          Deixa o teu contacto e respondemos o mais depressa possível.
-        </p>
+    // o brilho do fundo usa a cor escolhida pela empresa
+    <main className={styles.pagina} style={{ "--cor-brilho": obterCor(formulario.cor).cor }}>
+      <CartaoFormulario
+        nome={nomeEmpresa}
+        logo={formulario.logo_url}
+        cor={formulario.cor}
+        titulo={formulario.titulo}
+        texto={formulario.texto}
+      >
         {papel === "comercial" ? (
           <div className={styles.equipa}>
             <p>
@@ -70,10 +67,19 @@ export default async function PaginaFormulario({ params }) {
                 Estás a ver como administrador. Se enviares, entra um cliente novo na tua lista.
               </p>
             )}
-            <FormLead slug={slug} nomeEmpresa={nomeEmpresa} perguntas={formulario.perguntas ?? []} />
+            <FormLead
+              slug={slug}
+              nomeEmpresa={nomeEmpresa}
+              perguntas={formulario.perguntas ?? []}
+              obrigado={{
+                texto: formulario.obrigado_texto,
+                botaoTexto: formulario.obrigado_botao_texto,
+                botaoLink: formulario.obrigado_botao_link,
+              }}
+            />
           </>
         )}
-      </div>
+      </CartaoFormulario>
 
       <p className={styles.marca}>
         Formulário criado com <Link href="/">FlowCRM</Link>

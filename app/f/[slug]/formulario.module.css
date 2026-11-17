@@ -8,64 +8,16 @@
   justify-content: center;
   gap: 20px;
   padding: 48px 16px;
-  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(32, 201, 107, 0.1), transparent 70%);
-}
-
-.cartao {
-  width: 100%;
-  max-width: 460px;
-  padding: 32px;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #111;
-}
-
-/* inicial da empresa, como um pequeno "logótipo" */
-.inicial {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 1.3rem;
-  font-weight: 700;
-}
-
-/* logótipo da empresa (fundo claro: logótipos escuros também se veem) */
-.logo {
-  display: block;
-  width: 56px;
-  height: 56px;
-  margin-bottom: 20px;
-  padding: 5px;
-  border-radius: 14px;
-  background: #fff;
-  object-fit: contain;
-}
-
-.cartao h1 {
-  font-size: clamp(1.5rem, 5vw, 1.9rem);
-  margin-bottom: 8px;
-  overflow-wrap: anywhere;
-}
-
-.subtitulo {
-  color: var(--cor-texto-suave);
-  margin-bottom: 24px;
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 0%,
+    color-mix(in srgb, var(--cor-brilho, #20c96b) 12%, transparent),
+    transparent 70%
+  );
 }
 
 .marca {
   color: var(--cor-texto-fraco);
   font-size: 0.82rem;
-}
-
-@media (max-width: 480px) {
-  .cartao {
-    padding: 24px 20px;
-  }
 }
 
 /* quem é comercial da empresa vê esta mensagem em vez do formulário */

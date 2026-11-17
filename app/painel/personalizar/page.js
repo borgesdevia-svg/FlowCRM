@@ -1,57 +1,52 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { obterSessao } from "@/lib/sessao";
-import FormLogo from "@/components/personalizar/FormLogo";
-import EditorPerguntas from "@/components/personalizar/EditorPerguntas";
+import EditorFormulario from "@/components/personalizar/EditorFormulario";
 import Icone from "@/components/Icone";
 import styles from "./personalizar.module.css";
 
-// Rota /painel/personalizar — o administrador muda o logótipo e as perguntas do formulário público.
+// Rota /painel/personalizar — o administrador muda o formulário público da empresa:
+// logótipo, cor, textos, perguntas e a mensagem depois de enviar.
+// A página ocupa a largura toda: opções à esquerda, pré-visualização à direita.
 export const metadata = { title: "Personalizar · FlowCRM" };
 
 export default async function PaginaPersonalizar() {
   const { supabase, perfil, empresa, eAdmin } = await obterSessao();
   if (!eAdmin) redirect("/painel");
 
-  const { data } = await supabase.from("empresas").select("perguntas").eq("id", perfil.empresa_id).single();
-  const perguntas = data?.perguntas ?? [];
+  const { data } = await supabase
+    .from("empresas")
+    .select("perguntas, form_cor, form_titulo, form_texto, obrigado_texto, obrigado_botao_texto, obrigado_botao_link")
+    .eq("id", perfil.empresa_id)
+    .single();
+
+  // no formato do editor (textos vazios = usar os textos por defeito)
+  const inicial = {
+    marca: { cor: data?.form_cor ?? "verde", titulo: data?.form_titulo ?? "", texto: data?.form_texto ?? "" },
+    perguntas: data?.perguntas ?? [],
+    depois: {
+      mensagem: data?.obrigado_texto ?? "",
+      botaoTexto: data?.obrigado_botao_texto ?? "",
+      botaoLink: data?.obrigado_botao_link ?? "",
+    },
+  };
 
   return (
     <div className={`entrar ${styles.pagina}`}>
       <header className={styles.cabecalho}>
-        <h1>Personalizar</h1>
-        <p className={styles.resumo}>
-          O logótipo e o formulário de contacto da {empresa.nome.endsWith(".") ? empresa.nome : `${empresa.nome}.`}
-        </p>
+        <div>
+          <h1>Personalizar</h1>
+          <p className={styles.resumo}>
+            O formulário de contacto da {empresa.nome.replace(/\.$/, "")}: quem o preenche entra sozinho como cliente
+            novo.
+          </p>
+        </div>
+        <Link href={`/f/${empresa.slug}`} target="_blank" className="botao botao-secundario">
+          Abrir formulário <Icone nome="externo" tamanho={14} />
+        </Link>
       </header>
 
-      <section className={styles.bloco} aria-labelledby="titulo-logo">
-        <div className={styles.descricao}>
-          <h2 id="titulo-logo">
-            <Icone nome="imagem" tamanho={18} /> Logótipo
-          </h2>
-          <p>Aparece no menu do CRM, para toda a equipa, e no topo do formulário público. PNG, JPG ou WebP, até 1 MB.</p>
-        </div>
-        <FormLogo logoAtual={empresa.logo_url} nomeEmpresa={empresa.nome} />
-      </section>
-
-      <section className={styles.blocoLargo} aria-labelledby="titulo-perguntas">
-        <div className={styles.topoBloco}>
-          <div className={styles.descricao}>
-            <h2 id="titulo-perguntas">
-              <Icone nome="pergunta" tamanho={18} /> Perguntas do formulário
-            </h2>
-            <p>
-              Nome, email e telefone estão sempre no formulário. Junta até 10 perguntas tuas: as respostas aparecem na
-              ficha do cliente.
-            </p>
-          </div>
-          <Link href={`/f/${empresa.slug}`} target="_blank" className="botao botao-secundario">
-            Abrir formulário <Icone nome="externo" tamanho={14} />
-          </Link>
-        </div>
-        <EditorPerguntas inicial={perguntas} nomeEmpresa={empresa.nome} logo={empresa.logo_url} />
-      </section>
+      <EditorFormulario inicial={inicial} nomeEmpresa={empresa.nome} logo={empresa.logo_url} />
     </div>
   );
 }

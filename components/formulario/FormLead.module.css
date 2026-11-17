@@ -29,7 +29,7 @@
 }
 
 .escolha legend {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   padding: 0;
   font-size: 0.9rem;
   font-weight: 500;
@@ -48,7 +48,7 @@
 }
 
 .opcaoEscolha:hover {
-  border-color: rgba(32, 201, 107, 0.4);
+  border-color: color-mix(in srgb, var(--cor-destaque) 45%, transparent);
 }
 
 .opcaoEscolha:has(input:checked) {
@@ -56,9 +56,51 @@
   background: var(--cor-superficie-verde);
 }
 
-.opcaoEscolha input {
-  accent-color: var(--cor-destaque);
+/* ".escolha .opcaoEscolha input" ganha ao estilo geral dos campos (.campo input),
+   que daria a largura toda às bolinhas e às caixas */
+.escolha .opcaoEscolha input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
   margin: 0;
+  padding: 0;
+  accent-color: var(--cor-destaque);
+}
+
+/* as opções de escolha, umas por baixo das outras */
+.opcoesEscolha {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* sim / não: dois botões lado a lado */
+.simNao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.simNao .opcaoEscolha {
+  justify-content: center;
+}
+
+/* linha de ajuda por baixo da pergunta (escrita pela empresa) */
+.ajuda {
+  margin: -2px 0 4px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+/* número e data não precisam da largura toda */
+.campoCurto {
+  max-width: 220px;
+}
+
+/* botão opcional depois de enviar (ex.: "Ver o nosso Instagram") */
+.botaoObrigado {
+  margin-top: 12px;
 }
 
 .privacidade {
@@ -70,7 +112,8 @@
 .confirmacao {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   gap: 8px;
   animation: surgir 0.5s var(--curva);
 }
@@ -100,8 +143,8 @@
   top: 11px;
   width: 10px;
   height: 18px;
-  border-right: 3px solid #052e16;
-  border-bottom: 3px solid #052e16;
+  border-right: 3px solid var(--cor-texto-botao, #052e16);
+  border-bottom: 3px solid var(--cor-texto-botao, #052e16);
   transform: rotate(45deg);
 }
 

@@ -1,8 +1,8 @@
 "use client";
 // Enviar ou remover o logótipo da empresa.
-// Ao escolher o ficheiro mostra logo a imagem (antes de guardar), para se ver como fica.
+// Ao escolher o ficheiro mostra logo a imagem e envia-a sozinho (sem botão "Guardar").
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useRef, useState, useTransition } from "react";
 import { guardarLogo, removerLogo } from "@/lib/acoes/empresa";
 import styles from "./Personalizar.module.css";
 
@@ -15,6 +15,7 @@ export default function FormLogo({ logoAtual, nomeEmpresa }) {
   const [escolha, setEscolha] = useState(null); // { url, estado }
   const [erroLocal, setErroLocal] = useState("");
   const [aRemover, iniciarRemover] = useTransition();
+  const refForm = useRef(null);
 
   function escolher(evento) {
     const ficheiro = evento.target.files?.[0];
@@ -32,6 +33,8 @@ export default function FormLogo({ logoAtual, nomeEmpresa }) {
       return setErroLocal("A imagem é demasiado grande (máximo 1 MB).");
     }
     setEscolha({ url: URL.createObjectURL(ficheiro), estado });
+    // envia logo: o formulário chama a Server Action guardarLogo
+    refForm.current?.requestSubmit();
   }
 
   const previa = escolha && escolha.estado === estado ? escolha.url : null;
@@ -40,7 +43,7 @@ export default function FormLogo({ logoAtual, nomeEmpresa }) {
   const erro = erroLocal || estado.erro;
 
   return (
-    <form action={accao} className={styles.formLogo}>
+    <form ref={refForm} action={accao} className={styles.formLogo}>
       <div className={styles.linhaLogo}>
         <div className={styles.moldura}>
           {mostrar ? (
@@ -64,7 +67,7 @@ export default function FormLogo({ logoAtual, nomeEmpresa }) {
             onChange={escolher}
           />
           {!mostrar && <small>Sem logótipo, aparece a primeira letra do nome.</small>}
-          {previa && <small>Ainda não está guardado.</small>}
+          {pendente && <small>A enviar…</small>}
         </div>
       </div>
 
@@ -72,9 +75,6 @@ export default function FormLogo({ logoAtual, nomeEmpresa }) {
       {estado.sucesso && !previa && <p className="alerta alerta-sucesso" role="status">{estado.sucesso}</p>}
 
       <div className={styles.acoesLogo}>
-        <button type="submit" className="botao" disabled={!previa || pendente}>
-          {pendente ? "A enviar…" : "Guardar logótipo"}
-        </button>
         {logoAtual && (
           <button
             type="button"
