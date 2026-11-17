@@ -110,7 +110,7 @@ export default async function PaginaTarefas({ searchParams }) {
   const { data } = await separador
     .ordem(
       separador.filtro(
-        base("id, cliente_id, responsavel_id, titulo, data_limite, concluida, cliente_nome, responsavel_nome"),
+        base("id, cliente_id, responsavel_id, titulo, data_limite, concluida, concluida_em, cliente_nome, responsavel_nome"),
         hoje
       )
     )
@@ -235,7 +235,6 @@ export default async function PaginaTarefas({ searchParams }) {
               membros={membros}
               perfilId={perfil.id}
               mostrarResponsavel={eAdmin}
-              mostrarEstado={false}
             />
 
             {/* rodapé: que tarefas estão a ser vistas e as páginas */}

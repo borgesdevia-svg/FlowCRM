@@ -205,6 +205,7 @@ export default async function PaginaCalendario({ searchParams }) {
               membros={eAdmin ? membros : null}
               perfilId={perfil.id}
               mostrarResponsavel={eAdmin}
+              agrupar={false}
             />
           </>
         ) : (

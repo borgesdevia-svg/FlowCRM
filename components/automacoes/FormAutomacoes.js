@@ -3,7 +3,7 @@
 // ligada, os ajustes dela (quem entra na roda, quantos dias até um cliente estar parado).
 // É de cliente porque os ajustes aparecem e desaparecem ao ligar/desligar.
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { guardarAutomacoes } from "@/lib/acoes/automacoes";
 import styles from "./FormAutomacoes.module.css";
 
@@ -26,9 +26,19 @@ export default function FormAutomacoes({ inicial, equipa }) {
   const [tarefa, setTarefa] = useState(inicial.tarefa_ligada);
   const [distribuir, setDistribuir] = useState(inicial.distribuir_ligada);
   const [parado, setParado] = useState(inicial.parado_ligado);
+  const [, iniciar] = useTransition();
+
+  // Com <form action={...}>, o React LIMPA o formulário depois de guardar: os interruptores
+  // voltavam ao estado em que estavam quando a página abriu (os que estavam desligados
+  // desligavam-se outra vez). Enviando nós o formulário aqui, nada é limpo.
+  function enviar(evento) {
+    evento.preventDefault();
+    const dados = new FormData(evento.currentTarget);
+    iniciar(() => accao(dados));
+  }
 
   return (
-    <form action={accao} className={styles.form}>
+    <form onSubmit={enviar} className={styles.form}>
       <ul className={styles.lista}>
         {/* 1) tarefa automática */}
         <li className={styles.item}>
