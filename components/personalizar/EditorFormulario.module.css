@@ -1,14 +1,16 @@
 /* Editor do formulário: opções à esquerda, pré-visualização à direita (presa ao ecrã). */
 .editor {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 500px);
-  gap: 28px;
+  /* a pré-visualização cresce com o ecrã, mas deixa sempre a maior parte às opções */
+  grid-template-columns: minmax(0, 1fr) clamp(330px, 30vw, 450px);
+  gap: 24px;
   align-items: start;
 }
 
 /* ---------- coluna das opções ---------- */
 .colunaOpcoes {
   min-width: 0;
+  container: opcoes / inline-size;
   border-radius: 18px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
@@ -160,10 +162,18 @@
 }
 
 /* ---------- modelos ---------- */
+/* modelos numa grelha que se ajusta à largura (sem ficar um sozinho na linha de baixo) */
 .modelos {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+/* com espaço, os 4 modelos ficam numa linha só */
+@container opcoes (min-width: 700px) {
+  .modelos {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .modelo {
@@ -282,12 +292,14 @@
   font-size: 0.85rem;
 }
 
-/* "ecrã" onde o formulário aparece, com o mesmo fundo da página pública */
+/* "ecrã" onde o formulário aparece, com o mesmo fundo da página pública.
+   Fica preso ao ecrã e, se o formulário for comprido, desliza por dentro. */
 .moldura {
   display: flex;
   justify-content: center;
-  max-height: calc(100vh - 80px);
-  padding: 28px 20px;
+  align-items: flex-start;
+  max-height: calc(100vh - 70px);
+  padding: 16px;
   border-radius: 20px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
@@ -295,16 +307,20 @@
   scrollbar-width: thin;
 }
 
-.cartaoPrevia {
+/* dentro da moldura, o cartão perde a margem grande (ganha espaço para o formulário) */
+.moldura .cartaoPrevia {
   max-width: 440px;
+  padding: 28px 20px 22px;
 }
 
 /* ---------- barra de guardar, presa ao fundo do ecrã ---------- */
+/* só na coluna das opções: nunca tapa a pré-visualização */
 .barraGuardar {
   position: sticky;
   bottom: 16px;
   z-index: 5;
-  grid-column: 1 / -1;
+  grid-column: 1;
+  grid-row: 2;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -345,6 +361,10 @@
 @media (max-width: 1100px) {
   .editor {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .barraGuardar {
+    grid-row: auto;
   }
 
   .previa {
