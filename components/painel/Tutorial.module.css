@@ -1,0 +1,166 @@
+/* Tutorial de boas-vindas: ecrã escuro, uma parte iluminada e um cartão a explicar. */
+
+/* botão "Ver tutorial" no menu: é um <button>, por isso tiramos o aspeto de botão do browser */
+.botaoMenu {
+  width: 100%;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* tudo o que o tutorial desenha fica por cima do painel */
+.camada {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-geist-sans), Arial, sans-serif;
+}
+
+/* camada invisível que apanha os cliques: durante o tutorial não se mexe no painel */
+.bloqueio {
+  position: absolute;
+  inset: 0;
+}
+
+/* o foco: caixa transparente com uma sombra gigante à volta, que escurece o resto.
+   O contorno verde mostra bem qual é a parte de que estamos a falar.
+   As transições fazem o foco deslizar de uma parte para a outra. */
+.foco {
+  position: fixed;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px var(--cor-destaque),
+    0 0 24px 2px rgba(32, 201, 107, 0.35),
+    0 0 0 9999px rgba(0, 0, 0, 0.74);
+  pointer-events: none;
+  transition:
+    top 0.4s var(--curva),
+    left 0.4s var(--curva),
+    width 0.4s var(--curva),
+    height 0.4s var(--curva);
+  animation: escurecer 0.4s var(--curva);
+}
+
+/* sem parte iluminada (primeiro passo): só o escuro, sem contorno */
+.focoCentro {
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.74);
+}
+
+@keyframes escurecer {
+  from {
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0);
+  }
+}
+
+/* o cartão com a explicação */
+.cartao {
+  position: fixed;
+  width: min(360px, calc(100vw - 32px));
+  padding: 22px 22px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #161817;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8);
+  transition:
+    top 0.4s var(--curva),
+    left 0.4s var(--curva);
+}
+
+.conteudo {
+  animation: entrar 0.35s var(--curva);
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.contagem {
+  color: var(--cor-destaque);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.titulo {
+  margin: 6px 0 8px;
+  font-size: 1.35rem;
+}
+
+.texto {
+  color: var(--cor-texto-suave);
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+/* barra de progresso: um traço fino por passo, verde nos que já foram vistos */
+.progresso {
+  display: flex;
+  gap: 4px;
+  margin: 18px 0 16px;
+}
+
+.traco,
+.tracoFeito {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.3s;
+}
+
+.tracoFeito {
+  background: var(--cor-destaque);
+}
+
+.botoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.botoes :global(.botao) {
+  padding: 9px 16px;
+  font-size: 0.9rem;
+}
+
+.botoes :global(.botao-secundario) {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.espaco {
+  flex: 1;
+}
+
+/* "Saltar": discreto, só texto */
+.saltar {
+  padding: 8px 4px;
+  border: none;
+  background: none;
+  color: var(--cor-texto-fraco);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.saltar:hover {
+  color: var(--cor-texto);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foco,
+  .cartao,
+  .conteudo {
+    transition: none;
+    animation: none;
+  }
+}

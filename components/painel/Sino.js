@@ -36,7 +36,7 @@ export default function Sino({ tarefas, total, hoje }) {
   }, [aberto]);
 
   return (
-    <div ref={refContentor} className={styles.sino}>
+    <div ref={refContentor} className={styles.sino} data-tutorial="sino">
       <button
         type="button"
         className={aberto ? `${styles.botao} ${styles.botaoAberto}` : styles.botao}

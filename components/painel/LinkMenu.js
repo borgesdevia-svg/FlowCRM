@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function LinkMenu({ href, className, classeAtiva, children }) {
+export default function LinkMenu({ href, className, classeAtiva, tutorial, children }) {
   const caminho = usePathname();
 
   // "/painel" só fica ativo na própria página; os outros também nas subpáginas
@@ -18,6 +18,8 @@ export default function LinkMenu({ href, className, classeAtiva, children }) {
       className={ativo ? `${className} ${classeAtiva}` : className}
       // aria-current diz aos leitores de ecrã qual é a página atual
       aria-current={ativo ? "page" : undefined}
+      // nome usado pelo tutorial para encontrar e iluminar este item
+      data-tutorial={tutorial}
     >
       {children}
     </Link>

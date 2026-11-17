@@ -9,13 +9,14 @@ import PesquisaGlobal from "@/components/painel/PesquisaGlobal";
 import Sino from "@/components/painel/Sino";
 import styles from "./painel.module.css";
 import SimboloLogo from "@/components/SimboloLogo";
+import Tutorial from "@/components/painel/Tutorial";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
 export const metadata = { title: "Painel · FlowCRM" };
 
 export default async function LayoutPainel({ children }) {
-  const { supabase, perfil, empresa, eAdmin, eDono } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto } = await obterSessao();
 
   // Números para os contadores do menu. As duas consultas são independentes,
   // por isso o Promise.all faz as duas ao mesmo tempo (mais rápido do que uma a seguir à outra).
@@ -48,10 +49,10 @@ export default async function LayoutPainel({ children }) {
     {
       titulo: "Menu principal",
       itens: [
-        { texto: "Painel", href: "/painel", icone: "casa" },
-        { texto: "Clientes", href: "/painel/clientes", icone: "utilizadores", contador: nClientes ?? null },
-        { texto: "Pipeline", href: "/painel/pipeline", icone: "subida" },
-        { texto: "Tarefas", href: "/painel/tarefas", icone: "lista", contador: nAtrasadas || null, alerta: true },
+        { texto: "Painel", tutorial: "painel", href: "/painel", icone: "casa" },
+        { texto: "Clientes", tutorial: "clientes", href: "/painel/clientes", icone: "utilizadores", contador: nClientes ?? null },
+        { texto: "Pipeline", tutorial: "pipeline", href: "/painel/pipeline", icone: "subida" },
+        { texto: "Tarefas", tutorial: "tarefas", href: "/painel/tarefas", icone: "lista", contador: nAtrasadas || null, alerta: true },
         { texto: "Notificações", href: "/painel/notificacoes", icone: "sino", contador: nAvisos || null },
       ],
     },
@@ -61,8 +62,8 @@ export default async function LayoutPainel({ children }) {
         // as páginas Equipa e Personalizar só aparecem ao administrador
         ...(eAdmin
           ? [
-              { texto: "Equipa", href: "/painel/equipa", icone: "utilizadorMais" },
-              { texto: "Personalizar", href: "/painel/personalizar", icone: "pincel" },
+              { texto: "Equipa", tutorial: "equipa", href: "/painel/equipa", icone: "utilizadorMais" },
+              { texto: "Personalizar", tutorial: "personalizar", href: "/painel/personalizar", icone: "pincel" },
             ]
           : []),
         { texto: "A minha conta", href: "/painel/conta", icone: "utilizador" },
@@ -99,7 +100,7 @@ export default async function LayoutPainel({ children }) {
         </div>
 
         {/* pesquisa global de clientes (componente de cliente) */}
-        <div className={styles.zonaPesquisa}>
+        <div className={styles.zonaPesquisa} data-tutorial="pesquisa">
           <PesquisaGlobal />
         </div>
 
@@ -108,7 +109,7 @@ export default async function LayoutPainel({ children }) {
             <div key={seccao.titulo} className={styles.seccao}>
               <p className={styles.tituloSeccao}>{seccao.titulo}</p>
               {seccao.itens.map((item) => (
-                <LinkMenu key={item.href} href={item.href} className={styles.itemMenu} classeAtiva={styles.itemAtivo}>
+                <LinkMenu key={item.href} href={item.href} className={styles.itemMenu} classeAtiva={styles.itemAtivo} tutorial={item.tutorial}>
                   <Icone nome={item.icone} tamanho={19} />
                   <span className={styles.textoItem}>{item.texto}</span>
                   {item.contador ? (
@@ -124,11 +125,13 @@ export default async function LayoutPainel({ children }) {
           {/* link para o formulário público: abre num separador novo (target="_blank") */}
           <div className={styles.seccao}>
             <p className={styles.tituloSeccao}>Ferramentas</p>
-            <Link href={`/f/${empresa.slug}`} target="_blank" className={styles.itemMenu}>
+            <Link href={`/f/${empresa.slug}`} target="_blank" className={styles.itemMenu} data-tutorial="formulario">
               <Icone nome="ligacao" tamanho={19} />
               <span className={styles.textoItem}>Formulário público</span>
               <Icone nome="externo" tamanho={14} className={styles.iconeExterno} />
             </Link>
+            {/* tutorial de boas-vindas: abre sozinho na primeira entrada; o botão deixa revê-lo */}
+            <Tutorial mostrarAoEntrar={!tutorialVisto} nome={perfil.nome} eAdmin={eAdmin} className={styles.itemMenu} />
           </div>
         </nav>
 
