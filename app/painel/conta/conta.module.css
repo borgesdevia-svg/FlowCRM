@@ -94,7 +94,7 @@
 .link code {
   padding: 11px 14px;
   border-radius: var(--raio);
-  border: 1px dashed rgba(32, 201, 107, 0.35);
+  border: 1px dashed rgba(34, 197, 94, 0.35);
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
   font-size: 0.9rem;

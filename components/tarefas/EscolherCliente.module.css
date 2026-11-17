@@ -30,7 +30,7 @@
   min-height: 46px;
   padding: 6px 6px 6px 14px;
   border-radius: var(--raio);
-  border: 1px solid rgba(32, 201, 107, 0.35);
+  border: 1px solid rgba(34, 197, 94, 0.35);
   background: var(--cor-cartao);
   font-size: 0.95rem;
 }

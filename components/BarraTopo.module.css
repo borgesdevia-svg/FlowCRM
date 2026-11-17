@@ -5,7 +5,7 @@
   z-index: 50;
   /* fundo preto meio transparente + desfoque do que passa por trás (efeito "vidro").
      O desfoque forte impede que o texto da página se leia através da barra. */
-  background: rgba(9, 9, 9, 0.6);
+  background: rgba(15, 17, 21, 0.65);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
@@ -39,7 +39,7 @@
 /* símbolo do logótipo (SVG), com um brilho verde suave */
 .simbolo {
   flex-shrink: 0;
-  filter: drop-shadow(0 0 10px rgba(32, 201, 107, 0.35));
+  filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.35));
 }
 
 .menu {
@@ -71,7 +71,7 @@
   font-size: 0.88rem;
   background: #fff;
   border-color: #fff;
-  color: #0a0a0a;
+  color: #0f1115;
 }
 
 .acoes :global(.botao):hover {

@@ -9,7 +9,7 @@
   padding: 40px 16px 48px;
   background: radial-gradient(
     ellipse 70% 50% at 50% 0%,
-    color-mix(in srgb, var(--cor-brilho, #20c96b) 12%, transparent),
+    color-mix(in srgb, var(--cor-brilho, #22c55e) 12%, transparent),
     transparent 70%
   );
 }
@@ -28,7 +28,7 @@
   padding: 24px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #111;
+  background: var(--cor-cartao);
   color: var(--cor-texto-suave);
 }
 

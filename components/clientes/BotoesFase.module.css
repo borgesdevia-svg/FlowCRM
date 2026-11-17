@@ -35,14 +35,14 @@
 
 /* o passo "natural" seguinte fica em destaque (verde) */
 .principal {
-  border: 1px solid rgba(32, 201, 107, 0.35);
-  background: rgba(32, 201, 107, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
   color: #86efac;
   font-weight: 600;
 }
 
 .principal:hover {
-  background: rgba(32, 201, 107, 0.22);
+  background: rgba(34, 197, 94, 0.22);
 }
 
 .botao:focus-visible,

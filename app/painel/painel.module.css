@@ -5,7 +5,7 @@
    valem para tudo o que está dentro do painel. */
 .estrutura {
   --cor-contorno: rgba(255, 255, 255, 0.07);
-  --cor-cartao: #161817;
+  --cor-cartao: #1c2028;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-geist-sans), Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   display: grid;
@@ -60,7 +60,7 @@
 }
 
 .marca:hover {
-  border-color: rgba(32, 201, 107, 0.35);
+  border-color: rgba(34, 197, 94, 0.35);
 }
 
 /* quadrado verde com a inicial da empresa (como o logótipo da referência) */
@@ -73,7 +73,7 @@
   border-radius: 10px;
   background: linear-gradient(135deg, #4ade80, #15803d);
   box-shadow:
-    0 0 18px rgba(32, 201, 107, 0.35),
+    0 0 18px rgba(34, 197, 94, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   color: #052e16;
   font-weight: 700;
@@ -172,7 +172,7 @@
 /* página atual: fundo cheio com um toque de verde (como a seleção da barra lateral do macOS) */
 .itemAtivo,
 .itemAtivo:hover {
-  background: rgba(32, 201, 107, 0.14);
+  background: rgba(34, 197, 94, 0.14);
   color: var(--cor-destaque);
 }
 

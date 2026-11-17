@@ -9,7 +9,7 @@
   padding: 22px 24px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #111;
+  background: var(--cor-cartao);
   transition: border-color 0.2s;
 }
 
@@ -153,7 +153,7 @@
   padding: 40px 24px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #111;
+  background: var(--cor-cartao);
   animation: surgir 0.5s var(--curva);
 }
 

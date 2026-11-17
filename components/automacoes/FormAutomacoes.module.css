@@ -141,8 +141,8 @@
 }
 
 .pessoa:has(input:checked) {
-  border-color: rgba(32, 201, 107, 0.45);
-  background: rgba(32, 201, 107, 0.08);
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.08);
 }
 
 .pessoa input {

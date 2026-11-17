@@ -120,7 +120,7 @@
 }
 
 .seletorAdmin {
-  border-color: rgba(32, 201, 107, 0.4) !important;
+  border-color: rgba(34, 197, 94, 0.4) !important;
   background-color: var(--cor-superficie-verde) !important;
   color: var(--cor-destaque) !important;
 }

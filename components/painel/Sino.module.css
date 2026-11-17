@@ -21,7 +21,7 @@
 .botao:hover,
 .botaoAberto {
   color: var(--cor-texto);
-  border-color: rgba(32, 201, 107, 0.35);
+  border-color: rgba(34, 197, 94, 0.35);
 }
 
 /* bolinha vermelha com o número, no canto do botão */
@@ -115,7 +115,7 @@
 .item:hover,
 .item:focus-visible {
   outline: none;
-  background: rgba(32, 201, 107, 0.08);
+  background: rgba(34, 197, 94, 0.08);
 }
 
 /* bolinha à esquerda: vermelha (atrasada) ou laranja (hoje) */

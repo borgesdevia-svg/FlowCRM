@@ -51,7 +51,7 @@
 }
 
 .botaoTexto:hover {
-  background: rgba(32, 201, 107, 0.1);
+  background: rgba(34, 197, 94, 0.1);
 }
 
 /* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
@@ -181,7 +181,7 @@
   outline: none;
   border-color: var(--cor-destaque);
   background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 0 0 3px rgba(32, 201, 107, 0.2);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
 }
 
 /* ---------- a lista ---------- */

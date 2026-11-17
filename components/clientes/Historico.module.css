@@ -90,7 +90,7 @@
 }
 
 .tipo input:focus-visible + span {
-  box-shadow: 0 0 0 3px rgba(32, 201, 107, 0.35);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35);
 }
 
 /* ---------- lista (linha do tempo) ---------- */

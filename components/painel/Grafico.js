@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 import Chart from "chart.js/auto"; // "auto" regista todos os tipos de gráfico de uma vez
 
 // O <canvas> não percebe variáveis CSS ("var(--cor-destaque)"):
-// lemos o valor verdadeiro (ex.: "#20c96b") das variáveis definidas no globals.css.
+// lemos o valor verdadeiro (ex.: "#22c55e") das variáveis definidas no globals.css.
 function resolverCor(cor) {
   const nome = cor.match(/^var\((--[\w-]+)\)$/)?.[1];
   if (!nome) return cor;

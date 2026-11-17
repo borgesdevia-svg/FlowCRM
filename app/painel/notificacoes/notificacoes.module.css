@@ -81,7 +81,7 @@
 
 /* linha selecionada: fundo esverdeado */
 .linhaMarcada {
-  background: rgba(32, 201, 107, 0.06);
+  background: rgba(34, 197, 94, 0.06);
 }
 
 .linha:first-child {

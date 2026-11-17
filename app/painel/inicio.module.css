@@ -80,7 +80,7 @@
 }
 
 .bom {
-  border-color: rgba(32, 201, 107, 0.45);
+  border-color: rgba(34, 197, 94, 0.45);
   color: #4ade80;
 }
 
@@ -290,7 +290,7 @@
   overflow-wrap: anywhere;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(32, 201, 107, 0.25);
+  border: 1px solid rgba(34, 197, 94, 0.25);
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
   font-size: 0.88rem;
@@ -314,7 +314,7 @@
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, #15803d, var(--cor-destaque));
-  box-shadow: 0 0 12px rgba(32, 201, 107, 0.5);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
 }
 
 .passos {
@@ -345,7 +345,7 @@
 .passos a {
   color: var(--cor-texto);
   text-decoration: underline;
-  text-decoration-color: rgba(32, 201, 107, 0.5);
+  text-decoration-color: rgba(34, 197, 94, 0.5);
   text-underline-offset: 3px;
 }
 
@@ -417,8 +417,8 @@
   gap: 18px;
   padding: 20px 22px;
   border-radius: 18px;
-  border: 1px solid rgba(32, 201, 107, 0.25);
-  background: linear-gradient(120deg, rgba(32, 201, 107, 0.12), rgba(32, 201, 107, 0.03) 60%), var(--cor-cartao);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: linear-gradient(120deg, rgba(34, 197, 94, 0.12), rgba(34, 197, 94, 0.03) 60%), var(--cor-cartao);
 }
 
 .logoEmpresa,
