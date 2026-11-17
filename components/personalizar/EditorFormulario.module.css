@@ -307,10 +307,9 @@
   scrollbar-width: thin;
 }
 
-/* dentro da moldura, o cartão perde a margem grande (ganha espaço para o formulário) */
+/* na pré-visualização, o formulário ocupa a largura da moldura */
 .moldura .cartaoPrevia {
-  max-width: 440px;
-  padding: 28px 20px 22px;
+  max-width: none;
 }
 
 /* ---------- barra de guardar, presa ao fundo do ecrã ---------- */

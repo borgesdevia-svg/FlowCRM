@@ -1,11 +1,11 @@
-/* Cartão do formulário público (também usado na pré-visualização do Personalizar). */
+/* Formulário público em página larga (também usado na pré-visualização do Personalizar).
+   Não é um cartão só: é uma coluna de blocos (cabeça + um bloco por pergunta). */
 .cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   width: 100%;
-  max-width: 480px;
-  padding: 36px 32px 32px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #111;
+  max-width: 720px;
   color: var(--cor-texto);
 }
 
@@ -19,44 +19,60 @@
   box-shadow: 0 8px 30px -8px color-mix(in srgb, var(--cor-destaque) 60%, transparent);
 }
 
-/* ---------- cabeça: logótipo grande, nome pequeno, título e texto ---------- */
+/* ---------- bloco de cima ---------- */
 .cabeca {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 28px;
-  text-align: center;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111;
 }
 
-/* logótipo em destaque (fundo claro: logótipos escuros também se veem) */
+/* faixa na cor da empresa, com um degradê suave para não ficar chapada */
+.faixa {
+  height: 120px;
+  background:
+    radial-gradient(circle at 85% -20%, rgba(255, 255, 255, 0.28), transparent 55%),
+    linear-gradient(135deg, var(--cor-destaque), color-mix(in srgb, var(--cor-destaque) 55%, #000));
+}
+
+.conteudoCabeca {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 32px 30px;
+}
+
+/* o logótipo sobe para cima da faixa (fundo claro: logótipos escuros também se veem) */
+.logo,
+.inicial {
+  width: 88px;
+  height: 88px;
+  margin-top: -44px;
+  margin-bottom: 14px;
+  border-radius: 22px;
+  border: 4px solid #111;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
 .logo {
   display: block;
-  width: 96px;
-  height: 96px;
-  margin-bottom: 14px;
-  padding: 8px;
-  border-radius: 22px;
+  padding: 6px;
   background: #fff;
   object-fit: contain;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
 }
 
 /* sem logótipo: a primeira letra do nome, na cor do formulário */
 .inicial {
   display: grid;
   place-items: center;
-  width: 80px;
-  height: 80px;
-  margin-bottom: 14px;
-  border-radius: 22px;
-  background: var(--cor-superficie-verde);
+  background: color-mix(in srgb, var(--cor-destaque) 18%, #111);
   color: var(--cor-destaque);
   font-size: 2rem;
   font-weight: 700;
 }
 
 .nome {
-  margin-bottom: 18px;
+  margin-bottom: 10px;
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
   font-weight: 600;
@@ -65,23 +81,31 @@
 
 .titulo {
   margin-bottom: 8px;
-  font-size: clamp(1.5rem, 5vw, 1.85rem);
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   overflow-wrap: anywhere;
 }
 
 .texto {
-  max-width: 380px;
+  max-width: 560px;
   color: var(--cor-texto-suave);
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 480px) {
-  .cartao {
-    padding: 28px 20px 24px;
+@media (max-width: 520px) {
+  .faixa {
+    height: 96px;
   }
 
-  .logo {
-    width: 80px;
-    height: 80px;
+  .conteudoCabeca {
+    padding: 0 20px 24px;
+  }
+
+  .logo,
+  .inicial {
+    width: 76px;
+    height: 76px;
+    margin-top: -38px;
   }
 }

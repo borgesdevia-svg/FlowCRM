@@ -103,7 +103,7 @@ export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado =
         <Pergunta key={p.id} pergunta={p} valor={respostas[p.id]} erro={erros[`resposta_${p.id}`]} />
       ))}
 
-      <button type="submit" className="botao botao-largo" disabled={pendente}>
+      <button type="submit" className="botao" disabled={pendente}>
         {pendente ? "A enviar..." : "Enviar pedido de contacto"}
       </button>
 

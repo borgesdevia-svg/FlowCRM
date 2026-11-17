@@ -1,7 +1,42 @@
 .formulario {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+}
+
+/* cada pergunta (e o nome, email e telefone) num bloco seu, como num Google Forms */
+.formulario > :global(.campo) {
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111;
+  transition: border-color 0.2s;
+}
+
+/* o bloco onde se está a escrever fica com um contorno na cor da empresa */
+.formulario > :global(.campo):focus-within {
+  border-color: color-mix(in srgb, var(--cor-destaque) 55%, transparent);
+}
+
+/* bloco com erro: contorno vermelho */
+.formulario > :global(.campo):has([aria-invalid="true"]) {
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.formulario > :global(.botao) {
+  align-self: flex-start;
+  min-width: 220px;
+  margin-top: 6px;
+}
+
+@media (max-width: 520px) {
+  .formulario > :global(.campo) {
+    padding: 18px 16px;
+  }
+
+  .formulario > :global(.botao) {
+    align-self: stretch;
+  }
 }
 
 /* tirado do ecrã (mas continua no HTML, onde os robôs o encontram) */
@@ -115,6 +150,10 @@
   align-items: center;
   text-align: center;
   gap: 8px;
+  padding: 40px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111;
   animation: surgir 0.5s var(--curva);
 }
 
