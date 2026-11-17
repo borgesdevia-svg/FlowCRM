@@ -6,6 +6,9 @@
 // por baixo · prazo à direita, com a cor da urgência.
 //  - Clicar no CÍRCULO conclui logo a tarefa (ou volta a pô-la por fazer, se já estava feita).
 //    Aparece um aviso em baixo com "Desfazer" durante alguns segundos.
+//    A tarefa NÃO sai logo da lista: fica no mesmo sítio, riscada, até se sair da página
+//    (senão parecia que tinha sido apagada, porque passa para o separador "Feitas").
+//    Um duplo clique conta como um clique só.
 //  - O botão "Selecionar" troca os círculos por caixas, para escolher várias tarefas;
 //    aparece então a barra de ações (Selecao.js): Marcar como feita, Adiar, Apagar...
 //
@@ -25,6 +28,7 @@ import EditarTarefa from "./EditarTarefa";
 import styles from "./TabelaTarefas.module.css";
 
 const SEGUNDOS_DESFAZER = 6;
+const MS_DUPLO_CLIQUE = 500; // dois cliques mais rápidos do que isto contam como um
 
 // dia (AAAA-MM-DD, em Portugal) em que uma tarefa feita foi concluída
 function diaEmPortugal(dataHora) {
@@ -76,15 +80,44 @@ function prazo(t, hoje) {
   return { texto: relativo[0].toUpperCase() + relativo.slice(1), classe: styles.prazoNormal };
 }
 
-export default function TabelaTarefas({ tarefas, hoje, mensagemVazia, membros = null, perfilId = "", mostrarResponsavel = false, agrupar = true }) {
-  const selecao = useSelecao(tarefas);
-  const [aSelecionar, setASelecionar] = useState(false);
+// lista do servidor + as tarefas mudadas neste ecrã que o servidor já tirou desta vista
+// (ex.: concluídas no separador "Hoje"), de volta ao sítio onde estavam
+function juntarGuardadas(tarefas, guardadas) {
+  const lista = [...tarefas];
+  const presentes = new Set(tarefas.map((t) => t.id));
+  Object.values(guardadas)
+    .filter((g) => !presentes.has(g.tarefa.id))
+    .sort((a, b) => a.indice - b.indice)
+    .forEach((g) => lista.splice(Math.min(g.indice, lista.length), 0, g.tarefa));
+  return lista;
+}
+
+export default function TabelaTarefas({ tarefas: doServidor, hoje, mensagemVazia, membros = null, perfilId = "", mostrarResponsavel = false, agrupar = true }) {
+  // tarefas mudadas neste ecrã: { id: { tarefa, indice } } (a cópia e o lugar onde estava)
+  const [guardadas, setGuardadas] = useState({});
   // tarefas acabadas de mudar neste ecrã: mostram logo o círculo cheio/vazio,
   // antes de o servidor responder ({ id: true = feita / false = por fazer })
   const [mudadas, setMudadas] = useState({});
+  const tarefas = juntarGuardadas(doServidor, guardadas).map((t) =>
+    t.id in mudadas ? { ...t, concluida: mudadas[t.id] } : t,
+  );
+  const selecao = useSelecao(tarefas);
+  const [aSelecionar, setASelecionar] = useState(false);
   const [aviso, setAviso] = useState(null); // { ids, titulo, feita }
   const [, iniciar] = useTransition();
   const temporizador = useRef(null);
+  const ultimoClique = useRef({}); // id -> hora do último clique no círculo
+  // os pedidos ao servidor vão um de cada vez, pela ordem dos cliques
+  // (senão "concluir" e "pôr por fazer" seguidos podiam chegar trocados)
+  const fila = useRef(Promise.resolve());
+
+  function enviar(acao, ids) {
+    const pedido = fila.current.then(() => acao(ids)).catch(() => {});
+    fila.current = pedido;
+    iniciar(async () => {
+      await pedido;
+    });
+  }
 
   // o aviso "Desfazer" desaparece sozinho
   useEffect(() => {
@@ -98,13 +131,18 @@ export default function TabelaTarefas({ tarefas, hoje, mensagemVazia, membros = 
 
   const feita = (t) => mudadas[t.id] ?? t.concluida;
 
-  function alternar(t) {
+  // "agora" = hora do clique (evento.timeStamp, em milissegundos)
+  function alternar(t, agora) {
+    // duplo clique: o segundo clique é ignorado
+    if (agora - (ultimoClique.current[t.id] ?? 0) < MS_DUPLO_CLIQUE) return;
+    ultimoClique.current[t.id] = agora;
+
     const passaAFeita = !feita(t);
+    // guarda a tarefa e o lugar dela, para continuar visível depois de o servidor a tirar
+    setGuardadas((g) => (g[t.id] ? g : { ...g, [t.id]: { tarefa: t, indice: tarefas.findIndex((x) => x.id === t.id) } }));
     setMudadas((m) => ({ ...m, [t.id]: passaAFeita }));
     setAviso({ ids: [t.id], titulo: t.titulo, feita: passaAFeita });
-    iniciar(async () => {
-      await (passaAFeita ? concluirTarefas : reabrirTarefas)([t.id]);
-    });
+    enviar(passaAFeita ? concluirTarefas : reabrirTarefas, [t.id]);
   }
 
   function desfazer() {
@@ -112,9 +150,7 @@ export default function TabelaTarefas({ tarefas, hoje, mensagemVazia, membros = 
     const { ids, feita: estavaAFicarFeita } = aviso;
     setMudadas((m) => Object.fromEntries([...Object.entries(m), ...ids.map((id) => [id, !estavaAFicarFeita])]));
     setAviso(null);
-    iniciar(async () => {
-      await (estavaAFicarFeita ? reabrirTarefas : concluirTarefas)(ids);
-    });
+    enviar(estavaAFicarFeita ? reabrirTarefas : concluirTarefas, ids);
   }
 
   function sairDaSelecao() {
@@ -184,7 +220,7 @@ export default function TabelaTarefas({ tarefas, hoje, mensagemVazia, membros = 
                     <button
                       type="button"
                       className={estaFeita ? `${styles.circulo} ${styles.circuloFeito}` : styles.circulo}
-                      onClick={() => alternar(t)}
+                      onClick={(e) => alternar(t, e.timeStamp)}
                       aria-label={estaFeita ? `Pôr por fazer: ${t.titulo}` : `Concluir: ${t.titulo}`}
                       title={estaFeita ? "Pôr por fazer" : "Concluir"}
                     >
