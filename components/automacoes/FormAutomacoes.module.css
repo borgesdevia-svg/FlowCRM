@@ -1,0 +1,212 @@
+/* Formulário das automações: uma lista com linhas finas (não cartões iguais),
+   cada linha com o texto à esquerda e o interruptor à direita. */
+.form {
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.lista {
+  list-style: none;
+}
+
+.item {
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.titulo {
+  margin-bottom: 6px;
+  font-family: inherit; /* o h2 global usa a letra dos títulos grandes; aqui fica a do texto */
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.texto {
+  max-width: 640px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+/* ---------- interruptor (como os do iPhone) ---------- */
+.interruptor {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+/* a caixa verdadeira fica invisível por cima do desenho: continua a funcionar com teclado */
+.interruptor input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.trilho {
+  display: block;
+  width: 46px;
+  height: 28px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.25s var(--curva);
+}
+
+.bola {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s var(--curva);
+}
+
+.interruptor input:checked + .trilho {
+  background: var(--cor-destaque);
+}
+
+.interruptor input:checked + .trilho .bola {
+  transform: translateX(18px);
+}
+
+/* foco com teclado: o contorno verde vai para o desenho (a caixa está invisível) */
+.interruptor input:focus-visible + .trilho {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 3px;
+}
+
+/* ---------- ajustes de cada automação (aparecem quando está ligada) ---------- */
+.ajustes {
+  margin-top: 16px;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  animation: abrir 0.3s var(--curva);
+}
+
+.ajustes[hidden] {
+  display: none;
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.legenda {
+  float: left; /* tira a legenda da moldura do fieldset, fica como um título normal */
+  width: 100%;
+  margin-bottom: 10px;
+  color: var(--cor-texto-suave);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.pessoas {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pessoa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.pessoa:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.pessoa:has(input:checked) {
+  border-color: rgba(32, 201, 107, 0.45);
+  background: rgba(32, 201, 107, 0.08);
+}
+
+.pessoa input {
+  accent-color: var(--cor-destaque);
+}
+
+.pessoa small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+}
+
+.dias {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.92rem;
+}
+
+.campoDias {
+  width: 72px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font: inherit;
+  text-align: center;
+}
+
+/* ---------- guardar ---------- */
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 16px 24px;
+}
+
+.erro {
+  color: #fca5a5;
+  font-size: 0.88rem;
+}
+
+.sucesso {
+  color: var(--cor-destaque);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 600px) {
+  .item {
+    padding: 18px;
+  }
+
+  .topo {
+    gap: 14px;
+  }
+
+  .rodape {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding: 16px 18px;
+  }
+
+  .rodape :global(.botao) {
+    justify-content: center;
+  }
+}

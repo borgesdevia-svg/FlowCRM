@@ -1,0 +1,36 @@
+.atribuir {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lista {
+  max-width: 170px;
+  padding: 6px 28px 6px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--cor-contorno);
+  /* setinha desenhada em SVG (a do browser não segue o tema escuro) */
+  background: rgba(255, 255, 255, 0.06)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 9px center;
+  appearance: none;
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.lista:hover {
+  border-color: rgba(32, 201, 107, 0.4);
+}
+
+.lista:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.erro {
+  color: #fca5a5;
+  font-size: 0.74rem;
+}

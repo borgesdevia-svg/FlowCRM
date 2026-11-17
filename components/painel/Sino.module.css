@@ -167,6 +167,57 @@
   color: #fbbf24;
 }
 
+/* ---------- clientes sem responsável (só administradores) ---------- */
+.subtitulo {
+  padding: 8px 6px 4px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.itemSemResponsavel {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 6px;
+}
+
+.itemSemResponsavel .texto {
+  flex: 1;
+}
+
+.itemSemResponsavel a {
+  color: var(--cor-texto);
+}
+
+.itemSemResponsavel a:hover {
+  color: var(--cor-destaque);
+}
+
+/* bolinha da urgência: verde (acabou de chegar), amarelo (mais de 4 h), vermelho (mais de 24 h) */
+.urgencia_verde,
+.urgencia_amarelo,
+.urgencia_vermelho {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+}
+
+.urgencia_verde {
+  background: var(--cor-destaque);
+}
+
+.urgencia_amarelo {
+  background: #fbbf24;
+}
+
+.urgencia_vermelho {
+  background: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
 .nada {
   padding: 6px 6px 12px;
   color: var(--cor-texto-suave);

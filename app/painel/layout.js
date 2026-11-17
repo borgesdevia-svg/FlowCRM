@@ -22,7 +22,13 @@ export default async function LayoutPainel({ children }) {
   // por isso o Promise.all faz as duas ao mesmo tempo (mais rápido do que uma a seguir à outra).
   // head: true = só queremos o número, não as linhas. O RLS já filtra por empresa/comercial.
   const hoje = hojeEmPortugal();
-  const [{ count: nClientes }, { count: nAtrasadas }, { data: avisos, count: nAvisos }] = await Promise.all([
+  const [
+    { count: nClientes },
+    { count: nAtrasadas },
+    { data: avisos, count: nAvisos },
+    { data: semResponsavel, count: nSemResponsavel },
+    { data: equipa },
+  ] = await Promise.all([
     supabase.from("clientes").select("id", { count: "exact", head: true }),
     supabase
       .from("tarefas")
@@ -41,7 +47,19 @@ export default async function LayoutPainel({ children }) {
       .lte("data_limite", hoje)
       .order("data_limite", { ascending: true })
       .limit(5),
+    // só para administradores: clientes que chegaram SEM responsável (os que esperam há
+    // mais tempo primeiro) e a equipa, para os poderem entregar a alguém ali mesmo no sino
+    eAdmin
+      ? supabase
+          .from("clientes")
+          .select("id, nome, criado_em", { count: "exact" })
+          .is("responsavel_id", null)
+          .order("criado_em", { ascending: true })
+          .limit(5)
+      : { data: [], count: 0 },
+    eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : { data: [] },
   ]);
+  const totalAvisos = (nAvisos ?? 0) + (nSemResponsavel ?? 0);
 
   // Menu dividido em secções. "contador" aparece à direita do item;
   // "alerta: true" pinta-o de vermelho (tarefas em atraso).
@@ -53,7 +71,7 @@ export default async function LayoutPainel({ children }) {
         { texto: "Clientes", tutorial: "clientes", href: "/painel/clientes", icone: "utilizadores", contador: nClientes ?? null },
         { texto: "Pipeline", tutorial: "pipeline", href: "/painel/pipeline", icone: "subida" },
         { texto: "Tarefas", tutorial: "tarefas", href: "/painel/tarefas", icone: "lista", contador: nAtrasadas || null, alerta: true },
-        { texto: "Notificações", href: "/painel/notificacoes", icone: "sino", contador: nAvisos || null },
+        { texto: "Notificações", href: "/painel/notificacoes", icone: "sino", contador: totalAvisos || null },
       ],
     },
     {
@@ -63,6 +81,7 @@ export default async function LayoutPainel({ children }) {
         ...(eAdmin
           ? [
               { texto: "Equipa", tutorial: "equipa", href: "/painel/equipa", icone: "utilizadorMais" },
+              { texto: "Automações", tutorial: "automacoes", href: "/painel/automacoes", icone: "raio" },
               { texto: "Personalizar", tutorial: "personalizar", href: "/painel/personalizar", icone: "pincel" },
             ]
           : []),
@@ -96,7 +115,14 @@ export default async function LayoutPainel({ children }) {
               </small>
             </span>
           </Link>
-          <Sino tarefas={avisos ?? []} total={nAvisos ?? 0} hoje={hoje} />
+          <Sino
+            tarefas={avisos ?? []}
+            semResponsavel={semResponsavel ?? []}
+            nSemResponsavel={nSemResponsavel ?? 0}
+            equipa={equipa ?? []}
+            total={totalAvisos}
+            hoje={hoje}
+          />
         </div>
 
         {/* pesquisa global de clientes (componente de cliente) */}

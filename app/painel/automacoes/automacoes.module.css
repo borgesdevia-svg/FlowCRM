@@ -1,0 +1,100 @@
+.pagina {
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---------- cabeçalho (igual ao das outras páginas) ---------- */
+.cabecalho h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- registo ---------- */
+.registo h2 {
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.explicacao {
+  margin-bottom: 14px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.vazio {
+  padding: 22px 0;
+  color: var(--cor-texto-fraco);
+  font-size: 0.92rem;
+}
+
+.lista {
+  list-style: none;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+/* bolinha com a cor de cada automação */
+.linha i {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.ponto_tarefa_novo_cliente {
+  background: var(--cor-destaque);
+}
+
+.ponto_distribuir {
+  background: var(--cor-estado-novo);
+}
+
+.ponto_cliente_parado {
+  background: var(--cor-estado-negociacao);
+}
+
+.textoLinha {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  font-size: 0.92rem;
+}
+
+.textoLinha a {
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+.textoLinha a:hover {
+  color: var(--cor-destaque);
+}
+
+.textoLinha small {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+.quando {
+  flex-shrink: 0;
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}

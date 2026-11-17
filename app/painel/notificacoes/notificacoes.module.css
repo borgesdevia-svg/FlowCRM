@@ -247,6 +247,58 @@
   color: #fbbf24;
 }
 
+/* ---------- clientes sem responsável (só administradores) ---------- */
+.urgencia_verde,
+.urgencia_amarelo,
+.urgencia_vermelho {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  border-radius: 50%;
+}
+
+.urgencia_verde {
+  background: var(--cor-destaque);
+}
+
+.urgencia_amarelo {
+  background: #fbbf24;
+}
+
+.urgencia_vermelho {
+  background: #ef4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18);
+}
+
+.nomeCliente {
+  align-self: flex-start;
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+.nomeCliente:hover {
+  color: var(--cor-destaque);
+}
+
+.textoUrgencia_verde,
+.textoUrgencia_amarelo,
+.textoUrgencia_vermelho {
+  font-size: 0.82rem;
+}
+
+.textoUrgencia_verde {
+  color: var(--cor-texto-suave);
+}
+
+.textoUrgencia_amarelo {
+  color: #fbbf24;
+}
+
+.textoUrgencia_vermelho {
+  color: #fca5a5;
+}
+
 /* ---------- sem notificações ---------- */
 .vazio {
   display: flex;

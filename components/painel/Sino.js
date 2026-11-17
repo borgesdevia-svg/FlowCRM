@@ -4,17 +4,21 @@
 // este componente só trata de abrir e fechar a lista, por isso é de cliente.
 //
 // Mostra as MINHAS tarefas por fazer que estão em atraso ou que acabam hoje.
+// Aos administradores mostra também os clientes que chegaram SEM responsável, com uma
+// bolinha que muda de cor com o tempo de espera (verde, amarelo, vermelho) e a lista
+// "Entregar a…" para os atribuir ali mesmo.
 // O número só desce quando a tarefa é concluída (não há "marcar como lida").
 // Só chegam as primeiras 5; "total" diz quantas há, e a lista inteira está
 // na página /painel/notificacoes.
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { formatarDiaCurto } from "@/lib/datas";
+import { formatarDiaCurto, tempoRelativo, urgenciaSemResponsavel } from "@/lib/datas";
+import AtribuirCliente from "@/components/painel/AtribuirCliente";
 import Icone from "@/components/Icone";
 import styles from "./Sino.module.css";
 
-export default function Sino({ tarefas, total, hoje }) {
+export default function Sino({ tarefas, semResponsavel = [], nSemResponsavel = 0, equipa = [], total, hoje }) {
   const [aberto, setAberto] = useState(false);
   const refContentor = useRef(null);
 
@@ -42,7 +46,7 @@ export default function Sino({ tarefas, total, hoje }) {
         className={aberto ? `${styles.botao} ${styles.botaoAberto}` : styles.botao}
         onClick={() => setAberto(!aberto)}
         aria-expanded={aberto}
-        aria-label={total ? `Notificações: ${total} tarefas para tratar` : "Notificações"}
+        aria-label={total ? `Notificações: ${total} para tratar` : "Notificações"}
         title="Notificações"
       >
         <Icone nome="sino" tamanho={18} />
@@ -59,6 +63,27 @@ export default function Sino({ tarefas, total, hoje }) {
           {total === 0 ? (
             <p className={styles.nada}>Está tudo em dia. Sem tarefas atrasadas nem para hoje.</p>
           ) : (
+            <>
+            {semResponsavel.length > 0 && (
+              <>
+                <p className={styles.subtitulo}>Clientes sem responsável · {nSemResponsavel}</p>
+                <ul className={styles.lista}>
+                  {semResponsavel.map((c) => (
+                    <li key={c.id} className={styles.itemSemResponsavel}>
+                      <i className={styles[`urgencia_${urgenciaSemResponsavel(c.criado_em)}`]}></i>
+                      <span className={styles.texto}>
+                        <Link href={`/painel/clientes/${c.id}`} onClick={() => setAberto(false)}>
+                          <strong>{c.nome}</strong>
+                        </Link>
+                        <small>chegou {tempoRelativo(c.criado_em)}</small>
+                      </span>
+                      <AtribuirCliente clienteId={c.id} clienteNome={c.nome} equipa={equipa} />
+                    </li>
+                  ))}
+                </ul>
+                {tarefas.length > 0 && <p className={styles.subtitulo}>As tuas tarefas</p>}
+              </>
+            )}
             <ul className={styles.lista}>
               {tarefas.map((t) => {
                 const atrasada = t.data_limite < hoje; // datas AAAA-MM-DD comparam-se como texto
@@ -85,10 +110,11 @@ export default function Sino({ tarefas, total, hoje }) {
                 );
               })}
             </ul>
+            </>
           )}
 
           <Link href="/painel/notificacoes" className={styles.verTodas} onClick={() => setAberto(false)}>
-            {total > tarefas.length ? `Ver todas (${total})` : "Abrir notificações"}
+            {total > tarefas.length + semResponsavel.length ? `Ver todas (${total})` : "Abrir notificações"}
           </Link>
         </div>
       )}

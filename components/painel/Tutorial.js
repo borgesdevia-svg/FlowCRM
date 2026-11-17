@@ -89,6 +89,13 @@ function criarPassos(nome, eAdmin) {
         "Aqui adicionas as pessoas que vendem contigo. Cada comercial só vê os clientes e as tarefas que lhe dás; tu, como administrador, vês tudo.",
     },
     {
+      alvo: "automacoes",
+      so: "admin",
+      titulo: "Automações",
+      texto:
+        "Trabalho que o CRM faz sozinho: criar a tarefa de contactar cada cliente novo, entregar os leads à equipa e lembrar clientes esquecidos. Ligas e desligas cada uma.",
+    },
+    {
       alvo: "personalizar",
       so: "admin",
       titulo: "Personalizar",
