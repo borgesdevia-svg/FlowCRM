@@ -1,21 +1,19 @@
-// Formulário público em estilo "página de formulário" (como um Google Forms):
-//  - bloco de cima com uma faixa na cor da empresa, o logótipo por cima da faixa,
-//    o nome da empresa, o título e o texto de entrada;
-//  - por baixo, o formulário (children), com cada pergunta no seu bloco (FormLead).
+// Formulário público em estilo "documento" (como uma folha de Word):
+//  - em cima, o logótipo e o nome da empresa, uma linha fina, o título e o texto de entrada;
+//  - por baixo, as perguntas numeradas (children = FormLead), sem cores: só preto, branco e cinzentos.
 // É o MESMO componente na página pública (/f/[slug]) e na pré-visualização da página
-// Personalizar: assim o administrador vê exatamente o que o cliente vai ver.
+// Formulário: assim o administrador vê exatamente o que o cliente vai ver.
 // Sem "use client": funciona tanto no servidor como dentro de componentes de cliente.
+// (A cor que as empresas escolhiam antes deixou de ser usada: o aspeto é igual para todas.)
 
-import { TEXTOS_PADRAO, estiloCor } from "@/lib/formulario";
+import { TEXTOS_PADRAO } from "@/lib/formulario";
 import styles from "./CartaoFormulario.module.css";
 
-export default function CartaoFormulario({ nome, logo, cor, titulo, texto, children, className = "" }) {
+export default function CartaoFormulario({ nome, logo, titulo, texto, children, className = "" }) {
   return (
-    // a cor escolhida entra como variáveis CSS (ver estiloCor em lib/formulario.js)
-    <div className={`${styles.cartao} ${className}`} style={estiloCor(cor)}>
+    <div className={`${styles.folha} ${className}`}>
       <header className={styles.cabeca}>
-        <div className={styles.faixa} aria-hidden="true"></div>
-        <div className={styles.conteudoCabeca}>
+        <div className={styles.empresa}>
           {logo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={logo} alt={`Logótipo da ${nome}`} className={styles.logo} />
@@ -25,9 +23,9 @@ export default function CartaoFormulario({ nome, logo, cor, titulo, texto, child
             </span>
           )}
           <p className={styles.nome}>{nome}</p>
-          <h1 className={styles.titulo}>{titulo || TEXTOS_PADRAO.titulo}</h1>
-          <p className={styles.texto}>{texto || TEXTOS_PADRAO.texto}</p>
         </div>
+        <h1 className={styles.titulo}>{titulo || TEXTOS_PADRAO.titulo}</h1>
+        <p className={styles.texto}>{texto || TEXTOS_PADRAO.texto}</p>
       </header>
       {children}
     </div>

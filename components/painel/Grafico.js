@@ -23,6 +23,13 @@ function resolverCor(cor) {
   return getComputedStyle(document.documentElement).getPropertyValue(nome).trim();
 }
 
+// "#4357e8" -> "rgb(67 87 232 / 0.3)" (a mesma cor com transparência)
+function comTransparencia(hex, alfa) {
+  const n = parseInt(hex.replace("#", ""), 16);
+  if (Number.isNaN(n) || hex.length < 7) return hex;
+  return `rgb(${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255} / ${alfa})`;
+}
+
 const euros = new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 
 export default function Grafico({ tipo, etiquetas, valores, cores, formato, preencher = true }) {
@@ -37,6 +44,17 @@ export default function Grafico({ tipo, etiquetas, valores, cores, formato, pree
     const corGrelha = `rgb(${resolverCor("var(--rgb-tinta)")} / 0.08)`;
     const formatar = (v) => (formato === "euros" ? euros.format(v) : v);
     const circular = tipo === "doughnut";
+    // barras de uma só cor (ex.: novos clientes por semana): degradê suave de cima para baixo,
+    // com uma linha da cor cheia no topo de cada barra (como na referência Octax)
+    const barrasSuaves = tipo === "bar" && !Array.isArray(cores);
+    const degrade = (contexto) => {
+      const area = contexto.chart.chartArea;
+      if (!area) return comTransparencia(listaCores, 0.2); // primeiro desenho: ainda sem medidas
+      const g = contexto.chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+      g.addColorStop(0, comTransparencia(listaCores, 0.32));
+      g.addColorStop(1, comTransparencia(listaCores, 0.06));
+      return g;
+    };
 
     const grafico = new Chart(refCanvas.current, {
       type: tipo,
@@ -48,10 +66,13 @@ export default function Grafico({ tipo, etiquetas, valores, cores, formato, pree
             backgroundColor:
               tipo === "line"
                 ? listaCores + "22" // cor da linha com transparência ("22" em hexadecimal ≈ 13%)
-                : listaCores,
+                : barrasSuaves
+                  ? degrade
+                  : listaCores,
             borderColor: circular ? resolverCor("var(--cor-cartao)") : listaCores,
-            borderWidth: circular ? 3 : 2,
-            borderRadius: tipo === "bar" ? 8 : 0,
+            borderWidth: circular ? 3 : barrasSuaves ? { top: 2, left: 0, right: 0, bottom: 0 } : 2,
+            borderSkipped: barrasSuaves ? "bottom" : undefined,
+            borderRadius: tipo === "bar" ? (barrasSuaves ? 4 : 8) : 0,
             fill: tipo === "line" && preencher, // pinta a área por baixo da linha
             tension: 0.35, // linha suavemente curva
             pointRadius: 3,
@@ -66,7 +87,16 @@ export default function Grafico({ tipo, etiquetas, valores, cores, formato, pree
         animation: { duration: 900 },
         plugins: {
           legend: { display: false }, // a legenda é feita em HTML pela página
+          // caixa da dica clara e discreta, com contorno fino
           tooltip: {
+            backgroundColor: resolverCor("var(--cor-cartao)"),
+            titleColor: resolverCor("var(--cor-texto)"),
+            bodyColor: resolverCor("var(--cor-texto-suave)"),
+            borderColor: `rgb(${resolverCor("var(--rgb-tinta)")} / 0.12)`,
+            borderWidth: 1,
+            padding: 10,
+            cornerRadius: 8,
+            displayColors: false,
             callbacks: { label: (contexto) => ` ${formatar(contexto.parsed.y ?? contexto.parsed)}` },
           },
         },

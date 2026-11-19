@@ -1,6 +1,6 @@
 "use client";
 // Editor da página Configurações (só o administrador):
-//   - modelo de design (cada um já traz as suas cores) e gráfico do Início;
+//   - aspeto claro ou escuro e gráfico do Início;
 //   - nome e ordem de cada item do menu lateral.
 // Enquanto se mexe, o painel inteiro muda logo de aspeto (pré-visualização ao vivo:
 // um <style> com as cores do rascunho por cima das guardadas). Só grava ao carregar
@@ -106,78 +106,57 @@ export default function EditorAparencia({ inicial }) {
       <style>{cssAparencia(paraGuardar)}</style>
 
       <div className={styles.colunaOpcoes}>
-        {/* ---------- modelo de design ---------- */}
+        {/* ---------- aspeto: claro ou escuro ---------- */}
         <section className={styles.seccao} aria-labelledby="titulo-modelo">
           <header className={styles.cabecaSeccao}>
-            <h2 id="titulo-modelo">Modelo de design</h2>
+            <h2 id="titulo-modelo">Aspeto</h2>
             <p className={styles.explicacao}>
-              O aspeto geral do CRM para toda a equipa. Cada modelo tem versão clara (sol) e escura (lua). Vês a mudança
-              logo, antes de guardar.
+              Claro ou escuro, para toda a equipa. Vês a mudança logo, antes de guardar.
             </p>
           </header>
           <div className={styles.grelhaModelos} role="radiogroup" aria-labelledby="titulo-modelo">
-            {MODELOS.map((m) => {
-              const ativo = dados.modelo === m.chave;
-              // a miniatura mostra a versão do modo escolhido (claro ou escuro)
-              const a = (m[dados.modo] ?? m[m.modoPadrao]).amostra;
-              // riscas do menu na miniatura: claras num menu escuro à parte, cinzentas nos outros
-              const linha = a.lateralEscura ? "rgb(255 255 255 / 0.4)" : a.fraco;
+            {MODOS.map((modo) => {
+              const ativo = dados.modo === modo.chave;
+              const a = MODELOS[0][modo.chave].amostra;
               return (
-                <div key={m.chave} className={ativo ? styles.modeloAtivo : styles.modelo}>
-                <label className={styles.escolherModelo}>
-                  <input
-                    type="radio"
-                    name="modelo"
-                    value={m.chave}
-                    checked={ativo}
-                    onChange={() => mudar({ modelo: m.chave })}
-                    className="so-leitores"
-                  />
-                  {/* miniatura do painel com as cores do modelo */}
-                  <span className={styles.miniatura} style={{ background: a.fundo }} aria-hidden="true">
-                    <span className={styles.miniLateral} style={{ background: a.lateral }}>
-                      <span style={{ background: a.destaqueLateral }} />
-                      <span style={{ background: linha }} />
-                      <span style={{ background: linha }} />
-                      <span style={{ background: linha }} />
-                    </span>
-                    <span className={styles.miniConteudo}>
-                      <span className={styles.miniTitulo} style={{ background: a.texto }} />
-                      <span className={styles.miniCartoes}>
-                        <span style={{ background: a.cartao }}>
-                          <i style={{ background: a.destaque }} />
-                        </span>
-                        <span style={{ background: a.cartao }}>
-                          <i style={{ background: a.fraco }} />
-                        </span>
+                <div key={modo.chave} className={ativo ? styles.modeloAtivo : styles.modelo}>
+                  <label className={styles.escolherModelo}>
+                    <input
+                      type="radio"
+                      name="modo"
+                      value={modo.chave}
+                      checked={ativo}
+                      onChange={() => mudar({ modo: modo.chave })}
+                      className="so-leitores"
+                    />
+                    {/* miniatura do painel com as cores deste modo */}
+                    <span className={styles.miniatura} style={{ background: a.fundo }} aria-hidden="true">
+                      <span className={styles.miniLateral} style={{ background: a.lateral }}>
+                        <span style={{ background: a.destaqueLateral }} />
+                        <span style={{ background: a.fraco }} />
+                        <span style={{ background: a.fraco }} />
+                        <span style={{ background: a.fraco }} />
                       </span>
-                      <span className={styles.miniBotao} style={{ background: a.destaque }} />
+                      <span className={styles.miniConteudo}>
+                        <span className={styles.miniTitulo} style={{ background: a.texto }} />
+                        <span className={styles.miniCartoes}>
+                          <span style={{ background: a.cartao }}>
+                            <i style={{ background: a.destaque }} />
+                          </span>
+                          <span style={{ background: a.cartao }}>
+                            <i style={{ background: a.fraco }} />
+                          </span>
+                        </span>
+                        <span className={styles.miniBotao} style={{ background: a.destaque }} />
+                      </span>
                     </span>
-                  </span>
-                  <span className={styles.nomeModelo}>
-                    <strong>
-                      {m.nome}
-                      {m.chave === PADRAO.modelo && <small className={styles.etiqueta}>Padrão</small>}
-                    </strong>
-                    <small>{m.descricao}</small>
-                  </span>
-                </label>
-                {/* sol = versão clara, lua = versão escura (escolhe também este modelo) */}
-                <span className={styles.modos} role="group" aria-label={`Modo do modelo ${m.nome}`}>
-                  {MODOS.map((modo) => (
-                    <button
-                      key={modo.chave}
-                      type="button"
-                      className={ativo && dados.modo === modo.chave ? styles.modoAtivo : styles.modo}
-                      aria-pressed={ativo && dados.modo === modo.chave}
-                      title={`${m.nome} ${modo.nome.toLowerCase()}`}
-                      onClick={() => mudar({ modelo: m.chave, modo: modo.chave })}
-                    >
-                      <Icone nome={modo.icone} tamanho={15} />
-                      {modo.nome}
-                    </button>
-                  ))}
-                </span>
+                    <span className={styles.nomeModelo}>
+                      <strong>
+                        <Icone nome={modo.icone} tamanho={15} /> {modo.nome}
+                        {modo.chave === PADRAO.modo && <small className={styles.etiqueta}>Padrão</small>}
+                      </strong>
+                    </span>
+                  </label>
                 </div>
               );
             })}

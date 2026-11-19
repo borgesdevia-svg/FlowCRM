@@ -9,7 +9,6 @@
 import { useEffect, useState, useTransition } from "react";
 import { guardarFormulario } from "@/lib/acoes/empresa";
 import {
-  CORES,
   LIMITES,
   MAX_OPCOES,
   MAX_PERGUNTAS,
@@ -189,27 +188,6 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
               </section>
 
               <section className={styles.seccao}>
-                <h2 id="titulo-cor">Cor</h2>
-                <p className={styles.explicacao}>A cor dos botões e das opções escolhidas no formulário.</p>
-                <div className={styles.cores} role="radiogroup" aria-labelledby="titulo-cor">
-                  {CORES.map((c) => (
-                    <label key={c.chave} className={styles.cor} title={c.nome}>
-                      <input
-                        type="radio"
-                        name="cor"
-                        value={c.chave}
-                        checked={dados.marca.cor === c.chave}
-                        onChange={() => mudarMarca({ cor: c.chave })}
-                        className="so-leitores"
-                      />
-                      <span className={styles.amostra} style={{ background: c.cor }} aria-hidden="true" />
-                      <span className={styles.nomeCor}>{c.nome}</span>
-                    </label>
-                  ))}
-                </div>
-              </section>
-
-              <section className={styles.seccao}>
                 <h2>Textos de entrada</h2>
                 <div className="campo">
                   <label htmlFor="form-titulo">Título</label>
@@ -386,13 +364,11 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
         <p className={styles.tituloPrevia}>
           {separador === "depois" ? "O que o cliente vê depois de enviar" : "Como o cliente vê o formulário"}
         </p>
-        {/* "aparencia-site": o formulário público tem sempre o aspeto escuro do site,
-            por isso a pré-visualização ignora o modelo de design escolhido para o painel */}
-        <div className={`${styles.moldura} aparencia-site`}>
+        {/* o formulário público é sempre uma folha branca sobre cinzento-claro, como na página real */}
+        <div className={styles.moldura}>
           <CartaoFormulario
             nome={nomeEmpresa}
             logo={logo}
-            cor={dados.marca.cor}
             titulo={dados.marca.titulo.trim()}
             texto={dados.marca.texto.trim()}
             className={styles.cartaoPrevia}

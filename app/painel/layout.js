@@ -11,6 +11,7 @@ import Sino from "@/components/painel/Sino";
 import styles from "./painel.module.css";
 import SimboloLogo from "@/components/SimboloLogo";
 import Tutorial from "@/components/painel/Tutorial";
+import BarraTopo from "@/components/painel/BarraTopo";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
@@ -87,7 +88,7 @@ export default async function LayoutPainel({ children }) {
           O CSS é montado a partir de listas fixas (lib/aparencia.js), nunca de texto escrito pelo utilizador. */}
       <style>{cssAparencia(aparencia)}</style>
       <aside className={`painel-lateral ${styles.lateral}`}>
-        {/* cabeça: logótipo + empresa numa caixa, e o sino de notificações ao lado */}
+        {/* cabeça: o "espaço de trabalho" (logótipo + nome da empresa), ao estilo do Linear */}
         <div className={styles.topoMenu}>
           <Link href="/painel" className={styles.marca}>
             {/* logótipo da empresa (se o administrador o enviou) ou a inicial do nome */}
@@ -109,14 +110,6 @@ export default async function LayoutPainel({ children }) {
               </small>
             </span>
           </Link>
-          <Sino
-            tarefas={avisos ?? []}
-            semResponsavel={semResponsavel ?? []}
-            nSemResponsavel={nSemResponsavel ?? 0}
-            equipa={equipa ?? []}
-            total={totalAvisos}
-            hoje={hoje}
-          />
         </div>
 
         {/* pesquisa global de clientes (componente de cliente) */}
@@ -174,8 +167,25 @@ export default async function LayoutPainel({ children }) {
         </div>
       </aside>
 
-      {/* "painel-conteudo": usa a animação de entrada curta (globals.css) */}
-      <main className={`painel-conteudo ${styles.conteudo}`}>{children}</main>
+      <div className={styles.coluna}>
+        {/* barra de topo: onde estou (Clientes › Importar) + sino + conta */}
+        <BarraTopo itens={seccoes.flatMap((s) => s.itens).map(({ href, nome }) => ({ href, nome }))}>
+          <Sino
+            tarefas={avisos ?? []}
+            semResponsavel={semResponsavel ?? []}
+            nSemResponsavel={nSemResponsavel ?? 0}
+            equipa={equipa ?? []}
+            total={totalAvisos}
+            hoje={hoje}
+          />
+          <Link href="/painel/conta" className={styles.avatarTopo} title="A minha conta" aria-label="A minha conta">
+            {iniciais(perfil.nome)}
+          </Link>
+        </BarraTopo>
+
+        {/* "painel-conteudo": usa a animação de entrada curta (globals.css) */}
+        <main className={`painel-conteudo ${styles.conteudo}`}>{children}</main>
+      </div>
     </div>
   );
 }

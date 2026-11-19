@@ -1,17 +1,33 @@
 /* Página pública: a protagonista é a empresa, não o FlowCRM.
-   Por isso é sóbria e o nome da empresa é o título. */
+   Fundo cinzento claro com o formulário no meio, como uma folha de documento.
+   Sempre clara (as variáveis do tema escuro do site são trocadas aqui). */
 .pagina {
+  --cor-cartao: #ffffff;
+  --cor-contorno: #e4e7ec;
+  --cor-texto: #101828;
+  --cor-texto-suave: #475467;
+  --cor-texto-fraco: #667085;
+  --rgb-tinta: 16 24 40;
+  color-scheme: light;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  padding: 40px 16px 48px;
-  background: radial-gradient(
-    ellipse 70% 50% at 50% 0%,
-    color-mix(in srgb, var(--cor-brilho, #22c55e) 12%, transparent),
-    transparent 70%
-  );
+  padding: 48px 16px;
+  background: #f2f4f7;
+  color: var(--cor-texto);
+}
+
+.marca a {
+  color: var(--cor-texto-suave);
+  text-decoration: underline;
+}
+
+@media (max-width: 520px) {
+  .pagina {
+    padding: 0 0 32px;
+  }
 }
 
 .marca {

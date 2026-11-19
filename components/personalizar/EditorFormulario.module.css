@@ -110,57 +110,6 @@
   font-size: 0.78rem;
 }
 
-/* ---------- cores ---------- */
-.cores {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.cor {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 64px;
-  cursor: pointer;
-}
-
-.amostra {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgb(var(--rgb-tinta) / 0.15);
-  transition:
-    transform 0.2s var(--curva),
-    box-shadow 0.2s;
-}
-
-.cor:hover .amostra {
-  transform: scale(1.08);
-}
-
-/* a escolhida tem um anel à volta */
-.cor:has(input:checked) .amostra {
-  box-shadow:
-    0 0 0 3px var(--cor-cartao),
-    0 0 0 5px var(--cor-texto);
-}
-
-.cor:has(input:focus-visible) .amostra {
-  outline: 2px solid var(--cor-destaque);
-  outline-offset: 6px;
-}
-
-.nomeCor {
-  color: var(--cor-texto-fraco);
-  font-size: 0.75rem;
-}
-
-.cor:has(input:checked) .nomeCor {
-  color: var(--cor-texto);
-}
-
 /* ---------- modelos ---------- */
 /* modelos numa grelha que se ajusta à largura (sem ficar um sozinho na linha de baixo) */
 .modelos {
@@ -299,10 +248,10 @@
   justify-content: center;
   align-items: flex-start;
   max-height: calc(100vh - 70px);
-  padding: 16px;
-  border-radius: 20px;
+  padding: 20px;
+  border-radius: 14px;
   border: 1px solid var(--cor-contorno);
-  background: var(--cor-fundo);
+  background: #f2f4f7; /* o mesmo cinzento da página pública */
   overflow-y: auto;
   scrollbar-width: thin;
 }

@@ -5,7 +5,6 @@ import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { papelNaEmpresaDoFormulario } from "@/lib/sessao";
 import FormLead from "@/components/formulario/FormLead";
 import CartaoFormulario from "@/components/formulario/CartaoFormulario";
-import { obterCor } from "@/lib/formulario";
 import styles from "./formulario.module.css";
 
 // Rota PÚBLICA /f/[slug] — o formulário de contacto de cada empresa.
@@ -41,12 +40,11 @@ export default async function PaginaFormulario({ params }) {
   const papel = await papelNaEmpresaDoFormulario(supabase, slug);
 
   return (
-    // o brilho do fundo usa a cor escolhida pela empresa
-    <main className={styles.pagina} style={{ "--cor-brilho": obterCor(formulario.cor).cor }}>
+    // fundo cinzento claro com a "folha" branca do formulário no meio
+    <main className={styles.pagina}>
       <CartaoFormulario
         nome={nomeEmpresa}
         logo={formulario.logo_url}
-        cor={formulario.cor}
         titulo={formulario.titulo}
         texto={formulario.texto}
       >

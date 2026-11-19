@@ -194,24 +194,34 @@ export default async function PaginaPainel() {
   const numeros = [
     {
       rotulo: "Clientes",
+      icone: "utilizadores",
       valor: totalClientes,
       etiqueta: { texto: `+${novosEsteMes ?? 0} este mês`, tipo: novosEsteMes > 0 ? "bom" : "neutro" },
+      detalhe: eAdmin ? "Em toda a empresa" : "Os teus clientes",
+      href: "/painel/clientes",
     },
     {
       rotulo: "Em negociação",
+      icone: "subida",
       valor: contagem.negociacao ?? 0,
-      detalhe: formatarEuros(valorNegociacao),
+      detalhe: `${formatarEuros(valorNegociacao)} previstos`,
+      href: "/painel/pipeline",
     },
     {
       rotulo: "Conversão",
+      icone: "grafico",
       valor: conversao,
       sufixo: "%",
       detalhe: `${contagem.ativo ?? 0} ${(contagem.ativo ?? 0) === 1 ? "cliente ativo" : "clientes ativos"}`,
+      href: "/painel/clientes?estado=ativo",
     },
     {
       rotulo: "Tarefas",
+      icone: "lista",
       valor: totalTarefas ?? 0,
       etiqueta: atrasadas ? { texto: `${atrasadas} em atraso`, tipo: "mau" } : { texto: "Em dia", tipo: "bom" },
+      detalhe: "Por fazer",
+      href: "/painel/tarefas",
     },
   ];
 
@@ -234,6 +244,11 @@ export default async function PaginaPainel() {
   const mostrarPassos = eAdmin && passosFeitos < passos.length;
 
   const primeiroNome = perfil.nome.split(" ")[0];
+  // "Bom dia" até ao meio-dia, "Boa tarde" até às 20h, depois "Boa noite" (hora de Portugal)
+  const hora = Number(
+    new Intl.DateTimeFormat("pt-PT", { hour: "numeric", hourCycle: "h23", timeZone: "Europe/Lisbon" }).format(new Date())
+  );
+  const saudacao = hora < 12 ? "Bom dia" : hora < 20 ? "Boa tarde" : "Boa noite";
   const linkFormulario = `/f/${empresa.slug}`;
   const totalSemanas = valoresSemanas.reduce((a, b) => a + b, 0);
 
@@ -242,7 +257,12 @@ export default async function PaginaPainel() {
     <div className={`entrar ${styles.pagina}`}>
       {/* cabeçalho: saudação à esquerda, ações à direita */}
       <header className={styles.cabecalho}>
-        <h1>Olá, {primeiroNome}!</h1>
+        <div>
+          <h1>
+            {saudacao}, {primeiroNome}
+          </h1>
+          <p className={styles.subtitulo}>Este é o resumo do CRM da {empresa.nome} para hoje.</p>
+        </div>
         <div className={styles.acoes}>
           {/* <a> normal (não <Link>) porque descarrega um ficheiro, não abre uma página */}
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
@@ -278,21 +298,32 @@ export default async function PaginaPainel() {
       )}
 
       {/* cartões de números: nome + etiqueta em cima, número grande em baixo */}
+      {/* cada cartão: painel de cima com cor suave (nome + número) e rodapé com o detalhe e o link */}
       <section className={styles.numeros}>
         {numeros.map((n) => (
           <article key={n.rotulo} className={styles.cartao}>
-            <div className={styles.topoCartao}>
-              <h2>{n.rotulo}</h2>
-              {n.etiqueta && (
-                <span className={`${styles.etiqueta} ${styles[n.etiqueta.tipo]}`}>{n.etiqueta.texto}</span>
-              )}
+            <div className={styles.frenteCartao}>
+              <div className={styles.topoCartao}>
+                <h2>
+                  <Icone nome={n.icone} tamanho={16} />
+                  {n.rotulo}
+                </h2>
+                {n.etiqueta && (
+                  <span className={`${styles.etiqueta} ${styles[n.etiqueta.tipo]}`}>{n.etiqueta.texto}</span>
+                )}
+              </div>
+              <p className={styles.valor}>
+                <strong>
+                  <ContarNumero valor={n.valor} sufixo={n.sufixo} />
+                </strong>
+              </p>
             </div>
-            <p className={styles.valor}>
-              <strong>
-                <ContarNumero valor={n.valor} sufixo={n.sufixo} />
-              </strong>
-              {n.detalhe && <span>{n.detalhe}</span>}
-            </p>
+            <div className={styles.rodapeCartao}>
+              <span>{n.detalhe}</span>
+              <Link href={n.href} className={styles.verDetalhes}>
+                Ver detalhes
+              </Link>
+            </div>
           </article>
         ))}
       </section>
