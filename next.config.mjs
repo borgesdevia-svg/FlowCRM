@@ -7,6 +7,11 @@ const nextConfig = {
       bodySizeLimit: "2mb",
     },
   },
+  // Endereço antigo: a página "Personalizar" passou a chamar-se "Formulário".
+  // Quem tiver o link guardado vai parar ao sítio novo.
+  async redirects() {
+    return [{ source: "/painel/personalizar", destination: "/painel/formulario", permanent: true }];
+  },
 };
 
 export default nextConfig;
