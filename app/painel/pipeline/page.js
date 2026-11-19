@@ -12,18 +12,16 @@ import styles from "./pipeline.module.css";
 // Para mudar de fase: arrastar o cartão para outra coluna (no computador)
 // ou usar os botões do cartão (componente BotoesFase, funciona também no telemóvel).
 //
-// Escala: uma coluna pode ter milhares de clientes (ex.: todos em Perdido).
-// Por isso cada coluna traz só os CARREGAR mais recentes, mostra os primeiros
-// (VISIVEIS) e o resto abre num "Mostrar mais". Se houver ainda mais, há um link
-// para a lista de clientes já filtrada por essa fase, que tem páginas.
-// Os totais (contadores e números das colunas) vêm da função resumo_clientes.
+// Escala: uma coluna pode ter milhares de leads (ex.: todos em Perdido).
+// Por isso cada coluna traz só os CARREGAR mais recentes. O quadro tem uma altura fixa
+// (cabe no ecrã) e cada coluna faz scroll por dentro: a página não cresce com os leads.
+// Se houver ainda mais, há um link para a lista de leads já filtrada por essa fase.
+// Os totais (quantos e valor no topo de cada coluna) vêm da função resumo_clientes.
 // Pesquisa: ?q=... no URL filtra todas as colunas (nome ou email, sem acentos),
 // com a mesma coluna "pesquisa" e o mesmo índice da lista de clientes.
 export const metadata = { title: "Pipeline · FlowCRM" };
 
 const CARREGAR = 30;
-// as fases "em curso" mostram mais cartões; as fechadas (ganho/perdido) mostram poucos
-const VISIVEIS = { novo: 8, negociacao: 8, ativo: 4, perdido: 3 };
 
 const numero = (n) => new Intl.NumberFormat("pt-PT").format(n);
 
@@ -96,32 +94,13 @@ export default async function PaginaPipeline({ searchParams }) {
           <h1>Pipeline</h1>
           <p className={styles.resumo}>
             {formatarEuros(emAberto.soma)} em aberto em {numero(emAberto.n)}{" "}
-            {emAberto.n === 1 ? "cliente" : "clientes"}, {numero(total("negociacao").n)} em negociação.
+            {emAberto.n === 1 ? "lead" : "leads"}, {numero(total("negociacao").n)} em negociação.
           </p>
         </div>
         <Link href="/painel/clientes/novo" className="botao">
           <Icone nome="mais" tamanho={16} /> Novo lead
         </Link>
       </header>
-
-      {/* contadores, um por fase: o valor em jogo e quantos clientes */}
-      <section className={styles.contadores} aria-label="Resumo por fase">
-        {ESTADOS.map((estado) => {
-          const t = total(estado.chave);
-          return (
-            <div key={estado.chave} className={styles.contador} style={{ "--cor": estado.cor }}>
-              <span className={styles.fase}>
-                <i aria-hidden="true"></i>
-                {estado.texto}
-              </span>
-              <strong>{formatarEuros(t.soma)}</strong>
-              <small>
-                {numero(t.n)} {t.n === 1 ? "cliente" : "clientes"}
-              </small>
-            </div>
-          );
-        })}
-      </section>
 
       {/* pesquisa + dica (ou quantos resultados a pesquisa encontrou) */}
       <div className={styles.barra}>
@@ -153,8 +132,6 @@ export default async function PaginaPipeline({ searchParams }) {
         {ESTADOS.map((estado, i) => {
           const daColuna = porFase[i]?.data ?? [];
           const nTotal = total(estado.chave).n;
-          const visiveis = daColuna.slice(0, VISIVEIS[estado.chave]);
-          const resto = daColuna.slice(VISIVEIS[estado.chave]);
           const foraDoQuadro = nTotal - daColuna.length; // os que nem vieram
 
           return (
@@ -165,33 +142,31 @@ export default async function PaginaPipeline({ searchParams }) {
               className={styles.coluna}
               style={{ "--cor": estado.cor }}
             >
-              {/* título numa faixa com um traço da cor da fase em cima */}
+              {/* topo da coluna: nome da fase com a bolinha da cor, quantos leads e o valor em jogo */}
               <header className={styles.topoColuna}>
-                <h2>{estado.texto}</h2>
-                <span>{numero(nTotal)}</span>
+                <div className={styles.linhaTopo}>
+                  <h2>
+                    <i aria-hidden="true"></i>
+                    {estado.texto}
+                  </h2>
+                  <span>{numero(nTotal)}</span>
+                </div>
+                <strong className={styles.somaColuna}>{formatarEuros(total(estado.chave).soma)}</strong>
               </header>
 
-              {daColuna.length === 0 && <p className={styles.vazia}>{termo ? "Nenhum resultado nesta fase." : "Nenhum lead nesta fase."}</p>}
+              {/* os cartões fazem scroll aqui dentro (a coluna tem altura fixa) */}
+              <div className={styles.listaColuna}>
+                {daColuna.length === 0 && <p className={styles.vazia}>{termo ? "Nenhum resultado nesta fase." : "Nenhum lead nesta fase."}</p>}
 
-              {visiveis.map(cartao)}
+                {daColuna.map(cartao)}
 
-              {/* o resto dos que vieram abre aqui mesmo (<details>, sem JavaScript) */}
-              {resto.length > 0 && (
-                <details className={styles.mais}>
-                  <summary>
-                    <span className={styles.abrir}>Mostrar mais {resto.length}</span>
-                    <span className={styles.fechar}>Mostrar menos</span>
-                  </summary>
-                  <div className={styles.cartoesMais}>{resto.map(cartao)}</div>
-                </details>
-              )}
-
-              {/* ainda há mais: a lista de clientes tem páginas e pesquisa */}
-              {foraDoQuadro > 0 && (
-                <Link href={`/painel/clientes?estado=${estado.chave}${termo ? `&q=${encodeURIComponent(termo)}` : ""}`} className={styles.verTodos}>
-                  Ver todos os {numero(nTotal)} na lista
-                </Link>
-              )}
+                {/* ainda há mais: a lista de leads tem páginas e pesquisa */}
+                {foraDoQuadro > 0 && (
+                  <Link href={`/painel/clientes?estado=${estado.chave}${termo ? `&q=${encodeURIComponent(termo)}` : ""}`} className={styles.verTodos}>
+                    Ver todos os {numero(nTotal)} na lista
+                  </Link>
+                )}
+              </div>
 
               {/* os clientes novos entram sempre na fase "Novo" */}
               {estado.chave === "novo" && (

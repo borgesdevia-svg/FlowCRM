@@ -26,6 +26,19 @@ const AVISOS = {
 
 const numero = (n) => new Intl.NumberFormat("pt-PT").format(n);
 
+// avatar de cada lead: iniciais ("Ana Lopes" -> "AL") numa cor fixa escolhida pelo nome
+// (o mesmo lead tem sempre a mesma cor)
+const CORES_AVATAR = ["#22c55e", "#14b8a6", "#3b82f6", "#8b5cf6", "#f59e0b", "#ec4899", "#06b6d4"];
+function iniciais(nome) {
+  const partes = String(nome).trim().split(/\s+/).filter(Boolean);
+  return ((partes[0]?.[0] ?? "?") + (partes.length > 1 ? partes.at(-1)[0] : "")).toUpperCase();
+}
+function corAvatar(nome) {
+  let h = 0;
+  for (const letra of String(nome)) h = (h * 31 + letra.charCodeAt(0)) >>> 0;
+  return CORES_AVATAR[h % CORES_AVATAR.length];
+}
+
 // No Next.js 16, searchParams chega como uma Promise: por isso o "await"
 export default async function PaginaClientes({ searchParams }) {
   const { q = "", estado = "", aviso = "", pagina = "1" } = await searchParams;
@@ -196,6 +209,10 @@ export default async function PaginaClientes({ searchParams }) {
                   return (
                     <tr key={c.id}>
                       <td>
+                        <div className={styles.pessoa}>
+                        <span className={styles.avatarLead} style={{ "--cor-avatar": corAvatar(c.nome) }} aria-hidden="true">
+                          {iniciais(c.nome)}
+                        </span>
                         <div className={styles.nomeEmail}>
                           {/* o link ocupa a linha toda (ver CSS) para a linha inteira ser clicável */}
                           <Link href={`/painel/clientes/${c.id}`} className={styles.linkCliente}>
@@ -205,6 +222,7 @@ export default async function PaginaClientes({ searchParams }) {
                             {c.email ?? "Sem email"}
                             {c.origem === "formulario" && <em className={styles.origem}>Formulário</em>}
                           </small>
+                        </div>
                         </div>
                       </td>
                       <td className={styles.colTelefone}>
@@ -219,7 +237,16 @@ export default async function PaginaClientes({ searchParams }) {
                       </td>
                       {eAdmin && (
                         <td className={styles.colResponsavel}>
-                          {c.perfis?.nome ?? <span className={styles.semResponsavel}>Por atribuir</span>}
+                          {c.perfis?.nome ? (
+                            <span className={styles.responsavel}>
+                              <span className={styles.miniAvatar} aria-hidden="true">
+                                {iniciais(c.perfis.nome)}
+                              </span>
+                              {c.perfis.nome}
+                            </span>
+                          ) : (
+                            <span className={styles.semResponsavel}>Por atribuir</span>
+                          )}
                         </td>
                       )}
                       <td className={styles.colValor}>

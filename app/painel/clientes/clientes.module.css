@@ -191,19 +191,22 @@
   overflow: hidden; /* os cantos redondos cortam a tabela */
 }
 
+/* as linhas são "cartões" separados por um pequeno espaço */
 .rolar {
   overflow-x: auto;
+  padding: 2px 10px 6px;
 }
 
 .tabela {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 6px;
   font-size: 0.92rem;
 }
 
 /* cabeçalhos: pequenos e cinzentos, sem fundo nem ícones */
 .tabela th {
-  padding: 14px 20px 10px;
+  padding: 12px 18px 2px;
   color: var(--cor-texto-fraco);
   font-size: 0.8rem;
   font-weight: 500;
@@ -212,17 +215,23 @@
 }
 
 .tabela td {
-  padding: 13px 20px;
+  padding: 14px 18px;
   vertical-align: middle;
+  background: rgb(var(--rgb-tinta) / 0.025);
+  border-top: 1px solid rgb(var(--rgb-tinta) / 0.05);
+  border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.05);
+  transition: background 0.15s, border-color 0.15s;
 }
 
-/* linha fina por cima de cada linha (não da primeira), como nas listas do iPhone */
-.tabela tbody tr + tr td {
-  border-top: 1px solid rgb(var(--rgb-tinta) / 0.06);
+/* cantos redondos em cada linha (no primeiro e no último campo) */
+.tabela td:first-child {
+  border-left: 1px solid rgb(var(--rgb-tinta) / 0.05);
+  border-radius: 12px 0 0 12px;
 }
 
-.tabela thead th {
-  border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.06);
+.tabela td:last-child {
+  border-right: 1px solid rgb(var(--rgb-tinta) / 0.05);
+  border-radius: 0 12px 12px 0;
 }
 
 /* a linha fica "posicionada" para o link do nome a poder cobrir toda */
@@ -231,8 +240,50 @@
   transition: background 0.15s;
 }
 
-.tabela tbody tr:hover {
-  background: rgb(var(--rgb-tinta) / 0.035);
+.tabela tbody tr:hover td {
+  background: rgb(var(--rgb-tinta) / 0.05);
+  border-color: rgb(var(--rgb-destaque) / 0.25);
+}
+
+/* nome do lead com o avatar de iniciais à esquerda */
+.pessoa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatarLead {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--cor-avatar) 16%, transparent);
+  color: var(--cor-avatar);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* responsável: bolinha com as iniciais + nome */
+.responsavel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto);
+}
+
+.miniAvatar {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto-suave);
+  font-size: 0.66rem;
+  font-weight: 600;
 }
 
 .nomeEmail {
@@ -244,7 +295,7 @@
 
 .linkCliente {
   color: var(--cor-texto);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* truque: um pseudo-elemento do link estica-se por cima da linha inteira */
@@ -284,10 +335,14 @@
   font-size: 0.82rem;
 }
 
-/* "Formulário": o cliente chegou pelo formulário público */
+/* "Formulário": o lead chegou pelo formulário público */
 .origem {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-destaque) / 0.12);
   font-style: normal;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
+  font-weight: 500;
   color: var(--cor-destaque);
 }
 
@@ -300,7 +355,7 @@
 
 .colValor {
   text-align: right !important;
-  font-weight: 500;
+  font-weight: 600;
   font-variant-numeric: tabular-nums; /* algarismos com a mesma largura: colunas alinhadas */
   white-space: nowrap;
 }
@@ -309,19 +364,24 @@
   color: var(--cor-estado-negociacao);
 }
 
-/* estado: bolinha com a cor + nome, sem caixa à volta */
+/* estado: etiqueta com a cor da fase (fundo suave, bolinha e texto na mesma cor) */
 .estado {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: var(--cor-texto-suave);
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cor) 14%, transparent);
+  color: var(--cor);
+  font-size: 0.82rem;
+  font-weight: 500;
   white-space: nowrap;
 }
 
 .estado::before {
   content: "";
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--cor);
 }
@@ -434,6 +494,15 @@ a.botaoPagina:hover {
 
   .nomeEmail {
     min-width: 0;
+  }
+
+  .avatarLead {
+    width: 32px;
+    height: 32px;
+  }
+
+  .estado {
+    padding: 4px;
   }
 
   /* estado: só a bolinha (o nome aparece ao tocar, no "title") */

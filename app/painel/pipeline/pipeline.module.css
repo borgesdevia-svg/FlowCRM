@@ -1,4 +1,4 @@
-/* Pipeline no mesmo estilo da página Tarefas: contadores em cima, quadro por baixo */
+/* Pipeline: cabeçalho e pesquisa em cima, quadro de altura fixa por baixo (cada coluna faz scroll por dentro) */
 .pagina {
   container-type: inline-size; /* o quadro adapta-se à largura da página (ver @container em baixo) */
   max-width: 1400px;
@@ -28,52 +28,6 @@
   color: var(--cor-texto-suave);
 }
 
-/* ---------- contadores (um por fase) ---------- */
-.contadores {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.contador {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px 20px;
-  border-radius: 16px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-}
-
-/* nome da fase com o ponto da cor dela (--cor vem do style) */
-.fase {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--cor-texto-suave);
-  font-size: 0.9rem;
-}
-
-.fase i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--cor);
-}
-
-.contador strong {
-  font-size: 1.6rem;
-  font-weight: 600;
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.contador small {
-  color: var(--cor-texto-fraco);
-  font-size: 0.85rem;
-}
-
 /* pesquisa à esquerda, dica (ou nº de resultados) ao lado */
 .barra {
   display: flex;
@@ -88,45 +42,91 @@
   font-size: 0.88rem;
 }
 
-/* ---------- quadro: 4 colunas ---------- */
-/* As 4 colunas dividem a largura disponível, sem scroll para o lado.
-   Se o espaço for pouco (janela estreita), passam a 2 por linha (ver @container em baixo). */
+/* ---------- quadro: 4 colunas com altura fixa ---------- */
+/* O quadro cabe no ecrã (altura = janela menos o cabeçalho) e cada coluna faz scroll
+   por dentro: com muitos leads a página não fica gigante. As 4 colunas dividem a largura;
+   se o espaço for pouco, deslizam para o lado (ver @container em baixo). */
 .quadro {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  align-items: start;
+  gap: 14px;
+  height: clamp(440px, calc(100vh - 250px), 1000px);
 }
 
 .coluna {
+  min-height: 0; /* deixa a lista de dentro encolher e fazer scroll */
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 200px;
-  padding: 12px;
+  padding: 10px;
   border-radius: 16px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo-2);
   scroll-snap-align: start;
 }
 
-/* título da coluna numa faixa, com um traço da cor da fase em cima */
+/* topo da coluna: fase + quantos, e o valor em jogo por baixo; traço da cor da fase em cima */
 .topoColuna {
+  flex-shrink: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
   background: var(--cor-cartao);
   box-shadow: inset 0 2px 0 var(--cor);
 }
 
+.linhaTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .topoColuna h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
   letter-spacing: normal;
+}
+
+.topoColuna h2 i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+
+.somaColuna {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* a lista de cartões: ocupa o resto da coluna e faz scroll por dentro */
+.listaColuna {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  overscroll-behavior: contain; /* o scroll da coluna não passa para a página */
+  padding-right: 2px;
+  margin-right: -4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--rgb-tinta) / 0.15) transparent;
+}
+
+/* os cartões não encolhem para caber: a lista faz scroll */
+.listaColuna > * {
+  flex-shrink: 0;
 }
 
 .topoColuna span {
@@ -231,60 +231,17 @@
 }
 
 /* página com menos de 900px de largura (ex.: portátil pequeno, menu ao lado):
-   cada coluna ficaria apertada demais, por isso passam a 2 por linha */
+   cada coluna ficaria apertada demais, por isso as colunas deslizam para o lado */
 @container (max-width: 900px) {
   .quadro {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, min(300px, 82%));
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
   }
 }
 
-/* ---------- "Mostrar mais" e "Ver todos" (colunas compridas) ---------- */
-.mais {
-  display: flex;
-  flex-direction: column;
-}
-
-.mais summary {
-  list-style: none; /* tira o triângulo do <details> */
-  padding: 9px 10px;
-  border-radius: 10px;
-  background: rgb(var(--rgb-tinta) / 0.04);
-  color: var(--cor-texto-suave);
-  font-size: 0.85rem;
-  text-align: center;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.mais summary::-webkit-details-marker {
-  display: none;
-}
-
-.mais summary:hover,
-.mais summary:focus-visible {
-  background: rgb(var(--rgb-tinta) / 0.08);
-  color: var(--cor-texto);
-}
-
-.mais[open] summary {
-  margin-bottom: 10px;
-}
-
-.fechar,
-.mais[open] .abrir {
-  display: none;
-}
-
-.mais[open] .fechar {
-  display: inline;
-}
-
-.cartoesMais {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+/* ---------- "Ver todos" (colunas compridas) ---------- */
 /* link para a lista de clientes, quando a fase tem mais do que o quadro mostra */
 .verTodos {
   padding: 4px;
@@ -299,6 +256,7 @@
 
 /* botão "+ Novo cliente" no fundo da coluna "Novo" */
 .adicionar {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -317,17 +275,10 @@
 }
 
 @media (max-width: 760px) {
-  .contadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .contador strong {
-    font-size: 1.3rem;
-  }
-
   /* no telemóvel cada coluna ocupa quase o ecrã todo e desliza-se para a seguinte */
   .quadro {
     grid-template-columns: repeat(4, min(300px, 82vw));
+    height: min(72vh, 640px);
     overflow-x: auto;
     padding-bottom: 4px;
     scroll-snap-type: x mandatory;
@@ -359,7 +310,7 @@
   text-decoration: underline;
 }
 
-/* teclado: anel de foco por dentro (em listas com scroll, por fora ficava cortado) */
-.mais summary:focus-visible {
+/* teclado: anel de foco por dentro (na lista com scroll, por fora ficava cortado) */
+.listaColuna :focus-visible {
   outline-offset: -2px;
 }
