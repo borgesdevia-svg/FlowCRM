@@ -184,6 +184,29 @@ const DESENHOS = {
   direita: <polyline points="9 18 15 12 9 6" />,
   cima: <polyline points="18 15 12 9 6 15" />,
   baixo: <polyline points="6 9 12 15 18 9" />,
+  definicoes: (
+    <>
+      <path d="M4 6h3M11 6h9M4 12h9M17 12h3M4 18h1M9 18h11" />
+      <circle cx="9" cy="6" r="2" />
+      <circle cx="15" cy="12" r="2" />
+      <circle cx="7" cy="18" r="2" />
+    </>
+  ),
+  sol: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </>
+  ),
+  lua: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
+  formulario: (
+    <>
+      <rect x="4" y="3" width="16" height="18" rx="2" />
+      <line x1="8" y1="8" x2="16" y2="8" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+      <line x1="8" y1="16" x2="12" y2="16" />
+    </>
+  ),
   lixo: (
     <>
       <path d="M3 6h18" />

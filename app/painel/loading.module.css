@@ -9,7 +9,7 @@
 .bloco {
   height: 96px;
   border-radius: 14px;
-  background: linear-gradient(90deg, #171a21 0%, #1e222b 50%, #171a21 100%);
+  background: linear-gradient(90deg, var(--cor-cartao) 0%, var(--cor-elevado) 50%, var(--cor-cartao) 100%);
   background-size: 200% 100%;
   animation: brilho 1.4s ease-in-out infinite;
 }

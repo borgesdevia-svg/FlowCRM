@@ -98,8 +98,14 @@ function criarPassos(nome, eAdmin) {
     {
       alvo: "personalizar",
       so: "admin",
-      titulo: "Personalizar",
+      titulo: "Formulário",
       texto: "Põe o logótipo da tua empresa e escolhe as perguntas que aparecem no formulário público.",
+    },
+    {
+      alvo: "configuracoes",
+      so: "admin",
+      titulo: "Configurações",
+      texto: "Muda o aspeto do CRM: o modelo de design, claro ou escuro, o gráfico do Início e o nome e a ordem de cada item deste menu.",
     },
     {
       alvo: "ajuda",

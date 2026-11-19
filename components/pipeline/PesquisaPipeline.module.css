@@ -1,0 +1,89 @@
+/* caixa de pesquisa da Pipeline: campo "cheio", com a lupa dentro (igual à lista de clientes) */
+.pesquisa {
+  position: relative;
+  flex: 0 1 360px;
+}
+
+.lupa {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-fraco);
+  pointer-events: none; /* clicar na lupa vai para a caixa de texto */
+}
+
+.pesquisa input {
+  width: 100%;
+  padding: 9px 38px 9px 36px; /* espaço para a lupa e para o botão de limpar */
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgb(var(--rgb-tinta) / 0.06);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+/* o "x" do próprio browser sai: usamos o nosso botão de limpar */
+.pesquisa input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.pesquisa input::placeholder {
+  color: var(--cor-texto-fraco);
+}
+
+.pesquisa input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  background: rgb(var(--rgb-tinta) / 0.04);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
+}
+
+.limpar {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-fraco);
+  cursor: pointer;
+}
+
+.limpar:hover {
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto);
+}
+
+/* rodinha pequena enquanto a página traz os resultados */
+.aCarregar {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border: 2px solid rgb(var(--rgb-tinta) / 0.15);
+  border-top-color: var(--cor-destaque);
+  border-radius: 50%;
+  animation: rodar 0.7s linear infinite;
+}
+
+@keyframes rodar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 560px) {
+  .pesquisa {
+    flex-basis: 100%;
+  }
+}

@@ -3,6 +3,7 @@
 // para mostrar erros e o estado "a adicionar..." sem recarregar a página).
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { criarMembro } from "@/lib/acoes/equipa";
 import Icone from "@/components/Icone";
 import CampoPassword from "@/components/CampoPassword";
@@ -22,7 +23,14 @@ export default function FormMembro() {
     // key: quando um membro é criado com sucesso, o formulário "renasce" vazio
     <form action={accao} key={estado.sucesso} style={{ display: "flex", flexDirection: "column", gap: 14 }} noValidate>
       {estado.mensagem && <p className="alerta alerta-erro" role="alert">{estado.mensagem}</p>}
-      {estado.sucesso && <p className="alerta alerta-sucesso" role="status">{estado.sucesso}</p>}
+      {estado.sucesso && (
+        <p className="alerta alerta-sucesso" role="status">
+          {estado.sucesso}{" "}
+          <Link href="/painel/equipa" style={{ textDecoration: "underline" }}>
+            Ver a equipa
+          </Link>
+        </p>
+      )}
 
       <div className="campo">
         <label htmlFor="nome">Nome</label>

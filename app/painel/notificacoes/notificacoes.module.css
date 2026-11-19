@@ -52,7 +52,7 @@
 .tituloGrupo span {
   padding: 1px 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto-suave);
   font-size: 0.78rem;
   font-weight: 500;
@@ -81,7 +81,7 @@
 
 /* linha selecionada: fundo esverdeado */
 .linhaMarcada {
-  background: rgba(34, 197, 94, 0.06);
+  background: rgb(var(--rgb-destaque) / 0.06);
 }
 
 .linha:first-child {
@@ -106,7 +106,7 @@
   height: 20px;
   margin: 0;
   border-radius: 6px;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border: 1.5px solid rgb(var(--rgb-tinta) / 0.3);
   background: transparent;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;
@@ -132,8 +132,8 @@
   width: 5px;
   height: 10px;
   margin-top: -2px;
-  border-right: 2px solid #052e16;
-  border-bottom: 2px solid #052e16;
+  border-right: 2px solid var(--cor-sobre-destaque);
+  border-bottom: 2px solid var(--cor-sobre-destaque);
   transform: rotate(45deg);
 }
 
@@ -197,7 +197,7 @@
 .limpar:hover,
 .limpar:focus-visible {
   outline: none;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
 }
 
@@ -240,11 +240,11 @@
 }
 
 .prazoAtrasado {
-  color: #fca5a5;
+  color: var(--cor-perigo-texto);
 }
 
 .prazoHoje {
-  color: #fbbf24;
+  color: var(--cor-aviso-texto);
 }
 
 /* ---------- clientes sem responsável (só administradores) ---------- */
@@ -292,11 +292,11 @@
 }
 
 .textoUrgencia_amarelo {
-  color: #fbbf24;
+  color: var(--cor-aviso-texto);
 }
 
 .textoUrgencia_vermelho {
-  color: #fca5a5;
+  color: var(--cor-perigo-texto);
 }
 
 /* ---------- sem notificações ---------- */

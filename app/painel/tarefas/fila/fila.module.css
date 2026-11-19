@@ -70,7 +70,7 @@
 }
 
 .atrasada {
-  color: #f87171;
+  color: var(--cor-perigo-texto);
 }
 
 .hoje {
@@ -151,7 +151,7 @@
 
 .contacto:hover {
   color: var(--cor-destaque);
-  border-color: rgba(34, 197, 94, 0.4);
+  border-color: rgb(var(--rgb-destaque) / 0.4);
 }
 
 .fraco {

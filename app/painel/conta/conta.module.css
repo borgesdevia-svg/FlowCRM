@@ -94,7 +94,7 @@
 .link code {
   padding: 11px 14px;
   border-radius: var(--raio);
-  border: 1px dashed rgba(34, 197, 94, 0.35);
+  border: 1px dashed rgb(var(--rgb-destaque) / 0.35);
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
   font-size: 0.9rem;
@@ -121,7 +121,7 @@
   border-radius: var(--raio);
   border: 1px solid rgba(248, 113, 113, 0.3);
   background: transparent;
-  color: #fca5a5;
+  color: var(--cor-perigo-texto);
   font: inherit;
   font-size: 0.92rem;
   cursor: pointer;

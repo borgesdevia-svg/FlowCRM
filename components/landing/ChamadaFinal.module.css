@@ -64,10 +64,10 @@
   display: inline-block;
   margin-bottom: 20px;
   padding: 5px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgb(var(--rgb-tinta) / 0.12);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  color: #86efac;
+  background: rgb(var(--rgb-tinta) / 0.03);
+  color: var(--cor-destaque-claro);
   font-size: 0.85rem;
 }
 
@@ -103,11 +103,11 @@
 .botoes .principal {
   padding: 14px 36px;
   color: #fff;
-  background: linear-gradient(180deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.08));
+  background: linear-gradient(180deg, rgb(var(--rgb-destaque) / 0.3), rgb(var(--rgb-destaque) / 0.08));
   border-color: rgba(74, 222, 128, 0.55);
   box-shadow:
-    0 0 32px rgba(34, 197, 94, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 0 32px rgb(var(--rgb-destaque) / 0.3),
+    inset 0 1px 0 rgb(var(--rgb-tinta) / 0.2);
 }
 
 @media (max-width: 640px) {

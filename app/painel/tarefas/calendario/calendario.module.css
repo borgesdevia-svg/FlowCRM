@@ -59,7 +59,7 @@
 
 .seta:hover {
   color: var(--cor-texto);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
 }
 
 .irHoje {
@@ -140,7 +140,7 @@
 /* hoje: número num círculo verde */
 .eHoje .numeroDia {
   background: var(--cor-destaque);
-  color: #052e16;
+  color: var(--cor-sobre-destaque);
   font-weight: 600;
 }
 

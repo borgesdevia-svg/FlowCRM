@@ -68,11 +68,11 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
           </div>
           <div className="campo">
             <label htmlFor="telefone">
-              Telefone <span className={styles.opcional}>opcional</span>
+              Telefone
             </label>
             <div className="com-icone">
               <Icone nome="telemovel" tamanho={17} className="icone-campo" />
-              <input id="telefone" name="telefone" type="tel" placeholder="912 345 678" defaultValue={v.telefone ?? ""} aria-invalid={!!erros.telefone} />
+              <input id="telefone" name="telefone" type="tel" required placeholder="912 345 678" defaultValue={v.telefone ?? ""} aria-invalid={!!erros.telefone} />
             </div>
             {erros.telefone && <p className="erro-campo">{erros.telefone}</p>}
           </div>

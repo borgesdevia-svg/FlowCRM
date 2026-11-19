@@ -9,10 +9,10 @@
   display: inline-block;
   margin-bottom: 18px;
   padding: 5px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgb(var(--rgb-tinta) / 0.12);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  color: #86efac;
+  background: rgb(var(--rgb-tinta) / 0.03);
+  color: var(--cor-destaque-claro);
   font-size: 0.82rem;
   font-weight: 500;
 }

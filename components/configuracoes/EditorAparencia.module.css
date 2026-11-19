@@ -1,0 +1,516 @@
+/* Página Configurações: opções à esquerda, pré-visualização do menu à direita.
+   Tudo usa as variáveis de cor, por isso a própria página muda de aspeto ao vivo. */
+.editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 24px;
+}
+
+.colunaOpcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+/* ---------- cartões de secção ---------- */
+.seccao {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.cabecaSeccao h2 {
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+
+.cabecaComBotao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.explicacao {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+/* ---------- modelos de design ---------- */
+.grelhaModelos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.modelo,
+.modeloAtivo,
+.grafico,
+.graficoAtivo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1.5px solid var(--cor-contorno);
+  background: rgb(var(--rgb-tinta) / 0.02);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s var(--curva);
+}
+
+.grafico,
+.graficoAtivo {
+  cursor: pointer;
+}
+
+.modelo:hover,
+.grafico:hover {
+  border-color: rgb(var(--rgb-tinta) / 0.2);
+  transform: translateY(-1px);
+}
+
+.modeloAtivo,
+.graficoAtivo {
+  border-color: var(--cor-destaque);
+  background: rgb(var(--rgb-destaque) / 0.07);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.15);
+}
+
+/* contorno visível ao navegar com o teclado */
+.modelo:has(input:focus-visible),
+.modeloAtivo:has(input:focus-visible),
+.grafico:has(input:focus-visible),
+.graficoAtivo:has(input:focus-visible) {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* parte clicável do cartão do modelo (miniatura + nome) */
+.escolherModelo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  cursor: pointer;
+}
+
+/* sol e lua por baixo de cada modelo */
+.modos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgb(var(--rgb-tinta) / 0.05);
+}
+
+.modo,
+.modoAtivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.modo:hover {
+  background: rgb(var(--rgb-tinta) / 0.07);
+  color: var(--cor-texto);
+}
+
+.modoAtivo {
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+}
+
+.modo:focus-visible,
+.modoAtivo:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* miniatura do painel: barra lateral + título + dois cartões */
+.miniatura {
+  display: flex;
+  gap: 7px;
+  height: 92px;
+  padding: 0 7px 0 0;
+  border-radius: 9px;
+  border: 1px solid rgb(127 127 127 / 0.2);
+  overflow: hidden;
+}
+
+/* barra lateral da miniatura, com a cor do menu do modelo */
+.miniLateral {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 28%;
+  padding: 9px 6px;
+  border-right: 1px solid rgb(127 127 127 / 0.15);
+}
+
+.miniLateral span {
+  height: 6px;
+  border-radius: 3px;
+  opacity: 0.55;
+}
+
+.miniLateral span:first-child {
+  opacity: 1;
+}
+
+.miniConteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0 7px;
+}
+
+/* botão pequeno na cor de destaque */
+.miniBotao {
+  align-self: flex-end;
+  width: 30%;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.miniTitulo {
+  width: 55%;
+  height: 7px;
+  border-radius: 3px;
+  opacity: 0.85;
+}
+
+.miniCartoes {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.miniCartoes span {
+  display: flex;
+  align-items: flex-end;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid rgb(127 127 127 / 0.15);
+}
+
+.miniCartoes i {
+  width: 60%;
+  height: 5px;
+  border-radius: 3px;
+}
+
+.nomeModelo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 2px 2px;
+}
+
+.nomeModelo strong {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.nomeModelo small {
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.etiqueta {
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto-suave);
+  font-size: 0.7rem !important;
+  font-weight: 600;
+}
+
+/* ---------- gráficos ---------- */
+.graficos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.miniGrafico {
+  width: 100%;
+  height: 64px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: rgb(var(--rgb-tinta) / 0.04);
+  fill: var(--cor-destaque);
+}
+
+.miniLinha {
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.miniArea {
+  fill: rgb(var(--rgb-destaque) / 0.2);
+  stroke: none;
+}
+
+/* ---------- menu ---------- */
+.grupoMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tituloGrupo {
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.listaMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+}
+
+.itemMenu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 10px;
+  border-radius: 12px;
+  background: rgb(var(--rgb-tinta) / 0.035);
+}
+
+.iconeItem {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgb(var(--rgb-tinta) / 0.06);
+  color: var(--cor-texto-suave);
+}
+
+.campoNome {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  font-weight: 500;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.campoNome:hover {
+  border-color: var(--cor-contorno);
+}
+
+.campoNome:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  background: var(--cor-fundo);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
+}
+
+.soAdmin {
+  flex-shrink: 0;
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+}
+
+.setas {
+  display: flex;
+  gap: 2px;
+}
+
+.botaoIcone {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.botaoIcone:hover:not(:disabled) {
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto);
+}
+
+.botaoIcone:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.botaoTexto {
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.botaoTexto:hover:not(:disabled) {
+  background: rgb(var(--rgb-tinta) / 0.06);
+  color: var(--cor-texto);
+}
+
+/* ---------- barra de guardar (fica presa ao fundo do ecrã) ---------- */
+.barraGuardar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 10px 18px;
+  border-radius: 16px;
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  background: var(--cor-elevado);
+  box-shadow: 0 16px 40px -8px rgb(0 0 0 / 0.45);
+}
+
+.textoEstado {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.textoErro {
+  color: var(--cor-perigo-texto);
+  font-size: 0.9rem;
+}
+
+.botoesBarra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- pré-visualização do menu ---------- */
+.previa {
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tituloPrevia,
+.nota {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+}
+
+.moldura {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 16px 12px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo-2);
+}
+
+.previaSeccao {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.previaTitulo {
+  padding: 0 10px 6px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.previaItem,
+.previaAtivo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.previaAtivo {
+  background: rgb(var(--rgb-destaque) / 0.14);
+  color: var(--cor-texto);
+}
+
+.previaAtivo svg {
+  color: var(--cor-destaque);
+}
+
+@media (max-width: 1000px) {
+  .editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .previa {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .seccao {
+    padding: 16px;
+  }
+
+  .soAdmin {
+    display: none;
+  }
+}

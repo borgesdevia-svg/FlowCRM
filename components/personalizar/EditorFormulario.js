@@ -386,7 +386,9 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
         <p className={styles.tituloPrevia}>
           {separador === "depois" ? "O que o cliente vê depois de enviar" : "Como o cliente vê o formulário"}
         </p>
-        <div className={styles.moldura}>
+        {/* "aparencia-site": o formulário público tem sempre o aspeto escuro do site,
+            por isso a pré-visualização ignora o modelo de design escolhido para o painel */}
+        <div className={`${styles.moldura} aparencia-site`}>
           <CartaoFormulario
             nome={nomeEmpresa}
             logo={logo}
@@ -425,7 +427,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
               <button type="button" className={styles.cancelar} onClick={descartar} disabled={aGuardar}>
                 Descartar
               </button>
-              <button type="button" className="botao" onClick={guardar} disabled={aGuardar}>
+              <button type="button" className="botao" onClick={guardar} disabled={aGuardar} aria-busy={aGuardar}>
                 {aGuardar ? "A guardar…" : "Guardar"}
               </button>
             </div>

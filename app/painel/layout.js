@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { obterSessao } from "@/lib/sessao";
+import { obterSessao, obterAparencia } from "@/lib/sessao";
+import { SECCOES_MENU, cssAparencia, itensDoMenu } from "@/lib/aparencia";
 import { sair } from "@/lib/acoes/autenticacao";
 import { hojeEmPortugal } from "@/lib/datas";
 import { iniciais } from "@/lib/texto";
@@ -17,6 +18,7 @@ export const metadata = { title: "Painel · FlowCRM" };
 
 export default async function LayoutPainel({ children }) {
   const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto } = await obterSessao();
+  const pedidoAparencia = obterAparencia(); // começa já, em paralelo com as contagens
 
   // Números para os contadores do menu. As duas consultas são independentes,
   // por isso o Promise.all faz as duas ao mesmo tempo (mais rápido do que uma a seguir à outra).
@@ -59,40 +61,32 @@ export default async function LayoutPainel({ children }) {
       : { data: [], count: 0 },
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : { data: [] },
   ]);
+  const aparencia = await pedidoAparencia;
   const totalAvisos = (nAvisos ?? 0) + (nSemResponsavel ?? 0);
 
-  // Menu dividido em secções. "contador" aparece à direita do item;
+  // Menu dividido em secções. O nome e a ordem de cada item vêm das Configurações
+  // da empresa (lib/aparencia.js). "contador" aparece à direita do item;
   // "alerta: true" pinta-o de vermelho (tarefas em atraso).
-  const seccoes = [
-    {
-      titulo: "Menu principal",
-      itens: [
-        { texto: "Painel", tutorial: "painel", href: "/painel", icone: "casa" },
-        { texto: "Clientes", tutorial: "clientes", href: "/painel/clientes", icone: "utilizadores", contador: nClientes ?? null },
-        { texto: "Pipeline", tutorial: "pipeline", href: "/painel/pipeline", icone: "subida" },
-        { texto: "Tarefas", tutorial: "tarefas", href: "/painel/tarefas", icone: "lista", contador: nAtrasadas || null, alerta: true },
-        { texto: "Notificações", href: "/painel/notificacoes", icone: "sino", contador: totalAvisos || null },
-      ],
-    },
-    {
-      titulo: "Empresa",
-      itens: [
-        // as páginas Equipa e Personalizar só aparecem ao administrador
-        ...(eAdmin
-          ? [
-              { texto: "Equipa", tutorial: "equipa", href: "/painel/equipa", icone: "utilizadorMais" },
-              { texto: "Automações", tutorial: "automacoes", href: "/painel/automacoes", icone: "raio" },
-              { texto: "Personalizar", tutorial: "personalizar", href: "/painel/personalizar", icone: "pincel" },
-            ]
-          : []),
-        { texto: "A minha conta", href: "/painel/conta", icone: "utilizador" },
-      ],
-    },
-  ];
+  const contadores = {
+    clientes: { contador: nClientes ?? null },
+    tarefas: { contador: nAtrasadas || null, alerta: true },
+    notificacoes: { contador: totalAvisos || null },
+  };
+  const seccoes = SECCOES_MENU.map(({ chave, titulo }) => ({
+    titulo,
+    itens: itensDoMenu(aparencia, chave)
+      // Equipa, Automações, Formulário e Configurações só aparecem ao administrador
+      .filter((item) => eAdmin || !item.admin)
+      .map((item) => ({ ...item, ...contadores[item.id] })),
+  }));
 
   return (
     <div className={styles.estrutura}>
-      <aside className={styles.lateral}>
+      {/* cores do modelo de design e da cor de destaque escolhidos em Configurações.
+          Só existe enquanto se está no painel: ao sair para o site, volta o aspeto normal.
+          O CSS é montado a partir de listas fixas (lib/aparencia.js), nunca de texto escrito pelo utilizador. */}
+      <style>{cssAparencia(aparencia)}</style>
+      <aside className={`painel-lateral ${styles.lateral}`}>
         {/* cabeça: logótipo + empresa numa caixa, e o sino de notificações ao lado */}
         <div className={styles.topoMenu}>
           <Link href="/painel" className={styles.marca}>
@@ -137,7 +131,7 @@ export default async function LayoutPainel({ children }) {
               {seccao.itens.map((item) => (
                 <LinkMenu key={item.href} href={item.href} className={styles.itemMenu} classeAtiva={styles.itemAtivo} tutorial={item.tutorial}>
                   <Icone nome={item.icone} tamanho={19} />
-                  <span className={styles.textoItem}>{item.texto}</span>
+                  <span className={styles.textoItem}>{item.nome}</span>
                   {item.contador ? (
                     <span className={item.alerta ? `${styles.contador} ${styles.contadorAlerta}` : styles.contador}>
                       {item.contador}

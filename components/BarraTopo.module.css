@@ -39,7 +39,7 @@
 /* símbolo do logótipo (SVG), com um brilho verde suave */
 .simbolo {
   flex-shrink: 0;
-  filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.35));
+  filter: drop-shadow(0 0 10px rgb(var(--rgb-destaque) / 0.35));
 }
 
 .menu {
@@ -75,7 +75,7 @@
 }
 
 .acoes :global(.botao):hover {
-  box-shadow: 0 8px 30px -6px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 30px -6px rgb(var(--rgb-tinta) / 0.35);
 }
 
 .entrar {

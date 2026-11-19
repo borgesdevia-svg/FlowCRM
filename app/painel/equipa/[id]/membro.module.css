@@ -1,0 +1,458 @@
+/* Detalhes de um membro da equipa: cabeçalho, números e três blocos
+   (ações recentes à esquerda; tarefas resolvidas e clientes à direita) */
+.pagina {
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- cabeçalho ---------- */
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.voltar::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-left: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.voltar:hover {
+  color: var(--cor-texto);
+}
+
+.identidade {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.identidade h1 {
+  font-size: clamp(1.7rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.identidade h1 em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--cor-texto-fraco);
+  font-size: 0.6em;
+}
+
+.resumo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.resumo a:hover {
+  color: var(--cor-texto);
+  text-decoration: underline;
+}
+
+.papel,
+.papelAdmin {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  color: var(--cor-texto-suave);
+  font-size: 0.78rem;
+}
+
+.papelAdmin {
+  border-color: rgb(var(--rgb-destaque) / 0.4);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+}
+
+/* ---------- números ---------- */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.numeroCartao {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.numeroCartao span {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.numeroCartao strong {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.numeroCartao small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+}
+
+.atraso {
+  color: var(--cor-perigo-texto);
+  font-weight: 500;
+}
+
+/* barra dos clientes por fase */
+.barra {
+  display: flex;
+  gap: 2px;
+  height: 5px;
+  margin-top: 4px;
+}
+
+.barra i {
+  flex-basis: 0;
+  border-radius: 999px;
+}
+
+.barraVazia {
+  flex-grow: 1;
+  background: rgb(var(--rgb-tinta) / 0.06);
+}
+
+/* ---------- blocos ---------- */
+.grelha {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  min-width: 0;
+}
+
+.topoBloco {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.topoBloco h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.topoBloco span {
+  min-width: 26px;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.06);
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.vazio {
+  padding: 22px 12px;
+  border: 1px dashed var(--cor-contorno);
+  border-radius: 12px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.nota {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* ---------- ações recentes: linha do tempo ---------- */
+.acoes {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.acao {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 16px;
+  --cor-acao: var(--cor-texto-suave);
+}
+
+/* traço vertical entre os ícones */
+.acao:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 30px;
+  bottom: 2px;
+  width: 1px;
+  background: var(--cor-contorno);
+}
+
+.fase {
+  --cor-acao: var(--cor-estado-negociacao);
+}
+
+.tarefa {
+  --cor-acao: var(--cor-destaque);
+}
+
+.chamada,
+.email,
+.reuniao {
+  --cor-acao: var(--cor-estado-novo);
+}
+
+.iconeAcao {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cor-acao) 14%, transparent);
+  color: var(--cor-acao);
+}
+
+.corpoAcao {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 3px;
+  font-size: 0.9rem;
+}
+
+.cliente {
+  color: var(--cor-texto);
+  font-weight: 600;
+}
+
+.cliente:hover {
+  color: var(--cor-destaque);
+}
+
+/* parte do texto da nota, cortada a 2 linhas */
+.excerto {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgb(var(--rgb-tinta) / 0.04);
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.corpoAcao time {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+/* ---------- listas (tarefas e clientes) ---------- */
+.lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  margin: 0 -8px;
+}
+
+/* ---------- "Ver mais" (o resto da lista, escondido num <details>) ---------- */
+.mais summary {
+  list-style: none; /* tira o triângulo do <details> */
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgb(var(--rgb-tinta) / 0.04);
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mais summary::-webkit-details-marker {
+  display: none;
+}
+
+.mais summary:hover,
+.mais summary:focus-visible {
+  outline: none;
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto);
+}
+
+/* aberto: o botão passa a "Ver menos" e o resto da lista aparece por baixo */
+.mais[open] summary {
+  margin-bottom: 10px;
+}
+
+.fechar,
+.mais[open] .abrir {
+  display: none;
+}
+
+.mais[open] .fechar {
+  display: inline;
+}
+
+/* a continuação da lista de tarefas/clientes leva o traço de separação em cima */
+.mais .lista {
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 8px;
+  border-radius: 10px;
+}
+
+.lista li + li {
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.linhaCliente {
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.linhaCliente:hover {
+  background: rgb(var(--rgb-tinta) / 0.04);
+}
+
+.linhaCliente:hover strong {
+  color: var(--cor-destaque);
+}
+
+.visto {
+  flex-shrink: 0;
+  color: var(--cor-destaque);
+}
+
+.textoLinha {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+
+.textoLinha strong {
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.textoLinha small {
+  overflow: hidden;
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.textoLinha small a:hover {
+  color: var(--cor-texto);
+  text-decoration: underline;
+}
+
+/* fase do cliente com a cor dela (--cor vem do style) */
+.estado {
+  flex-shrink: 0;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cor) 14%, transparent);
+  color: var(--cor);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.valor {
+  flex-shrink: 0;
+  min-width: 70px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- ecrãs mais pequenos ---------- */
+@media (max-width: 1100px) {
+  .grelha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .numeros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .numeroCartao strong {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .valor {
+    display: none;
+  }
+}

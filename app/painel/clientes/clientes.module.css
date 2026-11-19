@@ -51,7 +51,7 @@
 }
 
 .botaoTexto:hover {
-  background: rgba(34, 197, 94, 0.1);
+  background: rgb(var(--rgb-destaque) / 0.1);
 }
 
 /* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
@@ -82,7 +82,7 @@
   max-width: 100%;
   padding: 3px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
   overflow-x: auto; /* no telemóvel desliza para o lado */
   scrollbar-width: none;
 }
@@ -108,7 +108,7 @@
 }
 
 .segmentoAtivo {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgb(var(--rgb-tinta) / 0.14);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   color: var(--cor-texto);
 }
@@ -136,7 +136,7 @@
   position: absolute;
   inset: 0;
   border-radius: 9px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgb(var(--rgb-tinta) / 0.08);
   opacity: 0;
   transition: opacity 0.15s;
   pointer-events: none;
@@ -166,7 +166,7 @@
   padding: 9px 12px 9px 36px; /* espaço à esquerda para a lupa */
   border-radius: 12px;
   border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
   font: inherit;
   font-size: 0.92rem;
@@ -180,8 +180,8 @@
 .pesquisa input:focus {
   outline: none;
   border-color: var(--cor-destaque);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  background: rgb(var(--rgb-tinta) / 0.04);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
 }
 
 /* ---------- a lista ---------- */
@@ -218,11 +218,11 @@
 
 /* linha fina por cima de cada linha (não da primeira), como nas listas do iPhone */
 .tabela tbody tr + tr td {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgb(var(--rgb-tinta) / 0.06);
 }
 
 .tabela thead th {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.06);
 }
 
 /* a linha fica "posicionada" para o link do nome a poder cobrir toda */
@@ -232,7 +232,7 @@
 }
 
 .tabela tbody tr:hover {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgb(var(--rgb-tinta) / 0.035);
 }
 
 .nomeEmail {
@@ -318,7 +318,7 @@
 .colSeta {
   width: 36px;
   padding-left: 0 !important;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgb(var(--rgb-tinta) / 0.25);
   text-align: right;
 }
 
@@ -334,7 +334,7 @@
   justify-content: space-between;
   gap: 10px;
   padding: 12px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto-fraco);
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
@@ -357,19 +357,19 @@
 .botaoPagina {
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
   font-weight: 500;
   transition: background 0.2s;
 }
 
 a.botaoPagina:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgb(var(--rgb-tinta) / 0.12);
 }
 
 .desligado {
   color: var(--cor-texto-fraco);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgb(var(--rgb-tinta) / 0.03);
 }
 
 /* ---------- lista vazia ---------- */

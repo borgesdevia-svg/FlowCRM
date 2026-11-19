@@ -49,11 +49,11 @@
   display: flex;
   gap: 20px;
   padding: 28px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgb(var(--rgb-tinta) / 0.1);
 }
 
 .lista li:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.1);
 }
 
 /* ícone simples, verde, sem quadrado à volta */

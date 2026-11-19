@@ -6,11 +6,11 @@
 }
 
 .lista {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgb(var(--rgb-tinta) / 0.08);
 }
 
 .item {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.08);
 }
 
 /* a pergunta: clicável, com um "+" à direita que roda para "×" quando abre */

@@ -13,7 +13,7 @@
 /* sublinha ao passar o rato: diz que abre alguma coisa */
 .abrir:hover {
   text-decoration: underline;
-  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-decoration-color: rgb(var(--rgb-tinta) / 0.35);
   text-underline-offset: 3px;
 }
 

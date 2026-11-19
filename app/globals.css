@@ -19,6 +19,22 @@
   --cor-texto-suave: #9aa1ab;
   --cor-texto-fraco: #646b76;
 
+  /* variantes da cor de destaque (o painel troca-as conforme a cor escolhida em Configurações) */
+  --rgb-destaque: 34 197 94; /* a mesma cor em "R G B", para usar com transparência: rgb(var(--rgb-destaque) / 0.2) */
+  --cor-destaque-claro: #4ade80;
+  --cor-destaque-escuro: #15803d;
+  --cor-sobre-destaque: #052e16; /* letras em cima da cor de destaque */
+
+  /* "tinta" dos realces transparentes: branco nos modelos escuros, quase preto no claro */
+  --rgb-tinta: 255 255 255;
+  --cor-elevado: #1e222b; /* menus e janelas que flutuam por cima */
+  --cor-perigo-texto: #fca5a5;
+  --cor-aviso-texto: #fbbf24;
+
+  /* cartões e contornos dentro do painel (um pouco mais claros do que no site) */
+  --painel-cartao: #1c2028;
+  --painel-contorno: rgb(255 255 255 / 0.07);
+
   /* estados do cliente */
   --cor-estado-novo: #2563eb;
   --cor-estado-negociacao: #d97706;
@@ -34,6 +50,26 @@
 
   /* diz ao browser que o site é escuro (barras de scroll, campos, etc.) */
   color-scheme: dark;
+}
+
+/* Repõe o aspeto escuro do site dentro de um elemento, mesmo que o painel use outro
+   modelo de design (ex.: a pré-visualização do formulário público no modelo Claro). */
+.aparencia-site {
+  --cor-fundo: #0f1115;
+  --cor-fundo-2: #13161b;
+  --cor-cartao: #171a21;
+  --cor-contorno: #262a33;
+  --cor-texto: #e6e8eb;
+  --cor-texto-suave: #9aa1ab;
+  --cor-texto-fraco: #646b76;
+  --rgb-tinta: 255 255 255;
+  --cor-elevado: #1e222b;
+  --cor-perigo-texto: #fca5a5;
+  --cor-aviso-texto: #fbbf24;
+  --painel-cartao: #1c2028;
+  --painel-contorno: rgb(255 255 255 / 0.07);
+  color-scheme: dark;
+  color: var(--cor-texto);
 }
 
 * {
@@ -94,27 +130,27 @@ a {
   border: 1px solid var(--cor-destaque);
   border-radius: 999px;
   background: var(--cor-destaque);
-  color: #052e16;
+  color: var(--cor-sobre-destaque);
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  box-shadow: 0 0 0 0 rgb(var(--rgb-destaque) / 0);
   transition: transform 0.2s var(--curva), box-shadow 0.2s var(--curva), background 0.2s;
 }
 
 .botao:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 30px -6px rgba(34, 197, 94, 0.55);
+  box-shadow: 0 8px 30px -6px rgb(var(--rgb-destaque) / 0.55);
 }
 
 .botao-secundario {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgb(var(--rgb-tinta) / 0.03);
   color: var(--cor-texto);
   border-color: var(--cor-contorno);
 }
 
 .botao-secundario:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgb(var(--rgb-tinta) / 0.07);
   box-shadow: none;
 }
 
@@ -127,11 +163,17 @@ a {
   transform: translateX(3px);
 }
 
+/* desativado: seta normal (não há nada para fazer); a roda de espera só aparece
+   quando o botão está mesmo a trabalhar (aria-busy="true") */
 .botao:disabled {
   opacity: 0.6;
-  cursor: wait;
+  cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.botao[aria-busy="true"] {
+  cursor: progress;
 }
 
 .botao-largo {
@@ -168,8 +210,8 @@ a {
   width: 100%;
   padding: 11px 14px;
   border-radius: var(--raio);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  background: rgb(var(--rgb-tinta) / 0.03);
   color: var(--cor-texto);
   font: inherit;
   font-size: 0.95rem;
@@ -224,7 +266,7 @@ a {
   .campo select option:hover,
   .campo select option:focus-visible {
     outline: none;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgb(var(--rgb-tinta) / 0.06);
   }
 
   .campo select option:checked {
@@ -252,16 +294,16 @@ a {
 .campo textarea:focus {
   outline: none;
   border-color: var(--cor-destaque);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
 }
 
 /* campo com erro: contorno vermelho */
 .campo input[aria-invalid="true"] {
-  border-color: #f87171;
+  border-color: var(--cor-perigo-texto);
 }
 
 .erro-campo {
-  color: #f87171;
+  color: var(--cor-perigo-texto);
   font-size: 0.82rem;
 }
 
@@ -314,7 +356,7 @@ a {
 }
 
 .botao-mostrar:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
 }
 
@@ -328,13 +370,13 @@ a {
 .alerta-erro {
   background: rgba(248, 113, 113, 0.1);
   border: 1px solid rgba(248, 113, 113, 0.3);
-  color: #fca5a5;
+  color: var(--cor-perigo-texto);
 }
 
 .alerta-sucesso {
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: #86efac;
+  background: rgb(var(--rgb-destaque) / 0.1);
+  border: 1px solid rgb(var(--rgb-destaque) / 0.3);
+  color: var(--cor-destaque-claro);
 }
 
 /* ---------- Animações ---------- */

@@ -12,7 +12,7 @@
 /* os botões do formulário usam a cor escolhida; as letras ficam claras ou escuras
    conforme a cor (ver CORES em lib/formulario.js) */
 .cartao :global(.botao) {
-  color: var(--cor-texto-botao, #052e16);
+  color: var(--cor-texto-botao, var(--cor-sobre-destaque));
 }
 
 .cartao :global(.botao:hover) {

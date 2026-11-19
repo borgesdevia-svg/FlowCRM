@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { obterSessao } from "@/lib/sessao";
+import { obterSessao, obterAparencia } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
 import { hojeEmPortugal } from "@/lib/datas";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
@@ -76,6 +76,9 @@ function ultimasSemanas() {
 
 export default async function PaginaPainel() {
   const { supabase, perfil, empresa, eAdmin } = await obterSessao();
+  // tipo de gráfico de clientes por semana, escolhido em Configurações
+  // (o layout já fez este pedido: o cache() devolve o mesmo resultado sem ir outra vez à base de dados)
+  const { grafico: tipoGrafico } = await obterAparencia();
   const hoje = hojeEmPortugal();
   // clientes criados desde o dia 1 deste mês ("2026-11-01")
   const inicioMes = hoje.slice(0, 7) + "-01";
@@ -279,7 +282,13 @@ export default async function PaginaPainel() {
               <p className={styles.numeroGrande}>{totalSemanas}</p>
             </header>
             <div className={styles.areaGrafico}>
-              <Grafico tipo="line" etiquetas={semanas.map((s) => s.etiqueta)} valores={valoresSemanas} cores="var(--cor-destaque)" />
+              <Grafico
+                tipo={tipoGrafico === "barras" ? "bar" : "line"}
+                preencher={tipoGrafico === "area"}
+                etiquetas={semanas.map((s) => s.etiqueta)}
+                valores={valoresSemanas}
+                cores="var(--cor-destaque)"
+              />
             </div>
           </article>
 

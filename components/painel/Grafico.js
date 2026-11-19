@@ -8,6 +8,7 @@
 //  - valores: números, um por etiqueta
 //  - cores: uma cor (linha) ou uma por valor (barras/circular). Aceita "var(--nome)".
 //  - formato: "euros" para mostrar os valores como dinheiro
+//  - preencher: só nas linhas; false = só a linha, sem a área pintada por baixo (por defeito true)
 //
 // Os dados são calculados no servidor (na página) e chegam aqui já prontos.
 
@@ -24,7 +25,7 @@ function resolverCor(cor) {
 
 const euros = new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 
-export default function Grafico({ tipo, etiquetas, valores, cores, formato }) {
+export default function Grafico({ tipo, etiquetas, valores, cores, formato, preencher = true }) {
   const refCanvas = useRef(null);
 
   // useEffect: cria o gráfico depois de o <canvas> aparecer no ecrã.
@@ -32,7 +33,8 @@ export default function Grafico({ tipo, etiquetas, valores, cores, formato }) {
   useEffect(() => {
     const listaCores = Array.isArray(cores) ? cores.map(resolverCor) : resolverCor(cores);
     const corTexto = resolverCor("var(--cor-texto-fraco)");
-    const corGrelha = "rgba(255, 255, 255, 0.06)";
+    // grelha com a "tinta" do modelo de design (branca nos escuros, escura nos claros)
+    const corGrelha = `rgb(${resolverCor("var(--rgb-tinta)")} / 0.08)`;
     const formatar = (v) => (formato === "euros" ? euros.format(v) : v);
     const circular = tipo === "doughnut";
 
@@ -50,7 +52,7 @@ export default function Grafico({ tipo, etiquetas, valores, cores, formato }) {
             borderColor: circular ? resolverCor("var(--cor-cartao)") : listaCores,
             borderWidth: circular ? 3 : 2,
             borderRadius: tipo === "bar" ? 8 : 0,
-            fill: tipo === "line", // pinta a área por baixo da linha
+            fill: tipo === "line" && preencher, // pinta a área por baixo da linha
             tension: 0.35, // linha suavemente curva
             pointRadius: 3,
             pointBackgroundColor: listaCores,
@@ -84,7 +86,7 @@ export default function Grafico({ tipo, etiquetas, valores, cores, formato }) {
 
     // limpeza: destrói o gráfico antigo antes de criar outro (ou ao sair da página)
     return () => grafico.destroy();
-  }, [tipo, etiquetas, valores, cores, formato]);
+  }, [tipo, etiquetas, valores, cores, formato, preencher]);
 
   // role="img" + aria-label: os leitores de ecrã anunciam o gráfico como uma imagem
   return <canvas ref={refCanvas} role="img" aria-label={`Gráfico: ${etiquetas.join(", ")}`}></canvas>;

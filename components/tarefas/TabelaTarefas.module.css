@@ -64,7 +64,7 @@
 
 /* dia que já passou (tarefas em atraso): o título fica vermelho */
 .diaAtrasado {
-  color: #fca5a5;
+  color: var(--cor-perigo-texto);
 }
 
 .lista {
@@ -90,7 +90,7 @@
   right: 0;
   bottom: 0;
   height: 1px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgb(var(--rgb-tinta) / 0.07);
 }
 
 .linha:last-child::after {
@@ -98,7 +98,7 @@
 }
 
 .linhaMarcada {
-  background: rgba(34, 197, 94, 0.07);
+  background: rgb(var(--rgb-destaque) / 0.07);
 }
 
 /* ---------- círculo: um clique conclui ---------- */
@@ -114,7 +114,7 @@
 .circulo {
   padding: 0;
   border-radius: 50%;
-  border: 1.8px solid rgba(255, 255, 255, 0.28);
+  border: 1.8px solid rgb(var(--rgb-tinta) / 0.28);
   background: transparent;
   cursor: pointer;
   transition:
@@ -127,7 +127,7 @@
   width: 15px;
   height: 15px;
   fill: none;
-  stroke: #052e16;
+  stroke: var(--cor-sobre-destaque);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -160,7 +160,7 @@
 
 .circuloFeito svg,
 .circuloFeito:hover svg {
-  stroke: #052e16;
+  stroke: var(--cor-sobre-destaque);
   stroke-dashoffset: 0;
   opacity: 1;
 }
@@ -202,7 +202,7 @@
 .linhaFeita .texto .titulo {
   color: var(--cor-texto-fraco);
   text-decoration: line-through;
-  text-decoration-color: rgba(255, 255, 255, 0.25);
+  text-decoration-color: rgb(var(--rgb-tinta) / 0.25);
 }
 
 /* ---------- prazo, à direita ---------- */
@@ -214,11 +214,11 @@
 }
 
 .prazoAtrasado {
-  color: #fca5a5;
+  color: var(--cor-perigo-texto);
 }
 
 .prazoHoje {
-  color: #fbbf24;
+  color: var(--cor-aviso-texto);
 }
 
 .prazoNormal {
@@ -241,8 +241,8 @@
   max-width: calc(100vw - 32px);
   padding: 12px 14px 12px 18px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #1e222b;
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  background: var(--cor-elevado);
   box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.75);
   font-size: 0.9rem;
   transform: translateX(-50%);
@@ -274,7 +274,7 @@
   padding: 6px 12px;
   border-radius: 9px;
   border: none;
-  background: rgba(34, 197, 94, 0.14);
+  background: rgb(var(--rgb-destaque) / 0.14);
   color: var(--cor-destaque);
   font: inherit;
   font-weight: 600;
@@ -282,7 +282,7 @@
 }
 
 .desfazer:hover {
-  background: rgba(34, 197, 94, 0.22);
+  background: rgb(var(--rgb-destaque) / 0.22);
 }
 
 /* ---------- telemóvel: o prazo passa para baixo dos detalhes ---------- */

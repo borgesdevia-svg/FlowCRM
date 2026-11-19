@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
+import { termoPesquisa } from "@/lib/texto";
 import Icone from "@/components/Icone";
 import BotoesFase from "@/components/clientes/BotoesFase";
 import { CartaoArrastavel, ColunaArrastavel } from "@/components/pipeline/Arrastar";
+import PesquisaPipeline from "@/components/pipeline/PesquisaPipeline";
 import styles from "./pipeline.module.css";
 
 // Rota /painel/pipeline — os clientes organizados por fase, em colunas.
@@ -15,6 +17,8 @@ import styles from "./pipeline.module.css";
 // (VISIVEIS) e o resto abre num "Mostrar mais". Se houver ainda mais, há um link
 // para a lista de clientes já filtrada por essa fase, que tem páginas.
 // Os totais (contadores e números das colunas) vêm da função resumo_clientes.
+// Pesquisa: ?q=... no URL filtra todas as colunas (nome ou email, sem acentos),
+// com a mesma coluna "pesquisa" e o mesmo índice da lista de clientes.
 export const metadata = { title: "Pipeline · FlowCRM" };
 
 const CARREGAR = 30;
@@ -23,22 +27,28 @@ const VISIVEIS = { novo: 8, negociacao: 8, ativo: 4, perdido: 3 };
 
 const numero = (n) => new Intl.NumberFormat("pt-PT").format(n);
 
-export default async function PaginaPipeline() {
+// No Next.js 16, searchParams chega como uma Promise: por isso o "await"
+export default async function PaginaPipeline({ searchParams }) {
+  const { q = "" } = await searchParams;
   const { supabase, eAdmin } = await obterSessao();
+  const termo = String(q).trim().slice(0, 80); // o que a pessoa escreveu
+  const procura = termoPesquisa(termo); // sem acentos, para a base de dados
 
   // em paralelo (o RLS já filtra: admin vê todos, comercial só os seus):
   //  - os totais por fase
   //  - os clientes mais recentes de cada fase (uma consulta por fase)
   const [{ data: resumo }, ...porFase] = await Promise.all([
-    supabase.rpc("resumo_clientes", { termo: "" }),
-    ...ESTADOS.map((e) =>
-      supabase
+    supabase.rpc("resumo_clientes", { termo: procura }),
+    ...ESTADOS.map((e) => {
+      let consulta = supabase
         .from("clientes")
         .select("id, nome, email, estado, valor_previsto, perfis(nome)")
         .eq("estado", e.chave)
         .order("criado_em", { ascending: false })
-        .limit(CARREGAR)
-    ),
+        .limit(CARREGAR);
+      if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
+      return consulta;
+    }),
   ]);
 
   const totais = {};
@@ -46,6 +56,7 @@ export default async function PaginaPipeline() {
   const total = (chave) => totais[chave] ?? { n: 0, soma: 0 };
 
   // "em aberto" = negócios ainda por decidir (novos + em negociação)
+  const encontrados = ESTADOS.reduce((soma, e) => soma + total(e.chave).n, 0);
   const emAberto = { n: total("novo").n + total("negociacao").n, soma: total("novo").soma + total("negociacao").soma };
 
   // um cartão de cliente (usado nos visíveis e nos que abrem em "Mostrar mais")
@@ -112,7 +123,17 @@ export default async function PaginaPipeline() {
         })}
       </section>
 
-      <p className={styles.dica}>Arrasta os cartões para outra coluna ou usa os botões de cada cartão.</p>
+      {/* pesquisa + dica (ou quantos resultados a pesquisa encontrou) */}
+      <div className={styles.barra}>
+        <PesquisaPipeline inicial={termo} />
+        <p className={styles.dica} role="status">
+          {termo
+            ? encontrados === 0
+              ? `Nenhum cliente com "${termo}".`
+              : `${numero(encontrados)} ${encontrados === 1 ? "cliente encontrado" : "clientes encontrados"} com "${termo}".`
+            : "Arrasta os cartões para outra coluna ou usa os botões de cada cartão."}
+        </p>
+      </div>
 
       <div className={styles.quadro}>
         {ESTADOS.map((estado, i) => {
@@ -136,7 +157,7 @@ export default async function PaginaPipeline() {
                 <span>{numero(nTotal)}</span>
               </header>
 
-              {daColuna.length === 0 && <p className={styles.vazia}>Nenhum cliente nesta fase.</p>}
+              {daColuna.length === 0 && <p className={styles.vazia}>{termo ? "Nenhum resultado nesta fase." : "Nenhum cliente nesta fase."}</p>}
 
               {visiveis.map(cartao)}
 
@@ -153,7 +174,7 @@ export default async function PaginaPipeline() {
 
               {/* ainda há mais: a lista de clientes tem páginas e pesquisa */}
               {foraDoQuadro > 0 && (
-                <Link href={`/painel/clientes?estado=${estado.chave}`} className={styles.verTodos}>
+                <Link href={`/painel/clientes?estado=${estado.chave}${termo ? `&q=${encodeURIComponent(termo)}` : ""}`} className={styles.verTodos}>
                   Ver todos os {numero(nTotal)} na lista
                 </Link>
               )}

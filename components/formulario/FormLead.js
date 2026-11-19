@@ -85,13 +85,14 @@ export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado =
 
       <div className="campo">
         <label htmlFor="telefone">
-          Telefone <span className={styles.opcional}>(opcional)</span>
+          Telefone
         </label>
         <input
           id="telefone"
           name="telefone"
           type="tel"
           autoComplete="tel"
+          required
           defaultValue={valores.telefone}
           aria-invalid={!!erros.telefone}
         />
