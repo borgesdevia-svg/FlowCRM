@@ -92,6 +92,9 @@ export default async function PaginaClientes({ searchParams }) {
           <a href={linkExportar} className={styles.botaoTexto}>
             <Icone nome="folha" tamanho={16} /> Exportar
           </a>
+          <Link href="/painel/clientes/importar" className={styles.botaoTexto}>
+            <Icone nome="caixaEntrada" tamanho={16} /> Importar
+          </Link>
           <Link href="/painel/clientes/novo" className="botao">
             <Icone nome="mais" tamanho={16} /> Novo cliente
           </Link>
@@ -150,10 +153,15 @@ export default async function PaginaClientes({ searchParams }) {
             {total === 0 && !termo ? (
               <>
                 <h2>Ainda não tens clientes</h2>
-                <p>Adiciona o primeiro à mão ou partilha o formulário público da empresa.</p>
-                <Link href="/painel/clientes/novo" className="botao">
-                  Adicionar cliente
-                </Link>
+                <p>Adiciona o primeiro à mão, importa uma folha de Excel ou partilha o formulário público da empresa.</p>
+                <div className={styles.acoesTopo}>
+                  <Link href="/painel/clientes/novo" className="botao">
+                    Adicionar cliente
+                  </Link>
+                  <Link href="/painel/clientes/importar" className="botao botao-secundario">
+                    Importar CSV
+                  </Link>
+                </div>
               </>
             ) : (
               <>

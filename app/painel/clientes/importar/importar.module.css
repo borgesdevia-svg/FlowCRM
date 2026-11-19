@@ -1,0 +1,241 @@
+.pagina {
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- cabeçalho (igual ao de "Novo cliente") ---------- */
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cabecalho h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.resumo,
+.suave {
+  color: var(--cor-texto-suave);
+}
+
+.voltar {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.voltar::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-left: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.voltar:hover {
+  color: var(--cor-texto);
+}
+
+/* ---------- duas colunas: ficheiro + pré-visualização | responsável + ajuda ---------- */
+.colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+
+.principal,
+.lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 14px;
+  background: var(--cor-cartao);
+}
+
+/* zona grande para escolher o ficheiro (o <input> fica escondido dentro do <label>) */
+.zonaFicheiro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  border: 1.5px dashed var(--cor-contorno);
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--cor-texto-suave);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.zonaFicheiro strong {
+  color: var(--cor-texto);
+  overflow-wrap: anywhere;
+}
+
+.zonaFicheiro:hover,
+.zonaFicheiro:focus-within {
+  border-color: var(--cor-destaque);
+  background: var(--cor-superficie-verde);
+}
+
+/* escondido mas acessível ao teclado (Tab chega lá e o contorno aparece na zona) */
+.inputEscondido {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* ---------- pré-visualização ---------- */
+.contas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+}
+
+.contas li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--cor-elevado);
+  font-size: 0.88rem;
+  color: var(--cor-texto-suave);
+}
+
+.contas strong {
+  color: var(--cor-texto);
+}
+
+.contaBoa strong {
+  color: var(--cor-destaque);
+}
+
+.contaMa strong {
+  color: var(--cor-estado-perdido);
+}
+
+.rolar {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.tabela th,
+.tabela td {
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.tabela th {
+  color: var(--cor-texto-fraco);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.tabela .direita {
+  text-align: right;
+}
+
+.erros summary {
+  cursor: pointer;
+  color: var(--cor-estado-perdido);
+  font-weight: 500;
+}
+
+.erros ul {
+  margin-top: 8px;
+  padding-left: 18px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+}
+
+/* ---------- lateral ---------- */
+.ajuda {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  font-size: 0.86rem;
+  color: var(--cor-texto-suave);
+}
+
+.ajuda h2 {
+  font-size: 0.95rem;
+  color: var(--cor-texto);
+}
+
+.linkModelo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: var(--cor-destaque);
+  font-weight: 600;
+}
+
+.linkModelo:hover {
+  text-decoration: underline;
+}
+
+/* ---------- resultado ---------- */
+.resultado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 8px;
+  text-align: center;
+}
+
+.iconeFeito {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+@media (max-width: 860px) {
+  .colunas {
+    grid-template-columns: 1fr;
+  }
+}
