@@ -2,7 +2,7 @@ import Link from "next/link";
 import IndicadorLink from "@/components/painel/IndicadorLink";
 import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, obterEstado, formatarEuros, formatarData } from "@/lib/estados";
-import { termoPesquisa } from "@/lib/texto";
+import { formatarTelefone, linkTelefone, termoPesquisa } from "@/lib/texto";
 import Icone from "@/components/Icone";
 import styles from "./clientes.module.css";
 
@@ -199,7 +199,16 @@ export default async function PaginaClientes({ searchParams }) {
                           </small>
                         </div>
                       </td>
-                      <td className={styles.colTelefone}>{c.telefone ?? "—"}</td>
+                      <td className={styles.colTelefone}>
+                        {/* o número liga ao carregar (fica por cima do link que ocupa a linha) */}
+                        {c.telefone ? (
+                          <a href={linkTelefone(c.telefone)} className={styles.linkTelefone}>
+                            {formatarTelefone(c.telefone)}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
                       {eAdmin && (
                         <td className={styles.colResponsavel}>
                           {c.perfis?.nome ?? <span className={styles.semResponsavel}>Por atribuir</span>}

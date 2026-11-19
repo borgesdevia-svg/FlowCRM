@@ -373,15 +373,22 @@ export default async function PaginaPainel() {
             <header className={styles.topoBloco}>
               <h2>Valor por fase</h2>
             </header>
-            <div className={styles.areaGrafico}>
-              <Grafico
-                tipo="bar"
-                etiquetas={ESTADOS.map((e) => e.texto)}
-                valores={valorPorFase}
-                cores={ESTADOS.map((e) => e.cor)}
-                formato="euros"
-              />
-            </div>
+            {/* sem valores previstos, o gráfico seria só um eixo vazio "0 € – 1 €" */}
+            {valorPorFase.every((v) => !v) ? (
+              <p className={styles.subtitulo}>
+                {totalClientes === 0 ? "Ainda não há clientes." : "Ainda não há valores previstos nos clientes."}
+              </p>
+            ) : (
+              <div className={styles.areaGrafico}>
+                <Grafico
+                  tipo="bar"
+                  etiquetas={ESTADOS.map((e) => e.texto)}
+                  valores={valorPorFase}
+                  cores={ESTADOS.map((e) => e.cor)}
+                  formato="euros"
+                />
+              </div>
+            )}
           </article>
         </section>
       )}

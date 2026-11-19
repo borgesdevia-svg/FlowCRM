@@ -5,6 +5,7 @@ import { obterEstado } from "@/lib/estados";
 import { alternarTarefa, adiarTarefa } from "@/lib/acoes/tarefas";
 import FormNota from "@/components/clientes/FormNota";
 import Icone from "@/components/Icone";
+import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import VistasTarefas from "@/components/tarefas/VistasTarefas";
 import styles from "./fila.module.css";
 
@@ -133,8 +134,8 @@ export default async function PaginaFila({ searchParams }) {
             </div>
             <div className={styles.contactos}>
               {tarefa.clientes?.telefone && (
-                <a href={`tel:${tarefa.clientes.telefone}`} className={styles.contacto}>
-                  <Icone nome="telemovel" tamanho={15} /> {tarefa.clientes.telefone}
+                <a href={linkTelefone(tarefa.clientes.telefone)} className={styles.contacto}>
+                  <Icone nome="telemovel" tamanho={15} /> {formatarTelefone(tarefa.clientes.telefone)}
                 </a>
               )}
               {tarefa.clientes?.email && (

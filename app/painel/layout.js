@@ -100,7 +100,7 @@ export default async function LayoutPainel({ children }) {
               </span>
             )}
             <span className={styles.textoMarca}>
-              <strong>{empresa.nome}</strong>
+              <strong title={empresa.nome}>{empresa.nome}</strong>
               <small>
                 <SimboloLogo tamanho={11} />
                 <span>

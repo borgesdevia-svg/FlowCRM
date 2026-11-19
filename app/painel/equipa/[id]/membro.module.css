@@ -242,17 +242,17 @@
   background: var(--cor-contorno);
 }
 
-.fase {
+.tipo-fase {
   --cor-acao: var(--cor-estado-negociacao);
 }
 
-.tarefa {
+.tipo-tarefa {
   --cor-acao: var(--cor-destaque);
 }
 
-.chamada,
-.email,
-.reuniao {
+.tipo-chamada,
+.tipo-email,
+.tipo-reuniao {
   --cor-acao: var(--cor-estado-novo);
 }
 

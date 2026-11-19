@@ -9,6 +9,7 @@ import Historico from "@/components/clientes/Historico";
 import FormTarefa from "@/components/tarefas/FormTarefa";
 import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import Icone from "@/components/Icone";
+import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
@@ -107,9 +108,9 @@ export default async function PaginaCliente({ params, searchParams }) {
                 </a>
               )}
               {cliente.telefone && (
-                <a href={`tel:${cliente.telefone}`} className={styles.contacto}>
+                <a href={linkTelefone(cliente.telefone)} className={styles.contacto}>
                   <Icone nome="telemovel" tamanho={15} />
-                  {cliente.telefone}
+                  {formatarTelefone(cliente.telefone)}
                 </a>
               )}
               {!cliente.email && !cliente.telefone && (

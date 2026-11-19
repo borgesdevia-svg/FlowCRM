@@ -334,3 +334,18 @@
     scroll-snap-type: x mandatory;
   }
 }
+
+/* dica: em ecrãs de toque (sem rato) não há arrastar, por isso só se fala dos botões */
+.soToque {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .soRato {
+    display: none;
+  }
+
+  .soToque {
+    display: inline;
+  }
+}

@@ -35,6 +35,9 @@
   border-right: 1px solid var(--cor-contorno);
   background: var(--cor-fundo-2);
   overflow-y: auto; /* em ecrãs baixos, o menu faz scroll em vez de cortar */
+  /* barra de scroll fina e discreta (a do sistema era larga e chamava a atenção) */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--rgb-tinta) / 0.15) transparent;
 }
 
 /* linha de cima: marca + sino. "relative" para a lista do sino abrir por baixo desta linha */
@@ -97,11 +100,14 @@
   line-height: 1.25;
 }
 
+/* nomes compridos ocupam até 2 linhas (antes cortavam logo: "Teste QA L…") */
 .textoMarca strong {
-  font-size: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
 }
 
 /* "FlowCRM" pequeno por baixo do nome da empresa, com o símbolo ao lado */

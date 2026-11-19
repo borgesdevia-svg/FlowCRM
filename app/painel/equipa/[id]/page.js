@@ -210,7 +210,7 @@ export default async function PaginaMembro({ params }) {
               desenhar={(a) => {
                 const d = descreverAcao(a);
                 return (
-                  <li key={a.id} className={`${styles.acao} ${styles[d.classe] ?? ""}`}>
+                  <li key={a.id} className={`${styles.acao} ${styles[`tipo-${d.classe}`] ?? ""}`}>
                     <span className={styles.iconeAcao}>
                       <Icone nome={d.icone} tamanho={14} />
                     </span>

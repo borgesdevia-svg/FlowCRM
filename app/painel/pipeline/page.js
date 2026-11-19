@@ -131,7 +131,13 @@ export default async function PaginaPipeline({ searchParams }) {
             ? encontrados === 0
               ? `Nenhum cliente com "${termo}".`
               : `${numero(encontrados)} ${encontrados === 1 ? "cliente encontrado" : "clientes encontrados"} com "${termo}".`
-            : "Arrasta os cartões para outra coluna ou usa os botões de cada cartão."}
+            : (
+              <>
+                {/* no telemóvel não se arrasta: lá a dica fala só dos botões (CSS) */}
+                <span className={styles.soRato}>Arrasta os cartões para outra coluna ou usa os botões de cada cartão.</span>
+                <span className={styles.soToque}>Usa os botões de cada cartão para o mudar de fase.</span>
+              </>
+            )}
         </p>
       </div>
 

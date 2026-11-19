@@ -254,6 +254,18 @@
   inset: 0;
 }
 
+/* telefone clicável dentro da linha: fica por cima do link que ocupa a linha toda */
+.linkTelefone {
+  position: relative;
+  z-index: 1;
+  color: inherit;
+}
+
+.linkTelefone:hover {
+  color: var(--cor-destaque);
+  text-decoration: underline;
+}
+
 .linkCliente:focus-visible {
   outline: none;
 }
