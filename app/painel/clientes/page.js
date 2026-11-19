@@ -237,16 +237,7 @@ export default async function PaginaClientes({ searchParams }) {
                       </td>
                       {eAdmin && (
                         <td className={styles.colResponsavel}>
-                          {c.perfis?.nome ? (
-                            <span className={styles.responsavel}>
-                              <span className={styles.miniAvatar} aria-hidden="true">
-                                {iniciais(c.perfis.nome)}
-                              </span>
-                              {c.perfis.nome}
-                            </span>
-                          ) : (
-                            <span className={styles.semResponsavel}>Por atribuir</span>
-                          )}
+                          {c.perfis?.nome ?? <span className={styles.semResponsavel}>Por atribuir</span>}
                         </td>
                       )}
                       <td className={styles.colValor}>

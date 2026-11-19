@@ -266,26 +266,6 @@
   letter-spacing: 0.02em;
 }
 
-/* responsável: bolinha com as iniciais + nome */
-.responsavel {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--cor-texto);
-}
-
-.miniAvatar {
-  width: 24px;
-  height: 24px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgb(var(--rgb-tinta) / 0.08);
-  color: var(--cor-texto-suave);
-  font-size: 0.66rem;
-  font-weight: 600;
-}
-
 .nomeEmail {
   min-width: 200px;
   display: flex;
