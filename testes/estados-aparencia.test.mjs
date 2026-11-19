@@ -45,7 +45,7 @@ test("normalizarAparencia: menu respeita a ordem e os nomes, sem repetidos nem i
   assert.equal(new Set(ids).size, MENU.principal.length);
   assert.ok(!ids.includes("hacker"));
   assert.equal(a.menu.principal[0].nome, "As minhas tarefas");
-  assert.equal(a.menu.principal[1].nome, "Clientes"); // nome vazio volta ao padrão
+  assert.equal(a.menu.principal[1].nome, "Leads"); // nome vazio volta ao padrão
 });
 
 test("normalizarAparencia: nomes do menu cortados no máximo", () => {
@@ -64,4 +64,10 @@ test("cssAparencia: só gera CSS a partir das listas fixas", () => {
   const css = cssAparencia(normalizarAparencia({ modelo: "</style><script>", modo: "claro" }));
   assert.ok(!css.includes("<"));
   assert.match(css, /^:root\{.*\}\.painel-lateral\{.*\}$/);
+});
+
+test("normalizarAparencia: nomes de origem antigos guardados passam aos novos", () => {
+  const a = normalizarAparencia({ menu: { principal: [{ id: "painel", nome: "Painel" }, { id: "clientes", nome: "Clientes" }] } });
+  assert.equal(a.menu.principal[0].nome, "Visão geral");
+  assert.equal(a.menu.principal[1].nome, "Leads");
 });

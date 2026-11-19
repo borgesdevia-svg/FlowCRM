@@ -5,7 +5,7 @@ import { apagarCliente } from "@/lib/acoes/clientes";
 
 export default function BotaoApagarCliente({ id, nome }) {
   function confirmar(evento) {
-    if (!window.confirm(`Apagar ${nome}? As notas e tarefas deste cliente também são apagadas.`)) {
+    if (!window.confirm(`Apagar ${nome}? As notas e tarefas deste lead também são apagadas.`)) {
       evento.preventDefault();
     }
   }
@@ -18,7 +18,7 @@ export default function BotaoApagarCliente({ id, nome }) {
         className="botao botao-secundario"
         style={{ color: "#fca5a5", borderColor: "rgba(248,113,113,0.35)" }}
       >
-        Apagar cliente
+        Apagar lead
       </button>
     </form>
   );

@@ -15,7 +15,7 @@ const MOSTRAR_REGISTO = 30;
 
 // frase de cada linha do registo, a partir do tipo
 function frase(linha) {
-  const cliente = linha.clientes?.nome ?? "um cliente apagado";
+  const cliente = linha.clientes?.nome ?? "um lead apagado";
   const pessoa = linha.perfis?.nome;
   switch (linha.tipo) {
     case "tarefa_novo_cliente":
@@ -54,7 +54,7 @@ export default async function PaginaAutomacoes() {
     <div className={`entrar ${styles.pagina}`}>
       <header className={styles.cabecalho}>
         <h1>Automações</h1>
-        <p className={styles.resumo}>Trabalho que o CRM faz sozinho, para nenhum cliente ficar esquecido.</p>
+        <p className={styles.resumo}>Trabalho que o CRM faz sozinho, para nenhum lead ficar esquecido.</p>
       </header>
 
       <FormAutomacoes

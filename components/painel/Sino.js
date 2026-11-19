@@ -66,7 +66,7 @@ export default function Sino({ tarefas, semResponsavel = [], nSemResponsavel = 0
             <>
             {semResponsavel.length > 0 && (
               <>
-                <p className={styles.subtitulo}>Clientes sem responsável · {nSemResponsavel}</p>
+                <p className={styles.subtitulo}>Leads sem responsável · {nSemResponsavel}</p>
                 <ul className={styles.lista}>
                   {semResponsavel.map((c) => (
                     <li key={c.id} className={styles.itemSemResponsavel}>
@@ -99,7 +99,7 @@ export default function Sino({ tarefas, semResponsavel = [], nSemResponsavel = 0
                       <span className={styles.texto}>
                         <strong>{t.titulo}</strong>
                         <small>
-                          {t.clientes?.nome ?? "Cliente"} ·{" "}
+                          {t.clientes?.nome ?? "Lead"} ·{" "}
                           <em className={atrasada ? styles.atrasada : styles.hoje}>
                             {atrasada ? `atrasada desde ${formatarDiaCurto(t.data_limite)}` : "acaba hoje"}
                           </em>

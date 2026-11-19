@@ -239,7 +239,7 @@ export default function TabelaTarefas({ tarefas: doServidor, hoje, mensagemVazia
                     />
                     <span className={styles.detalhes}>
                       <Link href={`/painel/clientes/${t.cliente_id}`} className={styles.cliente}>
-                        {t.clientes?.nome ?? "Cliente"}
+                        {t.clientes?.nome ?? "Lead"}
                       </Link>
                       {mostrarResponsavel && (
                         <>

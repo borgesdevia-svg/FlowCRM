@@ -121,10 +121,10 @@ export default async function PaginaFila({ searchParams }) {
           </div>
 
           {/* o cliente e os contactos: clicar no email ou no telefone abre o programa certo */}
-          <section className={styles.cliente} aria-label="Cliente">
+          <section className={styles.cliente} aria-label="Lead">
             <div className={styles.linhaCliente}>
               <Link href={`/painel/clientes/${tarefa.cliente_id}`} className={styles.nomeCliente}>
-                {tarefa.clientes?.nome ?? "Cliente"}
+                {tarefa.clientes?.nome ?? "Lead"}
               </Link>
               {tarefa.clientes?.estado && (
                 <span className={styles.estado} style={{ "--cor": obterEstado(tarefa.clientes.estado).cor }}>
@@ -159,7 +159,7 @@ export default async function PaginaFila({ searchParams }) {
                   <span className={styles.textoRegisto}>{ultimo.nota}</span>
                 </p>
               ) : (
-                <p className={styles.fraco}>Ainda não há registos deste cliente.</p>
+                <p className={styles.fraco}>Ainda não há registos deste lead.</p>
               )}
             </div>
           </section>

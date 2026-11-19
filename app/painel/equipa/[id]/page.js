@@ -160,7 +160,7 @@ export default async function PaginaMembro({ params }) {
       {/* ---------- números ---------- */}
       <section className={styles.numeros} aria-label="Resumo">
         <div className={styles.numeroCartao}>
-          <span>Clientes</span>
+          <span>Leads</span>
           <strong>{numero(totalClientes)}</strong>
           {/* barra com os clientes por fase */}
           <div className={styles.barra} aria-hidden="true">
@@ -179,7 +179,7 @@ export default async function PaginaMembro({ params }) {
           <small>novos + em negociação</small>
         </div>
         <div className={styles.numeroCartao}>
-          <span>Clientes ganhos</span>
+          <span>Leads ganhos</span>
           <strong>{numero(ganhos)}</strong>
           <small>na fase Ativo</small>
         </div>
@@ -201,7 +201,7 @@ export default async function PaginaMembro({ params }) {
             <span>{numero(nAcoes ?? 0)}</span>
           </header>
           {listaAcoes.length === 0 ? (
-            <p className={styles.vazio}>{primeiroNome} ainda não registou nada no histórico dos clientes.</p>
+            <p className={styles.vazio}>{primeiroNome} ainda não registou nada no histórico dos leads.</p>
           ) : (
             <ListaComMais
               Lista="ol"
@@ -270,11 +270,11 @@ export default async function PaginaMembro({ params }) {
           {/* ---------- clientes ---------- */}
           <section className={styles.bloco} aria-labelledby="titulo-clientes">
             <header className={styles.topoBloco}>
-              <h2 id="titulo-clientes">Clientes</h2>
+              <h2 id="titulo-clientes">Leads</h2>
               <span>{numero(totalClientes)}</span>
             </header>
             {listaClientes.length === 0 ? (
-              <p className={styles.vazio}>{primeiroNome} ainda não é responsável por nenhum cliente.</p>
+              <p className={styles.vazio}>{primeiroNome} ainda não é responsável por nenhum lead.</p>
             ) : (
               <ListaComMais
                 className={styles.lista}

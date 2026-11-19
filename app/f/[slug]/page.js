@@ -52,7 +52,7 @@ export default async function PaginaFormulario({ params }) {
           <div className={styles.equipa}>
             <p>
               Já fazes parte da equipa da {nomeEmpresa}, por isso não respondes a este formulário: ele é para os
-              clientes. Partilha o link com eles e os contactos que chegarem aparecem no painel.
+              leads. Partilha o link com eles e os contactos que chegarem aparecem no painel.
             </p>
             <Link href="/painel" className="botao">
               Voltar ao painel
@@ -62,7 +62,7 @@ export default async function PaginaFormulario({ params }) {
           <>
             {papel === "admin" && (
               <p className={styles.avisoAdmin}>
-                Estás a ver como administrador. Se enviares, entra um cliente novo na tua lista.
+                Estás a ver como administrador. Se enviares, entra um lead novo na tua lista.
               </p>
             )}
             <FormLead

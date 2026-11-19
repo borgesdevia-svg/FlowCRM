@@ -183,7 +183,7 @@ export default async function PaginaTarefas({ searchParams }) {
               type="search"
               name="q"
               defaultValue={termo}
-              placeholder="Pesquisar tarefa ou cliente"
+              placeholder="Pesquisar tarefa ou lead"
               aria-label="Pesquisar tarefas"
             />
           </form>
@@ -198,7 +198,7 @@ export default async function PaginaTarefas({ searchParams }) {
             <div className={styles.painelNova}>
               {(clientes ?? []).length === 0 ? (
                 <p className={styles.semClientes}>
-                  Para criar tarefas precisas de clientes. <Link href="/painel/clientes/novo">Adiciona o primeiro.</Link>
+                  Para criar tarefas precisas de leads. <Link href="/painel/clientes/novo">Adiciona o primeiro.</Link>
                 </p>
               ) : (
                 <FormTarefa clientes={clientes} membros={membros} perfilId={perfil.id} />

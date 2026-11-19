@@ -20,7 +20,7 @@ export default function AtividadeRecente({ eventos }) {
 
       {eventos.length === 0 ? (
         <p className={styles.vazio}>
-          Ainda não há atividade. Quando a equipa mudar clientes de fase ou concluir tarefas, aparece aqui.
+          Ainda não há atividade. Quando a equipa mudar leads de fase ou concluir tarefas, aparece aqui.
         </p>
       ) : (
         <ol className={styles.lista}>

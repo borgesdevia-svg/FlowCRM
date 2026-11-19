@@ -42,7 +42,7 @@ export default async function PaginaConta() {
       <section className={styles.contadores} aria-label="Os meus números">
         <div className={styles.contador}>
           <strong>{nClientes ?? 0}</strong>
-          <span>Os meus clientes</span>
+          <span>Os meus leads</span>
         </div>
         <div className={styles.contador}>
           <strong>{nAtivos ?? 0}</strong>
@@ -60,7 +60,7 @@ export default async function PaginaConta() {
           <h2>
             <Icone nome="utilizador" tamanho={18} /> Nome
           </h2>
-          <p>É o nome que a tua equipa vê nos clientes, nas tarefas e no histórico.</p>
+          <p>É o nome que a tua equipa vê nos leads, nas tarefas e no histórico.</p>
         </div>
         <FormNome nomeAtual={perfil.nome} />
       </section>
@@ -80,7 +80,7 @@ export default async function PaginaConta() {
           <h2>
             <Icone nome="ligacao" tamanho={18} /> Formulário público
           </h2>
-          <p>Partilha este link: quem o preencher entra como cliente novo no CRM da {empresaFimFrase}</p>
+          <p>Partilha este link: quem o preencher entra como lead novo no CRM da {empresaFimFrase}</p>
         </div>
         <div className={styles.link}>
           <code>{linkFormulario}</code>

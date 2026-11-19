@@ -5,7 +5,7 @@ import Icone from "@/components/Icone";
 import styles from "./novo.module.css";
 
 // Rota /painel/clientes/novo — adicionar um cliente à mão
-export const metadata = { title: "Novo cliente · FlowCRM" };
+export const metadata = { title: "Novo lead · FlowCRM" };
 
 export default async function PaginaNovoCliente() {
   const { supabase, perfil, empresa, eAdmin } = await obterSessao();
@@ -23,13 +23,13 @@ export default async function PaginaNovoCliente() {
       {/* cabeçalho igual ao das outras páginas do painel */}
       <header className={styles.cabecalho}>
         <Link href="/painel/clientes" className={styles.voltar}>
-          Clientes
+          Leads
         </Link>
-        <h1>Novo cliente</h1>
+        <h1>Novo lead</h1>
         <p className={styles.resumo}>
           {eAdmin
             ? "Podes atribuí-lo já a um comercial ou deixar para depois."
-            : "Vais ficar como responsável por este cliente."}
+            : "Vais ficar como responsável por este lead."}
         </p>
       </header>
 

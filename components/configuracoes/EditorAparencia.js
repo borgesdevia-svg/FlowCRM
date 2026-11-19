@@ -167,7 +167,7 @@ export default function EditorAparencia({ inicial }) {
         <section className={styles.seccao} aria-labelledby="titulo-grafico">
           <header className={styles.cabecaSeccao}>
             <h2 id="titulo-grafico">Gráfico no Início</h2>
-            <p className={styles.explicacao}>Como aparece o gráfico de clientes novos por semana.</p>
+            <p className={styles.explicacao}>Como aparece o gráfico de leads novos por semana.</p>
           </header>
           <div className={styles.graficos} role="radiogroup" aria-labelledby="titulo-grafico">
             {GRAFICOS.map((g) => (

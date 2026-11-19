@@ -57,8 +57,8 @@ export default function ImportarClientes({ membros, perfilId }) {
           </span>
           <h2>
             {importados === 0
-              ? "Nenhum cliente novo para importar"
-              : `${importados} ${importados === 1 ? "cliente importado" : "clientes importados"}`}
+              ? "Nenhum lead novo para importar"
+              : `${importados} ${importados === 1 ? "lead importado" : "leads importados"}`}
           </h2>
           {(repetidos.length > 0 || invalidos.length > 0) && (
             <p className={styles.suave}>
@@ -68,7 +68,7 @@ export default function ImportarClientes({ membros, perfilId }) {
           )}
           <div className={styles.botoes}>
             <Link href="/painel/clientes" className="botao">
-              Ver clientes
+              Ver leads
             </Link>
             {/* recarregar a página limpa o resultado e o ficheiro escolhido */}
             <button type="button" className="botao botao-secundario" onClick={() => location.reload()}>
@@ -97,7 +97,7 @@ export default function ImportarClientes({ membros, perfilId }) {
             <Icone nome="folha" tamanho={26} />
             <strong>{ficheiro ? ficheiro.nome : "Escolher ficheiro CSV"}</strong>
             <span className={styles.suave}>
-              {ficheiro ? "Carrega outra vez para trocar de ficheiro." : `Até ${MAX_LINHAS_IMPORTAR} clientes de cada vez.`}
+              {ficheiro ? "Carrega outra vez para trocar de ficheiro." : `Até ${MAX_LINHAS_IMPORTAR} leads de cada vez.`}
             </span>
             <input type="file" accept=".csv,text/csv" onChange={escolher} className={styles.inputEscondido} />
           </label>
@@ -184,7 +184,7 @@ export default function ImportarClientes({ membros, perfilId }) {
 
         {membros && (
           <div className="campo">
-            <label htmlFor="responsavel_id">Responsável pelos clientes</label>
+            <label htmlFor="responsavel_id">Responsável pelos leads</label>
             <select id="responsavel_id" name="responsavel_id" defaultValue={perfilId}>
               <option value="">Por atribuir</option>
               {membros.map((m) => (
@@ -206,8 +206,8 @@ export default function ImportarClientes({ membros, perfilId }) {
             A primeira linha tem os títulos. <strong>Nome</strong> e <strong>Telefone</strong> são obrigatórios;{" "}
             Email, Cidade, Valor previsto e Estado são opcionais.
           </p>
-          <p>Sem estado, o cliente entra como Novo. Clientes com um email que já existe no CRM ficam como estão.</p>
-          <p>Se a automação de tarefas estiver ligada, cada cliente com responsável recebe a tarefa “Contactar”.</p>
+          <p>Sem estado, o lead entra como Novo. Leads com um email que já existe no CRM ficam como estão.</p>
+          <p>Se a automação de tarefas estiver ligada, cada lead com responsável recebe a tarefa “Contactar”.</p>
           <a href={`data:text/csv;charset=utf-8,${encodeURIComponent(MODELO)}`} download="modelo-clientes.csv" className={styles.linkModelo}>
             <Icone nome="folha" tamanho={15} /> Descarregar ficheiro de exemplo
           </a>

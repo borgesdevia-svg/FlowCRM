@@ -14,14 +14,14 @@ import styles from "./clientes.module.css";
 //
 // Escala: só vêm POR_PAGINA clientes de cada vez; os números dos separadores e os
 // totais vêm da função resumo_clientes (migração 07), sem trazer os clientes todos.
-export const metadata = { title: "Clientes · FlowCRM" };
+export const metadata = { title: "Leads · FlowCRM" };
 
 const POR_PAGINA = 50;
 
 const AVISOS = {
-  adicionado: "Cliente adicionado.",
+  adicionado: "Lead adicionado.",
   guardado: "Alterações guardadas.",
-  apagado: "Cliente apagado.",
+  apagado: "Lead apagado.",
 };
 
 const numero = (n) => new Intl.NumberFormat("pt-PT").format(n);
@@ -84,7 +84,7 @@ export default async function PaginaClientes({ searchParams }) {
       {/* cabeçalho: título grande à esquerda, ações à direita */}
       <header className={styles.cabecalho}>
         <div>
-          <h1>Clientes</h1>
+          <h1>Leads</h1>
           <p className={styles.resumo}>{frase}</p>
         </div>
         <div className={styles.acoesTopo}>
@@ -96,7 +96,7 @@ export default async function PaginaClientes({ searchParams }) {
             <Icone nome="caixaEntrada" tamanho={16} /> Importar
           </Link>
           <Link href="/painel/clientes/novo" className="botao">
-            <Icone nome="mais" tamanho={16} /> Novo cliente
+            <Icone nome="mais" tamanho={16} /> Novo lead
           </Link>
         </div>
       </header>
@@ -141,7 +141,7 @@ export default async function PaginaClientes({ searchParams }) {
             name="q"
             defaultValue={termo}
             placeholder="Pesquisar nome ou email"
-            aria-label="Pesquisar clientes"
+            aria-label="Pesquisar leads"
           />
         </form>
       </div>
@@ -152,11 +152,11 @@ export default async function PaginaClientes({ searchParams }) {
           <div className={styles.vazio}>
             {total === 0 && !termo ? (
               <>
-                <h2>Ainda não tens clientes</h2>
+                <h2>Ainda não tens leads</h2>
                 <p>Adiciona o primeiro à mão, importa uma folha de Excel ou partilha o formulário público da empresa.</p>
                 <div className={styles.acoesTopo}>
                   <Link href="/painel/clientes/novo" className="botao">
-                    Adicionar cliente
+                    Adicionar lead
                   </Link>
                   <Link href="/painel/clientes/importar" className="botao botao-secundario">
                     Importar CSV
@@ -165,7 +165,7 @@ export default async function PaginaClientes({ searchParams }) {
               </>
             ) : (
               <>
-                <h2>Nenhum cliente encontrado</h2>
+                <h2>Nenhum lead encontrado</h2>
                 <p>Experimenta outra pesquisa ou mostra todos os estados.</p>
                 <Link href="/painel/clientes" className="botao botao-secundario">
                   Limpar filtros

@@ -262,7 +262,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
                 <h2>As tuas perguntas</h2>
                 <p className={styles.explicacao}>
                   Nome, email e telefone estão sempre no formulário. Junta até {MAX_PERGUNTAS} perguntas tuas: as
-                  respostas aparecem na ficha do cliente.
+                  respostas aparecem na ficha do lead.
                 </p>
 
                 {dados.perguntas.length === 0 && (
@@ -305,7 +305,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
             <>
               <section className={styles.seccao}>
                 <h2>Mensagem</h2>
-                <p className={styles.explicacao}>O que o cliente lê depois de carregar em Enviar.</p>
+                <p className={styles.explicacao}>O que o lead lê depois de carregar em Enviar.</p>
                 <div className="campo">
                   <label htmlFor="obrigado-texto" className="so-leitores">
                     Mensagem depois de enviar
@@ -327,7 +327,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
               <section className={styles.seccao}>
                 <h2>Botão (opcional)</h2>
                 <p className={styles.explicacao}>
-                  Leva o cliente para o teu site, Instagram ou WhatsApp. Deixa os dois campos vazios para não mostrar.
+                  Leva o lead para o teu site, Instagram ou WhatsApp. Deixa os dois campos vazios para não mostrar.
                 </p>
                 <div className={styles.linhaBotao}>
                   <div className="campo">
@@ -362,7 +362,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
       {/* ================= pré-visualização ================= */}
       <aside className={styles.previa} aria-label="Pré-visualização do formulário">
         <p className={styles.tituloPrevia}>
-          {separador === "depois" ? "O que o cliente vê depois de enviar" : "Como o cliente vê o formulário"}
+          {separador === "depois" ? "O que o lead vê depois de enviar" : "Como o lead vê o formulário"}
         </p>
         {/* o formulário público é sempre uma folha branca sobre cinzento-claro, como na página real */}
         <div className={styles.moldura}>

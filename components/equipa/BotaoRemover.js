@@ -67,7 +67,7 @@ export default function BotaoRemover({ id, nome, className }) {
           <h2 id={`remover-titulo-${id}`}>Remover {nome} da equipa?</h2>
           <ul className={styles.consequencias}>
             <li>A conta é apagada e {nome.split(" ")[0]} deixa de conseguir entrar no FlowCRM.</li>
-            <li>Os clientes e as tarefas dessa pessoa ficam sem responsável (podes atribuí-los a outra pessoa).</li>
+            <li>Os leads e as tarefas dessa pessoa ficam sem responsável (podes atribuí-los a outra pessoa).</li>
             <li>Isto não se pode desfazer.</li>
           </ul>
 

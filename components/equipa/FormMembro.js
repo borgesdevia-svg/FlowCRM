@@ -10,7 +10,7 @@ import CampoPassword from "@/components/CampoPassword";
 import styles from "./Equipa.module.css";
 
 const PAPEIS = [
-  { valor: "comercial", texto: "Comercial", ajuda: "Vê só os clientes de que é responsável." },
+  { valor: "comercial", texto: "Comercial", ajuda: "Vê só os leads de que é responsável." },
   { valor: "admin", texto: "Administrador", ajuda: "Vê tudo e gere a equipa, como tu." },
 ];
 

@@ -44,13 +44,13 @@ export default function FormAutomacoes({ inicial, equipa }) {
         <li className={styles.item}>
           <div className={styles.topo}>
             <div>
-              <h2 className={styles.titulo}>Tarefa para cada cliente novo</h2>
+              <h2 className={styles.titulo}>Tarefa para cada lead novo</h2>
               <p className={styles.texto}>
-                Quando entra um cliente novo, o responsável recebe a tarefa “Contactar” para hoje. Se o cliente
+                Quando entra um lead novo, o responsável recebe a tarefa “Contactar” para hoje. Se o lead
                 chegar sem responsável, os administradores recebem um aviso para o entregar a alguém.
               </p>
             </div>
-            <Interruptor nome="tarefa_ligada" ligado={tarefa} mudar={setTarefa} rotulo="Tarefa para cada cliente novo" />
+            <Interruptor nome="tarefa_ligada" ligado={tarefa} mudar={setTarefa} rotulo="Tarefa para cada lead novo" />
           </div>
         </li>
 
@@ -92,13 +92,13 @@ export default function FormAutomacoes({ inicial, equipa }) {
         <li className={styles.item}>
           <div className={styles.topo}>
             <div>
-              <h2 className={styles.titulo}>Avisar quando um cliente fica parado</h2>
+              <h2 className={styles.titulo}>Avisar quando um lead fica parado</h2>
               <p className={styles.texto}>
-                Todos os dias às 8h, o CRM procura clientes Novos ou Em negociação onde não aconteceu nada (sem notas,
+                Todos os dias às 8h, o CRM procura leads Novos ou Em negociação onde não aconteceu nada (sem notas,
                 sem mudar de fase e sem tarefas por fazer). O responsável recebe a tarefa “Retomar contacto”.
               </p>
             </div>
-            <Interruptor nome="parado_ligado" ligado={parado} mudar={setParado} rotulo="Avisar quando um cliente fica parado" />
+            <Interruptor nome="parado_ligado" ligado={parado} mudar={setParado} rotulo="Avisar quando um lead fica parado" />
           </div>
 
           <div className={styles.ajustes} hidden={!parado}>

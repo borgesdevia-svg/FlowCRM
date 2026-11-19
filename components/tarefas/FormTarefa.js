@@ -33,7 +33,7 @@ export default function FormTarefa({ clienteId = null, clientes = null, membros 
         <div className={styles.linhaForm}>
           {clientes && (
             <div className="campo" style={{ flex: 1, minWidth: 200 }}>
-              <label htmlFor="cliente_id">Cliente</label>
+              <label htmlFor="cliente_id">Lead</label>
               <EscolherCliente sugestoes={clientes} />
             </div>
           )}

@@ -46,7 +46,7 @@ export async function GET(request) {
     if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
 
     const { data: bloco, error } = await consulta.range(inicio, inicio + BLOCO - 1);
-    if (error) return new Response("Não foi possível exportar os clientes.", { status: 500 });
+    if (error) return new Response("Não foi possível exportar os leads.", { status: 500 });
     data.push(...bloco);
     if (bloco.length < BLOCO) break;
   }
@@ -77,7 +77,7 @@ export async function GET(request) {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
       // "attachment" = o browser descarrega o ficheiro em vez de o mostrar
-      "Content-Disposition": `attachment; filename="clientes-${hoje}.csv"`,
+      "Content-Disposition": `attachment; filename="leads-${hoje}.csv"`,
       "Cache-Control": "no-store", // dados privados: não guardar em cache
     },
   });

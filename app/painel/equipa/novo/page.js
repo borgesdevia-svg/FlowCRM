@@ -17,11 +17,11 @@ const PAPEIS = [
   },
   {
     nome: "Administrador",
-    itens: ["Vê todos os clientes da empresa", "Atribui clientes aos comerciais", "Gere a equipa e personaliza o CRM"],
+    itens: ["Vê todos os leads da empresa", "Atribui leads aos comerciais", "Gere a equipa e personaliza o CRM"],
   },
   {
     nome: "Comercial",
-    itens: ["Vê só os clientes de que é responsável", "Gere as suas tarefas e notas"],
+    itens: ["Vê só os leads de que é responsável", "Gere as suas tarefas e notas"],
   },
 ];
 

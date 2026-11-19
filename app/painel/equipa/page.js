@@ -71,7 +71,7 @@ export default async function PaginaEquipa() {
               <>
                 {" "}
                 <Link href="/painel/clientes" className={styles.porAtribuir}>
-                  {porAtribuir} {porAtribuir === 1 ? "cliente está por atribuir" : "clientes estão por atribuir"}.
+                  {porAtribuir} {porAtribuir === 1 ? "lead está por atribuir" : "leads estão por atribuir"}.
                 </Link>
               </>
             )}
@@ -90,7 +90,7 @@ export default async function PaginaEquipa() {
               <tr>
                 <th>Membro</th>
                 <th>Papel</th>
-                <th className={styles.numero}>Clientes</th>
+                <th className={styles.numero}>Leads</th>
                 <th className={styles.numero}>Em aberto</th>
                 <th className={styles.numero}>Tarefas</th>
                 <th aria-label="Ações"></th>

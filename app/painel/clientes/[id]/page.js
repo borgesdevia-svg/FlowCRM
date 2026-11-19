@@ -14,7 +14,7 @@ import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
 // Ex.: /painel/clientes/3f2a...  ->  params.id = "3f2a..."
-export const metadata = { title: "Cliente · FlowCRM" };
+export const metadata = { title: "Lead · FlowCRM" };
 
 const REGEX_UUID = /^[0-9a-f-]{36}$/i;
 
@@ -83,7 +83,7 @@ export default async function PaginaCliente({ params, searchParams }) {
   return (
     <div className={styles.pagina}>
       <Link href="/painel/clientes" className={styles.voltar}>
-        Clientes
+        Leads
       </Link>
 
       {/* ---------- cabeçalho grande do cliente ---------- */}
@@ -164,7 +164,7 @@ export default async function PaginaCliente({ params, searchParams }) {
 
           <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "80ms" }}>
             <header className={styles.topoCartao}>
-              <h2>Dados do cliente</h2>
+              <h2>Dados do lead</h2>
             </header>
             <FormCliente cliente={cliente} membros={membros} />
           </section>
@@ -178,13 +178,13 @@ export default async function PaginaCliente({ params, searchParams }) {
             <FormTarefa clienteId={cliente.id} />
             <ListaTarefas
               tarefas={listaTarefas}
-              mensagemVazia="Sem tarefas para este cliente."
+              mensagemVazia="Sem tarefas para este lead."
               membros={membros}
               perfilId={perfil.id}
             />
             {tarefasEscondidas > 0 && (
               <p className={styles.notaTarefas}>
-                {tarefasEscondidas === 1 ? "Há mais 1 tarefa" : `Há mais ${tarefasEscondidas} tarefas`} deste cliente
+                {tarefasEscondidas === 1 ? "Há mais 1 tarefa" : `Há mais ${tarefasEscondidas} tarefas`} deste lead
                 (as feitas mais antigas) que não aparecem aqui.
               </p>
             )}
@@ -192,7 +192,7 @@ export default async function PaginaCliente({ params, searchParams }) {
 
           <section className={`entrar ${styles.zonaPerigo}`} style={{ "--atraso": "200ms" }}>
             <div>
-              <strong>Apagar este cliente</strong>
+              <strong>Apagar este lead</strong>
               <p>Apaga também as notas e as tarefas. Não dá para desfazer.</p>
             </div>
             <BotaoApagarCliente id={cliente.id} nome={cliente.nome} />

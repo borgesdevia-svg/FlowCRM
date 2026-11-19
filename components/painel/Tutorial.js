@@ -37,32 +37,32 @@ function criarPassos(nome, eAdmin) {
       alvo: null,
       titulo: primeiroNome ? `Olá, ${primeiroNome}!` : "Olá!",
       texto:
-        "Um CRM é o sítio onde guardas os teus clientes e tudo o que tens de fazer com cada um, para nenhum negócio ficar esquecido. Vamos ver as partes principais. Demora menos de um minuto.",
+        "Um CRM é o sítio onde guardas os teus leads e tudo o que tens de fazer com cada um, para nenhum negócio ficar esquecido. Vamos ver as partes principais. Demora menos de um minuto.",
     },
     {
       alvo: "painel",
       titulo: "Painel",
       texto:
-        "O resumo do teu dia: quantos clientes tens, gráficos com a evolução e o que aconteceu há pouco. É a primeira página que vês quando entras.",
+        "O resumo do teu dia: quantos leads tens, gráficos com a evolução e o que aconteceu há pouco. É a primeira página que vês quando entras.",
     },
     {
       alvo: "clientes",
-      titulo: "Clientes",
+      titulo: "Leads",
       texto: eAdmin
-        ? "Todas as pessoas e empresas com quem a tua empresa fala. Um contacto novo, que ainda pode vir a comprar, chama-se lead. Abre um cliente para veres a ficha: contactos, notas e tudo o que já aconteceu."
-        : "Os clientes que te foram entregues. Um contacto novo, que ainda pode vir a comprar, chama-se lead. Abre um cliente para veres a ficha: contactos, notas e tudo o que já aconteceu.",
+        ? "Todas as pessoas e empresas com quem a tua empresa fala: os leads. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas e tudo o que já aconteceu."
+        : "Os leads que te foram entregues. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas e tudo o que já aconteceu.",
     },
     {
       alvo: "pipeline",
       titulo: "Pipeline",
       texto:
-        "O caminho de cada negócio, dividido em fases: Novo, Em negociação, Ativo (negócio fechado) e Perdido. Quando um negócio avança, arrasta o cliente para a coluna seguinte.",
+        "O caminho de cada negócio, dividido em fases: Novo, Em negociação, Ativo (negócio fechado) e Perdido. Quando um negócio avança, arrasta o lead para a coluna seguinte.",
     },
     {
       alvo: "tarefas",
       titulo: "Tarefas",
       texto:
-        "As coisas que tens de fazer, cada uma com data: ligar a um cliente, enviar uma proposta, marcar uma reunião. Se aqui aparecer um número vermelho, tens tarefas em atraso.",
+        "As coisas que tens de fazer, cada uma com data: ligar a um lead, enviar uma proposta, marcar uma reunião. Se aqui aparecer um número vermelho, tens tarefas em atraso.",
     },
     {
       alvo: "sino",
@@ -72,28 +72,28 @@ function criarPassos(nome, eAdmin) {
     {
       alvo: "pesquisa",
       titulo: "Pesquisa",
-      texto: "Escreve o nome ou o email de um cliente e encontra-lo logo, sem andares à procura na lista.",
+      texto: "Escreve o nome ou o email de um lead e encontra-lo logo, sem andares à procura na lista.",
     },
     {
       alvo: "formulario",
       titulo: "Formulário público",
       texto: eAdmin
-        ? "Um link para pores no site ou nas redes sociais da empresa. Quem o preencher entra sozinho na lista como cliente novo, sem teres de escrever nada."
-        : "O link que a empresa partilha no site e nas redes sociais. Quem o preenche entra sozinho no CRM como cliente novo.",
+        ? "Um link para pores no site ou nas redes sociais da empresa. Quem o preencher entra sozinho na lista como lead novo, sem teres de escrever nada."
+        : "O link que a empresa partilha no site e nas redes sociais. Quem o preenche entra sozinho no CRM como lead novo.",
     },
     {
       alvo: "equipa",
       so: "admin",
       titulo: "Equipa",
       texto:
-        "Aqui adicionas as pessoas que vendem contigo. Cada comercial só vê os clientes e as tarefas que lhe dás; tu, como administrador, vês tudo.",
+        "Aqui adicionas as pessoas que vendem contigo. Cada comercial só vê os leads e as tarefas que lhe dás; tu, como administrador, vês tudo.",
     },
     {
       alvo: "automacoes",
       so: "admin",
       titulo: "Automações",
       texto:
-        "Trabalho que o CRM faz sozinho: criar a tarefa de contactar cada cliente novo, entregar os leads à equipa e lembrar clientes esquecidos. Ligas e desligas cada uma.",
+        "Trabalho que o CRM faz sozinho: criar a tarefa de contactar cada lead novo, entregar os leads à equipa e lembrar leads esquecidos. Ligas e desligas cada uma.",
     },
     {
       alvo: "personalizar",

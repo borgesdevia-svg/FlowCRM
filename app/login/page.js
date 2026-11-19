@@ -9,7 +9,7 @@ export default function PaginaLogin() {
   return (
     <MolduraAuth
       titulo="Bem-vindo de volta"
-      subtitulo="Entra para veres os teus clientes."
+      subtitulo="Entra para veres os teus leads."
       rodape={
         <>
           Ainda não tens conta? <Link href="/registo">Criar conta da empresa</Link>

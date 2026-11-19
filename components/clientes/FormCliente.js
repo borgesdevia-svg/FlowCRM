@@ -133,7 +133,7 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
         <button type="submit" className="botao" disabled={pendente}>
           {pendente ? "A guardar..." : aEditar ? "Guardar alterações" : (
             <>
-              <Icone nome="mais" tamanho={16} /> Adicionar cliente
+              <Icone nome="mais" tamanho={16} /> Adicionar lead
             </>
           )}
         </button>
@@ -174,7 +174,7 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
           <div className={styles.topoPrevia}>
             <span className={styles.avatar}>{nome ? iniciais(nome) : "?"}</span>
             <div className={styles.nomePrevia}>
-              <strong className={nome ? "" : styles.vazio}>{nome || "Nome do cliente"}</strong>
+              <strong className={nome ? "" : styles.vazio}>{nome || "Nome do lead"}</strong>
               <small>{previa.email || "sem email"}</small>
             </div>
           </div>

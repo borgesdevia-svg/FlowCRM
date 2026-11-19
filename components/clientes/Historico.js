@@ -32,7 +32,7 @@ export default function Historico({ clienteId, interacoes, total, linkMais, perf
       <FormNota clienteId={clienteId} />
 
       {interacoes.length === 0 ? (
-        <p className={styles.vazio}>Ainda não há registos. Escreve o primeiro depois de falares com o cliente.</p>
+        <p className={styles.vazio}>Ainda não há registos. Escreve o primeiro depois de falares com o lead.</p>
       ) : (
         <ol className={styles.lista}>
           {interacoes.map((i) => {

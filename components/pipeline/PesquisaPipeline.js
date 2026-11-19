@@ -60,7 +60,7 @@ export default function PesquisaPipeline({ inicial }) {
         onChange={(e) => mudar(e.target.value)}
         onKeyDown={(e) => e.key === "Escape" && texto && limpar()}
         placeholder="Pesquisar na pipeline (nome ou email)"
-        aria-label="Pesquisar clientes na pipeline"
+        aria-label="Pesquisar leads na pipeline"
         maxLength={80}
         autoComplete="off"
       />

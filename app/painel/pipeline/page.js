@@ -100,7 +100,7 @@ export default async function PaginaPipeline({ searchParams }) {
           </p>
         </div>
         <Link href="/painel/clientes/novo" className="botao">
-          <Icone nome="mais" tamanho={16} /> Novo cliente
+          <Icone nome="mais" tamanho={16} /> Novo lead
         </Link>
       </header>
 
@@ -129,12 +129,12 @@ export default async function PaginaPipeline({ searchParams }) {
         <p className={styles.dica} role="status">
           {termo
             ? encontrados === 0
-              ? `Nenhum cliente com "${termo}".`
-              : `${numero(encontrados)} ${encontrados === 1 ? "cliente encontrado" : "clientes encontrados"} com "${termo}".`
+              ? `Nenhum lead com "${termo}".`
+              : `${numero(encontrados)} ${encontrados === 1 ? "lead encontrado" : "leads encontrados"} com "${termo}".`
             : encontrados === 0 ? (
               // pipeline vazia: em vez de explicar como se arrasta, diz por onde começar
               <>
-                Ainda não há clientes.{" "}
+                Ainda não há leads.{" "}
                 <Link href="/painel/clientes/novo" className={styles.linkDica}>
                   Adicionar o primeiro
                 </Link>
@@ -171,7 +171,7 @@ export default async function PaginaPipeline({ searchParams }) {
                 <span>{numero(nTotal)}</span>
               </header>
 
-              {daColuna.length === 0 && <p className={styles.vazia}>{termo ? "Nenhum resultado nesta fase." : "Nenhum cliente nesta fase."}</p>}
+              {daColuna.length === 0 && <p className={styles.vazia}>{termo ? "Nenhum resultado nesta fase." : "Nenhum lead nesta fase."}</p>}
 
               {visiveis.map(cartao)}
 
@@ -196,7 +196,7 @@ export default async function PaginaPipeline({ searchParams }) {
               {/* os clientes novos entram sempre na fase "Novo" */}
               {estado.chave === "novo" && (
                 <Link href="/painel/clientes/novo" className={styles.adicionar}>
-                  <Icone nome="mais" tamanho={15} /> Novo cliente
+                  <Icone nome="mais" tamanho={15} /> Novo lead
                 </Link>
               )}
             </ColunaArrastavel>

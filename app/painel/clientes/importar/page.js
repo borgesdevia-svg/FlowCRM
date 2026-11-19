@@ -5,7 +5,7 @@ import styles from "./importar.module.css";
 
 // Rota /painel/clientes/importar — trazer clientes de um ficheiro CSV (Excel, Google Sheets
 // ou o próprio "Exportar" do FlowCRM).
-export const metadata = { title: "Importar clientes · FlowCRM" };
+export const metadata = { title: "Importar leads · FlowCRM" };
 
 export default async function PaginaImportar() {
   const { supabase, perfil, eAdmin } = await obterSessao();
@@ -21,11 +21,11 @@ export default async function PaginaImportar() {
     <div className={`entrar ${styles.pagina}`}>
       <header className={styles.cabecalho}>
         <Link href="/painel/clientes" className={styles.voltar}>
-          Clientes
+          Leads
         </Link>
-        <h1>Importar clientes</h1>
+        <h1>Importar leads</h1>
         <p className={styles.resumo}>
-          Escolhe um ficheiro CSV. Antes de gravar, vês quantos clientes entram e que linhas têm problemas.
+          Escolhe um ficheiro CSV. Antes de gravar, vês quantos leads entram e que linhas têm problemas.
         </p>
       </header>
 

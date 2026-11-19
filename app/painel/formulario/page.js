@@ -37,7 +37,7 @@ export default async function PaginaPersonalizar() {
         <div>
           <h1>Formulário</h1>
           <p className={styles.resumo}>
-            O formulário de contacto da {empresa.nome.replace(/\.$/, "")}: quem o preenche entra sozinho como cliente
+            O formulário de contacto da {empresa.nome.replace(/\.$/, "")}: quem o preenche entra sozinho como lead
             novo.
           </p>
         </div>

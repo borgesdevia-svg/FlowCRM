@@ -89,8 +89,8 @@ export default function PesquisaGlobal() {
           }}
           onFocus={() => setAberto(true)}
           onKeyDown={(e) => e.key === "Escape" && setAberto(false)}
-          placeholder="Pesquisar clientes…"
-          aria-label="Pesquisar clientes"
+          placeholder="Pesquisar leads…"
+          aria-label="Pesquisar leads"
           autoComplete="off"
         />
         <kbd className={styles.atalho} aria-hidden="true">
@@ -101,7 +101,7 @@ export default function PesquisaGlobal() {
       {mostrar && (
         <div className={styles.resultados}>
           {resultados.length === 0 ? (
-            <p className={styles.nada}>Nenhum cliente encontrado.</p>
+            <p className={styles.nada}>Nenhum lead encontrado.</p>
           ) : (
             <ul>
               {resultados.map((c) => {

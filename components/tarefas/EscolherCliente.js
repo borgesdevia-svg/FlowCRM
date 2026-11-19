@@ -120,7 +120,7 @@ export default function EscolherCliente({ sugestoes = [], inicial = null }) {
             }}
             onFocus={() => setAberto(true)}
             onKeyDown={tecla}
-            placeholder="Pesquisar cliente…"
+            placeholder="Pesquisar lead…"
             autoComplete="off"
           />
         </div>
@@ -131,7 +131,7 @@ export default function EscolherCliente({ sugestoes = [], inicial = null }) {
           {!pesquisa && sugestoes.length > 0 && <p className={styles.titulo}>Mais recentes</p>}
 
           {lista.length > 0 ? (
-            <ul id={idLista} role="listbox" aria-label="Clientes">
+            <ul id={idLista} role="listbox" aria-label="Leads">
               {lista.map((c, i) => (
                 <li
                   key={c.id}
@@ -159,7 +159,7 @@ export default function EscolherCliente({ sugestoes = [], inicial = null }) {
               {pesquisa
                 ? aProcurar
                   ? "A procurar…"
-                  : "Nenhum cliente com esse nome."
+                  : "Nenhum lead com esse nome."
                 : "Escreve pelo menos 2 letras do nome ou email."}
             </p>
           )}

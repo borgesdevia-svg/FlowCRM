@@ -69,7 +69,7 @@ export default async function PaginaNotificacoes() {
     id: t.id,
     titulo: t.titulo,
     clienteId: t.cliente_id,
-    cliente: t.clientes?.nome ?? "Cliente",
+    cliente: t.clientes?.nome ?? "Lead",
     prazo: prazo(t.data_limite),
   });
 
@@ -84,7 +84,7 @@ export default async function PaginaNotificacoes() {
   const partes = [];
   if (nAtrasadas) partes.push(`${nAtrasadas} ${nAtrasadas === 1 ? "tarefa em atraso" : "tarefas em atraso"}`);
   if (nHoje) partes.push(`${nHoje} para hoje`);
-  if (nSem) partes.push(`${nSem} ${nSem === 1 ? "cliente sem responsável" : "clientes sem responsável"}`);
+  if (nSem) partes.push(`${nSem} ${nSem === 1 ? "lead sem responsável" : "leads sem responsável"}`);
 
   return (
     <div className={`entrar ${styles.pagina}`}>
@@ -101,7 +101,7 @@ export default async function PaginaNotificacoes() {
         <section className={styles.grupo} aria-labelledby="grupo-sem-responsavel">
           <h2 id="grupo-sem-responsavel" className={styles.tituloGrupo}>
             <i className={styles.atrasadas}></i>
-            Clientes sem responsável <span>{nSem}</span>
+            Leads sem responsável <span>{nSem}</span>
           </h2>
           <ul className={styles.lista}>
             {semDono.map((c) => {

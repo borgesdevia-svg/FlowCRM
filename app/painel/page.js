@@ -24,7 +24,7 @@ function prepararAtividade(clientes, sistema) {
       id: `novo-${c.id}`,
       tipo: "novo",
       quando: c.criado_em,
-      antes: c.origem === "formulario" ? "Novo lead pelo formulário:" : "Novo cliente:",
+      antes: c.origem === "formulario" ? "Novo lead pelo formulário:" : "Novo lead:",
       clienteId: c.id,
       clienteNome: c.nome,
     });
@@ -193,11 +193,11 @@ export default async function PaginaPainel() {
   //  - "detalhe" é o texto pequeno ao lado do número
   const numeros = [
     {
-      rotulo: "Clientes",
+      rotulo: "Leads",
       icone: "utilizadores",
       valor: totalClientes,
       etiqueta: { texto: `+${novosEsteMes ?? 0} este mês`, tipo: novosEsteMes > 0 ? "bom" : "neutro" },
-      detalhe: eAdmin ? "Em toda a empresa" : "Os teus clientes",
+      detalhe: eAdmin ? "Em toda a empresa" : "Os teus leads",
       href: "/painel/clientes",
     },
     {
@@ -212,7 +212,7 @@ export default async function PaginaPainel() {
       icone: "grafico",
       valor: conversao,
       sufixo: "%",
-      detalhe: `${contagem.ativo ?? 0} ${(contagem.ativo ?? 0) === 1 ? "cliente ativo" : "clientes ativos"}`,
+      detalhe: `${contagem.ativo ?? 0} ${(contagem.ativo ?? 0) === 1 ? "lead ativo" : "leads ativos"}`,
       href: "/painel/clientes?estado=ativo",
     },
     {
@@ -232,7 +232,7 @@ export default async function PaginaPainel() {
     ...(eAdmin
       ? [{ texto: "Adicionar a equipa comercial", feito: (tamanhoEquipa ?? 1) > 1, href: "/painel/equipa" }]
       : []),
-    { texto: "Registar o primeiro cliente", feito: totalClientes > 0, href: "/painel/clientes/novo" },
+    { texto: "Registar o primeiro lead", feito: totalClientes > 0, href: "/painel/clientes/novo" },
     {
       texto: "Receber o primeiro contacto pelo formulário",
       feito: (doFormulario ?? []).length > 0,
@@ -270,7 +270,7 @@ export default async function PaginaPainel() {
             <Icone nome="folha" tamanho={16} /> Exportar
           </a>
           <Link href="/painel/clientes/novo" className="botao">
-            <Icone nome="mais" tamanho={16} /> Novo cliente
+            <Icone nome="mais" tamanho={16} /> Novo lead
           </Link>
         </div>
       </header>
@@ -289,8 +289,8 @@ export default async function PaginaPainel() {
           <div className={styles.textoEmpresa}>
             <h2>Estás no CRM da {empresa.nome}</h2>
             <p>
-              Entraste como comercial da equipa. Vês os clientes e as tarefas de que és responsável.
-              {totalClientes === 0 && ` Ainda não tens clientes: pede a ${quemAtribui} para te atribuir, ou adiciona um novo.`}
+              Entraste como comercial da equipa. Vês os leads e as tarefas de que és responsável.
+              {totalClientes === 0 && ` Ainda não tens leads: pede a ${quemAtribui} para te atribuir, ou adiciona um novo.`}
             </p>
           </div>
           <span className={styles.papelEmpresa}>Comercial</span>
@@ -334,7 +334,7 @@ export default async function PaginaPainel() {
           <article className={styles.bloco}>
             <header className={styles.topoBloco}>
               <div>
-                <h2>Novos clientes</h2>
+                <h2>Novos leads</h2>
                 <p className={styles.subtitulo}>Nas últimas 8 semanas</p>
               </div>
               <p className={styles.numeroGrande}>{totalSemanas}</p>
@@ -383,7 +383,7 @@ export default async function PaginaPainel() {
           membros={eAdmin ? (equipa ?? []) : null}
           perfilId={perfil.id}
           hoje={hoje}
-          mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada cliente."
+          mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada lead."
         />
       </article>
 
@@ -392,16 +392,16 @@ export default async function PaginaPainel() {
         <section className={styles.grelha}>
           <article className={styles.bloco}>
             <header className={styles.topoBloco}>
-              <h2>Clientes por estado</h2>
+              <h2>Leads por estado</h2>
               <Link href="/painel/pipeline" className={styles.verTudo}>
                 Ver pipeline
               </Link>
             </header>
             {totalClientes === 0 ? (
               <p className={styles.subtitulo}>
-                Ainda não há clientes.{" "}
+                Ainda não há leads.{" "}
                 <Link href="/painel/clientes/novo" className={styles.verTudo}>
-                  Adicionar cliente
+                  Adicionar lead
                 </Link>
               </p>
             ) : (
@@ -416,7 +416,7 @@ export default async function PaginaPainel() {
                   {/* total no buraco do meio */}
                   <span className={styles.centroDonut}>
                     <strong>{totalClientes}</strong>
-                    <small>clientes</small>
+                    <small>leads</small>
                   </span>
                 </div>
                 <ul className={styles.legenda}>
@@ -439,7 +439,7 @@ export default async function PaginaPainel() {
             {/* sem valores previstos, o gráfico seria só um eixo vazio "0 € – 1 €" */}
             {valorPorFase.every((v) => !v) ? (
               <p className={styles.subtitulo}>
-                {totalClientes === 0 ? "Ainda não há clientes." : "Ainda não há valores previstos nos clientes."}
+                {totalClientes === 0 ? "Ainda não há leads." : "Ainda não há valores previstos nos leads."}
               </p>
             ) : (
               <div className={styles.areaGrafico}>
@@ -465,7 +465,7 @@ export default async function PaginaPainel() {
               <p className={styles.subtitulo}>Dos negócios decididos, quantos foram ganhos</p>
             </header>
             {fecho === null ? (
-              <p className={styles.subtitulo}>Ainda nenhum cliente passou a Ativo ou Perdido.</p>
+              <p className={styles.subtitulo}>Ainda nenhum lead passou a Ativo ou Perdido.</p>
             ) : (
               <>
                 <p className={styles.numeroGrande}>{fecho}%</p>
@@ -483,10 +483,10 @@ export default async function PaginaPainel() {
           <article className={styles.bloco}>
             <header>
               <h2>Tempo até fechar</h2>
-              <p className={styles.subtitulo}>Desde que o cliente entra até passar a Ativo</p>
+              <p className={styles.subtitulo}>Desde que o lead entra até passar a Ativo</p>
             </header>
             {tempoFecho === null ? (
-              <p className={styles.subtitulo}>Aparece quando o primeiro cliente passar a Ativo na pipeline.</p>
+              <p className={styles.subtitulo}>Aparece quando o primeiro lead passar a Ativo na pipeline.</p>
             ) : (
               <>
                 <p className={styles.numeroGrande}>{textoDias(tempoFecho.media)}</p>
@@ -528,7 +528,7 @@ export default async function PaginaPainel() {
           <div>
             <h2>{eAdmin ? "O teu formulário público" : `Formulário da ${empresa.nome}`}</h2>
             <p className={styles.subtitulo}>
-              Partilha este link no site, nas redes sociais ou por email. Quem o preencher entra como cliente
+              Partilha este link no site, nas redes sociais ou por email. Quem o preencher entra como lead
               &quot;Novo&quot;.
             </p>
           </div>
