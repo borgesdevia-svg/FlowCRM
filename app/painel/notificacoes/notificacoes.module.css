@@ -196,7 +196,6 @@
 
 .limpar:hover,
 .limpar:focus-visible {
-  outline: none;
   background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
 }
@@ -348,4 +347,9 @@
 
 .mais a {
   color: var(--cor-destaque);
+}
+
+/* teclado: anel de foco por dentro (em listas com scroll, por fora ficava cortado) */
+.limpar:focus-visible {
+  outline-offset: -2px;
 }

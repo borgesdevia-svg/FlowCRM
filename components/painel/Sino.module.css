@@ -114,7 +114,6 @@
 
 .item:hover,
 .item:focus-visible {
-  outline: none;
   background: rgb(var(--rgb-destaque) / 0.08);
 }
 
@@ -244,4 +243,9 @@
     right: auto;
     width: min(360px, calc(100vw - 32px));
   }
+}
+
+/* teclado: anel de foco por dentro (em listas com scroll, por fora ficava cortado) */
+.item:focus-visible {
+  outline-offset: -2px;
 }

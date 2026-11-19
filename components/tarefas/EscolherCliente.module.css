@@ -56,7 +56,6 @@
 
 .escolhido button:hover,
 .escolhido button:focus-visible {
-  outline: none;
   color: var(--cor-texto);
   background: rgb(var(--rgb-tinta) / 0.1);
 }
@@ -135,4 +134,9 @@
   padding: 10px;
   color: var(--cor-texto-fraco);
   font-size: 0.86rem;
+}
+
+/* teclado: anel de foco por dentro (em listas com scroll, por fora ficava cortado) */
+.escolhido button:focus-visible {
+  outline-offset: -2px;
 }

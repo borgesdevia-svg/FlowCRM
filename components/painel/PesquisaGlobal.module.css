@@ -96,7 +96,6 @@
 
 .resultado:hover,
 .resultado:focus-visible {
-  outline: none;
   background: rgb(var(--rgb-destaque) / 0.08);
 }
 
@@ -168,4 +167,9 @@
   .pesquisa input {
     padding-right: 12px;
   }
+}
+
+/* teclado: anel de foco por dentro (em listas com scroll, por fora ficava cortado) */
+.resultado:focus-visible {
+  outline-offset: -2px;
 }

@@ -262,7 +262,6 @@
 
 .mais summary:hover,
 .mais summary:focus-visible {
-  outline: none;
   background: rgb(var(--rgb-tinta) / 0.08);
   color: var(--cor-texto);
 }
@@ -358,4 +357,9 @@
 
 .linkDica:hover {
   text-decoration: underline;
+}
+
+/* teclado: anel de foco por dentro (em listas com scroll, por fora ficava cortado) */
+.mais summary:focus-visible {
+  outline-offset: -2px;
 }
