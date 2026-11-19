@@ -32,8 +32,8 @@
 /* ---------- cartões de números ---------- */
 .numeros {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 /* cartão branco com um painel de cor suave por dentro (nome + número) e um rodapé */
@@ -50,8 +50,8 @@
 .frenteCartao {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding: 16px 16px 18px;
+  gap: 26px;
+  padding: 18px 18px 24px;
   border-radius: 10px;
   background: rgb(var(--rgb-destaque) / 0.06);
 }
@@ -66,12 +66,12 @@
 .topoCartao h2 {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
+  gap: 9px;
+  font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: normal;
   line-height: 1.3;
-  color: var(--cor-texto-suave);
+  color: var(--cor-texto);
 }
 
 .topoCartao h2 svg {
@@ -89,8 +89,8 @@
 }
 
 .bom {
-  background: rgb(22 163 74 / 0.1);
-  color: #15803d;
+  background: rgb(var(--rgb-destaque) / 0.12);
+  color: var(--cor-destaque);
 }
 
 .mau {
@@ -103,11 +103,30 @@
   color: var(--cor-texto-fraco);
 }
 
-/* número grande */
+/* variação face ao mês passado: seta + percentagem, verde a subir e vermelho a descer */
+.tendenciaBoa,
+.tendenciaMa {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tendenciaBoa {
+  color: var(--cor-destaque);
+}
+
+.tendenciaMa {
+  color: var(--cor-perigo-texto);
+}
+
+/* número grande (valor em euros ou contagem) */
 .valor strong {
-  font-size: 2.1rem;
+  font-size: clamp(2rem, 3.2vw, 2.6rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -125,6 +144,9 @@
 
 .rodapeCartao span {
   min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -401,10 +423,6 @@
 
 /* ---------- responsivo ---------- */
 @media (max-width: 1100px) {
-  .numeros {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .linhaPrincipal {
     grid-template-columns: 1fr;
   }
@@ -590,5 +608,100 @@
 @media (max-width: 700px) {
   .grelhaTres {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- redesign Octax: cabeçalho, títulos com ícone e origem dos leads ---------- */
+/* "comprimidos" por baixo da saudação: a data de hoje e o âmbito (empresa toda ou os meus) */
+.comprimidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.comprimidos span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  font-size: 0.86rem;
+}
+
+.comprimidos svg {
+  color: var(--cor-texto-suave);
+}
+
+/* título de bloco com um ícone à esquerda */
+.tituloIcone {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.tituloIcone svg {
+  color: var(--cor-texto-suave);
+}
+
+/* linha fina por cima de "De onde vêm" */
+.separador {
+  padding-top: 16px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.separador h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* cada origem: bolinha, nome e número; por baixo, a barra com a parte do total */
+.origens {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.origens li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+.origens i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.origens strong {
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.barraOrigem {
+  grid-column: 1 / -1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.06);
+  overflow: hidden;
+}
+
+.barraOrigem span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+@media (max-width: 1000px) {
+  .numeros {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

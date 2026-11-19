@@ -84,6 +84,9 @@ export default async function PaginaPainel() {
   const hoje = hojeEmPortugal();
   // clientes criados desde o dia 1 deste mês ("2026-11-01")
   const inicioMes = hoje.slice(0, 7) + "-01";
+  // dia 1 do mês passado ("2026-10-01"); em janeiro, volta a dezembro do ano anterior
+  const [ano, mes] = hoje.split("-").map(Number);
+  const inicioMesAnterior = mes === 1 ? `${ano - 1}-12-01` : `${ano}-${String(mes - 1).padStart(2, "0")}-01`;
   const semanas = ultimasSemanas();
 
   // ESCALA: a página não lê os clientes todos (com milhares, o Supabase corta em 1000 linhas
@@ -102,6 +105,8 @@ export default async function PaginaPainel() {
     { count: atrasadas }, // quantas das minhas estão em atraso
     { data: sistema }, // os últimos eventos automáticos (mudanças de fase, tarefas feitas)
     { data: fechos }, // cada "Passou para Ativo", para o tempo médio até fechar
+    { count: novosMesAnterior }, // leads que entraram no mês passado (para a variação)
+    { count: totalFormulario }, // quantos leads vieram do formulário público (origem)
     ...porSemana // um número por semana, para o gráfico
   ] = await Promise.all([
     supabase.rpc("resumo_clientes", { termo: "" }),
@@ -139,6 +144,8 @@ export default async function PaginaPainel() {
       .eq("nota", textoMudancaFase("ativo"))
       .order("criado_em", { ascending: false })
       .limit(1000),
+    contarClientes().gte("criado_em", inicioMesAnterior).lt("criado_em", inicioMes),
+    contarClientes().eq("origem", "formulario"),
     ...semanas.map((s) => contarClientes().gt("criado_em", s.inicio).lte("criado_em", s.fim)),
   ]);
 
@@ -164,9 +171,6 @@ export default async function PaginaPainel() {
   // valor total dos clientes em negociação
   const valorNegociacao = valorFase.negociacao ?? 0;
 
-  // taxa de conversão = clientes ativos ÷ total de clientes (em %)
-  const conversao = totalClientes ? Math.round(((contagem.ativo ?? 0) / totalClientes) * 100) : 0;
-
   // ---------- resultados ----------
   const fecho = taxaFecho(contagem.ativo ?? 0, contagem.perdido ?? 0);
   const tempoFecho = tempoAteFechar(fechos);
@@ -188,41 +192,48 @@ export default async function PaginaPainel() {
   const valoresSemanas = porSemana.map((r) => r.count ?? 0);
   const valorPorFase = ESTADOS.map((e) => valorFase[e.chave] ?? 0);
 
-  // os 4 cartões de números (estilo da referência B):
-  //  - "etiqueta" é o comprimido no canto (verde = bom, vermelho = atenção, cinzento = neutro)
-  //  - "detalhe" é o texto pequeno ao lado do número
+  // variação dos leads novos face ao mês passado (em %); sem leads no mês passado não há comparação
+  const variacao =
+    (novosMesAnterior ?? 0) > 0 ? Math.round((((novosEsteMes ?? 0) - novosMesAnterior) / novosMesAnterior) * 100) : null;
+  const nomeMes = new Intl.DateTimeFormat("pt-PT", { month: "long", timeZone: "Europe/Lisbon" }).format(new Date());
+  const porFechar = (contagem.novo ?? 0) + (contagem.negociacao ?? 0);
+
+  // os 3 cartões grandes do topo (ao estilo da referência Octax):
+  //  - em cima, num painel de cor suave: ícone + nome, variação (se houver) e o número grande;
+  //  - no rodapé: um detalhe com ícone e o botão "Ver detalhes"
   const numeros = [
     {
-      rotulo: "Leads",
-      icone: "utilizadores",
-      valor: totalClientes,
-      etiqueta: { texto: `+${novosEsteMes ?? 0} este mês`, tipo: novosEsteMes > 0 ? "bom" : "neutro" },
-      detalhe: eAdmin ? "Em toda a empresa" : "Os teus leads",
-      href: "/painel/clientes",
-    },
-    {
-      rotulo: "Em negociação",
-      icone: "subida",
-      valor: contagem.negociacao ?? 0,
-      detalhe: `${formatarEuros(valorNegociacao)} previstos`,
-      href: "/painel/pipeline",
-    },
-    {
-      rotulo: "Conversão",
-      icone: "grafico",
-      valor: conversao,
-      sufixo: "%",
-      detalhe: `${contagem.ativo ?? 0} ${(contagem.ativo ?? 0) === 1 ? "lead ativo" : "leads ativos"}`,
+      rotulo: "Valor ganho",
+      icone: "moedas",
+      valor: valorFase.ativo ?? 0,
+      formato: "euros",
+      iconeRodape: "visto",
+      rodape: `${contagem.ativo ?? 0} ${(contagem.ativo ?? 0) === 1 ? "lead ativo" : "leads ativos"}`,
       href: "/painel/clientes?estado=ativo",
     },
     {
-      rotulo: "Tarefas",
-      icone: "lista",
-      valor: totalTarefas ?? 0,
-      etiqueta: atrasadas ? { texto: `${atrasadas} em atraso`, tipo: "mau" } : { texto: "Em dia", tipo: "bom" },
-      detalhe: "Por fazer",
-      href: "/painel/tarefas",
+      rotulo: "Pipeline em aberto",
+      icone: "alvo",
+      valor: (valorFase.novo ?? 0) + valorNegociacao,
+      formato: "euros",
+      iconeRodape: "subida",
+      rodape: `${porFechar} ${porFechar === 1 ? "lead por fechar" : "leads por fechar"}`,
+      href: "/painel/pipeline",
     },
+    {
+      rotulo: "Leads este mês",
+      icone: "utilizadores",
+      valor: novosEsteMes ?? 0,
+      variacao,
+      iconeRodape: "calendario",
+      rodape: `1 – ${Number(hoje.slice(8, 10))} de ${nomeMes}`,
+      href: "/painel/clientes",
+    },
+  ];
+  // origem dos leads: formulário público ou adicionados à mão (inclui os importados)
+  const origens = [
+    { nome: "Formulário público", n: totalFormulario ?? 0, cor: "var(--cor-destaque)" },
+    { nome: "Adicionados à mão", n: Math.max(0, totalClientes - (totalFormulario ?? 0)), cor: "var(--cor-texto-fraco)" },
   ];
 
   // "Primeiros passos": cada passo fica feito quando os dados o confirmam
@@ -262,6 +273,16 @@ export default async function PaginaPainel() {
             {saudacao}, {primeiroNome}
           </h1>
           <p className={styles.subtitulo}>Este é o resumo do CRM da {empresa.nome} para hoje.</p>
+          <div className={styles.comprimidos}>
+            <span>
+              <Icone nome="calendario" tamanho={15} />
+              {new Intl.DateTimeFormat("pt-PT", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Lisbon" }).format(new Date())}
+            </span>
+            <span>
+              <Icone nome="utilizadores" tamanho={15} />
+              {eAdmin ? "Toda a empresa" : "Os meus leads"}
+            </span>
+          </div>
         </div>
         <div className={styles.acoes}>
           {/* <a> normal (não <Link>) porque descarrega um ficheiro, não abre uma página */}
@@ -297,29 +318,35 @@ export default async function PaginaPainel() {
         </section>
       )}
 
-      {/* cartões de números: nome + etiqueta em cima, número grande em baixo */}
-      {/* cada cartão: painel de cima com cor suave (nome + número) e rodapé com o detalhe e o link */}
+      {/* 3 cartões grandes: painel de cor suave (nome, variação, número) e rodapé com o detalhe e o link */}
       <section className={styles.numeros}>
         {numeros.map((n) => (
           <article key={n.rotulo} className={styles.cartao}>
             <div className={styles.frenteCartao}>
               <div className={styles.topoCartao}>
                 <h2>
-                  <Icone nome={n.icone} tamanho={16} />
+                  <Icone nome={n.icone} tamanho={18} />
                   {n.rotulo}
                 </h2>
-                {n.etiqueta && (
-                  <span className={`${styles.etiqueta} ${styles[n.etiqueta.tipo]}`}>{n.etiqueta.texto}</span>
+                {n.variacao != null && (
+                  <span className={n.variacao >= 0 ? styles.tendenciaBoa : styles.tendenciaMa}>
+                    <Icone nome={n.variacao >= 0 ? "subida" : "descida"} tamanho={16} />
+                    {n.variacao >= 0 ? "+" : ""}
+                    {n.variacao}%
+                  </span>
                 )}
               </div>
               <p className={styles.valor}>
                 <strong>
-                  <ContarNumero valor={n.valor} sufixo={n.sufixo} />
+                  <ContarNumero valor={n.valor} formato={n.formato} />
                 </strong>
               </p>
             </div>
             <div className={styles.rodapeCartao}>
-              <span>{n.detalhe}</span>
+              <span>
+                <Icone nome={n.iconeRodape} tamanho={15} />
+                {n.rodape}
+              </span>
               <Link href={n.href} className={styles.verDetalhes}>
                 Ver detalhes
               </Link>
@@ -328,14 +355,16 @@ export default async function PaginaPainel() {
         ))}
       </section>
 
-      {/* gráfico grande à esquerda + atividade recente à direita */}
+      {/* gráfico grande à esquerda + origem dos leads à direita (como "Sales Overview" e "Lead Source") */}
       {!semDados && (
         <section className={styles.linhaPrincipal}>
           <article className={styles.bloco}>
             <header className={styles.topoBloco}>
               <div>
-                <h2>Novos leads</h2>
-                <p className={styles.subtitulo}>Nas últimas 8 semanas</p>
+                <h2 className={styles.tituloIcone}>
+                  <Icone nome="grafico" tamanho={18} /> Novos leads
+                </h2>
+                <p className={styles.subtitulo}>Quantos leads entraram em cada uma das últimas 8 semanas.</p>
               </div>
               <p className={styles.numeroGrande}>{totalSemanas}</p>
             </header>
@@ -350,13 +379,36 @@ export default async function PaginaPainel() {
             </div>
           </article>
 
-          <div className={styles.atividade}>
-            <AtividadeRecente eventos={eventos} />
-          </div>
+          <article className={styles.bloco}>
+            <h2 className={styles.tituloIcone}>
+              <Icone nome="origem" tamanho={18} /> Origem dos leads
+            </h2>
+            <div>
+              <p className={styles.numeroGrande}>{totalClientes}</p>
+              <p className={styles.subtitulo}>Leads no total</p>
+            </div>
+            <div className={styles.separador}>
+              <h3>De onde vêm</h3>
+              <p className={styles.subtitulo}>Como cada lead chegou ao CRM.</p>
+            </div>
+            <ul className={styles.origens}>
+              {origens.map((o) => (
+                <li key={o.nome}>
+                  <i style={{ background: o.cor }}></i>
+                  <span>{o.nome}</span>
+                  <strong>{o.n}</strong>
+                  <span className={styles.barraOrigem} aria-hidden="true">
+                    <span style={{ width: `${totalClientes ? (o.n / totalClientes) * 100 : 0}%`, background: o.cor }}></span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </article>
         </section>
       )}
 
-      {/* as minhas tarefas, numa tabela a toda a largura */}
+      {/* as minhas tarefas + atividade recente ao lado */}
+      <section className={styles.linhaPrincipal}>
       <article className={styles.bloco}>
         <header className={styles.topoBloco}>
           <div>
@@ -386,6 +438,10 @@ export default async function PaginaPainel() {
           mensagemVazia="Não tens tarefas por fazer. Cria tarefas na página Tarefas ou na ficha de cada lead."
         />
       </article>
+      <div className={styles.atividade}>
+        <AtividadeRecente eventos={eventos} />
+      </div>
+      </section>
 
       {/* dois gráficos lado a lado */}
       {!semDados && (

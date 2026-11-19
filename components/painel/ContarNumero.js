@@ -2,12 +2,14 @@
 // Número que "conta" de 0 até ao valor final quando a página abre.
 // É de cliente porque a animação acontece no browser.
 // Ex.: <ContarNumero valor={38} sufixo="%" />  ->  0% ... 38%
+//      <ContarNumero valor={48250} formato="euros" />  ->  0 € ... 48 250 €
 
 import { useEffect, useState } from "react";
 
 const DURACAO = 900; // milissegundos
+const euros = new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 
-export default function ContarNumero({ valor, sufixo = "" }) {
+export default function ContarNumero({ valor, sufixo = "", formato }) {
   // começa já no valor final: assim o HTML gerado no servidor mostra o número certo,
   // e quem não tem JavaScript (ou pediu "menos movimento") vê logo o resultado
   const [atual, setAtual] = useState(valor);
@@ -33,7 +35,7 @@ export default function ContarNumero({ valor, sufixo = "" }) {
 
   return (
     <>
-      {atual}
+      {formato === "euros" ? euros.format(atual) : atual}
       {sufixo}
     </>
   );

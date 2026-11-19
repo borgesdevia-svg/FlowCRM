@@ -1,6 +1,6 @@
 /* Estrutura do painel: menu lateral fixo à esquerda + (barra de topo e conteúdo) à direita.
-   Redesign de 19/11, inspirado em dashboards como o Octax: fundo cinzento muito claro,
-   menu e cartões brancos, contornos finos, cantos de 10–14px e um só azul de destaque.
+   Redesign de 19/11, inspirado em dashboards como o Octax, com as cores da FlowCRM:
+   preto e verde (ou branco e verde no modo claro), contornos finos e cantos de 10–14px.
    As variáveis definidas aqui valem para tudo o que está dentro do painel. */
 .estrutura {
   --cor-contorno: var(--painel-contorno);
@@ -57,11 +57,11 @@
   background: rgb(var(--rgb-tinta) / 0.04);
 }
 
-/* mensagens de sucesso a verde (o destaque agora é azul) */
+/* mensagens de sucesso na cor de destaque (verde) */
 .estrutura :global(.alerta-sucesso) {
-  background: rgb(22 163 74 / 0.08);
-  border-color: rgb(22 163 74 / 0.25);
-  color: #15803d;
+  background: rgb(var(--rgb-destaque) / 0.08);
+  border-color: rgb(var(--rgb-destaque) / 0.25);
+  color: var(--cor-destaque);
 }
 
 /* ---------- menu lateral ---------- */
@@ -428,5 +428,16 @@
 
   .conteudo {
     padding-top: 20px;
+  }
+}
+
+/* "Novo lead" na barra de topo: mais baixo do que os botões normais */
+.estrutura .botaoTopo {
+  padding: 7px 14px;
+}
+
+@media (max-width: 520px) {
+  .estrutura .botaoTopo {
+    display: none;
   }
 }

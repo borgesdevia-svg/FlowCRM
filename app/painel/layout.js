@@ -170,6 +170,9 @@ export default async function LayoutPainel({ children }) {
       <div className={styles.coluna}>
         {/* barra de topo: onde estou (Clientes › Importar) + sino + conta */}
         <BarraTopo itens={seccoes.flatMap((s) => s.itens).map(({ href, nome }) => ({ href, nome }))}>
+          <Link href="/painel/clientes/novo" className={`botao ${styles.botaoTopo}`}>
+            <Icone nome="mais" tamanho={16} /> Novo lead
+          </Link>
           <Sino
             tarefas={avisos ?? []}
             semResponsavel={semResponsavel ?? []}
