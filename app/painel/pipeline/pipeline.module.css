@@ -349,3 +349,13 @@
     display: inline;
   }
 }
+
+/* "Adicionar o primeiro" quando a pipeline está vazia */
+.linkDica {
+  color: var(--cor-destaque);
+  font-weight: 600;
+}
+
+.linkDica:hover {
+  text-decoration: underline;
+}

@@ -36,3 +36,8 @@
   justify-content: center;
   gap: 12px;
 }
+
+/* dentro do painel: não ocupa o ecrã todo (o menu já está ao lado) */
+.dentroPainel {
+  min-height: 60vh;
+}

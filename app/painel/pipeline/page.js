@@ -131,7 +131,15 @@ export default async function PaginaPipeline({ searchParams }) {
             ? encontrados === 0
               ? `Nenhum cliente com "${termo}".`
               : `${numero(encontrados)} ${encontrados === 1 ? "cliente encontrado" : "clientes encontrados"} com "${termo}".`
-            : (
+            : encontrados === 0 ? (
+              // pipeline vazia: em vez de explicar como se arrasta, diz por onde começar
+              <>
+                Ainda não há clientes.{" "}
+                <Link href="/painel/clientes/novo" className={styles.linkDica}>
+                  Adicionar o primeiro
+                </Link>
+              </>
+            ) : (
               <>
                 {/* no telemóvel não se arrasta: lá a dica fala só dos botões (CSS) */}
                 <span className={styles.soRato}>Arrasta os cartões para outra coluna ou usa os botões de cada cartão.</span>

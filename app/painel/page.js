@@ -340,7 +340,12 @@ export default async function PaginaPainel() {
               </Link>
             </header>
             {totalClientes === 0 ? (
-              <p className={styles.subtitulo}>Ainda não há clientes.</p>
+              <p className={styles.subtitulo}>
+                Ainda não há clientes.{" "}
+                <Link href="/painel/clientes/novo" className={styles.verTudo}>
+                  Adicionar cliente
+                </Link>
+              </p>
             ) : (
               <div className={styles.donut}>
                 <div className={styles.areaDonut}>

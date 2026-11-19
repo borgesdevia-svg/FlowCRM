@@ -43,3 +43,37 @@
 .grande {
   height: 260px;
 }
+
+/* esqueletos de cada secção (clientes, pipeline, tarefas) */
+.linha {
+  height: 52px;
+  border-radius: 10px;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cartao {
+  height: 110px;
+  border-radius: 12px;
+}
+
+/* em ecrãs estreitos, 2 colunas como na Pipeline e grelha numa só coluna */
+@media (max-width: 700px) {
+  .grelha {
+    grid-template-columns: 1fr;
+  }
+
+  .colunas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
