@@ -484,3 +484,81 @@
     margin-left: auto;
   }
 }
+
+/* ---------- resultados ---------- */
+.grelhaTres {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* barra da taxa de fecho: verde = ganhos, vermelho suave = perdidos */
+.barraFecho {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cor-estado-perdido) 35%, transparent);
+  overflow: hidden;
+}
+
+.barraFecho span {
+  display: block;
+  height: 100%;
+  background: var(--cor-destaque);
+}
+
+/* ganhos por membro: nome e número, com uma barra por baixo */
+.ranking {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ranking li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  font-size: 0.9rem;
+}
+
+.ranking a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--cor-texto-suave);
+}
+
+.ranking a:hover {
+  color: var(--cor-texto);
+}
+
+.ranking strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.barraRanking {
+  grid-column: 1 / -1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--cor-elevado);
+  overflow: hidden;
+}
+
+.barraRanking span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cor-destaque);
+}
+
+@media (max-width: 1000px) {
+  .grelhaTres {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .grelhaTres {
+    grid-template-columns: 1fr;
+  }
+}

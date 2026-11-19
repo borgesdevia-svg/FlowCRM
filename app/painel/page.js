@@ -2,6 +2,8 @@ import Link from "next/link";
 import { obterSessao, obterAparencia } from "@/lib/sessao";
 import { ESTADOS, formatarEuros } from "@/lib/estados";
 import { hojeEmPortugal } from "@/lib/datas";
+import { textoMudancaFase } from "@/lib/eventos";
+import { taxaFecho, tempoAteFechar, textoDias } from "@/lib/relatorios";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
 import TabelaTarefas from "@/components/tarefas/TabelaTarefas";
 import Icone from "@/components/Icone";
@@ -99,6 +101,7 @@ export default async function PaginaPainel() {
     { data: minhasTarefas, count: totalTarefas }, // as 6 tarefas mais urgentes + quantas há
     { count: atrasadas }, // quantas das minhas estão em atraso
     { data: sistema }, // os últimos eventos automáticos (mudanças de fase, tarefas feitas)
+    { data: fechos }, // cada "Passou para Ativo", para o tempo médio até fechar
     ...porSemana // um número por semana, para o gráfico
   ] = await Promise.all([
     supabase.rpc("resumo_clientes", { termo: "" }),
@@ -129,6 +132,13 @@ export default async function PaginaPainel() {
       .eq("tipo", "sistema")
       .order("criado_em", { ascending: false })
       .limit(10),
+    supabase
+      .from("interacoes")
+      .select("cliente_id, criado_em, clientes(criado_em)")
+      .eq("tipo", "sistema")
+      .eq("nota", textoMudancaFase("ativo"))
+      .order("criado_em", { ascending: false })
+      .limit(1000),
     ...semanas.map((s) => contarClientes().gt("criado_em", s.inicio).lte("criado_em", s.fim)),
   ]);
 
@@ -156,6 +166,23 @@ export default async function PaginaPainel() {
 
   // taxa de conversão = clientes ativos ÷ total de clientes (em %)
   const conversao = totalClientes ? Math.round(((contagem.ativo ?? 0) / totalClientes) * 100) : 0;
+
+  // ---------- resultados ----------
+  const fecho = taxaFecho(contagem.ativo ?? 0, contagem.perdido ?? 0);
+  const tempoFecho = tempoAteFechar(fechos);
+  // admin: clientes ganhos (Ativo) por cada membro da equipa, do que tem mais para o que tem menos.
+  // Um número contado na base de dados por pessoa (a equipa é pequena, e vão todos ao mesmo tempo).
+  const ganhosEquipa = eAdmin
+    ? (
+        await Promise.all(
+          (equipa ?? []).map(async (m) => {
+            const { count } = await contarClientes().eq("estado", "ativo").eq("responsavel_id", m.id);
+            return { id: m.id, nome: m.nome, n: count ?? 0 };
+          })
+        )
+      ).sort((a, b) => b.n - a.n || a.nome.localeCompare(b.nome, "pt"))
+    : null;
+  const maisGanhos = Math.max(1, ...(ganhosEquipa ?? []).map((m) => m.n));
 
   // dados dos gráficos
   const valoresSemanas = porSemana.map((r) => r.count ?? 0);
@@ -395,6 +422,72 @@ export default async function PaginaPainel() {
               </div>
             )}
           </article>
+        </section>
+      )}
+
+      {/* resultados: taxa de fecho, tempo até fechar e (admin) ganhos por membro */}
+      {!semDados && (
+        <section className={eAdmin ? styles.grelhaTres : styles.grelha} aria-label="Resultados">
+          <article className={styles.bloco}>
+            <header>
+              <h2>Taxa de fecho</h2>
+              <p className={styles.subtitulo}>Dos negócios decididos, quantos foram ganhos</p>
+            </header>
+            {fecho === null ? (
+              <p className={styles.subtitulo}>Ainda nenhum cliente passou a Ativo ou Perdido.</p>
+            ) : (
+              <>
+                <p className={styles.numeroGrande}>{fecho}%</p>
+                {/* barra: verde = ganhos, o resto = perdidos */}
+                <div className={styles.barraFecho} aria-hidden="true">
+                  <span style={{ width: `${fecho}%` }}></span>
+                </div>
+                <p className={styles.subtitulo}>
+                  {contagem.ativo ?? 0} ganhos · {contagem.perdido ?? 0} perdidos
+                </p>
+              </>
+            )}
+          </article>
+
+          <article className={styles.bloco}>
+            <header>
+              <h2>Tempo até fechar</h2>
+              <p className={styles.subtitulo}>Desde que o cliente entra até passar a Ativo</p>
+            </header>
+            {tempoFecho === null ? (
+              <p className={styles.subtitulo}>Aparece quando o primeiro cliente passar a Ativo na pipeline.</p>
+            ) : (
+              <>
+                <p className={styles.numeroGrande}>{textoDias(tempoFecho.media)}</p>
+                <p className={styles.subtitulo}>
+                  Em média · metade fecha em {textoDias(tempoFecho.mediana)} ou menos · {tempoFecho.n}{" "}
+                  {tempoFecho.n === 1 ? "negócio" : "negócios"}
+                </p>
+              </>
+            )}
+          </article>
+
+          {ganhosEquipa && (
+            <article className={styles.bloco}>
+              <header className={styles.topoBloco}>
+                <h2>Ganhos por membro</h2>
+                <Link href="/painel/equipa" className={styles.verTudo}>
+                  Ver equipa
+                </Link>
+              </header>
+              <ul className={styles.ranking}>
+                {ganhosEquipa.map((m) => (
+                  <li key={m.id}>
+                    <Link href={`/painel/equipa/${m.id}`}>{m.nome}</Link>
+                    <strong>{m.n}</strong>
+                    <span className={styles.barraRanking} aria-hidden="true">
+                      <span style={{ width: `${(m.n / maisGanhos) * 100}%` }}></span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          )}
         </section>
       )}
 
