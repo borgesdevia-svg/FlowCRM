@@ -12,7 +12,8 @@ const colunas = [
   {
     titulo: "Produto",
     links: [
-      { texto: "O que é", href: "/#o-que-e" },
+      { texto: "O que é", href: "/#demonstracao" },
+      { texto: "Preços", href: "/#precos" },
       { texto: "Funcionalidades", href: "/#funcionalidades" },
       { texto: "Como funciona", href: "/#como-funciona" },
       { texto: "Perguntas frequentes", href: "/#perguntas" },
