@@ -1,0 +1,115 @@
+/* janela da chave de recuperação (um <dialog> do browser, como o Editar tarefa) */
+.dialogo {
+  width: min(520px, calc(100vw - 32px));
+  margin: auto;
+  padding: 0;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9);
+}
+
+.dialogo[open] {
+  animation: abrir 0.2s var(--curva);
+}
+
+.dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+}
+
+/* cadeado verde, sem quadrado à volta */
+.icone {
+  color: var(--cor-destaque);
+}
+
+.conteudo h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.texto {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+/* a chave: letra de largura fixa, grande, fácil de ler e de selecionar */
+.caixaChave {
+  display: grid;
+  place-items: center;
+  min-height: 64px;
+  padding: 16px;
+  border: 1px dashed rgb(var(--rgb-destaque) / 0.45);
+  border-radius: 12px;
+  background: rgb(var(--rgb-destaque) / 0.06);
+}
+
+.caixaChave code {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: clamp(0.95rem, 3.6vw, 1.2rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+  overflow-wrap: anywhere;
+  user-select: all; /* um clique seleciona a chave toda */
+}
+
+.aGerar {
+  color: var(--cor-texto-fraco);
+}
+
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.botoes :global(.botao) {
+  flex: 1;
+  justify-content: center;
+}
+
+.erro {
+  color: var(--cor-perigo-texto);
+  font-size: 0.9rem;
+}
+
+.outra {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-texto);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.confirmar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.confirmar input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--cor-destaque);
+}

@@ -3,6 +3,7 @@ import { obterSessao } from "@/lib/sessao";
 import { sair } from "@/lib/acoes/autenticacao";
 import { FormNome, FormPassword } from "@/components/conta/FormsConta";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
+import BlocoChave from "@/components/conta/BlocoChave";
 import Icone from "@/components/Icone";
 import styles from "./conta.module.css";
 
@@ -73,6 +74,19 @@ export default async function PaginaConta() {
           <p>Para tua segurança, pedimos a password atual antes de a mudar. Usa pelo menos 8 caracteres.</p>
         </div>
         <FormPassword />
+      </section>
+
+      <section className={styles.bloco}>
+        <div className={styles.descricao}>
+          <h2>
+            <Icone nome="cadeado" tamanho={18} /> Chave de recuperação
+          </h2>
+          <p>
+            Serve para recuperar a password se te esqueceres dela, em Entrar › Esqueci-me da password. Se perdeste a
+            chave, gera uma nova.
+          </p>
+        </div>
+        <BlocoChave email={perfil.email} />
       </section>
 
       <section className={styles.bloco}>

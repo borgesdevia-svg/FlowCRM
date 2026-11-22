@@ -154,3 +154,22 @@
     font-size: 0.8rem;
   }
 }
+
+/* ---------- chave de recuperação ---------- */
+.chave {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.avisoChave {
+  color: var(--cor-aviso-texto);
+  font-size: 0.95rem;
+}
+
+.botoesChave {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

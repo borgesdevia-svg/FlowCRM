@@ -12,6 +12,8 @@ import styles from "./painel.module.css";
 import SimboloLogo from "@/components/SimboloLogo";
 import Tutorial from "@/components/painel/Tutorial";
 import BarraTopo from "@/components/painel/BarraTopo";
+import JanelaChave from "@/components/painel/JanelaChave";
+import { precisaDeChave } from "@/lib/estadoChave";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
@@ -31,6 +33,7 @@ export default async function LayoutPainel({ children }) {
     { data: avisos, count: nAvisos },
     { data: semResponsavel, count: nSemResponsavel },
     { data: equipa },
+    mostrarChave, // ainda não tem chave de recuperação guardada? (mostra a janela)
   ] = await Promise.all([
     supabase.from("clientes").select("id", { count: "exact", head: true }),
     supabase
@@ -61,6 +64,7 @@ export default async function LayoutPainel({ children }) {
           .limit(5)
       : { data: [], count: 0 },
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : { data: [] },
+    precisaDeChave(perfil.id),
   ]);
   const aparencia = await pedidoAparencia;
   const totalAvisos = (nAvisos ?? 0) + (nSemResponsavel ?? 0);
@@ -144,7 +148,8 @@ export default async function LayoutPainel({ children }) {
               <Icone nome="externo" tamanho={14} className={styles.iconeExterno} />
             </Link>
             {/* tutorial de boas-vindas: abre sozinho na primeira entrada; o botão deixa revê-lo */}
-            <Tutorial mostrarAoEntrar={!tutorialVisto} nome={perfil.nome} eAdmin={eAdmin} className={styles.itemMenu} />
+            {/* (só depois de a chave de recuperação estar guardada, para as duas janelas não chocarem) */}
+            <Tutorial mostrarAoEntrar={!tutorialVisto && !mostrarChave} nome={perfil.nome} eAdmin={eAdmin} className={styles.itemMenu} />
           </div>
         </nav>
 
@@ -189,6 +194,9 @@ export default async function LayoutPainel({ children }) {
         {/* "painel-conteudo": usa a animação de entrada curta (globals.css) */}
         <main className={`painel-conteudo ${styles.conteudo}`}>{children}</main>
       </div>
+
+      {/* chave de recuperação da password: aparece até a pessoa confirmar que a guardou */}
+      {mostrarChave && <JanelaChave email={perfil.email} />}
     </div>
   );
 }

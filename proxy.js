@@ -37,7 +37,7 @@ export async function proxy(request) {
 
   const caminho = request.nextUrl.pathname;
   const paginaPrivada = caminho.startsWith("/painel");
-  const paginaDeEntrada = caminho === "/login" || caminho === "/registo";
+  const paginaDeEntrada = caminho === "/login" || caminho === "/registo" || caminho === "/recuperar";
 
   if (!user && paginaPrivada) {
     return redirecionar(request, resposta, "/login");
@@ -58,5 +58,5 @@ function redirecionar(request, resposta, destino) {
 
 // Só corre nestas rotas (as páginas públicas não precisam)
 export const config = {
-  matcher: ["/painel/:path*", "/login", "/registo"],
+  matcher: ["/painel/:path*", "/login", "/registo", "/recuperar"],
 };

@@ -2,6 +2,7 @@
 // Formulário de login (componente de cliente, como o de registo).
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { entrar } from "@/lib/acoes/autenticacao";
 import CampoPassword from "@/components/CampoPassword";
 import styles from "./Formulario.module.css";
@@ -21,7 +22,12 @@ export default function FormLogin() {
       </div>
 
       <div className="campo">
-        <label htmlFor="password">Password</label>
+        <div className={styles.rotuloComLink}>
+          <label htmlFor="password">Password</label>
+          <Link href="/recuperar" className={styles.linkPequeno}>
+            Esqueci-me da password
+          </Link>
+        </div>
         {/* password escondida com o botão "Mostrar" */}
         <CampoPassword id="password" name="password" autoComplete="current-password" />
       </div>

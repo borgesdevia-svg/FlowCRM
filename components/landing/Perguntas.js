@@ -26,6 +26,11 @@ const perguntas = [
       "Quem cria a conta fica como dono da empresa. Na página Equipa adicionas cada pessoa com o email e uma password inicial, e escolhes se é administrador ou comercial.",
   },
   {
+    pergunta: "E se me esquecer da password?",
+    resposta:
+      "Ao entrar pela primeira vez recebes uma chave de recuperação, que guardas no teu computador. Em Entrar › Esqueci-me da password escreves o email e a chave e escolhes uma password nova. Não precisas de esperar por nenhum email.",
+  },
+  {
     pergunta: "Como funciona o formulário público?",
     resposta:
       "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um lead novo. Na página Formulário escolhes as perguntas, a cor e o logótipo da empresa.",
