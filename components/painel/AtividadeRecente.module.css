@@ -37,8 +37,18 @@
   --cor: var(--cor-estado-negociacao);
 }
 
-.tarefa {
+.tarefa,
+.proposta {
   --cor: var(--cor-destaque);
+}
+
+.entregue,
+.outro {
+  --cor: var(--cor-texto-suave);
+}
+
+.recusada {
+  --cor: var(--cor-estado-perdido);
 }
 
 .evento {

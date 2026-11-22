@@ -5,11 +5,19 @@ import styles from "./AtividadeRecente.module.css";
 
 // Coluna "Atividade recente" do painel inicial (como o "Recent Activity" da referência).
 // Componente de servidor: recebe a lista de eventos já preparada pela página.
-// Cada evento: { id, tipo ("novo" | "fase" | "tarefa"), quando, autor, antes, depois, clienteId, clienteNome }
+// Cada evento: { id, tipo ("novo" | "fase" | "tarefa" | "entregue" | "proposta" | "recusada" | "outro"), quando, autor, antes, depois, clienteId, clienteNome }
 // A frase fica: [autor] [antes] [nome do cliente] [depois]
 // Ex.: "Rui" "moveu" "Marta Silva" "para Em negociação"
 
-const ICONES = { novo: "utilizadorMais", fase: "subida", tarefa: "visto" };
+const ICONES = {
+  novo: "utilizadorMais",
+  fase: "subida",
+  tarefa: "visto",
+  entregue: "utilizadores",
+  proposta: "documento",
+  recusada: "documento",
+  outro: "relogio",
+};
 
 export default function AtividadeRecente({ eventos }) {
   return (
@@ -20,7 +28,7 @@ export default function AtividadeRecente({ eventos }) {
 
       {eventos.length === 0 ? (
         <p className={styles.vazio}>
-          Ainda não há atividade. Quando a equipa mudar leads de fase ou concluir tarefas, aparece aqui.
+          Ainda não há atividade. Quando entrarem leads, a equipa os mudar de fase ou concluir tarefas, aparece aqui.
         </p>
       ) : (
         <ol className={styles.lista}>
@@ -32,7 +40,7 @@ export default function AtividadeRecente({ eventos }) {
               <div className={styles.corpo}>
                 <p>
                   {e.autor && <strong>{e.autor} </strong>}
-                  {e.antes}{" "}
+                  {e.antes && `${e.antes} `}
                   <Link href={`/painel/clientes/${e.clienteId}`} className={styles.cliente}>
                     {e.clienteNome}
                   </Link>

@@ -60,7 +60,7 @@ export default function ListaNotificacoes({ grupos }) {
           />
           {escolhidas.length > 0
             ? `${escolhidas.length} ${escolhidas.length === 1 ? "selecionada" : "selecionadas"}`
-            : "Selecionar todas"}
+            : "Selecionar todas as tarefas"}
         </label>
 
         {escolhidas.length > 0 && (

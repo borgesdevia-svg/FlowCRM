@@ -49,8 +49,8 @@ function criarPassos(nome, eAdmin) {
       alvo: "clientes",
       titulo: "Leads",
       texto: eAdmin
-        ? "Todas as pessoas e empresas com quem a tua empresa fala: os leads. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas e tudo o que já aconteceu."
-        : "Os leads que te foram entregues. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas e tudo o que já aconteceu.",
+        ? "Todas as pessoas e empresas com quem a tua empresa fala: os leads. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas, tudo o que já aconteceu, o botão do WhatsApp e as propostas."
+        : "Os leads que te foram entregues. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas, tudo o que já aconteceu, o botão do WhatsApp e as propostas.",
     },
     {
       alvo: "pipeline",
@@ -67,7 +67,9 @@ function criarPassos(nome, eAdmin) {
     {
       alvo: "sino",
       titulo: "Avisos",
-      texto: "O sino lembra-te das tarefas que acabam hoje e das que já passaram do prazo.",
+      texto: eAdmin
+        ? "O sino lembra-te das tarefas que acabam hoje, das que já passaram do prazo e dos leads que ainda não têm responsável."
+        : "O sino lembra-te das tarefas que acabam hoje e das que já passaram do prazo.",
     },
     {
       alvo: "pesquisa",
@@ -106,13 +108,15 @@ function criarPassos(nome, eAdmin) {
       alvo: "personalizar",
       so: "admin",
       titulo: "Formulário",
-      texto: "Põe o logótipo da tua empresa e escolhe as perguntas que aparecem no formulário público.",
+      texto:
+        "Escolhe as perguntas do formulário público e, no CRM Pro, o design: disposição, cor, fundo e logótipo da empresa.",
     },
     {
       alvo: "configuracoes",
       so: "admin",
       titulo: "Configurações",
-      texto: "Muda o aspeto do CRM: o modelo de design, claro ou escuro, o gráfico do Início e o nome e a ordem de cada item deste menu.",
+      texto:
+        "Muda o aspeto do CRM para toda a equipa: claro ou escuro, o gráfico do Início e o nome e a ordem de cada item deste menu. Também vês aqui o teu plano.",
     },
     {
       alvo: "ajuda",

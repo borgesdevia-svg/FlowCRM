@@ -51,7 +51,7 @@ export function FormPassword() {
       </div>
       <div className="campo">
         <label htmlFor="nova">Nova password</label>
-        <CampoPassword id="nova" name="nova" autoComplete="new-password" placeholder="8 ou mais, com maiúscula, minúscula, número e símbolo" />
+        <CampoPassword id="nova" name="nova" autoComplete="new-password" />
       </div>
       <div className="campo">
         <label htmlFor="confirmacao">Repete a nova password</label>

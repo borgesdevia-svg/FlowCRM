@@ -353,6 +353,8 @@
   .estrutura {
     position: relative;
     grid-template-columns: minmax(0, 1fr);
+    /* com pouco conteúdo, a grelha esticava o menu do topo até encher o ecrã */
+    align-content: start;
   }
 
   /* espaço à direita do logótipo para o "Novo lead", o sino e a conta */

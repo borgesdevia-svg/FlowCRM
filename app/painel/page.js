@@ -15,7 +15,9 @@ import styles from "./inicio.module.css";
 // Junta numa só lista os eventos para a "Atividade recente", do mais recente para o mais antigo:
 //  - clientes novos (vêm da data de criação de cada cliente)
 //  - eventos automáticos guardados nas interações com tipo "sistema"
-//    ("Passou para ..." = mudança de fase; "Concluiu a tarefa: ..." = tarefa feita)
+//    ("Passou para ..." = mudança de fase; "Concluiu a tarefa: ..." = tarefa feita;
+//     "Entregue a ..." = lead entregue a alguém; "Aceitou/Recusou a proposta ..." = resposta do cliente)
+//    Sem autor (ex.: o cliente aceitou a proposta, ou um membro que saiu), a frase não tem nome.
 function prepararAtividade(clientes, sistema) {
   const eventos = [];
 
@@ -31,18 +33,42 @@ function prepararAtividade(clientes, sistema) {
   }
 
   for (const s of sistema) {
-    const eFase = s.nota.startsWith("Passou para ");
-    eventos.push({
-      id: s.id,
-      tipo: eFase ? "fase" : "tarefa",
-      quando: s.criado_em,
-      autor: s.perfis?.nome?.split(" ")[0] ?? "Alguém", // só o primeiro nome
-      antes: eFase ? "moveu" : "concluiu uma tarefa de",
-      // "Passou para Ativo" -> "para Ativo";  "Concluiu a tarefa: X" -> "· X"
-      depois: eFase ? s.nota.replace("Passou para ", "para ") : `· ${s.nota.replace("Concluiu a tarefa: ", "")}`,
-      clienteId: s.cliente_id,
-      clienteNome: s.clientes?.nome ?? "lead",
-    });
+    const autor = s.perfis?.nome?.split(" ")[0]; // só o primeiro nome
+    const base = { id: s.id, quando: s.criado_em, clienteId: s.cliente_id, clienteNome: s.clientes?.nome ?? "lead" };
+    const nota = s.nota ?? "";
+
+    if (nota.startsWith("Passou para ")) {
+      // "Rui moveu Marta para Ativo" ou, sem autor, "Marta passou para Ativo"
+      eventos.push({
+        ...base,
+        tipo: "fase",
+        autor,
+        antes: autor ? "moveu" : "",
+        depois: autor ? nota.replace("Passou para ", "para ") : nota.replace("Passou para ", "passou para "),
+      });
+    } else if (nota.startsWith("Concluiu a tarefa: ")) {
+      eventos.push({
+        ...base,
+        tipo: "tarefa",
+        autor: autor ?? "Alguém",
+        antes: "concluiu uma tarefa de",
+        depois: `· ${nota.replace("Concluiu a tarefa: ", "")}`,
+      });
+    } else if (nota.startsWith("Entregue a ")) {
+      // "Marta entregue a Ana"
+      eventos.push({ ...base, tipo: "entregue", antes: "", depois: nota.replace("Entregue a ", "entregue a ") });
+    } else if (nota.startsWith("Aceitou a proposta") || nota.startsWith("Recusou a proposta")) {
+      // "Marta aceitou a proposta "Branqueamento" (300,00 €)" (sem o "assinada por")
+      const aceite = nota.startsWith("Aceitou");
+      eventos.push({
+        ...base,
+        tipo: aceite ? "proposta" : "recusada",
+        antes: "",
+        depois: (aceite ? "aceitou" : "recusou") + nota.slice(7).replace(/, assinada por .*$/, ""),
+      });
+    } else {
+      eventos.push({ ...base, tipo: "outro", antes: "", depois: `· ${nota}` });
+    }
   }
 
   // ordena por data (as datas ISO comparam-se como texto) e fica com os 10 mais recentes
