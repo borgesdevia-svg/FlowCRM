@@ -23,6 +23,16 @@ const bricolage = Bricolage_Grotesque({
 export const metadata = {
   title: "FlowCRM",
   description: "Gestão de clientes e vendas para pequenas equipas comerciais.",
+  // o cartão que aparece ao partilhar o link (a imagem vem do app/opengraph-image.js)
+  openGraph: {
+    title: "FlowCRM",
+    description: "Todos os teus clientes, num só fluxo. O CRM para pequenas equipas de vendas.",
+    siteName: "FlowCRM",
+    locale: "pt_PT",
+    type: "website",
+  },
+  // no X (Twitter): imagem grande em vez do quadradinho
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }) {
