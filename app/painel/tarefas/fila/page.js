@@ -21,7 +21,7 @@ import styles from "./fila.module.css";
 // ESCALA: só se pede UMA tarefa à base de dados de cada vez (range), mais o total.
 export const metadata = { title: "Fila de tarefas · FlowCRM" };
 
-const TIPOS_REGISTO = { nota: "Nota", chamada: "Chamada", email: "Email", reuniao: "Reunião", sistema: "Automático" };
+const TIPOS_REGISTO = { nota: "Nota", chamada: "Chamada", email: "Email", reuniao: "Reunião", whatsapp: "WhatsApp", sistema: "Automático" };
 
 // dias entre duas datas AAAA-MM-DD ("2026-11-10" e "2026-11-13" -> 3)
 function diasEntre(de, ate) {

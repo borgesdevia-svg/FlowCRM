@@ -5,6 +5,24 @@
 // Uso: <Icone nome="utilizadores" />  — a cor vem do CSS (currentColor = cor do texto à volta).
 
 const DESENHOS = {
+  // balão de conversa (WhatsApp)
+  conversa: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />,
+  // folha com linhas (propostas)
+  documento: (
+    <>
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+      <path d="M16 13H8" />
+      <path d="M16 17H8" />
+      <path d="M10 9H8" />
+    </>
+  ),
+  copiar: (
+    <>
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </>
+  ),
   moedas: (
     <>
       <circle cx="8" cy="8" r="6" />

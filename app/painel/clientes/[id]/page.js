@@ -9,6 +9,9 @@ import Historico from "@/components/clientes/Historico";
 import FormTarefa from "@/components/tarefas/FormTarefa";
 import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import Icone from "@/components/Icone";
+import BotaoWhatsapp from "@/components/clientes/BotaoWhatsapp";
+import ListaPropostas from "@/components/propostas/ListaPropostas";
+import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import styles from "../ficha.module.css";
 
@@ -28,12 +31,12 @@ const FEITAS_RECENTES = 10;
 
 export default async function PaginaCliente({ params, searchParams }) {
   const { id } = await params;
-  const { historico = "" } = await searchParams;
+  const { historico = "", proposta = "" } = await searchParams;
   // quantos registos mostrar: número do URL, entre HISTORICO e MAX_HISTORICO
   const nHistorico = Math.min(MAX_HISTORICO, Math.max(HISTORICO, Number.parseInt(historico, 10) || HISTORICO));
   if (!REGEX_UUID.test(id)) notFound();
 
-  const { supabase, perfil, eAdmin } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, plano } = await obterSessao();
 
   // se o cliente não existir OU for de outra empresa/de outro comercial,
   // o RLS não o devolve e mostramos a página "não encontrado".
@@ -57,7 +60,7 @@ export default async function PaginaCliente({ params, searchParams }) {
       .select("id, cliente_id, responsavel_id, titulo, data_limite, concluida", { count: "exact" })
       .eq("cliente_id", id)
       .eq("concluida", concluida);
-  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes] = await Promise.all([
+  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes] = await Promise.all([
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
     supabase
       .from("interacoes")
@@ -67,7 +70,15 @@ export default async function PaginaCliente({ params, searchParams }) {
       .limit(nHistorico),
     tarefasDoCliente(false).order("data_limite", { ascending: true, nullsFirst: false }).limit(MAX_POR_FAZER),
     tarefasDoCliente(true).order("concluida_em", { ascending: false, nullsFirst: false }).limit(FEITAS_RECENTES),
+    // propostas deste lead (CRM Pro), da mais recente para a mais antiga
+    supabase
+      .from("propostas")
+      .select("id, token, titulo, total, estado, validade, criado_em, respondida_em, aceite_por, autor_id")
+      .eq("cliente_id", id)
+      .order("criado_em", { ascending: false })
+      .limit(20),
   ]);
+  const propostas = propostasRes.data ?? [];
   // a própria pessoa aparece como "(eu)" na escolha do responsável
   const membros = eAdmin
     ? (membrosRes.data ?? []).map((m) => (m.id === perfil.id ? { ...m, nome: `${m.nome} (eu)` } : m))
@@ -112,6 +123,16 @@ export default async function PaginaCliente({ params, searchParams }) {
                   <Icone nome="telemovel" tamanho={15} />
                   {formatarTelefone(cliente.telefone)}
                 </a>
+              )}
+              {cliente.telefone && (
+                <BotaoWhatsapp
+                  clienteId={cliente.id}
+                  nome={cliente.nome}
+                  telefone={cliente.telefone}
+                  empresa={empresa.nome}
+                  eu={perfil.nome}
+                  className={`${styles.contacto} ${styles.contactoWhatsapp}`}
+                />
               )}
               {!cliente.email && !cliente.telefone && (
                 <span className={styles.semContactos}>Sem contactos registados</span>
@@ -161,6 +182,38 @@ export default async function PaginaCliente({ params, searchParams }) {
               </dl>
             </section>
           )}
+
+          {/* propostas com aceitação online (CRM Pro) */}
+          <section id="propostas" className={`entrar ${styles.cartao}`} style={{ "--atraso": "70ms" }}>
+            <header className={`${styles.topoCartao} ${styles.topoComBotao}`}>
+              <h2>
+                Propostas {propostas.length > 0 && <span>{propostas.length}</span>}
+              </h2>
+              {plano.pro ? (
+                <Link href={`/painel/clientes/${cliente.id}/proposta`} className="botao botao-secundario">
+                  <Icone nome="documento" tamanho={15} />
+                  Nova proposta
+                </Link>
+              ) : (
+                <EtiquetaPro />
+              )}
+            </header>
+            {plano.pro || propostas.length > 0 ? (
+              <ListaPropostas
+                propostas={propostas}
+                clienteId={cliente.id}
+                nomeCliente={cliente.nome}
+                telefone={cliente.telefone}
+                perfilId={perfil.id}
+                eAdmin={eAdmin}
+                destacarNova={proposta === "nova"}
+              />
+            ) : (
+              <p className={styles.notaTarefas}>
+                Com o CRM Pro crias orçamentos, envias o link e o cliente aceita online. O lead passa sozinho a Ativo.
+              </p>
+            )}
+          </section>
 
           <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "80ms" }}>
             <header className={styles.topoCartao}>

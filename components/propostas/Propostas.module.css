@@ -1,0 +1,293 @@
+/* ---------- lista de propostas na ficha do lead ---------- */
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.proposta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+}
+
+/* a proposta acabada de criar brilha uns segundos */
+.nova {
+  animation: brilho 2.4s var(--curva);
+}
+
+@keyframes brilho {
+  from {
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 4px rgb(var(--rgb-destaque) / 0.15);
+  }
+}
+
+.linhaTopo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.titulo {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.total {
+  flex-shrink: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.estado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+.ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+
+.data {
+  color: var(--cor-texto-fraco);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.acao:hover {
+  color: var(--cor-texto);
+  border-color: rgb(var(--rgb-tinta) / 0.25);
+}
+
+.apagar:hover {
+  color: var(--cor-perigo-texto, #f87171);
+}
+
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+/* ---------- formulário da nova proposta ---------- */
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 920px;
+}
+
+.voltar {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.cabecalho h1 {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 600;
+}
+
+.cabecalho p {
+  color: var(--cor-texto-suave);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.duasColunas {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.itens {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itens h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cabecaItens,
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px 120px 110px 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.cabecaItens {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+.item input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--raio);
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  background: rgb(var(--rgb-tinta) / 0.03);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.item input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+}
+
+.numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.subtotal {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+}
+
+.tirar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--cor-texto-fraco);
+  cursor: pointer;
+}
+
+.tirar:hover {
+  color: var(--cor-perigo-texto, #f87171);
+}
+
+.tirar:disabled {
+  visibility: hidden;
+}
+
+.maisLinha {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  border: 1px dashed var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.maisLinha:hover {
+  color: var(--cor-texto);
+}
+
+.totalGeral {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.totalGeral span {
+  color: var(--cor-texto-suave);
+}
+
+.totalGeral strong {
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rodape p {
+  color: var(--cor-texto-fraco);
+  font-size: 0.86rem;
+}
+
+.erro {
+  color: var(--cor-perigo-texto, #f87171);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .duasColunas {
+    grid-template-columns: 1fr;
+  }
+
+  .cabecaItens {
+    display: none;
+  }
+
+  /* no telemóvel: a descrição numa linha, quantidade, preço e total por baixo */
+  .item {
+    grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1fr) 36px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--cor-contorno);
+  }
+
+  .item .descricao {
+    grid-column: 1 / -1;
+  }
+
+  .item .subtotal {
+    display: none;
+  }
+}

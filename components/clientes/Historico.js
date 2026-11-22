@@ -14,6 +14,7 @@ const TIPOS = {
   chamada: { texto: "Chamada", icone: "telemovel" },
   email: { texto: "Email", icone: "email" },
   reuniao: { texto: "Reunião", icone: "utilizadores" },
+  whatsapp: { texto: "WhatsApp", icone: "conversa" },
   sistema: { texto: "Automático", icone: "raio" }, // eventos registados pela app (ex.: mudança de fase)
 };
 
@@ -48,8 +49,8 @@ export default function Historico({ clienteId, interacoes, total, linkMais, perf
                   <div className={styles.cabecalho}>
                     <span className={styles.etiqueta}>{tipo.texto}</span>
                     <span className={styles.meta}>
-                      {/* o autor pode ter sido removido da equipa: nesse caso fica "Ex-membro" */}
-                      {i.perfis?.nome ?? "Ex-membro"} · {formatarDataHora(i.criado_em)}
+                      {/* sem autor: "FlowCRM" nos eventos automáticos (ex.: o cliente aceitou uma proposta); nos outros, o autor saiu da equipa */}
+                      {i.perfis?.nome ?? (i.tipo === "sistema" ? "FlowCRM" : "Ex-membro")} · {formatarDataHora(i.criado_em)}
                     </span>
                     {/* só o autor ou o admin vê o botão (o RLS também o garante na base de dados);
                         os eventos automáticos não se apagam, porque são o registo do que aconteceu */}

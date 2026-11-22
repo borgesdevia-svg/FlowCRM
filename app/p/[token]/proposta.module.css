@@ -1,0 +1,352 @@
+/* Proposta pública: sempre clara (é um documento), seja qual for o tema do site. */
+.pagina {
+  --cor-texto: #101828;
+  --suave: #475467;
+  --fraco: #667085;
+  --linha: #e4e7ec;
+  --verde: #16a34a;
+  color-scheme: light;
+  min-height: 100vh;
+  padding: clamp(16px, 5vw, 56px) 16px 32px;
+  background: #f2f4f7;
+  color: var(--cor-texto);
+}
+
+.folha {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(24px, 6vw, 56px);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgb(16 24 40 / 0.05),
+    0 12px 32px -12px rgb(16 24 40 / 0.12);
+}
+
+.cabeca {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--linha);
+}
+
+.empresa {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo,
+.inicial {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+}
+
+.logo {
+  object-fit: contain;
+}
+
+.inicial {
+  display: grid;
+  place-items: center;
+  border: 1px solid #d0d5dd;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.nomeEmpresa {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.autor {
+  color: var(--fraco);
+  font-size: 0.88rem;
+}
+
+.datas {
+  display: flex;
+  gap: 24px;
+}
+
+.datas dt {
+  color: var(--fraco);
+  font-size: 0.78rem;
+}
+
+.datas dd {
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+
+.titulo p {
+  color: var(--suave);
+  font-size: 0.95rem;
+}
+
+.titulo h1 {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- tabela das linhas ---------- */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.tabela th,
+.tabela td {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--linha);
+}
+
+.tabela thead th {
+  color: var(--fraco);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.tabela td:first-child {
+  overflow-wrap: anywhere;
+}
+
+.tabela .num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela tfoot th,
+.tabela tfoot td {
+  border-bottom: none;
+  padding-top: 18px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.tabela tfoot th {
+  text-align: right;
+}
+
+.notas h2 {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.notas p {
+  color: var(--suave);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- aceitar / recusar ---------- */
+.zonaResposta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid var(--linha);
+}
+
+.zonaResposta h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.avisoEquipa {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background: #ffffff;
+  color: var(--suave);
+  font-size: 0.88rem;
+}
+
+.formResposta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.campoNome {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 420px;
+}
+
+.campoNome label {
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.campoNome input {
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background: #ffffff;
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+.campoNome input:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgb(22 163 74 / 0.15);
+}
+
+.campoNome small {
+  color: var(--fraco);
+  font-size: 0.8rem;
+}
+
+.botoesResposta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.aceitar {
+  padding: 12px 22px;
+  border-radius: 8px;
+  border: 1px solid var(--verde);
+  background: var(--verde);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.aceitar:hover {
+  background: #15803d;
+}
+
+.recusar {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background: #ffffff;
+  color: var(--suave);
+  font: inherit;
+  cursor: pointer;
+}
+
+.recusar:hover {
+  color: var(--cor-texto);
+}
+
+.aceitar:disabled,
+.recusar:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.confirmarRecusa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--suave);
+  font-size: 0.9rem;
+}
+
+.erro {
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.resposta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--linha);
+  background: #f9fafb;
+}
+
+.resposta p {
+  color: var(--suave);
+}
+
+.aceite {
+  border-color: rgb(22 163 74 / 0.35);
+  background: #f0fdf4;
+}
+
+.aceite strong {
+  color: #15803d;
+}
+
+.recusada strong {
+  color: #b42318;
+}
+
+.marca {
+  margin-top: 20px;
+  text-align: center;
+  color: var(--fraco);
+  font-size: 0.85rem;
+}
+
+.marca a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@media (max-width: 520px) {
+  .tabela thead {
+    display: none;
+  }
+
+  .tabela tbody td:nth-child(2),
+  .tabela tbody td:nth-child(3) {
+    display: none;
+  }
+
+  /* cada linha passa a ser "descrição ......... total", a toda a largura */
+  .tabela,
+  .tabela tbody,
+  .tabela tfoot {
+    display: block;
+  }
+
+  .tabela tr {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .tabela tbody tr {
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .tabela th,
+  .tabela td {
+    border-bottom: none;
+    padding-inline: 0;
+  }
+
+  .tabela tfoot th {
+    text-align: left;
+  }
+}

@@ -122,6 +122,10 @@
   --cor: #fbbf24;
 }
 
+.whatsapp {
+  --cor: #25d366;
+}
+
 .sistema {
   --cor: var(--cor-destaque);
 }

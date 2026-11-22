@@ -38,9 +38,11 @@ const PLANOS = [
 const FUNCOES = [
   { texto: "Leads, pipeline e tarefas" },
   { texto: "Notificações e pesquisa rápida" },
+  { texto: "WhatsApp com mensagens prontas, guardado no histórico" },
   { texto: "Formulário público com as tuas perguntas" },
   { texto: "Importar e exportar CSV" },
   { texto: "Gráfico, tema e menu à maneira da empresa" },
+  { texto: "Propostas com aceitação online: o lead fecha sozinho", soPro: true },
   { texto: "Tarefa “Contactar” automática para cada lead novo", soPro: true },
   { texto: "Leads do formulário distribuídos à vez pela equipa", soPro: true },
   { texto: "Aviso quando um lead fica parado", soPro: true },

@@ -1,0 +1,118 @@
+/* janela do WhatsApp (mesmo estilo dos outros avisos do painel) */
+.dialogo {
+  width: min(520px, calc(100vw - 32px));
+  margin: auto;
+  padding: 0;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
+}
+
+.dialogo[open] {
+  animation: abrir 0.2s var(--curva);
+}
+
+.dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.caixa {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.topo {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.topo h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.topo p {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.icone {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgb(37 211 102 / 0.14);
+  color: #25d366;
+}
+
+.modelos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.modelo {
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo);
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.modelo:hover {
+  color: var(--cor-texto);
+}
+
+.modelo[aria-checked="true"] {
+  border-color: rgb(37 211 102 / 0.6);
+  background: rgb(37 211 102 / 0.1);
+  color: var(--cor-texto);
+}
+
+.nota {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+.erro,
+.erroFora {
+  color: var(--cor-perigo-texto, #f87171);
+  font-size: 0.86rem;
+}
+
+.botoes {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* o botão de abrir é sempre verde WhatsApp, seja qual for a cor do painel */
+.abrir {
+  border-color: #25d366;
+  background: #25d366;
+  color: #062e16;
+}
+
+.abrir:hover {
+  box-shadow: 0 8px 30px -6px rgb(37 211 102 / 0.55);
+}

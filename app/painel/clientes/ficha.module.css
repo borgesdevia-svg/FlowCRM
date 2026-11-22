@@ -222,6 +222,31 @@
   background: var(--cor-cartao);
 }
 
+/* cabeçalho de cartão com um botão à direita (ex.: Propostas -> Nova proposta) */
+.topoComBotao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.topoComBotao :global(.botao) {
+  padding: 8px 14px;
+  font-size: 0.88rem;
+}
+
+/* o botão do WhatsApp parece mais um contacto, com o verde da marca ao passar */
+.contactoWhatsapp {
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.contactoWhatsapp:hover {
+  color: #25d366;
+  border-color: rgb(37 211 102 / 0.45);
+}
+
 .topoCartao h2 {
   display: flex;
   align-items: baseline;

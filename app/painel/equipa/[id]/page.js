@@ -29,6 +29,7 @@ const TIPOS = {
   chamada: { icone: "telemovel", texto: "Registou uma chamada com" },
   email: { icone: "email", texto: "Registou um email com" },
   reuniao: { icone: "utilizadores", texto: "Registou uma reunião com" },
+  whatsapp: { icone: "conversa", texto: "Mandou WhatsApp a" },
 };
 
 // transforma um registo do histórico numa linha da lista "Ações recentes"
