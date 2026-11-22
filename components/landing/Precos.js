@@ -37,13 +37,12 @@ const PLANOS = [
     mensal: 35,
     pessoas: "Até 20 pessoas",
     intro: "Tudo do Essencial, mais:",
-    // "Relatórios da equipa" também vai ser só do Pro, mas só entra nesta lista
-    // quando existir no CRM (a landing só anuncia o que a app já faz)
     itens: [
       "Tarefa “Contactar” automática para cada lead novo",
       "Leads do formulário distribuídos à vez pela equipa",
       "Aviso quando um lead fica parado",
       "Formulário com a tua cor, logótipo e modelos prontos",
+      "Relatórios da equipa: vendas, conversão e tempo até fechar",
     ],
     destaque: true,
   },

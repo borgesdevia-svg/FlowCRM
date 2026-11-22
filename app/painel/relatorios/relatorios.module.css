@@ -1,0 +1,233 @@
+/* Página Relatórios: totais + gráfico + tabela (o mesmo estilo da Equipa e das Tarefas) */
+.pagina {
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- cabeçalho: título à esquerda, período à direita ---------- */
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.cabecalho h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+}
+
+/* separadores do período (controlo segmentado, igual às Tarefas) */
+.segmentos {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgb(var(--rgb-tinta) / 0.06);
+}
+
+.segmento,
+.segmentoAtivo {
+  position: relative; /* para o fundo "a carregar" */
+  padding: 7px 14px;
+  border-radius: 9px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
+}
+
+.segmento:hover {
+  color: var(--cor-texto);
+}
+
+.segmentoAtivo {
+  background: rgb(var(--rgb-tinta) / 0.14);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  color: var(--cor-texto);
+}
+
+/* fundo que acende logo ao clicar, enquanto os números novos não chegam */
+.aCarregar {
+  position: absolute;
+  inset: 0;
+  border-radius: 9px;
+  background: rgb(var(--rgb-tinta) / 0.08);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.aCarregarAtivo {
+  opacity: 1;
+}
+
+.erro {
+  color: var(--cor-perigo-texto);
+}
+
+/* ---------- 1) totais: uma faixa dividida em quatro, com linhas finas ---------- */
+.totais {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--cor-contorno);
+  border-radius: 16px;
+  background: var(--cor-cartao);
+}
+
+.totais > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px;
+}
+
+.totais > div + div {
+  border-left: 1px solid var(--cor-contorno);
+}
+
+.totais small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.84rem;
+}
+
+.totais strong {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.totais span {
+  color: var(--cor-texto-suave);
+  font-size: 0.84rem;
+}
+
+/* ---------- 2) gráfico ---------- */
+.bloco {
+  padding: 20px 22px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 16px;
+  background: var(--cor-cartao);
+}
+
+.bloco h2 {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.areaGrafico {
+  position: relative;
+  height: 240px;
+}
+
+.vazio {
+  padding: 28px 0;
+  color: var(--cor-texto-fraco);
+  text-align: center;
+}
+
+/* ---------- 3) tabela (igual à da Equipa) ---------- */
+.tabelaBloco {
+  border-radius: 16px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  overflow: hidden;
+}
+
+/* a tabela desliza para o lado em ecrãs estreitos */
+.rolar {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tabela th {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--cor-contorno);
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabela td {
+  padding: 14px;
+  border-bottom: 1px solid var(--cor-contorno);
+  white-space: nowrap;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela .numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.zero {
+  color: var(--cor-texto-fraco);
+}
+
+.pessoa {
+  font-weight: 600;
+  color: inherit;
+}
+
+.pessoa:hover {
+  color: var(--cor-destaque);
+}
+
+.semDono {
+  color: var(--cor-aviso-texto);
+  font-weight: 600;
+}
+
+.nota {
+  max-width: 90ch;
+  color: var(--cor-texto-fraco);
+  font-size: 0.84rem;
+}
+
+/* ---------- telemóvel ---------- */
+@media (max-width: 860px) {
+  .totais {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 2 x 2: linha por cima da segunda fila, sem linha à esquerda no início de cada fila */
+  .totais > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .totais > div:nth-child(n + 3) {
+    border-top: 1px solid var(--cor-contorno);
+  }
+
+  .totais strong {
+    font-size: 1.5rem;
+  }
+
+  .areaGrafico {
+    height: 190px;
+  }
+}

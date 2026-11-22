@@ -96,6 +96,13 @@ function criarPassos(nome, eAdmin) {
         "Trabalho que o CRM faz sozinho: criar a tarefa de contactar cada lead novo, entregar os leads à equipa e lembrar leads esquecidos. Ligas e desligas cada uma.",
     },
     {
+      alvo: "relatorios",
+      so: "admin",
+      titulo: "Relatórios",
+      texto:
+        "Como vendeu cada pessoa da equipa: leads recebidos, negócios ganhos e perdidos, valor ganho e quanto tempo demora a fechar.",
+    },
+    {
       alvo: "personalizar",
       so: "admin",
       titulo: "Formulário",
