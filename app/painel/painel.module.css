@@ -349,8 +349,20 @@
 
 /* ---------- telemóvel: o menu passa para o topo ---------- */
 @media (max-width: 820px) {
+  /* a barra de topo (sino + conta) passa para cima, na linha do logótipo (BarraTopo.module.css) */
   .estrutura {
+    position: relative;
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* espaço à direita do logótipo para o "Novo lead", o sino e a conta */
+  .topoMenu {
+    padding-right: 250px;
+  }
+
+  /* o avatar da barra de topo já leva à conta (onde está o "Terminar sessão") */
+  .utilizador {
+    display: none;
   }
 
   .lateral {
@@ -439,5 +451,10 @@
 @media (max-width: 520px) {
   .estrutura .botaoTopo {
     display: none;
+  }
+
+  /* sem o "Novo lead", só o sino e a conta ficam ao lado do logótipo */
+  .topoMenu {
+    padding-right: 90px;
   }
 }

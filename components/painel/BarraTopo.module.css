@@ -69,10 +69,21 @@
   gap: 10px;
 }
 
-/* no telemóvel o menu já está em cima: a barra fica só com o caminho e o sino, sem ser fixa */
+/* no telemóvel o menu já está em cima e mostra a página atual: o caminho some e o sino e a
+   conta sobem para a linha do logótipo, em vez de ocuparem uma barra só para eles */
 @media (max-width: 820px) {
   .barra {
-    position: static;
-    min-height: 52px;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    min-height: 38px;
+    padding: 0;
+    border: none;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .caminho {
+    display: none;
   }
 }

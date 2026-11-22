@@ -874,6 +874,181 @@
 }
 
 /* ============ Telemóvel ============ */
+/* ============ Página 6: Personalizar ============ */
+.personalizar {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: 12px;
+}
+
+.personalizar > .cartao {
+  display: flex;
+  flex-direction: column;
+}
+
+.opcoes {
+  gap: 8px;
+}
+
+.opcoes > small:not(:first-child) {
+  margin-top: 6px;
+}
+
+.listaOpcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* cada opção acende-se durante o seu terço do ciclo (--k = 0, 1 ou 2) */
+.opcao {
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+}
+
+.opcao.primeiro {
+  border-color: rgb(var(--rgb-destaque) / 0.4);
+  background: rgb(var(--rgb-destaque) / 0.1);
+  color: var(--cor-texto);
+}
+
+.ativo .opcao {
+  animation: acenderOpcao 7.5s infinite;
+  animation-delay: calc(var(--k) * 2.5s);
+  border-color: transparent;
+  background: none;
+  color: var(--cor-texto-suave);
+}
+
+@keyframes acenderOpcao {
+  0%,
+  31% {
+    border-color: rgb(var(--rgb-destaque) / 0.4);
+    background: rgb(var(--rgb-destaque) / 0.1);
+    color: var(--cor-texto);
+  }
+  34%,
+  100% {
+    border-color: transparent;
+    background: transparent;
+    color: var(--cor-texto-suave);
+  }
+}
+
+.modos {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 8px;
+  background: rgb(var(--rgb-tinta) / 0.05);
+  font-size: 0.75rem;
+}
+
+.modos span {
+  flex: 1;
+  padding: 4px 0;
+  border-radius: 6px;
+  text-align: center;
+  color: var(--cor-texto-suave);
+}
+
+.modos .modoAtivo {
+  background: #22262f;
+  color: var(--cor-texto);
+}
+
+.campoFalso {
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid rgb(var(--rgb-tinta) / 0.12);
+  font-size: 0.8rem;
+}
+
+/* os 3 gráficos estão uns em cima dos outros; só um se vê de cada vez */
+.previsao {
+  position: relative;
+  flex: 1;
+  min-height: 120px;
+  margin-top: 12px;
+}
+
+.ciclo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.ciclo.primeiro {
+  opacity: 1;
+}
+
+.ativo .ciclo {
+  opacity: 0;
+  animation: mostrarGrafico 7.5s infinite;
+  animation-delay: calc(var(--k) * 2.5s);
+}
+
+@keyframes mostrarGrafico {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  4%,
+  30% {
+    opacity: 1;
+    transform: none;
+  }
+  34%,
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+.barraPrevisao {
+  fill: var(--cor-destaque);
+}
+
+.linhaPrevisao {
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.areaPrevisao {
+  fill: rgb(var(--rgb-destaque) / 0.18);
+}
+
+@media (max-width: 760px) {
+  .personalizar {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  /* no telemóvel fica só a escolha do gráfico, em linha, por cima da pré-visualização */
+  .opcoes .extraOpcao {
+    display: none;
+  }
+
+  .listaOpcoes {
+    flex-direction: row;
+  }
+
+  .opcao {
+    flex: 1;
+    text-align: center;
+  }
+}
+
 @media (max-width: 760px) {
   .fixo {
     gap: 14px;
@@ -984,5 +1159,21 @@
     animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0s !important;
+  }
+
+  /* Personalizar: sem troca automática, fica o primeiro gráfico (Barras) escolhido */
+  .tour .ativo .opcao,
+  .tour .ativo .ciclo {
+    animation: none !important;
+  }
+
+  .tour .ativo .opcao.primeiro {
+    border-color: rgb(var(--rgb-destaque) / 0.4);
+    background: rgb(var(--rgb-destaque) / 0.1);
+    color: var(--cor-texto);
+  }
+
+  .tour .ativo .ciclo.primeiro {
+    opacity: 1;
   }
 }

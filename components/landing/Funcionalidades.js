@@ -45,9 +45,9 @@ const EXTRAS = [
     texto: "Cada empresa tem um link próprio, com as suas perguntas. Quem o preenche entra logo no CRM como lead.",
   },
   {
-    icone: "pincel",
-    titulo: "Com o teu logótipo",
-    texto: "O logótipo da empresa aparece no menu do CRM e no topo do formulário.",
+    icone: "caixaEntrada",
+    titulo: "Importar de uma folha",
+    texto: "Traz os contactos que já tens num ficheiro CSV. Vês a pré-visualização antes de entrarem no CRM.",
   },
   {
     icone: "utilizadorMais",

@@ -9,6 +9,12 @@ import styles from "./Vantagens.module.css";
 
 const vantagens = [
   {
+    icone: "pincel",
+    titulo: "Muito personalizável",
+    texto:
+      "Escolhes o gráfico do Início, o modo claro ou escuro e o nome e a ordem de cada página do menu. O formulário do site leva as tuas perguntas, a tua cor e o teu logótipo.",
+  },
+  {
     icone: "olho",
     titulo: "Cada pessoa vê o que deve",
     texto: "O administrador vê todos os clientes. Cada comercial vê só aqueles por que é responsável.",

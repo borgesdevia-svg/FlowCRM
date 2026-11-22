@@ -700,8 +700,183 @@
   border-radius: inherit;
 }
 
-@media (max-width: 1000px) {
+/* ---------- telemóvel: os 3 cartões viram uma lista compacta ----------
+   Um só bloco com 3 linhas (nome e detalhe à esquerda, número e variação à direita),
+   separadas por linhas finas. A linha inteira é clicável: o "Ver detalhes" estica-se por
+   cima dela (::after) e o texto do botão fica só para leitores de ecrã. */
+@media (max-width: 700px) {
+  .pagina {
+    gap: 14px;
+  }
+
   .numeros {
     grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-radius: 14px;
+    border: 1px solid var(--cor-contorno);
+    background: var(--cor-cartao);
+    box-shadow: var(--sombra-cartao);
+    overflow: hidden;
+  }
+
+  .cartao {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "titulo valor"
+      "detalhe tendencia";
+    align-items: center;
+    gap: 4px 12px;
+    padding: 13px 16px;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .cartao + .cartao {
+    border-top: 1px solid var(--cor-contorno);
+  }
+
+  .frenteCartao,
+  .topoCartao,
+  .rodapeCartao {
+    display: contents;
+  }
+
+  .topoCartao h2 {
+    grid-area: titulo;
+    gap: 8px;
+    font-size: 0.92rem;
+  }
+
+  .tendenciaBoa,
+  .tendenciaMa {
+    grid-area: tendencia;
+    justify-self: end;
+    gap: 3px;
+    font-size: 0.8rem;
+  }
+
+  .valor {
+    grid-area: valor;
+    justify-self: end;
+  }
+
+  .valor strong {
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  .rodapeCartao span {
+    grid-area: detalhe;
+    padding-left: 26px; /* alinhado com o texto do título, depois do ícone */
+    color: var(--cor-texto-suave);
+    font-size: 0.8rem;
+  }
+
+  .rodapeCartao span svg {
+    display: none;
+  }
+
+  .verDetalhes {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    font-size: 0;
+    color: transparent;
+  }
+
+  .verDetalhes:hover,
+  .verDetalhes:active {
+    background: rgb(var(--rgb-tinta) / 0.04);
+  }
+
+  .verDetalhes:focus-visible {
+    outline-offset: -3px; /* dentro da linha, senão o bloco cortava o contorno */
+  }
+
+  /* blocos (gráficos, tarefas, resultados) mais baixos: menos espaço à volta */
+  .bloco {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .bloco h2 {
+    font-size: 1.02rem;
+  }
+
+  .subtitulo {
+    font-size: 0.84rem;
+  }
+
+  .numeroGrande {
+    font-size: 1.7rem;
+  }
+
+  .areaGrafico {
+    height: 170px;
+  }
+
+  .linhaPrincipal,
+  .grelha,
+  .grelhaTres {
+    gap: 12px;
+  }
+
+  /* donut mais pequeno e com a legenda ao lado (cabe ao lado a partir de ~340px) */
+  .donut {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .areaDonut {
+    width: 120px;
+    height: 120px;
+  }
+
+  .centroDonut strong {
+    font-size: 1.3rem;
+  }
+
+  .legenda {
+    gap: 8px;
+  }
+
+  .legenda li {
+    font-size: 0.84rem;
+  }
+
+  .cartaoEmpresa {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .logoEmpresa,
+  .inicialEmpresa {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+  }
+
+  .textoEmpresa h2 {
+    font-size: 1.05rem;
+  }
+
+  .textoEmpresa p {
+    font-size: 0.86rem;
+  }
+
+  .comprimidos {
+    margin-top: 10px;
+  }
+
+  .comprimidos span {
+    padding: 5px 10px;
+    font-size: 0.8rem;
   }
 }

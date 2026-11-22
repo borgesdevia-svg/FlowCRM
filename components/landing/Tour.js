@@ -2,7 +2,7 @@
 // Visita guiada à app, controlada pelo scroll.
 //
 // Uma janela falsa do browser mostra as páginas da app, uma de cada vez:
-// Painel -> Clientes -> Ficha do cliente -> Pipeline -> Tarefas.
+// Visão geral -> Leads -> Ficha do lead -> Pipeline -> Tarefas -> Personalizar.
 //
 // Como funciona:
 //  - a secção é mais alta do que o ecrã; lá dentro, a janela fica PRESA ao ecrã
@@ -19,24 +19,24 @@ import styles from "./Tour.module.css";
 
 const ECRAS = [
   {
-    menu: "Painel",
-    separador: "Painel",
+    menu: "Visão geral",
+    separador: "Visão geral",
     url: "flowcrm.app/painel",
     titulo: "O dia da equipa, num relance",
     texto: "Novos contactos, taxa de conversão e valor em negociação, sempre atualizados.",
   },
   {
-    menu: "Clientes",
-    separador: "Clientes",
+    menu: "Leads",
+    separador: "Leads",
     url: "flowcrm.app/painel/clientes",
-    titulo: "Todos os clientes numa lista",
+    titulo: "Todos os leads numa lista",
     texto: "Pesquisa pelo nome, filtra por estado e vê quem é o responsável por cada um.",
   },
   {
-    menu: "Clientes",
+    menu: "Leads",
     separador: "Ficha",
     url: "flowcrm.app/painel/clientes/marta-silva",
-    titulo: "A história de cada cliente",
+    titulo: "A história de cada lead",
     texto: "Chamadas, reuniões e notas ficam guardadas. Qualquer colega sabe onde o negócio ficou.",
   },
   {
@@ -44,18 +44,25 @@ const ECRAS = [
     separador: "Pipeline",
     url: "flowcrm.app/painel/pipeline",
     titulo: "Cada negócio na sua fase",
-    texto: "Um clique e o cliente avança de fase. A equipa vê logo o que está para fechar.",
+    texto: "Um clique e o lead avança de fase. A equipa vê logo o que está para fechar.",
   },
   {
     menu: "Tarefas",
     separador: "Tarefas",
     url: "flowcrm.app/painel/tarefas",
     titulo: "Nada fica esquecido",
-    texto: "Lembretes com data para cada cliente. Riscas quando está feito.",
+    texto: "Lembretes com data para cada lead. Riscas quando está feito.",
+  },
+  {
+    menu: "Configurações",
+    separador: "Personalizar",
+    url: "flowcrm.app/painel/configuracoes",
+    titulo: "O CRM à maneira da tua empresa",
+    texto: "Escolhe o gráfico do Início, o modo claro ou escuro e o nome de cada página do menu. O formulário também leva as tuas perguntas e o teu logótipo.",
   },
 ];
 
-const MENU = ["Painel", "Clientes", "Pipeline", "Tarefas", "Equipa"];
+const MENU = ["Visão geral", "Leads", "Pipeline", "Tarefas", "Configurações"];
 
 const ESTADOS = {
   novo: { texto: "Novo", cor: "var(--cor-estado-novo)" },
@@ -65,8 +72,21 @@ const ESTADOS = {
 };
 
 export default function Tour() {
-  const [ecra, setEcra] = useState(0); // número da página visível (0 a 4)
+  const [ecra, setEcra] = useState(0); // número da página visível (0 a 5)
   const refSeccao = useRef(null); // "ref" = ligação direta ao elemento <section> no browser
+  const refSeparadores = useRef(null);
+
+  // no telemóvel os separadores não cabem todos: a fila desliza para mostrar o ativo
+  // (só mexe na fila, nunca no scroll da página)
+  useEffect(() => {
+    const fila = refSeparadores.current;
+    const botao = fila?.children[ecra];
+    if (!botao || fila.scrollWidth <= fila.clientWidth) return;
+    const f = fila.getBoundingClientRect();
+    const b = botao.getBoundingClientRect();
+    // põe o separador ativo ao meio da fila
+    fila.scrollTo({ left: fila.scrollLeft + (b.left - f.left) - (f.width - b.width) / 2, behavior: "smooth" });
+  }, [ecra]);
 
   // O useEffect corre uma vez, depois de o componente aparecer no browser.
   // Aqui: fica a "ouvir" o scroll e calcula que página mostrar.
@@ -117,7 +137,7 @@ export default function Tour() {
       {/* esta parte fica presa ao ecrã enquanto a secção passa */}
       <div className={styles.fixo}>
         {/* separadores: mostram em que página vamos; clicar salta para essa página */}
-        <div className={styles.separadores} role="tablist" aria-label="Páginas da app">
+        <div ref={refSeparadores} className={styles.separadores} role="tablist" aria-label="Páginas da app">
           {ECRAS.map((e, i) => (
             <button
               key={e.separador}
@@ -176,6 +196,9 @@ export default function Tour() {
                 <div className={classeEcra(4)}>
                   <EcraTarefas />
                 </div>
+                <div className={classeEcra(5)}>
+                  <EcraPersonalizar />
+                </div>
               </div>
             </div>
           </div>
@@ -213,9 +236,9 @@ function EcraPainel() {
       <div className={`${styles.topo} ${styles.anima}`} style={{ "--i": 0 }}>
         <div>
           <small>Bom dia, Ana</small>
-          <strong>Painel</strong>
+          <strong>Visão geral</strong>
         </div>
-        <span className={styles.botaoFalso}>+ Novo cliente</span>
+        <span className={styles.botaoFalso}>+ Novo lead</span>
       </div>
 
       <div className={styles.numeros}>
@@ -247,7 +270,7 @@ function EcraPainel() {
 
         {/* barras por estado: cada barra cresce de baixo para cima */}
         <div className={`${styles.cartao} ${styles.anima}`} style={{ "--i": 5 }}>
-          <small>Clientes por estado</small>
+          <small>Leads por estado</small>
           <div className={styles.barras}>
             {porEstado.map((b, i) => (
               <div key={b.estado}>
@@ -275,10 +298,10 @@ function EcraClientes() {
     <>
       <div className={`${styles.topo} ${styles.anima}`} style={{ "--i": 0 }}>
         <div>
-          <small>30 clientes</small>
-          <strong>Clientes</strong>
+          <small>30 leads</small>
+          <strong>Leads</strong>
         </div>
-        <span className={styles.botaoFalso}>+ Novo cliente</span>
+        <span className={styles.botaoFalso}>+ Novo lead</span>
       </div>
 
       <div className={`${styles.ferramentas} ${styles.anima}`} style={{ "--i": 1 }}>
@@ -439,6 +462,80 @@ function EcraTarefas() {
             <span className={styles.data}>{t.data}</span>
           </div>
         ))}
+      </div>
+    </>
+  );
+}
+
+// Página 6: Configurações. O gráfico da direita vai trocando sozinho entre Barras, Linha e
+// Área, e a opção escolhida à esquerda acompanha-o (as duas animações têm o mesmo tempo).
+function EcraPersonalizar() {
+  const semanas = [3, 5, 4, 7, 6, 9, 8, 11]; // leads novos em cada semana (inventado)
+  const maximo = 12;
+  // pontos da linha, num desenho de 300 x 100
+  const pontos = semanas.map((n, i) => `${(i / (semanas.length - 1)) * 300} ${100 - (n / maximo) * 100}`);
+  const linha = `M${pontos.join(" L")}`;
+  const area = `${linha} L300 100 L0 100 Z`;
+  const tipos = ["Barras", "Linha", "Área"];
+
+  return (
+    <>
+      <div className={`${styles.topo} ${styles.anima}`} style={{ "--i": 0 }}>
+        <div>
+          <small>Aparência</small>
+          <strong>Configurações</strong>
+        </div>
+        <span className={styles.botaoFalso}>Guardar</span>
+      </div>
+
+      <div className={styles.personalizar}>
+        <div className={`${styles.cartao} ${styles.opcoes} ${styles.anima}`} style={{ "--i": 1 }}>
+          <small>Gráfico no Início</small>
+          <div className={styles.listaOpcoes}>
+            {tipos.map((t, k) => (
+              <span key={t} className={k === 0 ? `${styles.opcao} ${styles.primeiro}` : styles.opcao} style={{ "--k": k }}>
+                {t}
+              </span>
+            ))}
+          </div>
+
+          <small className={styles.extraOpcao}>Aspeto</small>
+          <div className={`${styles.modos} ${styles.extraOpcao}`}>
+            <span className={styles.modoAtivo}>Escuro</span>
+            <span>Claro</span>
+          </div>
+
+          <small className={styles.extraOpcao}>Nome no menu</small>
+          <span className={`${styles.campoFalso} ${styles.extraOpcao}`}>
+            <span className={styles.escrito}>Contactos</span>
+          </span>
+        </div>
+
+        <div className={`${styles.cartao} ${styles.anima}`} style={{ "--i": 2 }}>
+          <small>Leads novos por semana</small>
+          <div className={styles.previsao}>
+            <svg viewBox="0 0 300 100" preserveAspectRatio="none" className={`${styles.ciclo} ${styles.primeiro}`} style={{ "--k": 0 }}>
+              {semanas.map((n, i) => (
+                <rect
+                  key={i}
+                  x={i * 37.5 + 6}
+                  y={100 - (n / maximo) * 100}
+                  width="25.5"
+                  height={(n / maximo) * 100}
+                  rx="3"
+                  className={styles.barraPrevisao}
+                />
+              ))}
+            </svg>
+            <svg viewBox="0 0 300 100" preserveAspectRatio="none" className={styles.ciclo} style={{ "--k": 1 }}>
+              <path d={linha} className={styles.linhaPrevisao} />
+            </svg>
+            <svg viewBox="0 0 300 100" preserveAspectRatio="none" className={styles.ciclo} style={{ "--k": 2 }}>
+              <path d={area} className={styles.areaPrevisao} />
+              <path d={linha} className={styles.linhaPrevisao} />
+            </svg>
+          </div>
+        </div>
       </div>
     </>
   );

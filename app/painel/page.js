@@ -347,7 +347,7 @@ export default async function PaginaPainel() {
                 <Icone nome={n.iconeRodape} tamanho={15} />
                 {n.rodape}
               </span>
-              <Link href={n.href} className={styles.verDetalhes}>
+              <Link href={n.href} className={styles.verDetalhes} aria-label={`Ver detalhes: ${n.rotulo}`}>
                 Ver detalhes
               </Link>
             </div>
