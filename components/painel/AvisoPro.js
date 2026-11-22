@@ -15,9 +15,7 @@ export default function AvisoPro({ titulo, texto, plano, compacto = false }) {
         <h2>{titulo}</h2>
         <p>{texto}</p>
         <p className={styles.plano}>
-          {plano?.testeAcabou
-            ? "Os 14 dias a experimentar o CRM Pro acabaram e a empresa passou para o CRM Essencial. Os teus dados ficam todos guardados."
-            : `A empresa está no ${plano?.nome ?? "CRM Essencial"}.`}{" "}
+          {`A empresa está no ${plano?.nome ?? "CRM Essencial"}.`}{" "}
           <Link href="/painel/plano">Ver os planos</Link>
         </p>
       </div>

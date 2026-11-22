@@ -68,7 +68,7 @@ export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado =
 
       <div className="campo">
         <label htmlFor="nome">Nome</label>
-        <input id="nome" name="nome" autoComplete="name" defaultValue={valores.nome} aria-invalid={!!erros.nome} />
+        <input id="nome" name="nome" autoComplete="name" required minLength={2} maxLength={150} defaultValue={valores.nome} aria-invalid={!!erros.nome} />
         {erros.nome && <p className="erro-campo">{erros.nome}</p>}
       </div>
 
@@ -79,6 +79,8 @@ export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado =
           name="email"
           type="email"
           autoComplete="email"
+          required
+          maxLength={254}
           defaultValue={valores.email}
           aria-invalid={!!erros.email}
         />

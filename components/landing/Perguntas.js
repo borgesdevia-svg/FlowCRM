@@ -43,7 +43,7 @@ const perguntas = [
   {
     pergunta: "O que acontece quando acabam os 14 dias grátis?",
     resposta:
-      "Não pedimos cartão, por isso nada é cobrado. A empresa passa sozinha ao CRM Essencial e os dados ficam todos: leads, tarefas, histórico e propostas. Só deixam de funcionar as funções do Pro. Três dias antes, o painel avisa.",
+      "Não pedimos cartão, por isso nada é cobrado sozinho. Três dias antes, o painel avisa. Quando acabam, escolhes o CRM Essencial ou o CRM Pro, por mês ou por ano, e pagas com cartão. Até lá o CRM fica em pausa, mas os dados ficam todos guardados, podes exportar os leads e o formulário continua a recebê-los.",
   },
   {
     pergunta: "Posso tirar os meus leads do FlowCRM?",

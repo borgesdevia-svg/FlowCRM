@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { obterSessao, obterAparencia } from "@/lib/sessao";
 import { SECCOES_MENU, cssAparencia, itensDoMenu, varianteDe } from "@/lib/aparencia";
 import { sair } from "@/lib/acoes/autenticacao";
@@ -21,6 +22,10 @@ import AvisoTeste from "@/components/painel/AvisoTeste";
 import { COOKIE_AVISO_TESTE, avisoPlano, textoDiasRestantes } from "@/lib/planos";
 import { formatarData } from "@/lib/estados";
 
+// páginas que abrem com a empresa bloqueada (o resto manda para o Plano)
+const PAGINAS_COM_BLOQUEIO = ["/painel/plano", "/painel/conta"];
+const ITEM_PLANO = { id: "plano", nome: "Plano", href: "/painel/plano", icone: "moedas" };
+
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
 export const metadata = { title: "Painel · FlowCRM" };
@@ -36,17 +41,23 @@ export async function generateViewport() {
 export default async function LayoutPainel({ children }) {
   const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto, plano } = await obterSessao();
 
-  // aviso do teste do Pro: nos últimos dias e logo depois de acabar (lib/planos.js)
+  // Empresa bloqueada (acabou o teste ou a assinatura sem pagar): só abre o Plano
+  // (escolher e pagar, exportar os leads) e A minha conta. A base de dados também
+  // recusa mudanças (migração 29), isto é para a pessoa ver logo o que fazer.
+  const bloqueada = plano.bloqueada;
+  const caminho = (await headers()).get("x-caminho") ?? "";
+  if (bloqueada && caminho && !PAGINAS_COM_BLOQUEIO.some((p) => caminho.startsWith(p))) {
+    redirect("/painel/plano");
+  }
+
+  // aviso do teste do Pro: nos últimos dias antes de acabar (lib/planos.js)
   const dadosAviso = eAdmin ? avisoPlano(plano) : null;
   const avisoFechado = (await cookies()).get(COOKIE_AVISO_TESTE)?.value;
   const aviso =
     dadosAviso && dadosAviso.chave !== avisoFechado
       ? {
           ...dadosAviso,
-          texto:
-            dadosAviso.tipo === "acaba"
-              ? `O teste do CRM Pro acaba a ${formatarData(plano.fimTeste)} (${textoDiasRestantes(plano.diasRestantes)}). Depois, a empresa passa ao CRM Essencial; os dados ficam todos.`
-              : "Os 14 dias do CRM Pro acabaram e a empresa passou ao CRM Essencial. Os dados ficam todos guardados.",
+          texto: `O teste do CRM Pro acaba a ${formatarData(plano.fimTeste)} (${textoDiasRestantes(plano.diasRestantes)}). Escolhe um plano para continuar a usar o CRM; os dados ficam todos.`,
         }
       : null;
   const pedidoAparencia = obterAparencia(); // começa já, em paralelo com as contagens
@@ -105,13 +116,15 @@ export default async function LayoutPainel({ children }) {
     tarefas: { contador: nAtrasadas || null, alerta: true },
     notificacoes: { contador: totalAvisos || null },
   };
-  const seccoes = SECCOES_MENU.map(({ chave, titulo }) => ({
-    titulo,
-    itens: itensDoMenu(aparencia, chave)
-      // Equipa, Automações, Formulário e Configurações só aparecem ao administrador
-      .filter((item) => eAdmin || !item.admin)
-      .map((item) => ({ ...item, ...contadores[item.id] })),
-  }));
+  const seccoes = bloqueada
+    ? [{ titulo: "Empresa", itens: [ITEM_PLANO, ...itensDoMenu(aparencia, "empresa").filter((i) => i.id === "conta")] }]
+    : SECCOES_MENU.map(({ chave, titulo }) => ({
+        titulo,
+        itens: itensDoMenu(aparencia, chave)
+          // Equipa, Automações, Formulário e Configurações só aparecem ao administrador
+          .filter((item) => eAdmin || !item.admin)
+          .map((item) => ({ ...item, ...contadores[item.id] })),
+      }));
 
   return (
     <div className={styles.estrutura}>
@@ -145,9 +158,11 @@ export default async function LayoutPainel({ children }) {
         </div>
 
         {/* pesquisa global de clientes (componente de cliente) */}
-        <div className={styles.zonaPesquisa} data-tutorial="pesquisa">
-          <PesquisaGlobal />
-        </div>
+        {!bloqueada && (
+          <div className={styles.zonaPesquisa} data-tutorial="pesquisa">
+            <PesquisaGlobal />
+          </div>
+        )}
 
         <nav className={styles.menu}>
           {seccoes.map((seccao) => (
@@ -179,7 +194,9 @@ export default async function LayoutPainel({ children }) {
             </Link>
             {/* tutorial de boas-vindas: abre sozinho na primeira entrada; o botão deixa revê-lo */}
             {/* (só depois de a chave de recuperação estar guardada, para as duas janelas não chocarem) */}
-            <Tutorial mostrarAoEntrar={!tutorialVisto && !mostrarChave} nome={perfil.nome} eAdmin={eAdmin} className={styles.itemMenu} />
+            {!bloqueada && (
+              <Tutorial mostrarAoEntrar={!tutorialVisto && !mostrarChave} nome={perfil.nome} eAdmin={eAdmin} className={styles.itemMenu} />
+            )}
             {/* só aparece se o browser deixar instalar (ou no iPhone, com os passos) */}
             <BotaoInstalar className={styles.itemMenu} />
           </div>
@@ -209,20 +226,25 @@ export default async function LayoutPainel({ children }) {
         <BarraTopo
           itens={[
             ...seccoes.flatMap((s) => s.itens).map(({ href, nome }) => ({ href, nome })),
-            { href: "/painel/plano", nome: "Plano" }, // fora do menu (abre-se em Configurações e nos avisos)
+            // fora do menu (abre-se em Configurações e nos avisos); bloqueada já está no menu
+            ...(bloqueada ? [] : [{ href: "/painel/plano", nome: "Plano" }]),
           ]}
         >
-          <Link href="/painel/clientes/novo" className={`botao ${styles.botaoTopo}`} data-tutorial="novoLead">
-            <Icone nome="mais" tamanho={16} /> Novo lead
-          </Link>
-          <Sino
-            tarefas={avisos ?? []}
-            semResponsavel={semResponsavel ?? []}
-            nSemResponsavel={nSemResponsavel ?? 0}
-            equipa={equipa ?? []}
-            total={totalAvisos}
-            hoje={hoje}
-          />
+          {!bloqueada && (
+            <>
+              <Link href="/painel/clientes/novo" className={`botao ${styles.botaoTopo}`} data-tutorial="novoLead">
+                <Icone nome="mais" tamanho={16} /> Novo lead
+              </Link>
+              <Sino
+                tarefas={avisos ?? []}
+                semResponsavel={semResponsavel ?? []}
+                nSemResponsavel={nSemResponsavel ?? 0}
+                equipa={equipa ?? []}
+                total={totalAvisos}
+                hoje={hoje}
+              />
+            </>
+          )}
           <Link href="/painel/conta" className={styles.avatarTopo} title="A minha conta" aria-label="A minha conta">
             {iniciais(perfil.nome)}
           </Link>

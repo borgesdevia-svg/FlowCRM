@@ -2,7 +2,7 @@
 // Secção de preços: dois planos lado a lado, preço POR EMPRESA (não por pessoa).
 // Decidido com o aluno a 2026-11-22: CRM Essencial 15 €/mês (até 5 pessoas) e
 // CRM Pro 35 €/mês (até 20 pessoas); no anual pagam-se 10 meses (2 grátis);
-// 14 dias grátis do Pro, sem cartão. Por agora os pagamentos ainda não são reais.
+// 14 dias grátis do Pro, sem cartão. Depois, paga-se com a Stripe na página Plano do painel.
 //
 // É um componente de cliente ("use client") só por causa do interruptor Mensal | Anual:
 // o useState guarda a escolha e os preços mudam sem recarregar a página.

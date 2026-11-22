@@ -7,6 +7,9 @@ import { createServerClient } from "@supabase/ssr";
 //  2. Redireciona: sem login não se entra no /painel; com login, /login e /registo
 //     levam direto ao painel.
 export async function proxy(request) {
+  // o endereço da página vai num cabeçalho para o layout do painel saber onde está
+  // (quando a empresa está bloqueada, só deixa abrir o Plano e A minha conta)
+  request.headers.set("x-caminho", request.nextUrl.pathname);
   let resposta = NextResponse.next({ request });
 
   const supabase = createServerClient(
