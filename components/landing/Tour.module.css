@@ -617,17 +617,6 @@
   margin-left: auto;
 }
 
-.avatarGrande {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.9rem;
-}
-
 .colunasFicha {
   display: grid;
   grid-template-columns: 0.8fr 1.7fr;

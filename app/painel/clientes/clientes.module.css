@@ -245,25 +245,11 @@
   border-color: rgb(var(--rgb-destaque) / 0.25);
 }
 
-/* nome do lead com o avatar de iniciais à esquerda */
+/* nome e email do lead */
 .pessoa {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.avatarLead {
-  flex-shrink: 0;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 11px;
-  background: color-mix(in srgb, var(--cor-avatar) 16%, transparent);
-  color: var(--cor-avatar);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
 }
 
 .nomeEmail {
@@ -476,12 +462,7 @@ a.botaoPagina:hover {
     min-width: 0;
   }
 
-  .avatarLead {
-    width: 32px;
-    height: 32px;
-  }
-
-  .estado {
+    .estado {
     padding: 4px;
   }
 

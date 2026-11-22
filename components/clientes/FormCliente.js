@@ -10,7 +10,6 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { guardarCliente } from "@/lib/acoes/clientes";
 import { ESTADOS, obterEstado, formatarEuros } from "@/lib/estados";
-import { iniciais } from "@/lib/texto";
 import Icone from "@/components/Icone";
 import styles from "./FormCliente.module.css";
 
@@ -172,7 +171,6 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
         {/* cartão igual aos do pipeline; a cor da fase vem em --cor */}
         <div className={styles.previa} style={{ "--cor": fase.cor }}>
           <div className={styles.topoPrevia}>
-            <span className={styles.avatar}>{nome ? iniciais(nome) : "?"}</span>
             <div className={styles.nomePrevia}>
               <strong className={nome ? "" : styles.vazio}>{nome || "Nome do lead"}</strong>
               <small>{previa.email || "sem email"}</small>

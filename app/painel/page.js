@@ -41,7 +41,7 @@ function prepararAtividade(clientes, sistema) {
       // "Passou para Ativo" -> "para Ativo";  "Concluiu a tarefa: X" -> "· X"
       depois: eFase ? s.nota.replace("Passou para ", "para ") : `· ${s.nota.replace("Concluiu a tarefa: ", "")}`,
       clienteId: s.cliente_id,
-      clienteNome: s.clientes?.nome ?? "cliente",
+      clienteNome: s.clientes?.nome ?? "lead",
     });
   }
 

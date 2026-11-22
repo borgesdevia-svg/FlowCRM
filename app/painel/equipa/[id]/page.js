@@ -218,7 +218,7 @@ export default async function PaginaMembro({ params }) {
                       <p>
                         {d.antes} {d.ligacao && `${d.ligacao} `}
                         <Link href={`/painel/clientes/${a.cliente_id}`} className={styles.cliente}>
-                          {a.clientes?.nome ?? "cliente"}
+                          {a.clientes?.nome ?? "lead"}
                         </Link>
                         {d.depois && ` ${d.depois}`}
                       </p>

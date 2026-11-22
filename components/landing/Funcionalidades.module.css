@@ -145,18 +145,6 @@
   margin-left: auto;
 }
 
-.avatar {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.85rem;
-}
-
 .dados {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

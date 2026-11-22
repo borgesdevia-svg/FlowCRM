@@ -155,7 +155,6 @@ function DemoClientes() {
   return (
     <div className={styles.demo}>
       <div className={`${styles.cabecaCliente} ${styles.entra}`} style={{ "--i": 0 }}>
-        <b className={styles.avatar}>MS</b>
         <div>
           <strong>Marta Silva</strong>
           <small>marta@exemplo.pt · 912 345 678</small>
@@ -312,7 +311,6 @@ function DemoAutomacoes() {
   return (
     <div className={styles.demo}>
       <div className={`${styles.cabecaCliente} ${styles.entra}`} style={{ "--i": 0 }}>
-        <b className={styles.avatar}>AC</b>
         <div>
           <strong>Ana Costa</strong>
           <small>ana@exemplo.pt · 913 456 789</small>

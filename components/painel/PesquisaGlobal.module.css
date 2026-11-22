@@ -99,18 +99,6 @@
   background: rgb(var(--rgb-destaque) / 0.08);
 }
 
-.resultado b {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--cor-superficie-verde);
-  color: var(--cor-destaque);
-  font-size: 0.62rem;
-}
-
 .nomeEmail {
   flex: 1;
   min-width: 0;

@@ -348,7 +348,6 @@ function EcraFicha() {
   return (
     <div className={styles.ficha}>
       <div className={`${styles.cabecaFicha} ${styles.anima}`} style={{ "--i": 0 }}>
-        <b className={styles.avatarGrande}>MS</b>
         <div>
           <strong>Marta Silva</strong>
           <small>marta@exemplo.pt · 912 345 678</small>

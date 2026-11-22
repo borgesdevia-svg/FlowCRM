@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { pesquisarClientes } from "@/lib/acoes/pesquisa";
 import { obterEstado } from "@/lib/estados";
-import { iniciais } from "@/lib/texto";
 import Icone from "@/components/Icone";
 import styles from "./PesquisaGlobal.module.css";
 
@@ -109,7 +108,6 @@ export default function PesquisaGlobal() {
                 return (
                   <li key={c.id}>
                     <Link href={`/painel/clientes/${c.id}`} onClick={escolher} className={styles.resultado}>
-                      <b>{iniciais(c.nome)}</b>
                       <span className={styles.nomeEmail}>
                         <strong>{c.nome}</strong>
                         <small>{c.email ?? "Sem email"}</small>
