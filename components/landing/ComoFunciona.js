@@ -39,7 +39,7 @@ export default function ComoFunciona() {
         <Link href="/registo" className="botao">
           Criar a conta da empresa
         </Link>
-        <small>Grátis, sem cartão.</small>
+        <small>14 dias grátis, sem cartão.</small>
       </Revelar>
     </section>
   );

@@ -30,7 +30,7 @@ export default function BarraTopo() {
             Entrar
           </Link>
           <Link href="/registo" className="botao">
-            Começar grátis
+            Experimentar grátis
           </Link>
         </div>
       </div>

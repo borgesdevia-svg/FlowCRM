@@ -17,7 +17,7 @@ export default function ChamadaFinal() {
           <p className={styles.texto}>Criar a conta da empresa demora dois minutos. Não precisas de cartão.</p>
           <div className={styles.botoes}>
             <Link href="/registo" className={`botao ${styles.principal}`}>
-              Começar grátis
+              Experimentar 14 dias grátis
             </Link>
             <Link href="/login" className="botao botao-secundario">
               Já tenho conta

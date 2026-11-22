@@ -23,7 +23,7 @@ export default function Destaque() {
 
         <div className={`entrar ${styles.botoes}`} style={{ "--atraso": "240ms" }}>
           <Link href="/registo" className={`botao ${styles.botaoVidro}`}>
-            Começar grátis
+            Experimentar 14 dias grátis
           </Link>
           <Link href="/#demonstracao" className="botao botao-secundario">
             Explorar plataforma
