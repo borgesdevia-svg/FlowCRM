@@ -1,5 +1,6 @@
 // Caixa pequena com o plano da empresa (página Configurações).
 // "plano" vem de obterSessao() (lib/planos.js).
+import Link from "next/link";
 import { textoDiasRestantes } from "@/lib/planos";
 import styles from "./AvisoPro.module.css";
 
@@ -10,10 +11,10 @@ export default function BlocoPlano({ plano }) {
   else detalhe = `Até ${plano.pessoas} pessoas.`;
 
   return (
-    <div className={styles.blocoPlano}>
+    <Link href="/painel/plano" className={styles.blocoPlano}>
       <span className={styles.rotuloPlano}>Plano</span>
       <strong className={plano.pro ? styles.nomePro : undefined}>{plano.nome}</strong>
       <small>{detalhe}</small>
-    </div>
+    </Link>
   );
 }

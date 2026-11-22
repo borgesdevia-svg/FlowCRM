@@ -18,7 +18,7 @@ const perguntas = [
   {
     pergunta: "Preciso de instalar alguma coisa?",
     resposta:
-      "Não. O FlowCRM funciona no browser, no computador ou no telemóvel. Basta criar a conta.",
+      "Não. O FlowCRM funciona no browser, no computador ou no telemóvel. Basta criar a conta. Se quiseres, no painel há o botão Instalar a app, que põe o FlowCRM no ecrã inicial como uma app normal.",
   },
   {
     pergunta: "Como junto a minha equipa?",
@@ -33,7 +33,17 @@ const perguntas = [
   {
     pergunta: "Como funciona o formulário público?",
     resposta:
-      "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um lead novo. Na página Formulário escolhes as perguntas, a cor e o logótipo da empresa.",
+      "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um lead novo. Na página Formulário escolhes as perguntas. No CRM Pro também mudas o design: disposição, cor, fundo e logótipo.",
+  },
+  {
+    pergunta: "Qual é a diferença entre o CRM Essencial e o CRM Pro?",
+    resposta:
+      "O Essencial tem o necessário para organizar os leads: pipeline, tarefas, formulário, WhatsApp e importar/exportar, para até 5 pessoas. O Pro junta as automações, as propostas aceites online, o design do formulário e os relatórios da equipa, para até 20 pessoas. O preço é por empresa, não por pessoa.",
+  },
+  {
+    pergunta: "O que acontece quando acabam os 14 dias grátis?",
+    resposta:
+      "Não pedimos cartão, por isso nada é cobrado. A empresa passa sozinha ao CRM Essencial e os dados ficam todos: leads, tarefas, histórico e propostas. Só deixam de funcionar as funções do Pro. Três dias antes, o painel avisa.",
   },
   {
     pergunta: "Posso tirar os meus leads do FlowCRM?",

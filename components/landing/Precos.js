@@ -15,42 +15,13 @@ import Link from "next/link";
 import Icone from "@/components/Icone";
 import CabecalhoSeccao from "./CabecalhoSeccao";
 import styles from "./Precos.module.css";
+import { FUNCOES, MESES_PAGOS_NO_ANUAL, PLANOS as PLANOS_BASE } from "@/lib/planos";
 
-// para mudar preços ou o que cada plano inclui, basta mexer aqui
+// preços e funções de cada plano: lib/planos.js (os mesmos da página Plano do painel)
 const PLANOS = [
-  {
-    nome: "CRM Essencial",
-    descricao: "Para começar a organizar os leads da equipa.",
-    mensal: 15,
-    pessoas: "Até 5 pessoas",
-  },
-  {
-    nome: "CRM Pro",
-    descricao: "Para equipas que querem que o CRM trabalhe por elas.",
-    mensal: 35,
-    pessoas: "Até 20 pessoas",
-    destaque: true,
-  },
+  { ...PLANOS_BASE.essencial, pessoas: `Até ${PLANOS_BASE.essencial.pessoas} pessoas` },
+  { ...PLANOS_BASE.pro, pessoas: `Até ${PLANOS_BASE.pro.pessoas} pessoas`, destaque: true },
 ];
-
-// A mesma lista nos dois planos, para comparar linha a linha:
-// o Pro tem tudo (✓); no Essencial, o que é só do Pro aparece com ✗.
-const FUNCOES = [
-  { texto: "Leads, pipeline e tarefas" },
-  { texto: "Notificações e pesquisa rápida" },
-  { texto: "WhatsApp com mensagens prontas, guardado no histórico" },
-  { texto: "Formulário público com as tuas perguntas" },
-  { texto: "Importar e exportar CSV" },
-  { texto: "Gráfico, tema e menu à maneira da empresa" },
-  { texto: "Propostas com aceitação online: o lead fecha sozinho", soPro: true },
-  { texto: "Tarefa “Contactar” automática para cada lead novo", soPro: true },
-  { texto: "Leads do formulário distribuídos à vez pela equipa", soPro: true },
-  { texto: "Aviso quando um lead fica parado", soPro: true },
-  { texto: "Formulário com o teu design: disposição, cor, logótipo e modelos", soPro: true },
-  { texto: "Relatórios da equipa: vendas, conversão e tempo até fechar", soPro: true },
-];
-
-const MESES_PAGOS_NO_ANUAL = 10; // anual = 12 meses pelo preço de 10
 
 const euros = (n) => `${n} €`;
 

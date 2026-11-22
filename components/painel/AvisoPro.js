@@ -1,6 +1,7 @@
 // Aviso mostrado no lugar de uma função que é só do CRM Pro (Relatórios, Automações,
 // design do formulário...). Explica o que é e porque não está disponível.
 // "plano" vem de obterSessao() (lib/planos.js). "compacto" = versão mais pequena, dentro de uma página.
+import Link from "next/link";
 import Icone from "@/components/Icone";
 import styles from "./AvisoPro.module.css";
 
@@ -17,7 +18,7 @@ export default function AvisoPro({ titulo, texto, plano, compacto = false }) {
           {plano?.testeAcabou
             ? "Os 14 dias a experimentar o CRM Pro acabaram e a empresa passou para o CRM Essencial. Os teus dados ficam todos guardados."
             : `A empresa está no ${plano?.nome ?? "CRM Essencial"}.`}{" "}
-          Em breve vais poder mudar para o CRM Pro aqui no painel.
+          <Link href="/painel/plano">Ver os planos</Link>
         </p>
       </div>
     </section>

@@ -86,6 +86,16 @@
   background: var(--painel-cartao, var(--cor-cartao));
 }
 
+/* a caixa é um link para a página Plano */
+a.blocoPlano {
+  color: var(--cor-texto);
+  transition: border-color 0.2s;
+}
+
+a.blocoPlano:hover {
+  border-color: rgb(var(--rgb-destaque) / 0.45);
+}
+
 .rotuloPlano {
   color: var(--cor-texto-fraco);
   font-size: 0.75rem;

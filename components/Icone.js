@@ -5,6 +5,12 @@
 // Uso: <Icone nome="utilizadores" />  — a cor vem do CSS (currentColor = cor do texto à volta).
 
 const DESENHOS = {
+  relogio: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </>
+  ),
   // balão de conversa (WhatsApp)
   conversa: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />,
   // folha com linhas (propostas)

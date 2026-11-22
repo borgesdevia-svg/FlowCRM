@@ -46,7 +46,7 @@ export default function FormRegisto() {
       <div className="campo">
         <label htmlFor="password">Password</label>
         <CampoPassword id="password" name="password" autoComplete="new-password"
-          placeholder="Mínimo 8 caracteres" invalido={!!erros.password} />
+          placeholder="8 ou mais, com maiúscula, minúscula, número e símbolo" invalido={!!erros.password} />
         {erros.password && <p className="erro-campo">{erros.password}</p>}
       </div>
 

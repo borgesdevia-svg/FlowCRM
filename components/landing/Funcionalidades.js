@@ -46,14 +46,29 @@ const AREAS = [
 // Só entram aqui coisas que a app já faz de verdade.
 const EXTRAS = [
   {
+    icone: "documento",
+    titulo: "Propostas aceites online",
+    texto: "Envias o orçamento por link. O cliente aceita com o nome e o lead passa sozinho a Ativo. (CRM Pro)",
+  },
+  {
+    icone: "conversa",
+    titulo: "WhatsApp num clique",
+    texto: "Mensagens prontas com o nome do cliente. Abre o WhatsApp e a conversa fica no histórico do lead.",
+  },
+  {
+    icone: "telemovel",
+    titulo: "App no telemóvel",
+    texto: "Instala o FlowCRM no ecrã inicial do telemóvel ou do computador, sem passar por nenhuma loja.",
+  },
+  {
     icone: "ligacao",
     titulo: "Formulário público",
     texto: "Cada empresa tem um link próprio, com as suas perguntas. Quem o preenche entra logo no CRM como lead.",
   },
   {
     icone: "caixaEntrada",
-    titulo: "Importar de uma folha",
-    texto: "Traz os contactos que já tens num ficheiro CSV. Vês a pré-visualização antes de entrarem no CRM.",
+    titulo: "Importar e exportar",
+    texto: "Traz os contactos que já tens num ficheiro CSV, com pré-visualização. E exporta para Excel quando precisares.",
   },
   {
     icone: "utilizadorMais",
@@ -69,11 +84,6 @@ const EXTRAS = [
     icone: "sino",
     titulo: "Avisos no sino",
     texto: "O sino mostra as tarefas para hoje, as atrasadas e os leads que ainda não têm responsável.",
-  },
-  {
-    icone: "folha",
-    titulo: "Exportar para Excel",
-    texto: "Descarrega a lista de leads em CSV sempre que precisares.",
   },
 ];
 

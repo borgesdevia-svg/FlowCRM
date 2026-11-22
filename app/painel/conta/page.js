@@ -71,7 +71,7 @@ export default async function PaginaConta() {
           <h2>
             <Icone nome="cadeado" tamanho={18} /> Password
           </h2>
-          <p>Para tua segurança, pedimos a password atual antes de a mudar. Usa pelo menos 8 caracteres.</p>
+          <p>Para tua segurança, pedimos a password atual antes de a mudar. Usa 8 ou mais caracteres, com maiúscula, minúscula, número e símbolo (ex.: ! ? #).</p>
         </div>
         <FormPassword />
       </section>

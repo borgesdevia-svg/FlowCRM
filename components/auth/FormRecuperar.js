@@ -43,7 +43,7 @@ export default function FormRecuperar() {
 
       <div className="campo">
         <label htmlFor="password">Password nova</label>
-        <CampoPassword id="password" name="password" autoComplete="new-password" placeholder="Pelo menos 8 caracteres" />
+        <CampoPassword id="password" name="password" autoComplete="new-password" placeholder="8 ou mais, com maiúscula, minúscula, número e símbolo" />
       </div>
 
       <div className="campo">

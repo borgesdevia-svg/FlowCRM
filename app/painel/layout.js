@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { obterSessao, obterAparencia } from "@/lib/sessao";
 import { SECCOES_MENU, cssAparencia, itensDoMenu, varianteDe } from "@/lib/aparencia";
 import { sair } from "@/lib/acoes/autenticacao";
@@ -16,6 +17,9 @@ import JanelaChave from "@/components/painel/JanelaChave";
 import BotaoInstalar from "@/components/painel/BotaoInstalar";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { precisaDeChave } from "@/lib/estadoChave";
+import AvisoTeste from "@/components/painel/AvisoTeste";
+import { COOKIE_AVISO_TESTE, avisoPlano, textoDiasRestantes } from "@/lib/planos";
+import { formatarData } from "@/lib/estados";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
@@ -31,6 +35,20 @@ export async function generateViewport() {
 
 export default async function LayoutPainel({ children }) {
   const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto, plano } = await obterSessao();
+
+  // aviso do teste do Pro: nos últimos dias e logo depois de acabar (lib/planos.js)
+  const dadosAviso = eAdmin ? avisoPlano(plano) : null;
+  const avisoFechado = (await cookies()).get(COOKIE_AVISO_TESTE)?.value;
+  const aviso =
+    dadosAviso && dadosAviso.chave !== avisoFechado
+      ? {
+          ...dadosAviso,
+          texto:
+            dadosAviso.tipo === "acaba"
+              ? `O teste do CRM Pro acaba a ${formatarData(plano.fimTeste)} (${textoDiasRestantes(plano.diasRestantes)}). Depois, a empresa passa ao CRM Essencial; os dados ficam todos.`
+              : "Os 14 dias do CRM Pro acabaram e a empresa passou ao CRM Essencial. Os dados ficam todos guardados.",
+        }
+      : null;
   const pedidoAparencia = obterAparencia(); // começa já, em paralelo com as contagens
 
   // Números para os contadores do menu. As duas consultas são independentes,
@@ -188,7 +206,12 @@ export default async function LayoutPainel({ children }) {
 
       <div className={styles.coluna}>
         {/* barra de topo: onde estou (Clientes › Importar) + sino + conta */}
-        <BarraTopo itens={seccoes.flatMap((s) => s.itens).map(({ href, nome }) => ({ href, nome }))}>
+        <BarraTopo
+          itens={[
+            ...seccoes.flatMap((s) => s.itens).map(({ href, nome }) => ({ href, nome })),
+            { href: "/painel/plano", nome: "Plano" }, // fora do menu (abre-se em Configurações e nos avisos)
+          ]}
+        >
           <Link href="/painel/clientes/novo" className={`botao ${styles.botaoTopo}`}>
             <Icone nome="mais" tamanho={16} /> Novo lead
           </Link>
@@ -206,7 +229,11 @@ export default async function LayoutPainel({ children }) {
         </BarraTopo>
 
         {/* "painel-conteudo": usa a animação de entrada curta (globals.css) */}
-        <main className={`painel-conteudo ${styles.conteudo}`}>{children}</main>
+        <main className={`painel-conteudo ${styles.conteudo}`}>
+          {/* aviso do fim do teste do CRM Pro (só administradores, até o fecharem) */}
+          {aviso && <AvisoTeste tipo={aviso.tipo} chave={aviso.chave} texto={aviso.texto} />}
+          {children}
+        </main>
       </div>
 
       {/* chave de recuperação da password: aparece até a pessoa confirmar que a guardou */}

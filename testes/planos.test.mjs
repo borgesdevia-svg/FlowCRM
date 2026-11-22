@@ -38,3 +38,13 @@ test("textoDiasRestantes", () => {
   assert.equal(textoDiasRestantes(1), "falta 1 dia");
   assert.equal(textoDiasRestantes(5), "faltam 5 dias");
 });
+
+test("aviso do fim do teste: só nos últimos 3 dias e 7 dias depois", async () => {
+  const { avisoPlano } = await import("../lib/planos.js");
+  const aviso = (teste_ate) => avisoPlano(estadoPlano({ plano: "pro", teste_ate }, agora));
+  assert.equal(aviso("2026-12-01T12:00:00Z"), null); // faltam 9 dias
+  assert.equal(aviso("2026-11-25T12:00:00Z").tipo, "acaba"); // faltam 3
+  assert.equal(aviso("2026-11-21T12:00:00Z").tipo, "acabou"); // acabou ontem
+  assert.equal(aviso("2026-11-10T12:00:00Z"), null); // acabou há 12 dias
+  assert.equal(avisoPlano(estadoPlano({ plano: "pro", teste_ate: null }, agora)), null); // Pro pago
+});
