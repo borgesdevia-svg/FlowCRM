@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { obterSessao, obterAparencia } from "@/lib/sessao";
-import { SECCOES_MENU, cssAparencia, itensDoMenu } from "@/lib/aparencia";
+import { SECCOES_MENU, cssAparencia, itensDoMenu, varianteDe } from "@/lib/aparencia";
 import { sair } from "@/lib/acoes/autenticacao";
 import { hojeEmPortugal } from "@/lib/datas";
 import { iniciais } from "@/lib/texto";
@@ -13,11 +13,20 @@ import SimboloLogo from "@/components/SimboloLogo";
 import Tutorial from "@/components/painel/Tutorial";
 import BarraTopo from "@/components/painel/BarraTopo";
 import JanelaChave from "@/components/painel/JanelaChave";
+import BotaoInstalar from "@/components/painel/BotaoInstalar";
 import { precisaDeChave } from "@/lib/estadoChave";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
 // (o menu lateral aparece em todas sem o repetirmos em cada página).
 export const metadata = { title: "Painel · FlowCRM" };
+
+// Na app instalada, a barra do topo (hora, bateria) fica da cor do fundo do painel:
+// clara ou escura, conforme o tema que a empresa escolheu em Configurações.
+// (obterAparencia tem cache: o layout reaproveita a mesma consulta)
+export async function generateViewport() {
+  const aparencia = await obterAparencia();
+  return { themeColor: varianteDe(aparencia).conteudo["--cor-fundo"] ?? "#0f1115" };
+}
 
 export default async function LayoutPainel({ children }) {
   const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto } = await obterSessao();
@@ -150,6 +159,8 @@ export default async function LayoutPainel({ children }) {
             {/* tutorial de boas-vindas: abre sozinho na primeira entrada; o botão deixa revê-lo */}
             {/* (só depois de a chave de recuperação estar guardada, para as duas janelas não chocarem) */}
             <Tutorial mostrarAoEntrar={!tutorialVisto && !mostrarChave} nome={perfil.nome} eAdmin={eAdmin} className={styles.itemMenu} />
+            {/* só aparece se o browser deixar instalar (ou no iPhone, com os passos) */}
+            <BotaoInstalar className={styles.itemMenu} />
           </div>
         </nav>
 

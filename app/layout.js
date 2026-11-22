@@ -33,7 +33,12 @@ export const metadata = {
   },
   // no X (Twitter): imagem grande em vez do quadradinho
   twitter: { card: "summary_large_image" },
+  // iPhone: ao "Adicionar ao ecrã principal", abre em janela própria com este nome
+  appleWebApp: { capable: true, title: "FlowCRM", statusBarStyle: "default" },
 };
+
+// cor da barra do topo do telemóvel (hora, bateria) no site; no painel segue o tema da empresa
+export const viewport = { themeColor: "#0f1115" };
 
 export default function RootLayout({ children }) {
   return (

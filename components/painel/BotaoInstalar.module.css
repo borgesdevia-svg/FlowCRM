@@ -1,0 +1,52 @@
+/* o botão tem o aspeto dos outros itens do menu (a classe vem do layout) */
+.botao {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* janela com os passos para o iPhone (um <dialog> do browser, como a da chave) */
+.dialogo {
+  width: min(420px, calc(100vw - 32px));
+  margin: auto;
+  padding: 0;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9);
+}
+
+.dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 26px;
+}
+
+.conteudo h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.passos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 20px;
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+.passos strong {
+  color: var(--cor-texto);
+}
