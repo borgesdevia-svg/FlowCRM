@@ -14,6 +14,7 @@ import Tutorial from "@/components/painel/Tutorial";
 import BarraTopo from "@/components/painel/BarraTopo";
 import JanelaChave from "@/components/painel/JanelaChave";
 import BotaoInstalar from "@/components/painel/BotaoInstalar";
+import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { precisaDeChave } from "@/lib/estadoChave";
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
@@ -29,7 +30,7 @@ export async function generateViewport() {
 }
 
 export default async function LayoutPainel({ children }) {
-  const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, eDono, tutorialVisto, plano } = await obterSessao();
   const pedidoAparencia = obterAparencia(); // começa já, em paralelo com as contagens
 
   // Números para os contadores do menu. As duas consultas são independentes,
@@ -138,6 +139,8 @@ export default async function LayoutPainel({ children }) {
                 <LinkMenu key={item.href} href={item.href} className={styles.itemMenu} classeAtiva={styles.itemAtivo} tutorial={item.tutorial}>
                   <Icone nome={item.icone} tamanho={19} />
                   <span className={styles.textoItem}>{item.nome}</span>
+                  {/* função do CRM Pro numa empresa que não o tem */}
+                  {item.pro && !plano.pro && <EtiquetaPro />}
                   {item.contador ? (
                     <span className={item.alerta ? `${styles.contador} ${styles.contadorAlerta}` : styles.contador}>
                       {item.contador}

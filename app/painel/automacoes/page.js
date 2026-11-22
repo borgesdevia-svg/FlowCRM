@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { obterSessao } from "@/lib/sessao";
+import AvisoPro from "@/components/painel/AvisoPro";
 import { tempoRelativo } from "@/lib/datas";
 import FormAutomacoes from "@/components/automacoes/FormAutomacoes";
 import styles from "./automacoes.module.css";
@@ -30,7 +31,7 @@ function frase(linha) {
 }
 
 export default async function PaginaAutomacoes() {
-  const { supabase, perfil, eAdmin } = await obterSessao();
+  const { supabase, perfil, eAdmin, plano } = await obterSessao();
   if (!eAdmin) redirect("/painel");
 
   const [{ data: config }, { data: roda }, { data: equipa }, { data: registo }] = await Promise.all([
@@ -56,6 +57,17 @@ export default async function PaginaAutomacoes() {
         <h1>Automações</h1>
         <p className={styles.resumo}>Trabalho que o CRM faz sozinho, para nenhum lead ficar esquecido.</p>
       </header>
+
+      {/* no Essencial as automações não correm (a base de dados confirma o plano: migração 24);
+          a configuração fica visível e guardada, para quando a empresa passar para o Pro */}
+      {!plano.pro && (
+        <AvisoPro
+          compacto
+          plano={plano}
+          titulo="As automações são do CRM Pro"
+          texto="Podes deixá-las configuradas, mas só começam a trabalhar quando a empresa tiver o CRM Pro."
+        />
+      )}
 
       <FormAutomacoes
         inicial={{

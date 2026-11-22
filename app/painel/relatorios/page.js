@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { obterSessao } from "@/lib/sessao";
+import AvisoPro from "@/components/painel/AvisoPro";
 import { formatarEuros } from "@/lib/estados";
 import { PERIODOS, inicioPeriodo, mediaDias, taxaFecho, textoDias } from "@/lib/relatorios";
 import Grafico from "@/components/painel/Grafico";
@@ -20,8 +21,27 @@ const numero = (n) => new Intl.NumberFormat("pt-PT").format(n);
 const percentagem = (p) => (p === null ? "–" : `${p}%`);
 
 export default async function PaginaRelatorios({ searchParams }) {
-  const { supabase, eAdmin } = await obterSessao();
+  const { supabase, eAdmin, plano } = await obterSessao();
   if (!eAdmin) redirect("/painel");
+
+  // os Relatórios são do CRM Pro: no Essencial, a página explica isso em vez dos números
+  if (!plano.pro) {
+    return (
+      <div className={`entrar ${styles.pagina}`}>
+        <header className={styles.cabecalho}>
+          <div>
+            <h1>Relatórios</h1>
+            <p className={styles.resumo}>Como a equipa vende: leads recebidos, ganhos, conversão e tempo até fechar.</p>
+          </div>
+        </header>
+        <AvisoPro
+          plano={plano}
+          titulo="Os Relatórios da equipa são do CRM Pro"
+          texto="Vê, por pessoa, quantos leads recebeu, quantos ganhou e perdeu, o valor ganho, a taxa de conversão e quantos dias demora a fechar um negócio."
+        />
+      </div>
+    );
+  }
 
   const { periodo: pedido = "30" } = await searchParams;
   const periodo = PERIODOS.find((p) => p.chave === pedido) ?? PERIODOS[0];

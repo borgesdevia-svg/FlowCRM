@@ -44,7 +44,7 @@ const FUNCOES = [
   { texto: "Tarefa “Contactar” automática para cada lead novo", soPro: true },
   { texto: "Leads do formulário distribuídos à vez pela equipa", soPro: true },
   { texto: "Aviso quando um lead fica parado", soPro: true },
-  { texto: "Formulário com a tua cor, logótipo e modelos prontos", soPro: true },
+  { texto: "Formulário com o teu design: disposição, cor, logótipo e modelos", soPro: true },
   { texto: "Relatórios da equipa: vendas, conversão e tempo até fechar", soPro: true },
 ];
 

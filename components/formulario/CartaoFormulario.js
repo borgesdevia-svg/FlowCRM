@@ -1,33 +1,51 @@
-// Formulário público em estilo "documento" (como uma folha de Word):
-//  - em cima, o logótipo e o nome da empresa, uma linha fina, o título e o texto de entrada;
-//  - por baixo, as perguntas numeradas (children = FormLead), sem cores: só preto, branco e cinzentos.
-// É o MESMO componente na página pública (/f/[slug]) e na pré-visualização da página
-// Formulário: assim o administrador vê exatamente o que o cliente vai ver.
-// Sem "use client": funciona tanto no servidor como dentro de componentes de cliente.
-// (A cor que as empresas escolhiam antes deixou de ser usada: o aspeto é igual para todas.)
+// O formulário público (também usado na pré-visualização da página Formulário).
+// Por defeito é uma "folha de documento": logótipo e nome da empresa, título, texto de
+// entrada e, por baixo, as perguntas (children = FormLead), a preto e cinzento.
+// No CRM Pro a empresa muda o design (lib/formularioDesign.js): disposição (folha, cartão,
+// dividido, aberto), posição do logótipo, cor, cantos, letra e alinhamento.
+// É o MESMO componente na página pública (/f/[slug]) e no editor: o administrador vê
+// exatamente o que o lead vai ver. Sem "use client": funciona no servidor e no browser.
+//
+// CenaFormulario (em baixo) é o fundo à volta do formulário (cinzento, cor da marca, escuro...).
 
 import { TEXTOS_PADRAO } from "@/lib/formulario";
+import { atributosDesign, normalizarDesign, variaveisDesign } from "@/lib/formularioDesign";
 import styles from "./CartaoFormulario.module.css";
 
-export default function CartaoFormulario({ nome, logo, titulo, texto, children, className = "" }) {
+export default function CartaoFormulario({ nome, logo, titulo, texto, design, children, className = "" }) {
+  const d = normalizarDesign(design);
+  const mostrarEmpresa = d.logo !== "escondido";
+
   return (
-    <div className={`${styles.folha} ${className}`}>
+    <div className={`${styles.folha} ${className}`} {...atributosDesign(d)} style={variaveisDesign(d)}>
       <header className={styles.cabeca}>
-        <div className={styles.empresa}>
-          {logo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={logo} alt={`Logótipo da ${nome}`} className={styles.logo} />
-          ) : (
-            <span className={styles.inicial} aria-hidden="true">
-              {nome[0]?.toUpperCase()}
-            </span>
-          )}
-          <p className={styles.nome}>{nome}</p>
-        </div>
+        {mostrarEmpresa && (
+          <div className={styles.empresa}>
+            {logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logo} alt={`Logótipo da ${nome}`} className={styles.logo} />
+            ) : (
+              <span className={styles.inicial} aria-hidden="true">
+                {nome[0]?.toUpperCase()}
+              </span>
+            )}
+            <p className={styles.nome}>{nome}</p>
+          </div>
+        )}
         <h1 className={styles.titulo}>{titulo || TEXTOS_PADRAO.titulo}</h1>
         <p className={styles.texto}>{texto || TEXTOS_PADRAO.texto}</p>
       </header>
-      {children}
+      <div className={styles.corpo}>{children}</div>
     </div>
+  );
+}
+
+// o fundo da página à volta do formulário (na página pública é o <main>)
+export function CenaFormulario({ design, as: Elemento = "div", className = "", children }) {
+  const d = normalizarDesign(design);
+  return (
+    <Elemento className={`${styles.cena} ${className}`} {...atributosDesign(d)} style={variaveisDesign(d)}>
+      {children}
+    </Elemento>
   );
 }

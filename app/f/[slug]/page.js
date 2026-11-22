@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { papelNaEmpresaDoFormulario } from "@/lib/sessao";
 import FormLead from "@/components/formulario/FormLead";
-import CartaoFormulario from "@/components/formulario/CartaoFormulario";
+import CartaoFormulario, { CenaFormulario } from "@/components/formulario/CartaoFormulario";
+import { normalizarDesign } from "@/lib/formularioDesign";
 import styles from "./formulario.module.css";
 
 // Rota PÚBLICA /f/[slug] — o formulário de contacto de cada empresa.
@@ -33,6 +34,8 @@ export default async function PaginaFormulario({ params }) {
   // slug que não existe -> página 404
   if (!formulario) notFound();
   const nomeEmpresa = formulario.nome;
+  // design escolhido pela empresa (a base de dados só o devolve no CRM Pro; sem ele, o de sempre)
+  const design = normalizarDesign(formulario.design);
 
   // quem já está na equipa não é cliente: o comercial não pode responder ao formulário
   // (o administrador pode, para o experimentar; o envio também é recusado no servidor)
@@ -40,9 +43,10 @@ export default async function PaginaFormulario({ params }) {
   const papel = await papelNaEmpresaDoFormulario(supabase, slug);
 
   return (
-    // fundo cinzento claro com a "folha" branca do formulário no meio
-    <main className={styles.pagina}>
+    // o fundo (cinzento, cor da marca, escuro...) com o formulário no meio
+    <CenaFormulario as="main" design={design} className={styles.pagina}>
       <CartaoFormulario
+        design={design}
         nome={nomeEmpresa}
         logo={formulario.logo_url}
         titulo={formulario.titulo}
@@ -69,6 +73,7 @@ export default async function PaginaFormulario({ params }) {
               slug={slug}
               nomeEmpresa={nomeEmpresa}
               perguntas={formulario.perguntas ?? []}
+              textoBotao={design.botao}
               obrigado={{
                 texto: formulario.obrigado_texto,
                 botaoTexto: formulario.obrigado_botao_texto,
@@ -82,6 +87,6 @@ export default async function PaginaFormulario({ params }) {
       <p className={styles.marca}>
         Formulário criado com <Link href="/">FlowCRM</Link>
       </p>
-    </main>
+    </CenaFormulario>
   );
 }

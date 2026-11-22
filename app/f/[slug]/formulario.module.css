@@ -15,8 +15,18 @@
   align-items: center;
   gap: 20px;
   padding: 48px 16px;
-  background: #f2f4f7;
   color: var(--cor-texto);
+}
+
+/* design "aberto": o formulário ocupa a página, sem margens à volta */
+.pagina[data-disposicao="aberto"] {
+  padding: 0 0 32px;
+}
+
+/* fundo escuro: o "criado com FlowCRM" fica mais claro para se ler */
+.pagina[data-fundo="escuro"] .marca,
+.pagina[data-fundo="escuro"] .marca a {
+  color: #98a2b3;
 }
 
 .marca a {

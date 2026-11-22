@@ -11,18 +11,19 @@ import styles from "./personalizar.module.css";
 export const metadata = { title: "Formulário · FlowCRM" };
 
 export default async function PaginaPersonalizar() {
-  const { supabase, perfil, empresa, eAdmin } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, plano } = await obterSessao();
   if (!eAdmin) redirect("/painel");
 
   const { data } = await supabase
     .from("empresas")
-    .select("perguntas, form_cor, form_titulo, form_texto, obrigado_texto, obrigado_botao_texto, obrigado_botao_link")
+    .select("perguntas, form_cor, form_titulo, form_texto, form_design, obrigado_texto, obrigado_botao_texto, obrigado_botao_link")
     .eq("id", perfil.empresa_id)
     .single();
 
   // no formato do editor (textos vazios = usar os textos por defeito)
   const inicial = {
     marca: { cor: data?.form_cor ?? "verde", titulo: data?.form_titulo ?? "", texto: data?.form_texto ?? "" },
+    design: data?.form_design ?? {},
     perguntas: data?.perguntas ?? [],
     depois: {
       mensagem: data?.obrigado_texto ?? "",
@@ -46,7 +47,7 @@ export default async function PaginaPersonalizar() {
         </Link>
       </header>
 
-      <EditorFormulario inicial={inicial} nomeEmpresa={empresa.nome} logo={empresa.logo_url} />
+      <EditorFormulario inicial={inicial} nomeEmpresa={empresa.nome} logo={empresa.logo_url} plano={plano} />
     </div>
   );
 }

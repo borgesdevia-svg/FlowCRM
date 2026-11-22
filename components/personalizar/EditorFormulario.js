@@ -1,6 +1,6 @@
 "use client";
 // Editor do formulário público (página Personalizar), a toda a largura:
-//  - à esquerda, três separadores: Marca · Perguntas · Depois de enviar;
+//  - à esquerda, quatro separadores: Marca · Design (CRM Pro) · Perguntas · Depois de enviar;
 //  - à direita, o formulário tal como o cliente o vê, atualizado enquanto se mexe
 //    (usa os MESMOS componentes da página pública: CartaoFormulario e FormLead).
 // Só grava quando se carrega em "Guardar" (Server Action guardarFormulario).
@@ -17,7 +17,9 @@ import {
   TIPOS,
   TIPOS_COM_OPCOES,
 } from "@/lib/formulario";
-import CartaoFormulario from "@/components/formulario/CartaoFormulario";
+import { CORES_DESIGN, DESIGN_PADRAO, MAX_TEXTO_BOTAO, OPCOES_DESIGN, TEXTO_BOTAO_PADRAO, normalizarDesign } from "@/lib/formularioDesign";
+import CartaoFormulario, { CenaFormulario } from "@/components/formulario/CartaoFormulario";
+import AvisoPro, { EtiquetaPro } from "@/components/painel/AvisoPro";
 import FormLead from "@/components/formulario/FormLead";
 import FormLogo from "./FormLogo";
 import Icone from "@/components/Icone";
@@ -26,6 +28,7 @@ import styles from "./EditorFormulario.module.css";
 
 const SEPARADORES = [
   { chave: "marca", texto: "Marca" },
+  { chave: "design", texto: "Design", pro: true },
   { chave: "perguntas", texto: "Perguntas" },
   { chave: "depois", texto: "Depois de enviar" },
 ];
@@ -39,6 +42,7 @@ function prepararPergunta(p) {
 function preparar(dados) {
   return {
     marca: { ...dados.marca },
+    design: normalizarDesign(dados.design),
     perguntas: dados.perguntas.map(prepararPergunta),
     depois: { ...dados.depois },
   };
@@ -49,6 +53,7 @@ function preparar(dados) {
 function limpar(dados) {
   return {
     marca: { cor: dados.marca.cor, titulo: dados.marca.titulo.trim(), texto: dados.marca.texto.trim() },
+    design: normalizarDesign(dados.design),
     perguntas: dados.perguntas.map((p) => ({
       id: p.id,
       texto: p.texto,
@@ -74,7 +79,7 @@ function perguntasDoModelo(modelo) {
   return modelo.perguntas.map((p) => prepararPergunta({ ...p, id: crypto.randomUUID() }));
 }
 
-export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
+export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano }) {
   const [dados, setDados] = useState(() => preparar(inicial));
   const [guardado, setGuardado] = useState(() => JSON.stringify(limpar(preparar(inicial))));
   const [separador, setSeparador] = useState("marca");
@@ -83,6 +88,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
   const [aGuardar, iniciar] = useTransition();
 
   const paraGuardar = limpar(dados);
+  const designPrevia = plano.pro ? dados.design : DESIGN_PADRAO;
   const alterado = JSON.stringify(paraGuardar) !== guardado;
 
   // aviso do browser ao sair da página com alterações por guardar
@@ -97,6 +103,10 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
   function mudarMarca(campos) {
     setMensagem(null);
     setDados((d) => ({ ...d, marca: { ...d.marca, ...campos } }));
+  }
+  function mudarDesign(campos) {
+    setMensagem(null);
+    setDados((d) => ({ ...d, design: { ...d.design, ...campos } }));
   }
   function mudarDepois(campos) {
     setMensagem(null);
@@ -169,6 +179,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
               onClick={() => setSeparador(s.chave)}
             >
               {s.texto}
+              {s.pro && !plano.pro && <EtiquetaPro />}
               {s.chave === "perguntas" && <span className={styles.contagem}>{dados.perguntas.length}</span>}
             </button>
           ))}
@@ -185,6 +196,11 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
                   logo que o escolhes.
                 </p>
                 <FormLogo logoAtual={logo} nomeEmpresa={nomeEmpresa} />
+                {!plano.pro && (
+                  <p className={styles.notaPro}>
+                    <EtiquetaPro /> No CRM Essencial o logótipo aparece no menu do CRM. No formulário, só com o CRM Pro.
+                  </p>
+                )}
               </section>
 
               <section className={styles.seccao}>
@@ -217,15 +233,108 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
             </>
           )}
 
+          {/* ---------- Design (CRM Pro) ---------- */}
+          {separador === "design" && (
+            <>
+              {!plano.pro && (
+                <AvisoPro
+                  compacto
+                  plano={plano}
+                  titulo="O design do formulário é do CRM Pro"
+                  texto="Muda a disposição, o sítio do logótipo, a cor, o fundo, os cantos, a letra e o texto do botão."
+                />
+              )}
+              <fieldset className={styles.grupoDesign} disabled={!plano.pro}>
+                <section className={styles.seccao}>
+                  <h2>Disposição</h2>
+                  <div className={styles.disposicoes}>
+                    {OPCOES_DESIGN.disposicao.map((o) => (
+                      <button
+                        key={o.valor}
+                        type="button"
+                        aria-pressed={dados.design.disposicao === o.valor}
+                        className={styles.disposicao}
+                        onClick={() => mudarDesign({ disposicao: o.valor })}
+                      >
+                        <span className={styles.esquema} data-esquema={o.valor} aria-hidden="true">
+                          <i></i>
+                          <i></i>
+                        </span>
+                        <strong>{o.nome}</strong>
+                        <small>{o.descricao}</small>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                <section className={styles.seccao}>
+                  <h2>Cor da marca</h2>
+                  <p className={styles.explicacao}>
+                    Pinta o botão e as opções escolhidas. No fundo da página e na disposição dividida, pinta também a página.
+                  </p>
+                  <div className={styles.cores} role="radiogroup" aria-label="Cor da marca">
+                    {CORES_DESIGN.map((c) => (
+                      <button
+                        key={c.chave}
+                        type="button"
+                        role="radio"
+                        aria-checked={dados.design.cor === c.chave}
+                        aria-label={c.nome}
+                        title={c.nome}
+                        className={styles.amostraCor}
+                        style={{ "--amostra": c.cor }}
+                        onClick={() => mudarDesign({ cor: c.chave })}
+                      />
+                    ))}
+                  </div>
+                </section>
+
+                <EscolhasDesign titulo="Logótipo" chave="logo" valor={dados.design.logo} mudar={mudarDesign} />
+                <EscolhasDesign titulo="Fundo da página" chave="fundo" valor={dados.design.fundo} mudar={mudarDesign} />
+                <EscolhasDesign titulo="Título e texto" chave="alinhamento" valor={dados.design.alinhamento} mudar={mudarDesign} />
+                <EscolhasDesign titulo="Cantos" chave="cantos" valor={dados.design.cantos} mudar={mudarDesign} />
+                <EscolhasDesign titulo="Letra" chave="letra" valor={dados.design.letra} mudar={mudarDesign} />
+
+                <section className={styles.seccao}>
+                  <h2>Botão de enviar</h2>
+                  <div className="campo">
+                    <label htmlFor="form-botao">Texto do botão</label>
+                    <input
+                      id="form-botao"
+                      value={dados.design.botao}
+                      maxLength={MAX_TEXTO_BOTAO}
+                      placeholder={TEXTO_BOTAO_PADRAO}
+                      onChange={(e) => mudarDesign({ botao: e.target.value })}
+                    />
+                    <small className={styles.contador}>
+                      {dados.design.botao.length}/{MAX_TEXTO_BOTAO} · vazio usa o texto que aparece a cinzento
+                    </small>
+                  </div>
+                </section>
+              </fieldset>
+            </>
+          )}
+
           {/* ---------- Perguntas ---------- */}
           {separador === "perguntas" && (
             <>
               <section className={styles.seccao}>
                 <h2>Começar de um modelo</h2>
                 <p className={styles.explicacao}>Perguntas já feitas para o teu tipo de negócio. Depois podes mudar tudo.</p>
+                {!plano.pro && (
+                  <p className={styles.notaPro}>
+                    <EtiquetaPro /> Os modelos prontos são do CRM Pro. Podes sempre escrever as tuas perguntas.
+                  </p>
+                )}
                 <div className={styles.modelos}>
                   {MODELOS.map((m) => (
-                    <button key={m.chave} type="button" className={styles.modelo} onClick={() => escolherModelo(m)}>
+                    <button
+                      key={m.chave}
+                      type="button"
+                      className={styles.modelo}
+                      onClick={() => escolherModelo(m)}
+                      disabled={!plano.pro}
+                    >
                       <strong>{m.nome}</strong>
                       <small>{m.perguntas.length} perguntas</small>
                     </button>
@@ -364,11 +473,12 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
         <p className={styles.tituloPrevia}>
           {separador === "depois" ? "O que o lead vê depois de enviar" : "Como o lead vê o formulário"}
         </p>
-        {/* o formulário público é sempre uma folha branca sobre cinzento-claro, como na página real */}
-        <div className={styles.moldura}>
+        {/* o mesmo fundo e o mesmo design da página real (sem o Pro, o design de sempre) */}
+        <CenaFormulario design={designPrevia} className={styles.moldura}>
           <CartaoFormulario
+            design={designPrevia}
             nome={nomeEmpresa}
-            logo={logo}
+            logo={plano.pro ? logo : null}
             titulo={dados.marca.titulo.trim()}
             texto={dados.marca.texto.trim()}
             className={styles.cartaoPrevia}
@@ -377,6 +487,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
               previa
               mostrarObrigado={separador === "depois"}
               nomeEmpresa={nomeEmpresa}
+              textoBotao={designPrevia.botao}
               perguntas={dados.perguntas.map((p) => ({ ...p, opcoes: p.opcoes.filter((o) => o.trim()) }))}
               obrigado={{
                 texto: dados.depois.mensagem.trim(),
@@ -385,7 +496,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo }) {
               }}
             />
           </CartaoFormulario>
-        </div>
+        </CenaFormulario>
       </aside>
 
       {/* ================= barra de guardar ================= */}
@@ -524,5 +635,27 @@ function EditorPergunta({ pergunta: p, indice: i, total, mudar, mover, apagar })
         />
       </div>
     </li>
+  );
+}
+
+// ---------- um grupo de escolhas do design (Logótipo, Fundo, Cantos...) ----------
+function EscolhasDesign({ titulo, chave, valor, mudar }) {
+  return (
+    <section className={styles.seccao}>
+      <h2>{titulo}</h2>
+      <div className={styles.escolhas}>
+        {OPCOES_DESIGN[chave].map((o) => (
+          <button
+            key={o.valor}
+            type="button"
+            aria-pressed={valor === o.valor}
+            className={styles.escolha}
+            onClick={() => mudar({ [chave]: o.valor })}
+          >
+            {o.nome}
+          </button>
+        ))}
+      </div>
+    </section>
   );
 }

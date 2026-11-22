@@ -1,6 +1,7 @@
-/* Formulário público como uma folha de documento (também usado na pré-visualização).
-   Sempre claro e sem cores, seja qual for o tema do site ou do painel: as variáveis
-   são redefinidas aqui dentro, por isso campos, botões e opções ficam a preto e cinzento. */
+/* Formulário público (também usado na pré-visualização do editor).
+   Sempre claro, seja qual for o tema do site ou do painel: as variáveis são redefinidas
+   aqui dentro. A cor da marca, os cantos e a letra vêm do design (lib/formularioDesign.js)
+   em variáveis --form-*; a disposição, o fundo e o logótipo vêm em atributos data-*. */
 .folha {
   --cor-fundo: #ffffff;
   --cor-fundo-2: #ffffff;
@@ -11,12 +12,13 @@
   --cor-texto-suave: #475467;
   --cor-texto-fraco: #667085;
   --rgb-tinta: 16 24 40;
-  --cor-destaque: #101828;
-  --rgb-destaque: 16 24 40;
-  --cor-destaque-claro: #344054;
-  --cor-destaque-escuro: #000000;
-  --cor-sobre-destaque: #ffffff;
-  --cor-superficie-verde: #f2f4f7;
+  /* a cor da marca pinta o botão, as opções escolhidas e o contorno ao escrever */
+  --cor-destaque: var(--form-cor, #101828);
+  --rgb-destaque: var(--form-cor-rgb, 16 24 40);
+  --cor-destaque-claro: color-mix(in srgb, var(--cor-destaque) 65%, #fff);
+  --cor-destaque-escuro: color-mix(in srgb, var(--cor-destaque) 80%, #000);
+  --cor-sobre-destaque: var(--form-sobre-cor, #ffffff);
+  --cor-superficie-verde: color-mix(in srgb, var(--cor-destaque) 10%, #fff);
   --cor-perigo-texto: #b42318;
   color-scheme: light;
 
@@ -24,44 +26,47 @@
   max-width: 780px;
   padding: clamp(28px, 6vw, 64px) clamp(20px, 7vw, 72px) clamp(32px, 6vw, 56px);
   border: 1px solid #e4e7ec;
-  border-radius: 4px; /* cantos quase retos, como uma folha */
+  border-radius: var(--form-raio, 10px);
   background: #ffffff;
   box-shadow:
     0 1px 2px rgb(16 24 40 / 0.05),
     0 12px 32px -12px rgb(16 24 40 / 0.12);
   color: var(--cor-texto);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  font-family: var(--form-letra, var(--font-geist-sans), -apple-system, BlinkMacSystemFont, Arial, sans-serif);
 }
 
-/* botão de enviar: preto, cantos discretos */
+/* botão de enviar: na cor da marca */
 .folha :global(.botao) {
-  border-radius: 6px;
-  border-color: #101828;
-  background: #101828;
-  color: #ffffff;
-  font-weight: 500;
+  border-radius: var(--form-raio-campo, 6px);
+  border-color: var(--cor-destaque);
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+  font-family: inherit;
+  font-weight: 600;
   box-shadow: none;
 }
 
 .folha :global(.botao:hover) {
   transform: none;
-  background: #000000;
+  border-color: var(--cor-destaque-escuro);
+  background: var(--cor-destaque-escuro);
   box-shadow: none;
 }
 
-/* campos: caixas brancas com contorno cinzento e anel cinzento ao escrever */
+/* campos: caixas brancas com contorno cinzento e anel da cor da marca ao escrever */
 .folha :global(.campo input),
 .folha :global(.campo select),
 .folha :global(.campo textarea) {
-  border-radius: 6px;
+  border-radius: var(--form-raio-campo, 6px);
   background: #ffffff;
+  font-family: inherit;
 }
 
 .folha :global(.campo input:focus),
 .folha :global(.campo select:focus),
 .folha :global(.campo textarea:focus) {
-  border-color: #101828;
-  box-shadow: 0 0 0 3px rgb(16 24 40 / 0.08);
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.15);
 }
 
 /* ---------- cabeça: logótipo + empresa, linha, título e texto ---------- */
@@ -86,7 +91,7 @@
   flex-shrink: 0;
   width: 56px;
   height: 56px;
-  border-radius: 8px;
+  border-radius: min(var(--form-raio, 8px), 14px);
 }
 
 .logo {
@@ -94,7 +99,7 @@
   object-fit: contain;
 }
 
-/* sem logótipo: a primeira letra do nome, a preto */
+/* sem logótipo: a primeira letra do nome */
 .inicial {
   display: grid;
   place-items: center;
@@ -126,6 +131,132 @@
   overflow-wrap: anywhere;
 }
 
+/* ================= logótipo ================= */
+.folha[data-logo="centro"] .empresa,
+.folha[data-logo="grande"] .empresa {
+  flex-direction: column;
+  text-align: center;
+}
+
+.folha[data-logo="grande"] .logo,
+.folha[data-logo="grande"] .inicial {
+  width: 112px;
+  height: 112px;
+  font-size: 2.6rem;
+}
+
+/* ================= alinhamento do título e do texto ================= */
+.folha[data-alinhamento="centro"] .cabeca {
+  align-items: center;
+  text-align: center;
+}
+
+/* ================= disposições ================= */
+
+/* Cartão: mais estreito, cantos da marca, sombra mais funda e uma faixa da cor no topo */
+.folha[data-disposicao="cartao"] {
+  max-width: 640px;
+  border: none;
+  border-top: 6px solid var(--cor-destaque);
+  box-shadow:
+    0 2px 4px rgb(16 24 40 / 0.06),
+    0 24px 60px -20px rgb(16 24 40 / 0.3);
+}
+
+.folha[data-disposicao="cartao"] .cabeca {
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+
+/* Dividido: a marca num painel da cor à esquerda, as perguntas à direita */
+.folha[data-disposicao="dividido"] {
+  max-width: 1040px;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  padding: 0;
+  overflow: hidden;
+}
+
+.folha[data-disposicao="dividido"] .cabeca {
+  justify-content: center;
+  margin: 0;
+  padding: clamp(28px, 5vw, 56px);
+  border-bottom: none;
+  background:
+    radial-gradient(circle at 0% 100%, rgb(255 255 255 / 0.18), transparent 60%),
+    var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+}
+
+.folha[data-disposicao="dividido"] .cabeca .nome,
+.folha[data-disposicao="dividido"] .cabeca .texto {
+  color: inherit;
+}
+
+.folha[data-disposicao="dividido"] .cabeca .texto {
+  opacity: 0.85;
+}
+
+.folha[data-disposicao="dividido"] .inicial {
+  border-color: currentColor;
+  color: inherit;
+}
+
+.folha[data-disposicao="dividido"] .logo {
+  padding: 6px;
+  background: #ffffff;
+}
+
+.folha[data-disposicao="dividido"] .corpo {
+  padding: clamp(28px, 5vw, 56px);
+}
+
+/* Aberto: sem caixa, o formulário ocupa a página; o conteúdo fica numa coluna ao centro */
+.folha[data-disposicao="aberto"] {
+  max-width: none;
+  min-height: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding-inline: max(20px, calc((100% - 720px) / 2));
+}
+
+/* ================= fundo à volta (CenaFormulario) ================= */
+.cena {
+  --form-fundo: #f2f4f7;
+  /* a largura da cena (não a do ecrã) decide quando o "dividido" fica numa coluna:
+     assim também funciona na pré-visualização, que é estreita */
+  container-type: inline-size;
+  background: var(--form-fundo);
+}
+
+.cena[data-fundo="cor"] {
+  --form-fundo: color-mix(in srgb, var(--form-cor, #101828) 16%, #ffffff);
+}
+
+.cena[data-fundo="degrade"] {
+  background:
+    radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--form-cor, #101828) 35%, transparent), transparent 55%),
+    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--form-cor, #101828) 22%, transparent), transparent 50%),
+    #f2f4f7;
+}
+
+.cena[data-fundo="escuro"] {
+  --form-fundo: #0f1115;
+}
+
+/* na disposição "aberta" o formulário já é a página: o fundo fica branco */
+.cena[data-disposicao="aberto"] {
+  background: #ffffff;
+}
+
+/* ================= telemóvel ================= */
+@container (max-width: 720px) {
+  .folha[data-disposicao="dividido"] {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 520px) {
   .folha {
     border-radius: 0;
@@ -137,5 +268,11 @@
   .inicial {
     width: 48px;
     height: 48px;
+  }
+
+  .folha[data-logo="grande"] .logo,
+  .folha[data-logo="grande"] .inicial {
+    width: 88px;
+    height: 88px;
   }
 }

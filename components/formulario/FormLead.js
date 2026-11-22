@@ -7,13 +7,15 @@
 //  - perguntas: as perguntas extra da empresa (tipos em lib/formulario.js)
 //  - obrigado: { texto, botaoTexto, botaoLink } — o que aparece depois de enviar
 //  - mostrarObrigado: na pré-visualização, mostra já o ecrã "depois de enviar"
+//  - textoBotao: o texto do botão de enviar (CRM Pro; vazio = texto de sempre)
 
 import { useActionState } from "react";
 import { enviarLead } from "@/lib/acoes/formulario";
 import { TEXTOS_PADRAO } from "@/lib/formulario";
+import { TEXTO_BOTAO_PADRAO } from "@/lib/formularioDesign";
 import styles from "./FormLead.module.css";
 
-export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado = {}, previa = false, mostrarObrigado = false }) {
+export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado = {}, previa = false, mostrarObrigado = false, textoBotao = "" }) {
   const [estado, accao, pendente] = useActionState(enviarLead, {});
   const erros = estado.erros ?? {};
   const valores = estado.valores ?? {};
@@ -105,7 +107,7 @@ export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado =
       ))}
 
       <button type="submit" className="botao" disabled={pendente}>
-        {pendente ? "A enviar..." : "Enviar pedido de contacto"}
+        {pendente ? "A enviar..." : textoBotao || TEXTO_BOTAO_PADRAO}
       </button>
 
       <p className={styles.privacidade}>Os teus dados só são usados para te contactarmos.</p>

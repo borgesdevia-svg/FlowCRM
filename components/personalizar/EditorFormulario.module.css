@@ -251,7 +251,7 @@
   padding: 20px;
   border-radius: 14px;
   border: 1px solid var(--cor-contorno);
-  background: #f2f4f7; /* o mesmo cinzento da página pública */
+  /* o fundo vem do design do formulário (CenaFormulario): cinzento, cor, escuro... */
   overflow-y: auto;
   scrollbar-width: thin;
 }
@@ -336,4 +336,175 @@
   .moldura {
     padding: 16px 10px;
   }
+}
+
+/* ================= separador Design (CRM Pro) ================= */
+.modelo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modelo:disabled:hover {
+  border-color: var(--cor-contorno);
+  background: transparent;
+}
+
+/* nota "isto é do Pro" dentro de uma secção */
+.notaPro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+/* o fieldset só serve para desligar tudo de uma vez quando não há Pro */
+.grupoDesign {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.grupoDesign:disabled {
+  opacity: 0.55;
+}
+
+.grupoDesign:disabled button {
+  cursor: not-allowed;
+}
+
+/* disposições: 4 cartões com um esquema pequeno de cada uma */
+.disposicoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@container opcoes (min-width: 700px) {
+  .disposicoes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.disposicao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.disposicao strong {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.disposicao small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.disposicao:hover,
+.escolha:hover {
+  border-color: rgb(var(--rgb-destaque) / 0.45);
+}
+
+.disposicao[aria-pressed="true"],
+.escolha[aria-pressed="true"] {
+  border-color: var(--cor-destaque);
+  background: rgb(var(--rgb-destaque) / 0.1);
+}
+
+/* esquema: uma página cinzenta com 2 blocos (cabeça e perguntas) */
+.esquema {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  background: rgb(var(--rgb-tinta) / 0.08);
+  overflow: hidden;
+}
+
+.esquema i {
+  position: absolute;
+  border-radius: 3px;
+  background: rgb(var(--rgb-tinta) / 0.35);
+}
+
+.esquema i:first-child {
+  background: var(--cor-destaque);
+}
+
+/* folha: caixa branca ao centro */
+.esquema[data-esquema="folha"] i:first-child { left: 25%; right: 25%; top: 14%; height: 12%; }
+.esquema[data-esquema="folha"] i:last-child { left: 25%; right: 25%; top: 32%; bottom: 10%; }
+/* cartão: mais estreito, com uma faixa no topo */
+.esquema[data-esquema="cartao"] i:first-child { left: 32%; right: 32%; top: 12%; height: 6%; }
+.esquema[data-esquema="cartao"] i:last-child { left: 32%; right: 32%; top: 22%; bottom: 12%; }
+/* dividido: bloco da cor à esquerda, perguntas à direita */
+.esquema[data-esquema="dividido"] i:first-child { left: 12%; width: 30%; top: 14%; bottom: 14%; }
+.esquema[data-esquema="dividido"] i:last-child { left: 46%; right: 12%; top: 14%; bottom: 14%; }
+/* aberto: ocupa a largura toda */
+.esquema[data-esquema="aberto"] i:first-child { left: 6%; right: 6%; top: 10%; height: 12%; }
+.esquema[data-esquema="aberto"] i:last-child { left: 6%; right: 6%; top: 28%; bottom: 0; }
+
+/* cores: bolinhas */
+.cores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.amostraCor {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--amostra);
+  box-shadow: inset 0 0 0 1px rgb(var(--rgb-tinta) / 0.3); /* o preto também se vê no tema escuro */
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.amostraCor:hover {
+  transform: scale(1.08);
+}
+
+.amostraCor[aria-checked="true"] {
+  outline: 2px solid var(--amostra);
+  outline-offset: 3px;
+}
+
+/* escolhas simples (Logótipo, Fundo, Cantos, Letra...) */
+.escolhas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.escolha {
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }

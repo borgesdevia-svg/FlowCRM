@@ -14,7 +14,7 @@ import styles from "./equipa.module.css";
 export const metadata = { title: "Equipa · FlowCRM" };
 
 export default async function PaginaEquipa() {
-  const { supabase, perfil, empresa, eAdmin } = await obterSessao();
+  const { supabase, perfil, empresa, eAdmin, plano } = await obterSessao();
 
   // proteção no servidor: um comercial que escreva o endereço à mão volta ao painel
   if (!eAdmin) redirect("/painel");
@@ -67,6 +67,11 @@ export default async function PaginaEquipa() {
             {lista.length} {lista.length === 1 ? "membro" : "membros"}: {nAdmins}{" "}
             {nAdmins === 1 ? "administrador" : "administradores"} e {nComerciais}{" "}
             {nComerciais === 1 ? "comercial" : "comerciais"}.
+            {/* limite de pessoas do plano (Essencial 5, Pro 20) */}
+            {" "}
+            {lista.length >= plano.pessoas
+              ? `Chegaram ao limite do ${plano.nome} (${plano.pessoas} pessoas).`
+              : `O ${plano.nome} dá para ${plano.pessoas} pessoas.`}
             {porAtribuir > 0 && (
               <>
                 {" "}

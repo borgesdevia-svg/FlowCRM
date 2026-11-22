@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { obterSessao, obterAparencia } from "@/lib/sessao";
 import EditorAparencia from "@/components/configuracoes/EditorAparencia";
+import BlocoPlano from "@/components/painel/BlocoPlano";
 import styles from "../formulario/personalizar.module.css";
 
 // Rota /painel/configuracoes — o administrador escolhe o aspeto do CRM para toda a empresa:
@@ -8,7 +9,7 @@ import styles from "../formulario/personalizar.module.css";
 export const metadata = { title: "Configurações · FlowCRM" };
 
 export default async function PaginaConfiguracoes() {
-  const { eAdmin } = await obterSessao();
+  const { eAdmin, plano } = await obterSessao();
   if (!eAdmin) redirect("/painel");
 
   const aparencia = await obterAparencia();
@@ -20,6 +21,7 @@ export default async function PaginaConfiguracoes() {
           <h1>Configurações</h1>
           <p className={styles.resumo}>O aspeto do CRM para toda a equipa: design, claro ou escuro, gráfico do Início e menu.</p>
         </div>
+        <BlocoPlano plano={plano} />
       </header>
 
       <EditorAparencia inicial={aparencia} />

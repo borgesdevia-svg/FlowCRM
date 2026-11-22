@@ -1,0 +1,105 @@
+/* aviso de função do CRM Pro: moldura com um brilho verde suave no canto (como o plano Pro da landing) */
+.aviso {
+  display: flex;
+  gap: 18px;
+  padding: 28px;
+  border: 1px solid var(--painel-contorno, var(--cor-contorno));
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 100% 0%, rgb(var(--rgb-destaque) / 0.12), transparent 55%),
+    var(--painel-cartao, var(--cor-cartao));
+}
+
+.icone {
+  flex-shrink: 0;
+  color: var(--cor-destaque);
+}
+
+.textos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+.textos h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.textos p {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+.textos .plano {
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+}
+
+.compacto {
+  gap: 12px;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.compacto .textos h2 {
+  font-size: 1rem;
+}
+
+.compacto .textos p {
+  font-size: 0.9rem;
+}
+
+/* etiqueta "Pro" pequena */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: rgb(var(--rgb-destaque) / 0.12);
+  color: var(--cor-destaque);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .aviso {
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+  }
+}
+
+/* caixa do plano (Configurações) */
+.blocoPlano {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+  padding: 12px 16px;
+  border: 1px solid var(--painel-contorno, var(--cor-contorno));
+  border-radius: 12px;
+  background: var(--painel-cartao, var(--cor-cartao));
+}
+
+.rotuloPlano {
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+}
+
+.blocoPlano strong {
+  font-size: 1rem;
+}
+
+.blocoPlano .nomePro {
+  color: var(--cor-destaque);
+}
+
+.blocoPlano small {
+  color: var(--cor-texto-suave);
+  font-size: 0.82rem;
+}
