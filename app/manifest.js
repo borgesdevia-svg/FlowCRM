@@ -10,7 +10,10 @@ export default function manifest() {
     lang: "pt-PT",
     // ao tocar no ícone abre o painel (sem sessão, o proxy leva a Entrar), não a landing page
     start_url: "/painel",
-    scope: "/",
+    // A app só "é dona" do painel. Com o site todo ("/"), o Chrome apanhava os cliques
+    // da landing (ex.: Entrar) e abria-os na janela da app, que ficava preta.
+    // Entrar, Registo e a landing ficam no browser normal.
+    scope: "/painel",
     display: "standalone", // janela própria, sem barra de endereço nem separadores
     // ecrã de abertura e barra do topo enquanto a app abre: escuros, como o painel
     background_color: "#0f1115",
