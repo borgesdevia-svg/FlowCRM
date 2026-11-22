@@ -6,6 +6,7 @@ import Tour from "@/components/landing/Tour";
 import Funcionalidades from "@/components/landing/Funcionalidades";
 import Vantagens from "@/components/landing/Vantagens";
 import ComoFunciona from "@/components/landing/ComoFunciona";
+import Precos from "@/components/landing/Precos";
 import Perguntas from "@/components/landing/Perguntas";
 import ChamadaFinal from "@/components/landing/ChamadaFinal";
 
@@ -13,7 +14,7 @@ import ChamadaFinal from "@/components/landing/ChamadaFinal";
 // É um componente de servidor: o HTML é gerado no servidor e chega pronto ao browser.
 // A ordem das secções responde, por ordem, às perguntas de quem chega:
 // o que é e como é por dentro? -> que problema resolve? -> o que faz? -> como começo?
-// -> porquê usar? -> dúvidas -> chamada final
+// -> porquê usar? -> quanto custa? -> dúvidas -> chamada final
 // Os layouts alternam (centrado, linhas texto/imagem, tabela, grelha de cartões)
 // para a página não ficar repetitiva.
 export default function Inicio() {
@@ -27,6 +28,7 @@ export default function Inicio() {
         <Funcionalidades />
         <ComoFunciona />
         <Vantagens />
+        <Precos />
         <Perguntas />
         <ChamadaFinal />
       </main>

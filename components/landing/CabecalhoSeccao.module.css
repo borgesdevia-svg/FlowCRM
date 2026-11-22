@@ -22,6 +22,7 @@
   font-weight: 650; /* títulos firmes e compactos, como no painel */
   letter-spacing: -0.02em;
   margin-bottom: 16px;
+  text-wrap: balance; /* linhas com tamanho parecido: nunca uma palavra sozinha em baixo */
 }
 
 .subtitulo {

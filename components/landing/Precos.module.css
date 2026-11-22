@@ -1,0 +1,178 @@
+.seccao {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 112px 16px 32px;
+  scroll-margin-top: 64px;
+}
+
+/* ---------- interruptor Mensal | Anual ---------- */
+.periodo {
+  display: flex;
+  width: fit-content;
+  margin: -24px auto 40px;
+  padding: 4px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.02);
+}
+
+.periodo button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.periodo button:hover {
+  color: var(--cor-texto);
+}
+
+.periodo button[aria-pressed="true"] {
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto);
+}
+
+.poupa {
+  color: var(--cor-destaque-claro);
+  font-size: 0.8rem;
+}
+
+/* ---------- os dois planos: uma moldura, duas colunas ---------- */
+.planos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--cor-fundo-2);
+}
+
+.plano {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+}
+
+/* o Pro: linha a separar e um brilho verde suave no canto (sem cor de cartão diferente) */
+.pro {
+  border-left: 1px solid var(--cor-contorno);
+  background: radial-gradient(circle at 100% 0%, rgb(var(--rgb-destaque) / 0.13), transparent 60%);
+}
+
+.plano h3 {
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+}
+
+.pro h3 {
+  color: var(--cor-destaque-claro);
+}
+
+.descricao {
+  min-height: 3em; /* as duas descrições ocupam o mesmo espaço: os preços ficam alinhados */
+  color: var(--cor-texto-suave);
+  font-size: 0.97rem;
+}
+
+.preco {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.preco strong {
+  font-family: var(--font-titulo);
+  font-size: 3.2rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.preco span {
+  color: var(--cor-texto-suave);
+}
+
+.notaPreco {
+  margin: 8px 0 24px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+}
+
+.plano :global(.botao) {
+  justify-content: center;
+}
+
+.pessoas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.08);
+  font-weight: 600;
+}
+
+.pessoas svg {
+  color: var(--cor-destaque);
+}
+
+.intro {
+  margin: 20px 0 12px;
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+}
+
+.itens {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itens li {
+  display: flex;
+  gap: 10px;
+  font-size: 0.97rem;
+}
+
+.itens svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--cor-destaque);
+}
+
+/* telemóvel: um plano por baixo do outro */
+@media (max-width: 760px) {
+  .seccao {
+    padding-top: 80px;
+  }
+
+  .planos {
+    grid-template-columns: 1fr;
+  }
+
+  .plano {
+    padding: 28px 22px;
+  }
+
+  .pro {
+    border-left: 0;
+    border-top: 1px solid var(--cor-contorno);
+  }
+
+  .descricao {
+    min-height: 0;
+  }
+}

@@ -21,6 +21,7 @@ export default function BarraTopo() {
           <Link href="/#o-que-e">O que é</Link>
           <Link href="/#funcionalidades">Funcionalidades</Link>
           <Link href="/#como-funciona">Como funciona</Link>
+          <Link href="/#precos">Preços</Link>
           <Link href="/#perguntas">Perguntas</Link>
         </nav>
 
