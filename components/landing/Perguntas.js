@@ -13,7 +13,7 @@ const perguntas = [
   {
     pergunta: "Os dados da minha empresa estão seguros?",
     resposta:
-      "Sim. As passwords são guardadas encriptadas e a base de dados tem regras que separam as empresas: cada utilizador só consegue ler os clientes da sua empresa, mesmo que tente aceder de outra forma.",
+      "Sim. As passwords são guardadas encriptadas e a base de dados tem regras que separam as empresas: cada utilizador só consegue ler os leads da sua empresa, mesmo que tente aceder de outra forma.",
   },
   {
     pergunta: "Preciso de instalar alguma coisa?",
@@ -28,12 +28,12 @@ const perguntas = [
   {
     pergunta: "Como funciona o formulário público?",
     resposta:
-      "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um cliente novo. Na página Personalizar podes juntar as tuas perguntas e o logótipo da empresa.",
+      "Cada empresa recebe um link próprio, por exemplo flowcrm.app/f/a-tua-empresa. Podes pô-lo no teu site ou nas redes sociais. Quem o preencher aparece no CRM como um lead novo. Na página Formulário escolhes as perguntas, a cor e o logótipo da empresa.",
   },
   {
-    pergunta: "Posso tirar os meus clientes do FlowCRM?",
+    pergunta: "Posso tirar os meus leads do FlowCRM?",
     resposta:
-      "Sim. Na página Clientes há um botão para exportar a lista em CSV, um ficheiro que abre no Excel ou no Google Sheets. Os dados são sempre da tua empresa.",
+      "Sim. Na página Leads há um botão para exportar a lista em CSV, um ficheiro que abre no Excel ou no Google Sheets. Os dados são sempre da tua empresa.",
   },
 ];
 

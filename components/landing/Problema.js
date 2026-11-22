@@ -10,22 +10,22 @@ const comparacao = [
   {
     icone: "folha",
     antes: "Os contactos estão espalhados por folhas de Excel, cadernos e telemóveis.",
-    depois: "Todos os clientes da empresa ficam num só sítio, com pesquisa e filtros.",
+    depois: "Todos os leads da empresa ficam num só sítio, com pesquisa e filtros.",
   },
   {
     icone: "caixaEntrada",
     antes: "Quem preenche o formulário do site fica perdido na caixa de email.",
-    depois: "Cada pedido de contacto entra sozinho no CRM como um cliente novo.",
+    depois: "Cada pedido de contacto entra sozinho no CRM como um lead novo.",
   },
   {
     icone: "pergunta",
     antes: "Ninguém sabe ao certo em que ponto está cada negócio.",
-    depois: "Cada cliente tem uma fase: novo, em negociação, ativo ou perdido.",
+    depois: "Cada lead tem uma fase: novo, em negociação, ativo ou perdido.",
   },
   {
     icone: "utilizadorSai",
     antes: "Quando alguém sai da equipa, os contactos dessa pessoa vão embora também.",
-    depois: "Os clientes pertencem à empresa. O administrador vê e reatribui tudo.",
+    depois: "Os leads pertencem à empresa. O administrador vê e reatribui tudo.",
   },
 ];
 

@@ -8,7 +8,7 @@ import styles from "./ComoFunciona.module.css";
 
 const passos = [
   { titulo: "Regista a tua empresa", texto: "Cria a conta em poucos minutos. Quem regista fica como administrador." },
-  { titulo: "Junta a tua equipa", texto: "Adiciona os comerciais. Cada um vê os seus clientes; o admin vê todos." },
+  { titulo: "Junta a tua equipa", texto: "Adiciona os comerciais. Cada um vê os seus leads; o admin vê todos." },
   { titulo: "Recebe e acompanha leads", texto: "Partilha o formulário público e segue cada negócio a partir do painel." },
 ];
 

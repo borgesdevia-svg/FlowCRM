@@ -3,7 +3,7 @@ import Icone from "@/components/Icone";
 import CabecalhoSeccao from "./CabecalhoSeccao";
 import styles from "./Funcionalidades.module.css";
 
-// Secção de funcionalidades: quatro áreas principais, uma por linha.
+// Secção de funcionalidades: cinco áreas principais, uma por linha.
 // As linhas alternam o lado: texto à esquerda + demonstração à direita, depois ao contrário
 // (a classe "invertida" troca a ordem no CSS). Assim a página não fica repetitiva.
 // As demonstrações são imitações da interface, feitas em HTML/CSS com dados inventados.
@@ -11,9 +11,9 @@ import styles from "./Funcionalidades.module.css";
 
 const AREAS = [
   {
-    titulo: "Cada cliente com a sua história",
+    titulo: "Cada lead com a sua história",
     texto: "Contactos, empresa, valor previsto e todas as interações num só ecrã. Qualquer colega sabe onde o negócio ficou.",
-    pontos: ["Pesquisa e filtro por estado", "Notas e histórico partilhados", "Responsável por cada cliente"],
+    pontos: ["Pesquisa e filtro por estado", "Notas e histórico partilhados", "Responsável por cada lead"],
     Demo: DemoClientes,
   },
   {
@@ -24,15 +24,21 @@ const AREAS = [
   },
   {
     titulo: "Nada fica esquecido",
-    texto: "Lembretes com data ligados a cada cliente. A equipa sabe o que tem de fazer hoje e o que está atrasado.",
-    pontos: ["Data limite em cada tarefa", "Atrasadas em destaque", "Selecionar várias e marcar como feitas"],
+    texto: "Lembretes com data ligados a cada lead. A equipa sabe o que tem de fazer hoje e o que está atrasado.",
+    pontos: ["Data limite em cada tarefa", "Lista, calendário e modo fila", "Selecionar várias e marcar como feitas"],
     Demo: DemoTarefas,
   },
   {
     titulo: "Os números da equipa, num relance",
     texto: "Gráficos e números calculados a partir dos dados reais da empresa, logo na primeira página do painel.",
-    pontos: ["Novos clientes por semana", "Taxa de conversão e valor em negociação", "Atividade recente da equipa"],
+    pontos: ["Novos leads por semana", "Taxa de conversão e valor em negociação", "Atividade recente da equipa"],
     Demo: DemoDashboard,
+  },
+  {
+    titulo: "O CRM trabalha sozinho",
+    texto: "Liga as automações que quiseres. Quando entra um lead, o CRM entrega-o a alguém da equipa e cria logo a tarefa de contacto.",
+    pontos: ["Tarefa “Contactar” para cada lead novo", "Leads do formulário distribuídos à vez", "Aviso quando um lead fica parado"],
+    Demo: DemoAutomacoes,
   },
 ];
 
@@ -52,22 +58,22 @@ const EXTRAS = [
   {
     icone: "utilizadorMais",
     titulo: "Papéis na equipa",
-    texto: "Administradores veem tudo; cada comercial vê só os seus clientes.",
+    texto: "Administradores veem tudo; cada comercial vê só os seus leads.",
   },
   {
     icone: "pesquisa",
     titulo: "Pesquisa rápida",
-    texto: "Encontra qualquer cliente a partir de qualquer página do painel.",
+    texto: "Encontra qualquer lead a partir de qualquer página do painel.",
   },
   {
     icone: "sino",
-    titulo: "Avisos de tarefas",
-    texto: "O sino mostra as tarefas para hoje e as que já estão atrasadas.",
+    titulo: "Avisos no sino",
+    texto: "O sino mostra as tarefas para hoje, as atrasadas e os leads que ainda não têm responsável.",
   },
   {
     icone: "folha",
     titulo: "Exportar para Excel",
-    texto: "Descarrega a lista de clientes em CSV sempre que precisares.",
+    texto: "Descarrega a lista de leads em CSV sempre que precisares.",
   },
 ];
 
@@ -76,7 +82,7 @@ export default function Funcionalidades() {
     <section id="funcionalidades" className={styles.seccao}>
       <CabecalhoSeccao
         titulo="Tudo o que a tua equipa precisa para vender"
-        subtitulo="Quatro áreas que trabalham em conjunto, desde o primeiro contacto até ao cliente ativo."
+        subtitulo="Cinco áreas que trabalham em conjunto, desde o primeiro contacto até ao cliente ativo."
       />
 
       <div className={styles.areas}>
@@ -281,7 +287,7 @@ function DemoDashboard() {
         ))}
       </div>
       <div className={`${styles.cartaoGrafico} ${styles.entra}`} style={{ "--i": 3 }}>
-        <small>Clientes por estado</small>
+        <small>Leads por estado</small>
         <div className={styles.barras}>
           {porEstado.map((b, i) => (
             <div key={b.estado}>
@@ -291,6 +297,37 @@ function DemoDashboard() {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// um lead entra pelo formulário e as automações fazem o resto, um passo de cada vez
+function DemoAutomacoes() {
+  const passos = [
+    { tipo: "Formulário", texto: "Ana Costa pediu contacto através do site." },
+    { tipo: "Automação", texto: "Entregue ao Rui Pereira, o próximo da vez." },
+    { tipo: "Automação", texto: "Tarefa criada: Contactar Ana Costa, para hoje." },
+  ];
+  return (
+    <div className={styles.demo}>
+      <div className={`${styles.cabecaCliente} ${styles.entra}`} style={{ "--i": 0 }}>
+        <b className={styles.avatar}>AC</b>
+        <div>
+          <strong>Ana Costa</strong>
+          <small>ana@exemplo.pt · 913 456 789</small>
+        </div>
+        <Estado estado="novo" />
+      </div>
+
+      <div className={styles.linhaTempo}>
+        {passos.map((p, i) => (
+          <div key={p.texto} className={`${styles.evento} ${styles.entra}`} style={{ "--i": i + 1 }}>
+            <span className={styles.ponto}></span>
+            <small>{p.tipo} · agora mesmo</small>
+            <p>{p.texto}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

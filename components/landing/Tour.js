@@ -2,7 +2,7 @@
 // Visita guiada à app, controlada pelo scroll.
 //
 // Uma janela falsa do browser mostra as páginas da app, uma de cada vez:
-// Visão geral -> Leads -> Ficha do lead -> Pipeline -> Tarefas -> Personalizar.
+// Visão geral -> Leads -> Ficha do lead -> Pipeline -> Tarefas -> Configurações.
 //
 // Como funciona:
 //  - a secção é mais alta do que o ecrã; lá dentro, a janela fica PRESA ao ecrã
@@ -55,10 +55,10 @@ const ECRAS = [
   },
   {
     menu: "Configurações",
-    separador: "Personalizar",
+    separador: "Configurações",
     url: "flowcrm.app/painel/configuracoes",
     titulo: "O CRM à maneira da tua empresa",
-    texto: "Escolhe o gráfico do Início, o modo claro ou escuro e o nome de cada página do menu. O formulário também leva as tuas perguntas e o teu logótipo.",
+    texto: "Escolhe o gráfico da Visão geral, o modo claro ou escuro e o nome de cada página do menu. O formulário também leva as tuas perguntas e o teu logótipo.",
   },
 ];
 
@@ -490,7 +490,7 @@ function EcraPersonalizar() {
 
       <div className={styles.personalizar}>
         <div className={`${styles.cartao} ${styles.opcoes} ${styles.anima}`} style={{ "--i": 1 }}>
-          <small>Gráfico no Início</small>
+          <small>Gráfico na Visão geral</small>
           <div className={styles.listaOpcoes}>
             {tipos.map((t, k) => (
               <span key={t} className={k === 0 ? `${styles.opcao} ${styles.primeiro}` : styles.opcao} style={{ "--k": k }}>

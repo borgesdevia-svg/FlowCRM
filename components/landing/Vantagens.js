@@ -12,17 +12,17 @@ const vantagens = [
     icone: "pincel",
     titulo: "Muito personalizável",
     texto:
-      "Escolhes o gráfico do Início, o modo claro ou escuro e o nome e a ordem de cada página do menu. O formulário do site leva as tuas perguntas, a tua cor e o teu logótipo.",
+      "Escolhes o gráfico da Visão geral, o modo claro ou escuro e o nome e a ordem de cada página do menu. O formulário do site leva as tuas perguntas, a tua cor e o teu logótipo.",
   },
   {
     icone: "olho",
     titulo: "Cada pessoa vê o que deve",
-    texto: "O administrador vê todos os clientes. Cada comercial vê só aqueles por que é responsável.",
+    texto: "O administrador vê todos os leads. Cada comercial vê só aqueles por que é responsável.",
   },
   {
     icone: "cadeado",
     titulo: "Os dados de cada empresa ficam separados",
-    texto: "A base de dados separa as empresas linha a linha: nenhuma empresa vê os clientes de outra.",
+    texto: "A base de dados separa as empresas linha a linha: nenhuma empresa vê os leads de outra.",
   },
   {
     icone: "telemovel",
