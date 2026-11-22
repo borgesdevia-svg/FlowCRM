@@ -7,7 +7,6 @@
      O desfoque forte impede que o texto da página se leia através da barra. */
   background: rgba(15, 17, 21, 0.65);
   backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
 .interior {

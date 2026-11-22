@@ -6,6 +6,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { recuperarPassword } from "@/lib/acoes/recuperacao";
 import CampoPassword from "@/components/CampoPassword";
+import { DICA_PASSWORD } from "@/lib/passwords";
 import styles from "./Formulario.module.css";
 
 export default function FormRecuperar() {
@@ -43,7 +44,8 @@ export default function FormRecuperar() {
 
       <div className="campo">
         <label htmlFor="password">Password nova</label>
-        <CampoPassword id="password" name="password" autoComplete="new-password" placeholder="8 ou mais, com maiúscula, minúscula, número e símbolo" />
+        <CampoPassword id="password" name="password" autoComplete="new-password" />
+        <p className="dica-campo">{DICA_PASSWORD}</p>
       </div>
 
       <div className="campo">

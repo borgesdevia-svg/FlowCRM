@@ -265,7 +265,8 @@ export default function EditorAparencia({ inicial }) {
         </section>
 
         {/* ---------- guardar ---------- */}
-        <div className={styles.barraGuardar} role="status">
+        {/* só fica a flutuar no fundo do ecrã quando há alterações por guardar */}
+        <div className={alterado ? styles.barraGuardar : `${styles.barraGuardar} ${styles.barraParada}`} role="status">
           <span className={mensagem?.tipo === "erro" ? styles.textoErro : styles.textoEstado}>
             {mensagem?.texto ?? (alterado ? "Tens alterações por guardar." : "Tudo guardado.")}
           </span>

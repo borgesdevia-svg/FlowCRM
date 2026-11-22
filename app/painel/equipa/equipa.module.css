@@ -320,3 +320,40 @@
   margin-top: 2px;
   color: var(--cor-destaque);
 }
+
+/* ---------- telemóvel: só o nome, o papel e o botão de remover ----------
+   Os números (leads, em aberto, tarefas) estão na página de cada membro, que abre ao tocar no nome. */
+@media (max-width: 600px) {
+  .tabela th:nth-child(3),
+  .tabela th:nth-child(4),
+  .tabela th:nth-child(5),
+  .tabela td:nth-child(3),
+  .tabela td:nth-child(4),
+  .tabela td:nth-child(5),
+  .verDetalhes {
+    display: none;
+  }
+
+  .tabela td:first-child {
+    max-width: 0; /* deixa o email encolher com reticências em vez de empurrar o papel para fora */
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .membro {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* o nome pode ir para duas linhas; o email corta com reticências */
+  .tabela td:first-child,
+  .dados strong {
+    white-space: normal;
+  }
+
+  .dados small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

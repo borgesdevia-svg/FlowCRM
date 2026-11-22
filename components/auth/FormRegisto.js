@@ -5,6 +5,7 @@
 import { useActionState } from "react";
 import { registar } from "@/lib/acoes/autenticacao";
 import CampoPassword from "@/components/CampoPassword";
+import { DICA_PASSWORD } from "@/lib/passwords";
 import styles from "./Formulario.module.css";
 
 // useActionState liga o formulário à Server Action "registar":
@@ -46,8 +47,8 @@ export default function FormRegisto() {
       <div className="campo">
         <label htmlFor="password">Password</label>
         <CampoPassword id="password" name="password" autoComplete="new-password"
-          placeholder="8 ou mais, com maiúscula, minúscula, número e símbolo" invalido={!!erros.password} />
-        {erros.password && <p className="erro-campo">{erros.password}</p>}
+          invalido={!!erros.password} />
+        {erros.password ? <p className="erro-campo">{erros.password}</p> : <p className="dica-campo">{DICA_PASSWORD}</p>}
       </div>
 
       {/* escrever a password duas vezes evita criar a conta com um erro de escrita */}

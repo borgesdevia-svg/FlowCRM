@@ -7,6 +7,7 @@ import Link from "next/link";
 import { criarMembro } from "@/lib/acoes/equipa";
 import Icone from "@/components/Icone";
 import CampoPassword from "@/components/CampoPassword";
+import { DICA_PASSWORD } from "@/lib/passwords";
 import styles from "./Equipa.module.css";
 
 const PAPEIS = [
@@ -77,10 +78,9 @@ export default function FormMembro() {
           id="password"
           name="password"
           autoComplete="new-password"
-          placeholder="8 ou mais, com maiúscula, minúscula, número e símbolo"
           invalido={!!erros.password}
         />
-        {erros.password && <p className="erro-campo">{erros.password}</p>}
+        {erros.password ? <p className="erro-campo">{erros.password}</p> : <p className="dica-campo">{DICA_PASSWORD}</p>}
       </div>
 
       <div className="campo">

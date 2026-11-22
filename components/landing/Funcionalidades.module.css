@@ -492,8 +492,9 @@
 }
 
 .barras {
-  flex: 1;
-  min-height: 130px;
+  /* altura fixa: as barras têm altura em %, que precisa de uma altura certa por cima */
+  flex: 0 0 130px;
+  height: 130px;
   display: flex;
   align-items: flex-end;
   gap: 16px;

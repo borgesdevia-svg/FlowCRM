@@ -12,7 +12,7 @@ const vantagens = [
     icone: "pincel",
     titulo: "Muito personalizável",
     texto:
-      "Escolhes o gráfico da Visão geral, o modo claro ou escuro e o nome e a ordem de cada página do menu. O formulário do site leva as tuas perguntas, a tua cor e o teu logótipo.",
+      "Escolhes o gráfico da Visão geral, o modo claro ou escuro e o nome e a ordem de cada página do menu. O formulário do site leva as tuas perguntas e, no CRM Pro, o teu design e logótipo.",
   },
   {
     icone: "olho",

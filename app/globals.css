@@ -307,6 +307,13 @@ a {
   font-size: 0.82rem;
 }
 
+/* ajuda por baixo de um campo (ex.: as regras da password) */
+.dica-campo {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
 /* caixa com um ícone dentro, à esquerda
    uso: <div className="com-icone"><Icone className="icone-campo"/><input/></div> */
 .com-icone {

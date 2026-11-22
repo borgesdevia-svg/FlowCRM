@@ -212,7 +212,7 @@ export default async function LayoutPainel({ children }) {
             { href: "/painel/plano", nome: "Plano" }, // fora do menu (abre-se em Configurações e nos avisos)
           ]}
         >
-          <Link href="/painel/clientes/novo" className={`botao ${styles.botaoTopo}`}>
+          <Link href="/painel/clientes/novo" className={`botao ${styles.botaoTopo}`} data-tutorial="novoLead">
             <Icone nome="mais" tamanho={16} /> Novo lead
           </Link>
           <Sino

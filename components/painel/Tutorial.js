@@ -50,13 +50,19 @@ function criarPassos(nome, eAdmin) {
       titulo: "Leads",
       texto: eAdmin
         ? "Todas as pessoas e empresas com quem a tua empresa fala: os leads. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas, tudo o que já aconteceu, o botão do WhatsApp e as propostas."
-        : "Os leads que te foram entregues. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas, tudo o que já aconteceu, o botão do WhatsApp e as propostas.",
+        : "Os teus leads: os que te entregaram e os que tu crias. Um lead é um contacto que pode vir a comprar (ou que já comprou). Abre um lead para veres a ficha: contactos, notas, tudo o que já aconteceu, o botão do WhatsApp e as propostas.",
+    },
+    {
+      alvo: "novoLead",
+      titulo: "Novo lead",
+      texto:
+        "Falaste com alguém interessado? Carrega aqui, escreve o nome e o telefone e o lead fica guardado. Está sempre neste canto, em qualquer página.",
     },
     {
       alvo: "pipeline",
       titulo: "Pipeline",
       texto:
-        "O caminho de cada negócio, dividido em fases: Novo, Em negociação, Ativo (negócio fechado) e Perdido. Quando um negócio avança, arrasta o lead para a coluna seguinte.",
+        "O caminho de cada negócio, dividido em fases: Novo, Em negociação, Ativo (negócio fechado) e Perdido. Quando um negócio avança, arrasta o cartão para a coluna seguinte ou usa os botões do cartão (no telemóvel é mais fácil).",
     },
     {
       alvo: "tarefas",
@@ -117,6 +123,12 @@ function criarPassos(nome, eAdmin) {
       titulo: "Configurações",
       texto:
         "Muda o aspeto do CRM para toda a equipa: claro ou escuro, o gráfico do Início e o nome e a ordem de cada item deste menu. Também vês aqui o teu plano.",
+    },
+    {
+      alvo: "conta",
+      titulo: "A minha conta",
+      texto:
+        "O teu nome, a tua password e a chave de recuperação, que serve para entrares se te esqueceres da password. Guarda-a bem.",
     },
     {
       alvo: "ajuda",

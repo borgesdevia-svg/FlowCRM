@@ -415,6 +415,11 @@
   box-shadow: 0 16px 40px -8px rgb(0 0 0 / 0.45);
 }
 
+.barraParada {
+  position: static;
+  box-shadow: none;
+}
+
 .textoEstado {
   color: var(--cor-texto-suave);
   font-size: 0.9rem;
