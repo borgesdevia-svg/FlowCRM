@@ -100,7 +100,10 @@ export default async function PaginaPlano() {
       {/* ---------- o que acontece ao passar do Pro ao Essencial ---------- */}
       <section className={styles.perguntas}>
         <h2>Quando a empresa passa do Pro ao Essencial</h2>
-        <p>Nada se apaga: os leads, as tarefas, o histórico e as propostas ficam todos. Muda só isto:</p>
+        <p>
+          A empresa perde logo todos os benefícios do Pro. Nada se apaga: os leads, as tarefas, o histórico e as
+          propostas ficam todos. A única exceção é o formulário público, que fica com o design que fizeste no Pro.
+        </p>
         <ul>
           {perdas.map((f) => (
             <li key={f.texto}>{f.perde}</li>

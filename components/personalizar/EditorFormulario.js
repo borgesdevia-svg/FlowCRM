@@ -79,7 +79,7 @@ function perguntasDoModelo(modelo) {
   return modelo.perguntas.map((p) => prepararPergunta({ ...p, id: crypto.randomUUID() }));
 }
 
-export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano }) {
+export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, designGuardado = false }) {
   const [dados, setDados] = useState(() => preparar(inicial));
   const [guardado, setGuardado] = useState(() => JSON.stringify(limpar(preparar(inicial))));
   const [separador, setSeparador] = useState("marca");
@@ -88,7 +88,9 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano }) 
   const [aGuardar, iniciar] = useTransition();
 
   const paraGuardar = limpar(dados);
-  const designPrevia = plano.pro ? dados.design : DESIGN_PADRAO;
+  // igual à página pública: com o Pro, ou com um design feito no Pro (fica mesmo no Essencial)
+  const comDesign = plano.pro || designGuardado;
+  const designPrevia = comDesign ? dados.design : DESIGN_PADRAO;
   const alterado = JSON.stringify(paraGuardar) !== guardado;
 
   // aviso do browser ao sair da página com alterações por guardar
@@ -198,7 +200,10 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano }) 
                 <FormLogo logoAtual={logo} nomeEmpresa={nomeEmpresa} />
                 {!plano.pro && (
                   <p className={styles.notaPro}>
-                    <EtiquetaPro /> No CRM Essencial o logótipo aparece no menu do CRM. No formulário, só com o CRM Pro.
+                    <EtiquetaPro />{" "}
+                    {designGuardado
+                      ? "O formulário mantém o logótipo e o design que fizeste no CRM Pro."
+                      : "No CRM Essencial o logótipo aparece no menu do CRM. No formulário, só com o CRM Pro."}
                   </p>
                 )}
               </section>
@@ -241,7 +246,11 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano }) 
                   compacto
                   plano={plano}
                   titulo="O design do formulário é do CRM Pro"
-                  texto="Muda a disposição, o sítio do logótipo, a cor, o fundo, os cantos, a letra e o texto do botão."
+                  texto={
+                    designGuardado
+                      ? "O formulário público continua com o design que fizeste no Pro. Para o mudares, volta ao CRM Pro."
+                      : "Muda a disposição, o sítio do logótipo, a cor, o fundo, os cantos, a letra e o texto do botão."
+                  }
                 />
               )}
               <fieldset className={styles.grupoDesign} disabled={!plano.pro}>
@@ -478,7 +487,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano }) 
           <CartaoFormulario
             design={designPrevia}
             nome={nomeEmpresa}
-            logo={plano.pro ? logo : null}
+            logo={comDesign ? logo : null}
             titulo={dados.marca.titulo.trim()}
             texto={dados.marca.texto.trim()}
             className={styles.cartaoPrevia}

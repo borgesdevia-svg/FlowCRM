@@ -47,7 +47,14 @@ export default async function PaginaPersonalizar() {
         </Link>
       </header>
 
-      <EditorFormulario inicial={inicial} nomeEmpresa={empresa.nome} logo={empresa.logo_url} plano={plano} />
+      <EditorFormulario
+        inicial={inicial}
+        nomeEmpresa={empresa.nome}
+        logo={empresa.logo_url}
+        plano={plano}
+        // design feito no Pro: o formulário público fica com ele mesmo no Essencial (migração 27)
+        designGuardado={Object.keys(data?.form_design ?? {}).length > 0}
+      />
     </div>
   );
 }
