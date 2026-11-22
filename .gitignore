@@ -33,3 +33,7 @@ npm-debug.log*
 
 # definições pessoais do Obsidian
 docs/.obsidian/
+
+# ficheiros pessoais (referências e configuração do Claude Code)
+Referencias/
+.claude/
