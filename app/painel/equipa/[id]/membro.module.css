@@ -1,7 +1,7 @@
 /* Detalhes de um membro da equipa: cabeçalho, números e três blocos
    (ações recentes à esquerda; tarefas resolvidas e clientes à direita) */
 .pagina {
-  max-width: 1400px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -50,7 +50,7 @@
 }
 
 .identidade h1 {
-  font-size: clamp(1.7rem, 3.5vw, 2.2rem);
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -105,7 +105,7 @@
   flex-direction: column;
   gap: 6px;
   padding: 16px 20px;
-  border-radius: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -170,8 +170,8 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 20px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   min-width: 0;
@@ -204,7 +204,7 @@
 .vazio {
   padding: 22px 12px;
   border: 1px dashed var(--cor-contorno);
-  border-radius: 12px;
+  border-radius: 8px;
   color: var(--cor-texto-fraco);
   font-size: 0.88rem;
   text-align: center;
@@ -316,7 +316,7 @@
 .mais summary {
   list-style: none; /* tira o triângulo do <details> */
   padding: 8px 10px;
-  border-radius: 10px;
+  border-radius: 7px;
   background: rgb(var(--rgb-tinta) / 0.04);
   color: var(--cor-texto-suave);
   font-size: 0.85rem;
@@ -359,7 +359,7 @@
   align-items: center;
   gap: 10px;
   padding: 9px 8px;
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 .lista li + li {

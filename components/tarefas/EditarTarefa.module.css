@@ -22,7 +22,7 @@
   width: min(460px, calc(100vw - 32px));
   margin: auto;
   padding: 0; /* o espaço fica no formulário: assim clicar fora dele = clicar no fundo */
-  border-radius: 18px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   color: var(--cor-texto);
@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px;
+  padding: 14px;
   text-align: left;
   font-weight: 400;
 }

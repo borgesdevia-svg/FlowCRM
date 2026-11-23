@@ -3,7 +3,7 @@
   width: min(520px, calc(100vw - 32px));
   margin: auto;
   padding: 0;
-  border-radius: 18px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   color: var(--cor-texto);
@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 28px;
+  padding: 16px;
 }
 
 /* cadeado verde, sem quadrado à volta */
@@ -56,7 +56,7 @@
   min-height: 64px;
   padding: 16px;
   border: 1px dashed rgb(var(--rgb-destaque) / 0.45);
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-destaque) / 0.06);
 }
 

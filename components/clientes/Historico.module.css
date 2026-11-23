@@ -26,7 +26,7 @@
   flex-direction: column;
   gap: 10px;
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
 }
@@ -53,7 +53,7 @@
   align-self: flex-start;
   gap: 2px;
   padding: 3px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-tinta) / 0.06);
 }
 
@@ -72,7 +72,7 @@
 .tipo span {
   display: inline-block;
   padding: 6px 13px;
-  border-radius: 9px;
+  border-radius: 6px;
   color: var(--cor-texto-suave);
   font-size: 0.85rem;
   font-weight: 500;
@@ -229,7 +229,7 @@
 /* o texto do registo numa caixa, como uma mensagem */
 .texto {
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo-2);
   white-space: pre-line;

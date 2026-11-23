@@ -1,13 +1,13 @@
 /* Página Notificações: uma lista larga, agrupada por "Em atraso" e "Acabam hoje" */
 .pagina {
-  max-width: 900px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
 .cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -62,7 +62,7 @@
 /* uma caixa com as tarefas em linhas separadas por traços finos */
 .lista {
   list-style: none;
-  border-radius: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -85,7 +85,7 @@
 }
 
 .linha:first-child {
-  border-radius: 15px 15px 0 0;
+  border-radius: 10px 15px 0 0;
 }
 
 .linha:last-child {
@@ -93,7 +93,7 @@
 }
 
 .linha:only-child {
-  border-radius: 15px;
+  border-radius: 7px;
 }
 
 /* caixa de seleção com as cores do site (quadrada: escolhe, não conclui) */
@@ -157,7 +157,7 @@
   gap: 12px;
   min-height: 58px;
   padding: 10px 14px 10px 18px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo-2);
 }
@@ -304,8 +304,8 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  padding: 28px;
-  border-radius: 16px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }

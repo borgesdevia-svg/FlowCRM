@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { obterSessao, obterAparencia } from "@/lib/sessao";
-import { SECCOES_MENU, cssAparencia, itensDoMenu, varianteDe } from "@/lib/aparencia";
+import { COOKIE_MODO, SECCOES_MENU, comModoPessoal, cssAparencia, itensDoMenu, varianteDe } from "@/lib/aparencia";
 import { sair } from "@/lib/acoes/autenticacao";
 import { hojeEmPortugal } from "@/lib/datas";
 import { iniciais } from "@/lib/texto";
@@ -16,6 +16,7 @@ import Tutorial from "@/components/painel/Tutorial";
 import BarraTopo from "@/components/painel/BarraTopo";
 import JanelaChave from "@/components/painel/JanelaChave";
 import BotaoInstalar from "@/components/painel/BotaoInstalar";
+import BotaoTema from "@/components/painel/BotaoTema";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { precisaDeChave } from "@/lib/estadoChave";
 import AvisoTeste from "@/components/painel/AvisoTeste";
@@ -34,7 +35,8 @@ export const metadata = { title: "Painel · FlowCRM" };
 // clara ou escura, conforme o tema que a empresa escolheu em Configurações.
 // (obterAparencia tem cache: o layout reaproveita a mesma consulta)
 export async function generateViewport() {
-  const aparencia = await obterAparencia();
+  const modoPessoal = (await cookies()).get(COOKIE_MODO)?.value;
+  const aparencia = comModoPessoal(await obterAparencia(), modoPessoal);
   return { themeColor: varianteDe(aparencia).conteudo["--cor-fundo"] ?? "#0f1115" };
 }
 
@@ -105,7 +107,8 @@ export default async function LayoutPainel({ children }) {
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : { data: [] },
     precisaDeChave(perfil.id),
   ]);
-  const aparencia = await pedidoAparencia;
+  // o modo (claro/escuro) que esta pessoa escolheu no botão da barra do topo passa à frente do da empresa
+  const aparencia = comModoPessoal(await pedidoAparencia, (await cookies()).get(COOKIE_MODO)?.value);
   const totalAvisos = (nAvisos ?? 0) + (nSemResponsavel ?? 0);
 
   // Menu dividido em secções. O nome e a ordem de cada item vêm das Configurações
@@ -132,6 +135,8 @@ export default async function LayoutPainel({ children }) {
           Só existe enquanto se está no painel: ao sair para o site, volta o aspeto normal.
           O CSS é montado a partir de listas fixas (lib/aparencia.js), nunca de texto escrito pelo utilizador. */}
       <style>{cssAparencia(aparencia)}</style>
+      {/* no painel a letra base é 14px (no site é 16px): tudo o que está em rem fica mais compacto */}
+      <style>{"html{font-size:14px}"}</style>
       <aside className={`painel-lateral ${styles.lateral}`}>
         {/* cabeça: o "espaço de trabalho" (logótipo + nome da empresa), ao estilo do Linear */}
         <div className={styles.topoMenu}>
@@ -245,6 +250,7 @@ export default async function LayoutPainel({ children }) {
               />
             </>
           )}
+          <BotaoTema aparencia={aparencia} />
           <Link href="/painel/conta" className={styles.avatarTopo} title="A minha conta" aria-label="A minha conta">
             {iniciais(perfil.nome)}
           </Link>

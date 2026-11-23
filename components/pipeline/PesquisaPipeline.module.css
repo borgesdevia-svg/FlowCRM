@@ -16,7 +16,7 @@
 .pesquisa input {
   width: 100%;
   padding: 9px 38px 9px 36px; /* espaço para a lupa e para o botão de limpar */
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid transparent;
   background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);

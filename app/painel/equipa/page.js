@@ -24,7 +24,7 @@ export default async function PaginaEquipa() {
   // ESCALA: os clientes e as tarefas vêm já contados pela base de dados (migração 12),
   // uma linha por pessoa e estado, em vez de virem todos (o que falhava acima de 1000).
   const [{ data: membros }, { data: resumo }, { data: tarefas }] = await Promise.all([
-    supabase.from("perfis").select("id, nome, email, papel, criado_em").order("criado_em"),
+    supabase.from("perfis").select("id, nome, email, papel, criado_em, cargo").order("criado_em"),
     supabase.rpc("resumo_equipa"),
     supabase.rpc("tarefas_por_pessoa"),
   ]);
@@ -117,7 +117,7 @@ export default async function PaginaEquipa() {
                           <strong>
                             {m.nome} {eu && <em>(tu)</em>}
                           </strong>
-                          <small>{m.email}</small>
+                          <small>{m.cargo ? `${m.cargo} · ${m.email}` : m.email}</small>
                         </div>
                       </Link>
                     </td>

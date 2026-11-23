@@ -21,7 +21,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 2px;
   padding: 3px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-tinta) / 0.06);
 }
 
@@ -39,7 +39,7 @@
 .segmento span {
   display: block;
   padding: 8px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
   font-weight: 500;

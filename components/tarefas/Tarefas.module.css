@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 10px;
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
 }
@@ -103,7 +103,7 @@
   margin: 0 -10px;
   padding-left: 10px;
   padding-right: 10px;
-  border-radius: 10px;
+  border-radius: 7px;
   background: rgb(var(--rgb-destaque) / 0.06);
 }
 

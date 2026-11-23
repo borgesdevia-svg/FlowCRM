@@ -202,11 +202,6 @@
   color: inherit;
 }
 
-.folha[data-disposicao="dividido"] .logo {
-  padding: 6px;
-  background: #ffffff;
-}
-
 .folha[data-disposicao="dividido"] .corpo {
   padding: clamp(28px, 5vw, 56px);
 }

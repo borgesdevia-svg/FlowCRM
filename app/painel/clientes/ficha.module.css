@@ -1,13 +1,14 @@
 /* Estilos partilhados pelas páginas "Adicionar cliente" e "Ficha do cliente" */
 .pagina {
   max-width: 720px;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
 }
 
 /* a ficha de um cliente existente é mais larga, porque tem duas colunas */
 .pagina:has(.colunas) {
-  max-width: 1240px;
+  max-width: none;
   gap: 20px;
 }
 
@@ -49,8 +50,8 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-  padding: 28px;
-  border-radius: 20px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -78,7 +79,7 @@
 }
 
 .linhaNome h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -114,7 +115,7 @@
   gap: 8px;
   max-width: 100%;
   padding: 7px 12px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
   color: var(--cor-texto-suave);
@@ -153,7 +154,7 @@
   gap: 6px;
   min-width: 150px;
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
 }
@@ -216,8 +217,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px;
-  border-radius: 18px;
+  padding: 14px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -304,7 +305,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 18px 24px;
-  border-radius: 18px;
+  border-radius: 7px;
   border: 1px solid rgba(248, 113, 113, 0.2);
   background: rgba(248, 113, 113, 0.03);
 }
@@ -333,7 +334,7 @@
 @media (max-width: 600px) {
   .cabecalhoFicha,
   .cartao {
-    padding: 18px;
+    padding: 14px;
   }
 
 

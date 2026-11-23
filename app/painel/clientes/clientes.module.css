@@ -1,7 +1,7 @@
 /* Página Clientes ao estilo das listas da Apple: título grande, controlo segmentado,
    lista com linhas finas e uma seta no fim de cada linha. Sem caixas a mais. */
 .pagina {
-  max-width: 1180px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -18,7 +18,7 @@
 
 /* título grande, letras um pouco mais juntas (como os títulos da Apple) */
 .cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -81,7 +81,7 @@
   gap: 2px;
   max-width: 100%;
   padding: 3px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-tinta) / 0.06);
   overflow-x: auto; /* no telemóvel desliza para o lado */
   scrollbar-width: none;
@@ -95,7 +95,7 @@
   align-items: center;
   gap: 7px;
   padding: 7px 14px;
-  border-radius: 9px;
+  border-radius: 6px;
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
   font-weight: 500;
@@ -135,7 +135,7 @@
 .aCarregar {
   position: absolute;
   inset: 0;
-  border-radius: 9px;
+  border-radius: 6px;
   background: rgb(var(--rgb-tinta) / 0.08);
   opacity: 0;
   transition: opacity 0.15s;
@@ -164,7 +164,7 @@
 .pesquisa input {
   width: 100%;
   padding: 9px 12px 9px 36px; /* espaço à esquerda para a lupa */
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid transparent;
   background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
@@ -186,7 +186,7 @@
 
 /* ---------- a lista ---------- */
 .bloco {
-  border-radius: 16px;
+  border-radius: 7px;
   background: var(--cor-cartao);
   overflow: hidden; /* os cantos redondos cortam a tabela */
 }
@@ -226,7 +226,7 @@
 /* cantos redondos em cada linha (no primeiro e no último campo) */
 .tabela td:first-child {
   border-left: 1px solid rgb(var(--rgb-tinta) / 0.05);
-  border-radius: 12px 0 0 12px;
+  border-radius: 8px 0 0 12px;
 }
 
 .tabela td:last-child {

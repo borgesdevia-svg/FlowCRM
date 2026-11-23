@@ -1,6 +1,6 @@
 /* Calendário das tarefas: grelha do mês + tabela do dia escolhido */
 .pagina {
-  max-width: 1400px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -16,7 +16,7 @@
 }
 
 .cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -51,7 +51,7 @@
   place-items: center;
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   color: var(--cor-texto-suave);
   transition: color 0.2s, background 0.2s;
@@ -65,7 +65,7 @@
 .irHoje {
   margin-left: 6px;
   padding: 7px 14px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
@@ -88,7 +88,7 @@
 .grelha {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  border-radius: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-contorno); /* as linhas entre os dias são o fundo a espreitar */
   gap: 1px;
@@ -204,8 +204,8 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 22px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   overflow: clip; /* a tabela vai até às bordas: os cantos redondos cortam-na */

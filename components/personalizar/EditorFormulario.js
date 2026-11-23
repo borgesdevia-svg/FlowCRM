@@ -1,8 +1,11 @@
 "use client";
-// Editor do formulário público (página Personalizar), a toda a largura:
-//  - à esquerda, quatro separadores: Marca · Design (CRM Pro) · Perguntas · Depois de enviar;
-//  - à direita, o formulário tal como o cliente o vê, atualizado enquanto se mexe
-//    (usa os MESMOS componentes da página pública: CartaoFormulario e FormLead).
+// Editor do formulário público (página Formulário), a toda a largura, em três colunas
+// (como os construtores de formulários tipo Typeform/Tally):
+//  - à esquerda, a estrutura: Entrada, Design (CRM Pro), as perguntas (arrastar para mudar
+//    a ordem), Modelos e Depois de enviar. Clicar numa parte abre-a à direita;
+//  - ao centro, o formulário tal como o cliente o vê, em computador ou telemóvel
+//    (usa os MESMOS componentes da página pública: CartaoFormulario e FormLead);
+//  - à direita, as opções da parte escolhida.
 // Só grava quando se carrega em "Guardar" (Server Action guardarFormulario).
 // O logótipo é a exceção: grava logo ao escolher (FormLogo).
 
@@ -21,17 +24,14 @@ import { CORES_DESIGN, DESIGN_PADRAO, MAX_TEXTO_BOTAO, OPCOES_DESIGN, TEXTO_BOTA
 import CartaoFormulario, { CenaFormulario } from "@/components/formulario/CartaoFormulario";
 import AvisoPro, { EtiquetaPro } from "@/components/painel/AvisoPro";
 import FormLead from "@/components/formulario/FormLead";
-import FormLogo from "./FormLogo";
+import Link from "next/link";
 import Icone from "@/components/Icone";
 import estilosPerguntas from "./Personalizar.module.css";
 import styles from "./EditorFormulario.module.css";
 
-const SEPARADORES = [
-  { chave: "marca", texto: "Marca" },
-  { chave: "design", texto: "Design", pro: true },
-  { chave: "perguntas", texto: "Perguntas" },
-  { chave: "depois", texto: "Depois de enviar" },
-];
+// os três campos que estão sempre no formulário (não se mudam)
+const CAMPOS_FIXOS = ["Nome", "Email", "Telefone"];
+const nomeTipo = (tipo) => TIPOS.find((t) => t.valor === tipo)?.texto ?? tipo;
 
 // as opções vivem sempre na pergunta (mesmo nas que não são de escolha),
 // para não se perderem ao mudar o tipo; a ajuda é sempre um texto
@@ -82,7 +82,10 @@ function perguntasDoModelo(modelo) {
 export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, designGuardado = false }) {
   const [dados, setDados] = useState(() => preparar(inicial));
   const [guardado, setGuardado] = useState(() => JSON.stringify(limpar(preparar(inicial))));
-  const [separador, setSeparador] = useState("marca");
+  // a parte aberta à direita: "marca" | "design" | "modelos" | "depois" | "p:<id da pergunta>"
+  const [selecionado, setSelecionado] = useState("marca");
+  const [aparelho, setAparelho] = useState("computador"); // pré-visualização: "computador" | "telemovel"
+  const [aArrastar, setAArrastar] = useState(null); // índice da pergunta que está a ser arrastada
   const [mensagem, setMensagem] = useState(null); // { tipo: "erro" | "sucesso", texto }
   const [modeloPendente, setModeloPendente] = useState(null); // modelo à espera de "Substituir / Juntar"
   const [aGuardar, iniciar] = useTransition();
@@ -129,6 +132,40 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
     });
   }
 
+  // arrastar na lista da esquerda: tira a pergunta de "de" e põe-na em "para"
+  function moverPara(de, para) {
+    if (de === null || de === para) return;
+    mudarPerguntas((lista) => {
+      const nova = [...lista];
+      const [p] = nova.splice(de, 1);
+      nova.splice(para, 0, p);
+      return nova;
+    });
+  }
+
+  function juntarPergunta() {
+    const nova = novaPergunta();
+    mudarPerguntas((lista) => [...lista, nova]);
+    setSelecionado(`p:${nova.id}`);
+  }
+
+  function duplicarPergunta(indice) {
+    const copia = { ...dados.perguntas[indice], id: crypto.randomUUID(), opcoes: [...dados.perguntas[indice].opcoes] };
+    mudarPerguntas((lista) => [...lista.slice(0, indice + 1), copia, ...lista.slice(indice + 1)]);
+    setSelecionado(`p:${copia.id}`);
+  }
+
+  function apagarPergunta(indice) {
+    const vizinha = dados.perguntas[indice + 1] ?? dados.perguntas[indice - 1];
+    mudarPerguntas((lista) => lista.filter((_, k) => k !== indice));
+    setSelecionado(vizinha ? `p:${vizinha.id}` : "marca");
+  }
+
+  const indiceSel = dados.perguntas.findIndex((p) => `p:${p.id}` === selecionado);
+  const perguntaSel = indiceSel >= 0 ? dados.perguntas[indiceSel] : null;
+  // a pergunta escolhida foi apagada (ex.: ao descartar): volta à Entrada
+  const aberto = selecionado.startsWith("p:") && !perguntaSel ? "marca" : selecionado;
+
   // ---------- modelos ----------
   function escolherModelo(modelo) {
     if (dados.perguntas.length === 0) return aplicarModelo(modelo, "substituir");
@@ -167,37 +204,86 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
   return (
     <div className={styles.editor}>
       {/* ================= coluna das opções ================= */}
-      <div className={styles.colunaOpcoes}>
-        <div className={styles.separadores} role="tablist" aria-label="Partes do formulário">
-          {SEPARADORES.map((s) => (
-            <button
-              key={s.chave}
-              type="button"
-              role="tab"
-              id={`sep-${s.chave}`}
-              aria-selected={separador === s.chave}
-              aria-controls={`painel-${s.chave}`}
-              className={separador === s.chave ? styles.separadorAtivo : styles.separador}
-              onClick={() => setSeparador(s.chave)}
-            >
-              {s.texto}
-              {s.pro && !plano.pro && <EtiquetaPro />}
-              {s.chave === "perguntas" && <span className={styles.contagem}>{dados.perguntas.length}</span>}
-            </button>
-          ))}
-        </div>
+      {/* ================= estrutura do formulário ================= */}
+      <nav className={styles.estrutura} aria-label="Partes do formulário">
+        <p className={styles.tituloGrupo}>Formulário</p>
+        <ItemEstrutura icone="pincel" ativo={aberto === "marca"} onClick={() => setSelecionado("marca")}>
+          Entrada <small>logótipo e textos</small>
+        </ItemEstrutura>
+        <ItemEstrutura icone="grelha" ativo={aberto === "design"} onClick={() => setSelecionado("design")}>
+          Design {!plano.pro && <EtiquetaPro />}
+        </ItemEstrutura>
 
-        <div className={styles.painel} role="tabpanel" id={`painel-${separador}`} aria-labelledby={`sep-${separador}`}>
+        <p className={styles.tituloGrupo}>
+          Perguntas <span className={styles.contagem}>{dados.perguntas.length}</span>
+        </p>
+        <ul className={styles.listaPerguntas}>
+          {CAMPOS_FIXOS.map((campo) => (
+            <li key={campo} className={styles.campoFixo}>
+              <Icone nome="cadeado" tamanho={13} /> {campo} <small>sempre</small>
+            </li>
+          ))}
+          {dados.perguntas.map((p, i) => (
+            <li
+              key={p.id}
+              draggable
+              onDragStart={() => setAArrastar(i)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={() => {
+                moverPara(aArrastar, i);
+                setAArrastar(null);
+              }}
+              onDragEnd={() => setAArrastar(null)}
+              className={aArrastar === i ? styles.aArrastar : undefined}
+            >
+              <button
+                type="button"
+                className={aberto === `p:${p.id}` ? styles.itemAtivo : styles.item}
+                aria-current={aberto === `p:${p.id}` ? "true" : undefined}
+                onClick={() => setSelecionado(`p:${p.id}`)}
+              >
+                <span className={styles.pega} aria-hidden="true">⋮⋮</span>
+                <span className={styles.numeroPergunta}>{i + 1}</span>
+                <span className={styles.textoItem}>
+                  {p.texto.trim() || <em>Pergunta sem texto</em>}
+                  <small>
+                    {nomeTipo(p.tipo)}
+                    {p.obrigatoria && " · obrigatória"}
+                  </small>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        {dados.perguntas.length < MAX_PERGUNTAS ? (
+          <button type="button" className={styles.juntar} onClick={juntarPergunta}>
+            <Icone nome="mais" tamanho={15} /> Juntar pergunta
+          </button>
+        ) : (
+          <p className={styles.notaLista}>Chegaste ao máximo de {MAX_PERGUNTAS} perguntas.</p>
+        )}
+        <ItemEstrutura icone="documento" ativo={aberto === "modelos"} onClick={() => setSelecionado("modelos")}>
+          Modelos prontos {!plano.pro && <EtiquetaPro />}
+        </ItemEstrutura>
+
+        <p className={styles.tituloGrupo}>Fim</p>
+        <ItemEstrutura icone="visto" ativo={aberto === "depois"} onClick={() => setSelecionado("depois")}>
+          Depois de enviar
+        </ItemEstrutura>
+      </nav>
+
+      {/* ================= opções da parte escolhida ================= */}
+      <div className={styles.colunaOpcoes}>
+        <div className={styles.painel}>
           {/* ---------- Marca ---------- */}
-          {separador === "marca" && (
+          {aberto === "marca" && (
             <>
               <section className={styles.seccao}>
                 <h2>Logótipo</h2>
                 <p className={styles.explicacao}>
-                  Aparece em destaque no topo do formulário e no menu do CRM. PNG, JPG ou WebP, até 1 MB. Fica guardado
-                  logo que o escolhes.
+                  {logo ? "O formulário usa o logótipo da empresa." : "Ainda não há logótipo."} Muda-se em{" "}
+                  <Link href="/painel/configuracoes">Configurações</Link>, junto com o do menu do CRM.
                 </p>
-                <FormLogo logoAtual={logo} nomeEmpresa={nomeEmpresa} />
                 {!plano.pro && (
                   <p className={styles.notaPro}>
                     <EtiquetaPro />{" "}
@@ -239,7 +325,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
           )}
 
           {/* ---------- Design (CRM Pro) ---------- */}
-          {separador === "design" && (
+          {aberto === "design" && (
             <>
               {!plano.pro && (
                 <AvisoPro
@@ -324,9 +410,8 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
             </>
           )}
 
-          {/* ---------- Perguntas ---------- */}
-          {separador === "perguntas" && (
-            <>
+          {/* ---------- Modelos prontos ---------- */}
+          {aberto === "modelos" && (
               <section className={styles.seccao}>
                 <h2>Começar de um modelo</h2>
                 <p className={styles.explicacao}>Perguntas já feitas para o teu tipo de negócio. Depois podes mudar tudo.</p>
@@ -375,51 +460,36 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
                   </div>
                 )}
               </section>
+          )}
 
-              <section className={styles.seccao}>
-                <h2>As tuas perguntas</h2>
-                <p className={styles.explicacao}>
-                  Nome, email e telefone estão sempre no formulário. Junta até {MAX_PERGUNTAS} perguntas tuas: as
-                  respostas aparecem na ficha do lead.
-                </p>
-
-                {dados.perguntas.length === 0 && (
-                  <p className={estilosPerguntas.semPerguntas}>
-                    Ainda não tens perguntas. Escolhe um modelo em cima ou junta a primeira.
-                  </p>
-                )}
-
-                <ol className={estilosPerguntas.perguntas}>
-                  {dados.perguntas.map((p, i) => (
-                    <EditorPergunta
-                      key={p.id}
-                      pergunta={p}
-                      indice={i}
-                      total={dados.perguntas.length}
-                      mudar={(campos) => mudarPergunta(p.id, campos)}
-                      mover={(passo) => mover(i, passo)}
-                      apagar={() => mudarPerguntas((lista) => lista.filter((x) => x.id !== p.id))}
-                    />
-                  ))}
-                </ol>
-
-                {dados.perguntas.length < MAX_PERGUNTAS ? (
-                  <button
-                    type="button"
-                    className={estilosPerguntas.adicionar}
-                    onClick={() => mudarPerguntas((lista) => [...lista, novaPergunta()])}
-                  >
-                    <Icone nome="mais" tamanho={16} /> Juntar pergunta
+          {/* ---------- a pergunta escolhida na lista ---------- */}
+          {perguntaSel && (
+            <section className={styles.seccao}>
+              <div className={styles.topoPergunta}>
+                <h2>Pergunta {indiceSel + 1}</h2>
+                {dados.perguntas.length < MAX_PERGUNTAS && (
+                  <button type="button" className={styles.botaoTexto} onClick={() => duplicarPergunta(indiceSel)}>
+                    <Icone nome="copiar" tamanho={14} /> Duplicar
                   </button>
-                ) : (
-                  <p className={estilosPerguntas.semPerguntas}>Chegaste ao máximo de {MAX_PERGUNTAS} perguntas.</p>
                 )}
-              </section>
-            </>
+              </div>
+              <p className={styles.explicacao}>As respostas aparecem na ficha do lead. Arrasta na lista para mudar a ordem.</p>
+              <ol className={estilosPerguntas.perguntas}>
+                <EditorPergunta
+                  key={perguntaSel.id}
+                  pergunta={perguntaSel}
+                  indice={indiceSel}
+                  total={dados.perguntas.length}
+                  mudar={(campos) => mudarPergunta(perguntaSel.id, campos)}
+                  mover={(passo) => mover(indiceSel, passo)}
+                  apagar={() => apagarPergunta(indiceSel)}
+                />
+              </ol>
+            </section>
           )}
 
           {/* ---------- Depois de enviar ---------- */}
-          {separador === "depois" && (
+          {aberto === "depois" && (
             <>
               <section className={styles.seccao}>
                 <h2>Mensagem</h2>
@@ -479,9 +549,29 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
 
       {/* ================= pré-visualização ================= */}
       <aside className={styles.previa} aria-label="Pré-visualização do formulário">
-        <p className={styles.tituloPrevia}>
-          {separador === "depois" ? "O que o lead vê depois de enviar" : "Como o lead vê o formulário"}
-        </p>
+        <div className={styles.topoPrevia}>
+          <p className={styles.tituloPrevia}>
+            {aberto === "depois" ? "O que o lead vê depois de enviar" : "Como o lead vê o formulário"}
+          </p>
+          <div className={styles.aparelhos} role="radiogroup" aria-label="Tamanho da pré-visualização">
+            {[
+              { chave: "computador", nome: "Computador", icone: "grelha" },
+              { chave: "telemovel", nome: "Telemóvel", icone: "telemovel" },
+            ].map((a) => (
+              <button
+                key={a.chave}
+                type="button"
+                role="radio"
+                aria-checked={aparelho === a.chave}
+                className={styles.aparelho}
+                onClick={() => setAparelho(a.chave)}
+              >
+                <Icone nome={a.icone} tamanho={14} /> {a.nome}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={styles.ecra} data-aparelho={aparelho}>
         {/* o mesmo fundo e o mesmo design da página real (sem o Pro, o design de sempre) */}
         <CenaFormulario design={designPrevia} className={styles.moldura}>
           <CartaoFormulario
@@ -494,7 +584,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
           >
             <FormLead
               previa
-              mostrarObrigado={separador === "depois"}
+              mostrarObrigado={aberto === "depois"}
               nomeEmpresa={nomeEmpresa}
               textoBotao={designPrevia.botao}
               perguntas={dados.perguntas.map((p) => ({ ...p, opcoes: p.opcoes.filter((o) => o.trim()) }))}
@@ -506,6 +596,7 @@ export default function EditorFormulario({ inicial, nomeEmpresa, logo, plano, de
             />
           </CartaoFormulario>
         </CenaFormulario>
+        </div>
       </aside>
 
       {/* ================= barra de guardar ================= */}
@@ -644,6 +735,21 @@ function EditorPergunta({ pergunta: p, indice: i, total, mudar, mover, apagar })
         />
       </div>
     </li>
+  );
+}
+
+// ---------- um item da coluna da estrutura (Entrada, Design, Modelos, Depois de enviar) ----------
+function ItemEstrutura({ icone, ativo, onClick, children }) {
+  return (
+    <button
+      type="button"
+      className={ativo ? styles.itemAtivo : styles.item}
+      aria-current={ativo ? "true" : undefined}
+      onClick={onClick}
+    >
+      <Icone nome={icone} tamanho={15} />
+      <span className={styles.textoItem}>{children}</span>
+    </button>
   );
 }
 

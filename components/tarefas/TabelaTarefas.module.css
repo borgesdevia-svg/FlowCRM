@@ -78,7 +78,7 @@
   align-items: center;
   gap: 14px;
   padding: 12px 0;
-  border-radius: 10px;
+  border-radius: 7px;
   transition: background 0.15s;
 }
 
@@ -240,7 +240,7 @@
   gap: 18px;
   max-width: calc(100vw - 32px);
   padding: 12px 14px 12px 18px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid rgb(var(--rgb-tinta) / 0.1);
   background: var(--cor-elevado);
   box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.75);
@@ -272,7 +272,7 @@
 .desfazer {
   flex-shrink: 0;
   padding: 6px 12px;
-  border-radius: 9px;
+  border-radius: 6px;
   border: none;
   background: rgb(var(--rgb-destaque) / 0.14);
   color: var(--cor-destaque);

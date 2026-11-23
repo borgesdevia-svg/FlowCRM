@@ -2,7 +2,7 @@
    de números com painel de cor suave e rodapé, gráfico grande com a atividade ao lado,
    tabela de tarefas a toda a largura e, por fim, os resultados e os extras. */
 .pagina {
-  max-width: 1400px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -41,7 +41,7 @@
   display: flex;
   flex-direction: column;
   padding: 5px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   box-shadow: var(--sombra-cartao);
@@ -52,7 +52,7 @@
   flex-direction: column;
   gap: 26px;
   padding: 18px 18px 24px;
-  border-radius: 10px;
+  border-radius: 7px;
   background: rgb(var(--rgb-destaque) / 0.06);
 }
 
@@ -124,7 +124,7 @@
 
 /* número grande (valor em euros ou contagem) */
 .valor strong {
-  font-size: clamp(2rem, 3.2vw, 2.6rem);
+  font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -193,8 +193,8 @@
 }
 
 .bloco {
-  padding: 22px;
-  border-radius: 14px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   box-shadow: var(--sombra-cartao);
@@ -225,7 +225,7 @@
 
 /* número grande do gráfico (ex.: total de clientes novos nas 8 semanas) */
 .numeroGrande {
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -274,7 +274,7 @@
 }
 
 .centroDonut strong {
-  font-size: 1.8rem;
+  font-size: 1.45rem;
   font-weight: 600;
   line-height: 1;
 }
@@ -463,8 +463,8 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  padding: 20px 22px;
-  border-radius: 18px;
+  padding: 16px 18px;
+  border-radius: 7px;
   border: 1px solid rgb(var(--rgb-destaque) / 0.25);
   background: linear-gradient(120deg, rgb(var(--rgb-destaque) / 0.12), rgb(var(--rgb-destaque) / 0.03) 60%), var(--cor-cartao);
 }
@@ -474,7 +474,7 @@
   flex-shrink: 0;
   width: 56px;
   height: 56px;
-  border-radius: 14px;
+  border-radius: 7px;
 }
 
 .logoEmpresa {
@@ -524,7 +524,7 @@
 @media (max-width: 600px) {
   .cartaoEmpresa {
     flex-wrap: wrap;
-    padding: 18px;
+    padding: 14px;
   }
 
   .papelEmpresa {
@@ -625,7 +625,7 @@
   align-items: center;
   gap: 8px;
   padding: 7px 12px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   color: var(--cor-texto);
@@ -712,7 +712,7 @@
   .numeros {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-    border-radius: 14px;
+    border-radius: 7px;
     border: 1px solid var(--cor-contorno);
     background: var(--cor-cartao);
     box-shadow: var(--sombra-cartao);
@@ -860,7 +860,7 @@
   .inicialEmpresa {
     width: 44px;
     height: 44px;
-    border-radius: 11px;
+    border-radius: 8px;
   }
 
   .textoEmpresa h2 {

@@ -17,6 +17,7 @@ import {
   PADRAO,
   SECCOES_MENU,
   cssAparencia,
+  guardarModoPessoal,
   normalizarAparencia,
 } from "@/lib/aparencia";
 import { guardarAparencia } from "@/lib/acoes/empresa";
@@ -89,6 +90,8 @@ export default function EditorAparencia({ inicial }) {
       setDados(resposta.guardado);
       setGuardado(JSON.stringify(resposta.guardado));
       setMensagem({ tipo: "sucesso", texto: resposta.sucesso });
+      // quem guarda passa a ver logo o modo escolhido (o botão sol/lua guarda o modo de cada pessoa)
+      guardarModoPessoal(resposta.guardado.modo);
       router.refresh(); // o menu lateral (feito no servidor) passa a mostrar os nomes e a ordem novos
     });
   }

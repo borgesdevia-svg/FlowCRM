@@ -1,5 +1,5 @@
 .pagina {
-  max-width: 1400px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -7,7 +7,7 @@
 
 /* ---------- cabeçalho (igual ao das outras páginas) ---------- */
 .cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -62,6 +62,7 @@
 /* ---------- página Adicionar membro: formulário + papéis lado a lado ---------- */
 .paginaEstreita {
   max-width: 980px;
+  margin-inline: auto;
 }
 
 .grelhaNovo {
@@ -79,7 +80,7 @@
 
 /* ---------- tabela dos membros (igual à lista de clientes) ---------- */
 .tabelaBloco {
-  border-radius: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   overflow: hidden;
@@ -262,8 +263,8 @@
 
 /* ---------- cartões da página Adicionar membro ---------- */
 .bloco {
-  padding: 22px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }

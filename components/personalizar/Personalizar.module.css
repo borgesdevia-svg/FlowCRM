@@ -18,9 +18,8 @@
   place-items: center;
   width: 84px;
   height: 84px;
-  padding: 8px;
-  border-radius: 20px;
-  background: #fff;
+  border-radius: 7px;
+  border: 1px dashed var(--cor-contorno);
   overflow: hidden;
 }
 
@@ -39,7 +38,7 @@
   margin: -8px;
   background: linear-gradient(135deg, var(--cor-destaque-claro), var(--cor-destaque-escuro));
   color: var(--cor-sobre-destaque);
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
@@ -115,7 +114,7 @@
   flex-direction: column;
   gap: 10px;
   padding: 14px 16px 16px;
-  border-radius: 14px;
+  border-radius: 7px;
   background: rgb(var(--rgb-tinta) / 0.035);
 }
 
@@ -257,7 +256,7 @@
   flex: 1;
   min-width: 0;
   padding: 8px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   border: 1px solid transparent;
   background: rgb(var(--rgb-tinta) / 0.05);
   color: var(--cor-texto);
@@ -296,7 +295,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px dashed rgb(var(--rgb-tinta) / 0.16);
   background: transparent;
   color: var(--cor-texto-suave);

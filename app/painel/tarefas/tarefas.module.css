@@ -1,6 +1,6 @@
 /* Página Tarefas: separadores com contagem + tabela com páginas (como a página Clientes) */
 .pagina {
-  max-width: 1280px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -16,7 +16,7 @@
 }
 
 .cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -52,7 +52,7 @@
   gap: 2px;
   max-width: 100%;
   padding: 3px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-tinta) / 0.06);
   overflow-x: auto; /* no telemóvel desliza para o lado */
   scrollbar-width: none;
@@ -66,7 +66,7 @@
   align-items: center;
   gap: 7px;
   padding: 7px 14px;
-  border-radius: 9px;
+  border-radius: 6px;
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
   font-weight: 500;
@@ -105,7 +105,7 @@
 .aCarregar {
   position: absolute;
   inset: 0;
-  border-radius: 9px;
+  border-radius: 6px;
   background: rgb(var(--rgb-tinta) / 0.08);
   opacity: 0;
   transition: opacity 0.15s;
@@ -135,7 +135,7 @@
 .pesquisa input {
   width: 100%;
   padding: 9px 12px 9px 36px;
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid transparent;
   background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto);
@@ -175,13 +175,13 @@
   top: calc(100% + 8px);
   right: 0;
   width: min(420px, calc(100vw - 32px));
-  border-radius: 16px;
+  border-radius: 7px;
   box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.9);
 }
 
 .semClientes {
   padding: 16px;
-  border-radius: 16px;
+  border-radius: 7px;
   background: var(--cor-cartao);
   color: var(--cor-texto-suave);
   font-size: 0.92rem;
@@ -192,8 +192,8 @@
 .bloco {
   display: flex;
   flex-direction: column;
-  padding: 22px;
-  border-radius: 16px;
+  padding: 16px;
+  border-radius: 7px;
   background: var(--cor-cartao);
   /* clip (e não hidden): corta os cantos sem estragar a barra presa ao topo (sticky) */
   overflow: clip;
@@ -255,7 +255,7 @@ a.botaoPagina:hover {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 34px 24px 56px;
+  padding: 24px 18px 40px;
   text-align: center;
   color: var(--cor-texto-suave);
 }

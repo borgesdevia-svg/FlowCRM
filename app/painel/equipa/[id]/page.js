@@ -88,7 +88,7 @@ export default async function PaginaMembro({ params }) {
     { count: nAtrasadas },
     { data: clientes, count: nClientes },
   ] = await Promise.all([
-    supabase.from("perfis").select("id, nome, email, papel, criado_em").eq("id", id).maybeSingle(),
+    supabase.from("perfis").select("id, nome, email, papel, criado_em, cargo, telefone").eq("id", id).maybeSingle(),
     supabase.rpc("resumo_equipa"),
     supabase
       .from("interacoes")
@@ -151,7 +151,9 @@ export default async function PaginaMembro({ params }) {
             </h1>
             <p className={styles.resumo}>
               <span className={membro.papel === "admin" ? styles.papelAdmin : styles.papel}>{nomePapel}</span>
+              {membro.cargo && <span>{membro.cargo}</span>}
               <a href={`mailto:${membro.email}`}>{membro.email}</a>
+              {membro.telefone && <a href={`tel:${membro.telefone.replace(/[^\d+]/g, "")}`}>{membro.telefone}</a>}
               <span>Na equipa desde {formatarData(membro.criado_em)}</span>
             </p>
           </div>

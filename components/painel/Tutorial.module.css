@@ -29,7 +29,7 @@
    As transições fazem o foco deslizar de uma parte para a outra. */
 .foco {
   position: fixed;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow:
     0 0 0 2px var(--cor-destaque),
     0 0 24px 2px rgb(var(--rgb-destaque) / 0.35),
@@ -62,8 +62,8 @@
 .cartao {
   position: fixed;
   width: min(360px, calc(100vw - 32px));
-  padding: 22px 22px 18px;
-  border-radius: 18px;
+  padding: 16px 16px 14px;
+  border-radius: 7px;
   border: 1px solid rgb(var(--rgb-tinta) / 0.1);
   background: var(--cor-elevado);
   box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8);

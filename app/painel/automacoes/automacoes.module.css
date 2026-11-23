@@ -1,5 +1,6 @@
 .pagina {
   max-width: 920px;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -7,7 +8,7 @@
 
 /* ---------- cabeçalho (igual ao das outras páginas) ---------- */
 .cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;

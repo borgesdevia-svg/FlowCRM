@@ -7,9 +7,9 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   color: var(--cor-texto-suave);
@@ -65,7 +65,7 @@
   right: 0;
   width: min(380px, calc(100vw - 32px));
   padding: 8px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   box-shadow: 0 12px 32px -8px rgb(16 24 40 / 0.18), 0 4px 8px -4px rgb(16 24 40 / 0.08);
@@ -105,7 +105,7 @@
   align-items: flex-start;
   gap: 10px;
   padding: 8px 6px;
-  border-radius: 10px;
+  border-radius: 7px;
   color: var(--cor-texto);
   transition: background 0.15s;
 }

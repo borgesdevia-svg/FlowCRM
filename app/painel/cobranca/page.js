@@ -152,11 +152,16 @@ export default async function PaginaCobranca({ searchParams }) {
   else if (semCobranca)
     estado = { texto: `O ${plano.nome} desta empresa não tem pagamentos nem data de fim.` };
 
+  // para o resumo ao lado: quanto já foi pago e desde quando
+  const pagas = faturas.filter((f) => f.estado === "paid");
+  const totalPago = pagas.reduce((soma, f) => soma + f.valor, 0);
+  const clienteDesde = pagas.length ? pagas[pagas.length - 1].data : null;
+
   const confirmarCancelar = parametros.cancelar && renova;
   const confirmarRemover = parametros.remover && cartao;
 
   return (
-    <div className={base.pagina}>
+    <div className={styles.pagina}>
       <header className={base.cabecalho}>
         <h1>Cobrança</h1>
         <p>O plano, o cartão e as faturas da empresa. Os dados do cartão ficam só na Stripe.</p>
@@ -222,126 +227,173 @@ export default async function PaginaCobranca({ searchParams }) {
         </section>
       )}
 
-      <div className={styles.painel}>
-        {/* ---------- 1. o plano ---------- */}
-        <section className={styles.plano} aria-label="Plano">
-          <SimboloLogo tamanho={44} className={styles.simbolo} />
-          <div className={styles.planoTexto}>
-            <h2>{plano.bloqueada ? "Nenhum plano" : plano.nome}</h2>
-            <p>{subtitulo}</p>
-          </div>
-          <Link href="/painel/plano" className={`botao ${plano.bloqueada ? "" : "botao-secundario"} ${styles.botaoPequeno}`}>
-            {plano.bloqueada ? "Escolher um plano" : "Mudar de plano"}
-          </Link>
-        </section>
-
-        {/* ---------- 2. a linha de estado ---------- */}
-        {estado && (
-          <div className={`${styles.estado} ${estado.tom ?? ""}`}>
-            <Icone nome="calendario" tamanho={16} />
-            <p>{estado.texto}</p>
-            {estado.retomar &&
-              (cartao ? (
-                <form action={retomarAssinatura}>
-                  <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`} aEspera="A retomar…">
-                    Retomar
-                  </BotaoPlano>
-                </form>
-              ) : (
-                <span className={styles.nota}>Para retomar, adiciona primeiro um cartão.</span>
-              ))}
-            {emAtraso && faturaPorPagar?.ver && (
-              <a href={faturaPorPagar.ver} target="_blank" rel="noreferrer" className={`botao ${styles.botaoPequeno}`}>
-                Pagar {euros(faturaPorPagar.valor)}
-              </a>
-            )}
-          </div>
-        )}
-
-        {/* ---------- 3. pagamento ---------- */}
-        <section className={styles.seccao} aria-labelledby="t-pagamento">
-          <div className={styles.topoSeccao}>
-            <div>
-              <h2 id="t-pagamento">Pagamento</h2>
-              <p>
-                {temCliente
-                  ? "O cartão que é cobrado em cada renovação."
-                  : "O cartão é pedido quando escolhes um plano pago."}
-              </p>
+      <div className={styles.grelha}>
+        <div className={styles.coluna}>
+          {/* ---------- 1. o plano e a linha de estado ---------- */}
+          <section className={styles.cartao} aria-label="Plano">
+            <div className={styles.plano}>
+              <SimboloLogo tamanho={40} className={styles.simbolo} />
+              <div className={styles.planoTexto}>
+                <h2>{plano.bloqueada ? "Nenhum plano" : plano.nome}</h2>
+                <p>{subtitulo}</p>
+              </div>
+              <Link
+                href="/painel/plano"
+                className={`botao ${plano.bloqueada ? "" : "botao-secundario"} ${styles.botaoPequeno}`}
+              >
+                {plano.bloqueada ? "Escolher um plano" : "Mudar de plano"}
+              </Link>
             </div>
-            {temCliente && !cartao && (
-              <form action={alterarCartao}>
-                <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`}>Adicionar cartão</BotaoPlano>
-              </form>
-            )}
-          </div>
 
-          {cartao ? (
-            <div className={styles.linha}>
-              <span className={styles.emblema} aria-hidden="true">
-                {EMBLEMAS[cartao.marca] ?? cartao.marca.slice(0, 4).toUpperCase()}
-              </span>
-              <div className={styles.linhaTexto}>
-                <strong>
-                  {MARCAS[cartao.marca] ?? cartao.marca} •••• {cartao.ultimos}
-                  {renova && <span className={styles.principal}>Principal</span>}
-                </strong>
-                <span>
-                  Expira em {String(cartao.mes).padStart(2, "0")}/{cartao.ano}
-                </span>
-                {caducaAntes && (
-                  <span className={styles.caduca}>Caduca antes da renovação de {formatarData(pagoAte)}.</span>
+            {estado && (
+              <div className={`${styles.estado} ${estado.tom ?? ""}`}>
+                <Icone nome="calendario" tamanho={16} />
+                <p>{estado.texto}</p>
+                {estado.retomar &&
+                  (cartao ? (
+                    <form action={retomarAssinatura}>
+                      <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`} aEspera="A retomar…">
+                        Retomar
+                      </BotaoPlano>
+                    </form>
+                  ) : (
+                    <span className={styles.nota}>Para retomar, adiciona primeiro um cartão.</span>
+                  ))}
+                {emAtraso && faturaPorPagar?.ver && (
+                  <a href={faturaPorPagar.ver} target="_blank" rel="noreferrer" className={`botao ${styles.botaoPequeno}`}>
+                    Pagar {euros(faturaPorPagar.valor)}
+                  </a>
                 )}
               </div>
-              <div className={styles.linhaAcoes}>
-                <Link href="/painel/cobranca?remover=1#confirmar" className={styles.ligacaoPerigo}>
-                  Remover
-                </Link>
+            )}
+          </section>
+
+          {/* ---------- 2. pagamento ---------- */}
+          <section className={styles.cartao} aria-labelledby="t-pagamento">
+            <div className={styles.topoSeccao}>
+              <div>
+                <h2 id="t-pagamento">Pagamento</h2>
+                <p>
+                  {temCliente
+                    ? "O cartão que é cobrado em cada renovação."
+                    : "O cartão é pedido quando escolhes um plano pago."}
+                </p>
+              </div>
+              {temCliente && !cartao && (
                 <form action={alterarCartao}>
-                  <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`}>Atualizar</BotaoPlano>
+                  <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`}>Adicionar cartão</BotaoPlano>
                 </form>
-              </div>
+              )}
             </div>
-          ) : (
-            <p className={styles.vazio}>
-              {renova ? "Nenhum cartão guardado: a próxima renovação vai falhar." : "Nenhum cartão guardado."}
-            </p>
-          )}
-        </section>
 
-        {/* ---------- 4. dados das faturas ---------- */}
-        <section className={styles.seccao} aria-labelledby="t-faturacao">
-          <div className={styles.topoSeccao}>
-            <div>
-              <h2 id="t-faturacao">Dados das faturas</h2>
-              <p>O nome, o email e o NIF que aparecem nas faturas.</p>
-            </div>
-          </div>
-
-          {temCliente ? (
-            <div className={styles.linha}>
-              <div className={styles.linhaTexto}>
-                <strong>{cobranca?.faturacao?.nif ? `NIF ${cobranca.faturacao.nif}` : "Nenhum NIF"}</strong>
-                <span>
-                  {[cobranca?.faturacao?.nome, cobranca?.faturacao?.email].filter(Boolean).join(" · ") ||
-                    "Sem nome nem email nas faturas."}
+            {cartao ? (
+              <div className={styles.linha}>
+                <span className={styles.emblema} aria-hidden="true">
+                  {EMBLEMAS[cartao.marca] ?? cartao.marca.slice(0, 4).toUpperCase()}
                 </span>
+                <div className={styles.linhaTexto}>
+                  <strong>
+                    {MARCAS[cartao.marca] ?? cartao.marca} •••• {cartao.ultimos}
+                    {renova && <span className={styles.principal}>Principal</span>}
+                  </strong>
+                  <span>
+                    Expira em {String(cartao.mes).padStart(2, "0")}/{cartao.ano}
+                  </span>
+                  {caducaAntes && (
+                    <span className={styles.caduca}>Caduca antes da renovação de {formatarData(pagoAte)}.</span>
+                  )}
+                </div>
+                <div className={styles.linhaAcoes}>
+                  <Link href="/painel/cobranca?remover=1#confirmar" className={styles.ligacaoPerigo}>
+                    Remover
+                  </Link>
+                  <form action={alterarCartao}>
+                    <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`}>Atualizar</BotaoPlano>
+                  </form>
+                </div>
               </div>
-              <div className={styles.linhaAcoes}>
-                <form action={editarFaturacao}>
-                  <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`}>
-                    {cobranca?.faturacao?.nif ? "Editar" : "Adicionar"}
-                  </BotaoPlano>
-                </form>
+            ) : (
+              <p className={styles.vazio}>
+                {renova ? "Nenhum cartão guardado: a próxima renovação vai falhar." : "Nenhum cartão guardado."}
+              </p>
+            )}
+          </section>
+
+          {/* ---------- 3. dados das faturas ---------- */}
+          <section className={styles.cartao} aria-labelledby="t-faturacao">
+            <div className={styles.topoSeccao}>
+              <div>
+                <h2 id="t-faturacao">Dados das faturas</h2>
+                <p>O nome, o email e o NIF que aparecem nas faturas.</p>
               </div>
             </div>
-          ) : (
-            <p className={styles.vazio}>Ficam disponíveis depois do primeiro pagamento.</p>
-          )}
-        </section>
 
-        {/* ---------- 5. faturas ---------- */}
-        <section className={styles.seccao} aria-labelledby="t-faturas">
+            {temCliente ? (
+              <div className={styles.linha}>
+                <div className={styles.linhaTexto}>
+                  <strong>{cobranca?.faturacao?.nif ? `NIF ${cobranca.faturacao.nif}` : "Nenhum NIF"}</strong>
+                  <span>
+                    {[cobranca?.faturacao?.nome, cobranca?.faturacao?.email].filter(Boolean).join(" · ") ||
+                      "Sem nome nem email nas faturas."}
+                  </span>
+                </div>
+                <div className={styles.linhaAcoes}>
+                  <form action={editarFaturacao}>
+                    <BotaoPlano className={`botao botao-secundario ${styles.botaoPequeno}`}>
+                      {cobranca?.faturacao?.nif ? "Editar" : "Adicionar"}
+                    </BotaoPlano>
+                  </form>
+                </div>
+              </div>
+            ) : (
+              <p className={styles.vazio}>Ficam disponíveis depois do primeiro pagamento.</p>
+            )}
+          </section>
+        </div>
+
+        {/* ---------- resumo, ao lado ---------- */}
+        <aside className={`${styles.cartao} ${styles.resumo}`} aria-label="Resumo">
+          <div className={styles.destaque}>
+            <span>Próxima cobrança</span>
+            <strong>{renova && proximo ? euros(precoPlano(proximo.plano, proximo.ciclo)) : "—"}</strong>
+            <small>
+              {renova && proximo
+                ? `a ${formatarData(pagoAte)}`
+                : plano.emTeste
+                  ? `teste grátis até ${formatarData(plano.fimTeste)}`
+                  : "sem renovação"}
+            </small>
+          </div>
+          <dl className={styles.factos}>
+            <div>
+              <dt>Ciclo</dt>
+              <dd>{plano.pago ? nomeCiclo(plano.ciclo) : "—"}</dd>
+            </div>
+            <div>
+              <dt>{renova ? "Pago até" : "Ativo até"}</dt>
+              <dd>{pagoAte ? formatarData(pagoAte) : plano.emTeste ? formatarData(plano.fimTeste) : "—"}</dd>
+            </div>
+            <div>
+              <dt>Total pago</dt>
+              <dd>{euros(totalPago)}</dd>
+            </div>
+            <div>
+              <dt>Cliente desde</dt>
+              <dd>{clienteDesde ? formatarData(clienteDesde) : "—"}</dd>
+            </div>
+          </dl>
+          {renova && (
+            <div className={styles.cancelar}>
+              <p>Cancelar não tira o plano: fica ativo até {formatarData(pagoAte)}.</p>
+              <Link href="/painel/cobranca?cancelar=1#confirmar" className={styles.ligacaoPerigo}>
+                Cancelar o plano
+              </Link>
+            </div>
+          )}
+        </aside>
+
+        {/* ---------- faturas, a toda a largura ---------- */}
+        <section className={`${styles.cartao} ${styles.largo}`} aria-labelledby="t-faturas">
           <h2 id="t-faturas">Faturas</h2>
           {faturas.length ? (
             <div className={styles.tabelaCaixa}>
@@ -389,16 +441,6 @@ export default async function PaginaCobranca({ searchParams }) {
             <p className={styles.vazio}>Ainda não há faturas.</p>
           )}
         </section>
-
-        {/* ---------- cancelar (discreto, no fim) ---------- */}
-        {renova && (
-          <section className={styles.cancelar}>
-            <p>Cancelar não tira o plano: fica ativo até {formatarData(pagoAte)}, o último dia já pago.</p>
-            <Link href="/painel/cobranca?cancelar=1#confirmar" className={styles.ligacaoPerigo}>
-              Cancelar o plano
-            </Link>
-          </section>
-        )}
       </div>
     </div>
   );

@@ -1,87 +1,163 @@
+/* Página A minha conta: cabeçalho com o avatar, os meus números e duas colunas de cartões. */
 .pagina {
-  max-width: 900px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-/* ---------- cabeçalho (igual ao das outras páginas) ---------- */
-.cabecalho {
-  display: flex;
-  align-items: center;
   gap: 16px;
 }
 
-.cabecalho h1 {
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-
-.resumo {
-  color: var(--cor-texto-suave);
-  overflow-wrap: anywhere;
-}
-
-
-/* ---------- contadores ---------- */
-.contadores {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.contador {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 18px 20px;
-  border-radius: 16px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-}
-
-.contador strong {
-  font-size: 2rem;
-  font-weight: 600;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.contador span {
-  color: var(--cor-texto-suave);
-  font-size: 0.9rem;
-}
-
-/* ---------- blocos: descrição à esquerda, formulário à direita ---------- */
-.bloco {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 24px;
-  padding: 24px;
-  border-radius: 16px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-}
-
-.descricao h2 {
+/* ---------- quem sou ---------- */
+.cabecalho {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
   font-size: 1.05rem;
   font-weight: 600;
 }
 
-.descricao h2 svg {
-  color: var(--cor-destaque);
+.quem {
+  flex: 1;
+  min-width: 0;
 }
 
-.descricao p {
+.quem h1 {
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.quem p {
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- os meus números (uma faixa com três números, clicáveis) ---------- */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--cor-contorno);
+  border-radius: 8px;
+  background: var(--cor-cartao);
+}
+
+.numero {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  border-left: 1px solid var(--cor-contorno);
+  color: var(--cor-texto);
+  transition: background 0.15s;
+}
+
+.numero:first-child {
+  border-left: 0;
+}
+
+.numero:hover {
+  background: rgb(var(--rgb-tinta) / 0.03);
+}
+
+.numero span {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+.numero strong {
+  font-size: 1.35rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- duas colunas de cartões ---------- */
+.grelha {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.topoCartao h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.topoCartao p {
+  margin-top: 2px;
   color: var(--cor-texto-suave);
   font-size: 0.88rem;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- sessões ---------- */
+.factos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.factos dt {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+.factos dd {
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+
+.botaoPerigo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid rgb(239 68 68 / 0.35);
+  border-radius: 7px;
+  background: rgb(239 68 68 / 0.12);
+  color: var(--cor-perigo-texto);
+  font: inherit;
+  font-size: 0.93rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.botaoPerigo:hover {
+  border-color: rgb(239 68 68 / 0.55);
+  background: rgb(239 68 68 / 0.2);
 }
 
 /* ---------- link do formulário público ---------- */
@@ -92,8 +168,8 @@
 }
 
 .link code {
-  padding: 11px 14px;
-  border-radius: var(--raio);
+  padding: 9px 12px;
+  border-radius: 7px;
   border: 1px dashed rgb(var(--rgb-destaque) / 0.35);
   background: var(--cor-superficie-verde);
   color: var(--cor-destaque);
@@ -101,61 +177,7 @@
   overflow-wrap: anywhere;
 }
 
-.acoesLink {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* ---------- terminar sessão ---------- */
-.formSair {
-  display: flex;
-  align-items: center;
-}
-
-.botaoSair {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: var(--raio);
-  border: 1px solid rgba(248, 113, 113, 0.3);
-  background: transparent;
-  color: var(--cor-perigo-texto);
-  font: inherit;
-  font-size: 0.92rem;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.botaoSair:hover {
-  background: rgba(248, 113, 113, 0.08);
-  border-color: rgba(248, 113, 113, 0.5);
-}
-
-/* ---------- telemóvel ---------- */
-@media (max-width: 700px) {
-  .bloco {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .contador {
-    padding: 14px;
-  }
-
-  .contador strong {
-    font-size: 1.5rem;
-  }
-
-  .contador span {
-    font-size: 0.8rem;
-  }
-}
-
-/* ---------- chave de recuperação ---------- */
+/* ---------- chave de recuperação (BlocoChave) ---------- */
 .chave {
   display: flex;
   flex-direction: column;
@@ -172,4 +194,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+/* ---------- telemóvel ---------- */
+@media (max-width: 900px) {
+  .grelha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .numeros {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .numero {
+    border-left: 0;
+    border-top: 1px solid var(--cor-contorno);
+  }
+
+  .numero:first-child {
+    border-top: 0;
+  }
 }

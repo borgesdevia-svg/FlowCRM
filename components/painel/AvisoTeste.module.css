@@ -5,7 +5,7 @@
   gap: 12px;
   margin-bottom: 24px;
   padding: 12px 12px 12px 16px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1px solid rgb(var(--rgb-destaque) / 0.35);
   background: rgb(var(--rgb-destaque) / 0.08);
   color: var(--cor-texto);

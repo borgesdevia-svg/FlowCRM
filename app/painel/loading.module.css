@@ -1,5 +1,5 @@
 .pagina {
-  max-width: 1100px;
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -8,7 +8,7 @@
 /* bloco cinzento com um brilho que passa da esquerda para a direita */
 .bloco {
   height: 96px;
-  border-radius: 14px;
+  border-radius: 7px;
   background: linear-gradient(90deg, var(--cor-cartao) 0%, var(--cor-elevado) 50%, var(--cor-cartao) 100%);
   background-size: 200% 100%;
   animation: brilho 1.4s ease-in-out infinite;
@@ -47,7 +47,7 @@
 /* esqueletos de cada secção (clientes, pipeline, tarefas) */
 .linha {
   height: 52px;
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 .colunas {
@@ -64,7 +64,7 @@
 
 .cartao {
   height: 110px;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 /* em ecrãs estreitos, 2 colunas como na Pipeline e grelha numa só coluna */

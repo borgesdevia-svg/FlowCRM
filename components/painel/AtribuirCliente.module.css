@@ -7,7 +7,7 @@
 .lista {
   max-width: 170px;
   padding: 6px 28px 6px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   border: 1px solid var(--cor-contorno);
   /* setinha desenhada em SVG (a do browser não segue o tema escuro) */
   background: rgb(var(--rgb-tinta) / 0.06)

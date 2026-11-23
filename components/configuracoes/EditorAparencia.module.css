@@ -19,8 +19,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 22px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -60,7 +60,7 @@
   flex-direction: column;
   gap: 10px;
   padding: 10px;
-  border-radius: 14px;
+  border-radius: 7px;
   border: 1.5px solid var(--cor-contorno);
   background: rgb(var(--rgb-tinta) / 0.02);
   transition: border-color 0.2s, background 0.2s, transform 0.2s var(--curva);
@@ -108,7 +108,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 4px;
   padding: 3px;
-  border-radius: 10px;
+  border-radius: 7px;
   background: rgb(var(--rgb-tinta) / 0.05);
 }
 
@@ -152,7 +152,7 @@
   gap: 7px;
   height: 92px;
   padding: 0 7px 0 0;
-  border-radius: 9px;
+  border-radius: 6px;
   border: 1px solid rgb(127 127 127 / 0.2);
   overflow: hidden;
 }
@@ -263,7 +263,7 @@
   width: 100%;
   height: 64px;
   padding: 8px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   background: rgb(var(--rgb-tinta) / 0.04);
   fill: var(--cor-destaque);
 }
@@ -308,7 +308,7 @@
   align-items: center;
   gap: 10px;
   padding: 6px 6px 6px 10px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-tinta) / 0.035);
 }
 
@@ -318,7 +318,7 @@
   flex-shrink: 0;
   width: 32px;
   height: 32px;
-  border-radius: 9px;
+  border-radius: 6px;
   background: rgb(var(--rgb-tinta) / 0.06);
   color: var(--cor-texto-suave);
 }
@@ -327,7 +327,7 @@
   flex: 1;
   min-width: 0;
   padding: 8px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--cor-texto);
@@ -409,7 +409,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 10px 10px 18px;
-  border-radius: 16px;
+  border-radius: 7px;
   border: 1px solid rgb(var(--rgb-tinta) / 0.1);
   background: var(--cor-elevado);
   box-shadow: 0 16px 40px -8px rgb(0 0 0 / 0.45);
@@ -457,7 +457,7 @@
   flex-direction: column;
   gap: 18px;
   padding: 16px 12px;
-  border-radius: 18px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo-2);
 }
@@ -481,7 +481,7 @@
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   color: var(--cor-texto-suave);
   font-size: 0.9rem;
   font-weight: 500;

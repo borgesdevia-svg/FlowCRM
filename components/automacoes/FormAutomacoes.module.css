@@ -1,7 +1,7 @@
 /* Formulário das automações: uma lista com linhas finas (não cartões iguais),
    cada linha com o texto à esquerda e o interruptor à direita. */
 .form {
-  border-radius: 16px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
 }
@@ -11,7 +11,7 @@
 }
 
 .item {
-  padding: 22px 24px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--cor-contorno);
 }
 
@@ -92,7 +92,7 @@
   margin-top: 16px;
   padding: 16px;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgb(var(--rgb-tinta) / 0.03);
   animation: abrir 0.3s var(--curva);
 }
@@ -129,7 +129,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: 7px;
   border: 1px solid var(--cor-contorno);
   font-size: 0.9rem;
   cursor: pointer;
@@ -164,7 +164,7 @@
 .campoDias {
   width: 72px;
   padding: 8px 10px;
-  border-radius: 9px;
+  border-radius: 6px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
   color: var(--cor-texto);
@@ -193,7 +193,7 @@
 
 @media (max-width: 600px) {
   .item {
-    padding: 18px;
+    padding: 14px;
   }
 
   .topo {
