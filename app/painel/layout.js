@@ -23,7 +23,7 @@ import { COOKIE_AVISO_TESTE, avisoPlano, textoDiasRestantes } from "@/lib/planos
 import { formatarData } from "@/lib/estados";
 
 // páginas que abrem com a empresa bloqueada (o resto manda para o Plano)
-const PAGINAS_COM_BLOQUEIO = ["/painel/plano", "/painel/conta"];
+const PAGINAS_COM_BLOQUEIO = ["/painel/plano", "/painel/cobranca", "/painel/conta"];
 const ITEM_PLANO = { id: "plano", nome: "Plano", href: "/painel/plano", icone: "moedas" };
 
 // LAYOUT do painel: envolve TODAS as páginas dentro de /painel
@@ -117,7 +117,7 @@ export default async function LayoutPainel({ children }) {
     notificacoes: { contador: totalAvisos || null },
   };
   const seccoes = bloqueada
-    ? [{ titulo: "Empresa", itens: [ITEM_PLANO, ...itensDoMenu(aparencia, "empresa").filter((i) => i.id === "conta")] }]
+    ? [{ titulo: "Empresa", itens: [ITEM_PLANO, ...itensDoMenu(aparencia, "empresa").filter((i) => i.id === "conta" || (eAdmin && i.id === "cobranca"))] }]
     : SECCOES_MENU.map(({ chave, titulo }) => ({
         titulo,
         itens: itensDoMenu(aparencia, chave)

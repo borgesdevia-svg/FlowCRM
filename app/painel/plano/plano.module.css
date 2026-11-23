@@ -370,32 +370,6 @@
   font-size: 0.86rem;
 }
 
-/* ---------- abas Plano / Cobrança ---------- */
-.abas {
-  display: flex;
-  gap: 4px;
-  border-bottom: 1px solid var(--cor-contorno);
-}
-
-.aba,
-.abaAtiva {
-  margin-bottom: -1px;
-  padding: 10px 16px;
-  border-bottom: 2px solid transparent;
-  color: var(--cor-texto-suave);
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.aba:hover {
-  color: var(--cor-texto);
-}
-
-.abaAtiva {
-  border-bottom-color: var(--cor-destaque);
-  color: var(--cor-texto);
-}
-
 /* ---------- confirmar uma mudança de plano / um cancelamento ---------- */
 .confirmar {
   display: flex;
@@ -467,19 +441,6 @@
   margin-top: 6px;
 }
 
-.numeroCartao {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.numeroCartao svg {
-  color: var(--cor-destaque);
-}
-
 .faturas {
   width: 100%;
   border-collapse: collapse;
@@ -532,4 +493,135 @@
   .faturas .opcional {
     display: none;
   }
+}
+
+/* ---------- página Cobrança ---------- */
+.topoCaixa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.etiquetaEstado {
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.estadoAtiva {
+  background: rgb(34 197 94 / 0.14);
+  color: #22c55e;
+}
+
+.estadoTeste {
+  background: rgb(var(--rgb-destaque) / 0.14);
+  color: var(--cor-destaque);
+}
+
+.estadoCancelada {
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto-suave);
+}
+
+.estadoPausa {
+  background: rgb(245 158 11 / 0.14);
+  color: #f59e0b;
+}
+
+/* os números principais da subscrição, em grelha */
+.factos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 8px 0 4px;
+}
+
+.factos dt,
+.factosLista dt {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+.factos dd {
+  margin: 2px 0 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.factos small {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.factosLista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.factosLista dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.explicacao {
+  font-size: 0.92rem;
+}
+
+.explicacao:empty {
+  display: none;
+}
+
+/* o cartão desenhado (só marca, 4 últimos números e validade) */
+.cartaoVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 320px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgb(var(--rgb-destaque) / 0.35), rgb(var(--rgb-destaque) / 0.08));
+  border: 1px solid rgb(var(--rgb-destaque) / 0.35);
+}
+
+.marcaCartao {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.numeroCartao {
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+.rodapeCartao {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.avisoCartao {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgb(245 158 11 / 0.1);
+  color: #f59e0b !important;
+  font-size: 0.88rem;
+}
+
+.botaoPerigo {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+}
+
+.botaoPerigo:hover {
+  background: #b91c1c;
 }

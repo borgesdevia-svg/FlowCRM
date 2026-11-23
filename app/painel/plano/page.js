@@ -2,7 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Icone from "@/components/Icone";
 import BotaoPlano from "@/components/painel/BotaoPlano";
-import AbasPlano from "@/components/painel/AbasPlano";
 import { obterSessao } from "@/lib/sessao";
 import { formatarData } from "@/lib/estados";
 import { DIAS_TESTE, FUNCOES, MESES_PAGOS_NO_ANUAL, PLANOS, precoPlano, textoDiasRestantes } from "@/lib/planos";
@@ -15,7 +14,7 @@ import styles from "./plano.module.css";
 // pagar), é a única página do painel que abre, além de A minha conta.
 // Quem já paga não muda de plano a meio: a mudança fica agendada para o dia do próximo
 // pagamento (antes, a página pede para confirmar e diz quando muda e quanto vai pagar).
-// O cartão, as faturas e o cancelamento estão na aba Cobrança (./cobranca).
+// O cartão, as faturas e o cancelamento estão na página Cobrança (/painel/cobranca, no menu).
 export const metadata = { title: "Plano · FlowCRM" };
 
 // "35 €/mês" · "350 €/ano"
@@ -125,8 +124,6 @@ export default async function PaginaPlano({ searchParams }) {
         <p>O plano da empresa e o que cada um inclui. O preço é por empresa, não por pessoa.</p>
       </header>
 
-      <AbasPlano ativa="plano" eAdmin={eAdmin} />
-
       {mensagem && (
         <p className={`${styles.mensagem} ${styles[mensagem.tipo]}`} role="status">
           {mensagem.texto}
@@ -171,7 +168,7 @@ export default async function PaginaPlano({ searchParams }) {
                     </BotaoPlano>
                   </form>
                 )}
-                <Link href="/painel/plano/cobranca" className="botao botao-secundario">
+                <Link href="/painel/cobranca" className="botao botao-secundario">
                   <Icone nome="cartao" tamanho={16} /> Cartão, faturas e cancelar
                 </Link>
               </div>
@@ -323,7 +320,7 @@ export default async function PaginaPlano({ searchParams }) {
           <p>
             O pagamento é feito na página da Stripe: o FlowCRM nunca vê os dados do cartão. Renova sozinho todos os
             meses (ou todos os anos). Mudar de plano ou cancelar só conta no fim do período já pago: até lá ficas com o
-            plano que pagaste. O cartão, as faturas e o cancelamento estão na aba Cobrança.
+            plano que pagaste. O cartão, as faturas e o cancelamento estão na página Cobrança, no menu.
             {!eAdmin && " Só os administradores podem mudar o plano."}
           </p>
           {modoTeste && (
