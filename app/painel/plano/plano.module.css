@@ -369,3 +369,167 @@
   color: var(--cor-texto-fraco);
   font-size: 0.86rem;
 }
+
+/* ---------- abas Plano / Cobrança ---------- */
+.abas {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.aba,
+.abaAtiva {
+  margin-bottom: -1px;
+  padding: 10px 16px;
+  border-bottom: 2px solid transparent;
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.aba:hover {
+  color: var(--cor-texto);
+}
+
+.abaAtiva {
+  border-bottom-color: var(--cor-destaque);
+  color: var(--cor-texto);
+}
+
+/* ---------- confirmar uma mudança de plano / um cancelamento ---------- */
+.confirmar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid rgb(var(--rgb-destaque) / 0.45);
+  background: rgb(var(--rgb-destaque) / 0.06);
+}
+
+.confirmar h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.confirmar p {
+  color: var(--cor-texto-suave);
+}
+
+.confirmarPerigo {
+  border-color: rgb(239 68 68 / 0.4);
+  background: rgb(239 68 68 / 0.05);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.agendado {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px dashed rgb(var(--rgb-destaque) / 0.45);
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+/* ---------- aba Cobrança ---------- */
+.cartoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.caixa {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.caixa h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.caixa p {
+  color: var(--cor-texto-suave);
+}
+
+.caixa form,
+.caixa .acoes {
+  margin-top: 6px;
+}
+
+.numeroCartao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.numeroCartao svg {
+  color: var(--cor-destaque);
+}
+
+.faturas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.faturas th {
+  padding: 8px 10px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.faturas td {
+  padding: 10px;
+  border-top: 1px solid var(--cor-contorno);
+  font-variant-numeric: tabular-nums;
+}
+
+.faturas a {
+  color: var(--cor-destaque);
+}
+
+.estadoFatura {
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgb(var(--rgb-tinta) / 0.07);
+  font-size: 0.8rem;
+}
+
+.paga {
+  background: rgb(var(--rgb-destaque) / 0.12);
+  color: var(--cor-destaque);
+}
+
+.tabelaFaturas {
+  overflow-x: auto;
+}
+
+.perigo {
+  color: var(--cor-perigo-texto);
+}
+
+@media (max-width: 760px) {
+  .cartoes {
+    grid-template-columns: 1fr;
+  }
+
+  .faturas .opcional {
+    display: none;
+  }
+}

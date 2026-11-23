@@ -23,6 +23,13 @@ const DESENHOS = {
       <path d="M10 9H8" />
     </>
   ),
+  // cartão de pagamento (aba Cobrança)
+  cartao: (
+    <>
+      <rect width="20" height="14" x="2" y="5" rx="2" />
+      <line x1="2" x2="22" y1="10" y2="10" />
+    </>
+  ),
   copiar: (
     <>
       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
