@@ -188,13 +188,24 @@
   color: var(--cor-aviso-texto) !important;
 }
 
+/* botões vermelhos (Remover, Cancelar o plano): fundo vermelho suave */
 .ligacaoPerigo {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border: 1px solid rgb(239 68 68 / 0.35);
+  border-radius: 999px;
+  background: rgb(239 68 68 / 0.12);
   color: var(--cor-perigo-texto);
   font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .ligacaoPerigo:hover {
-  text-decoration: underline;
+  border-color: rgb(239 68 68 / 0.55);
+  background: rgb(239 68 68 / 0.2);
 }
 
 /* ---------- tabela das faturas ---------- */
