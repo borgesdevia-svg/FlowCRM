@@ -1,0 +1,292 @@
+/* Página Cobrança: um só painel com secções, de cima para baixo. */
+
+.painel {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 820px;
+  padding: 28px 32px;
+  border-radius: 18px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.botaoPequeno {
+  padding: 7px 14px;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+/* ---------- 1. o plano ---------- */
+.plano {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.simbolo {
+  flex-shrink: 0;
+}
+
+.planoTexto {
+  flex: 1;
+  min-width: 0;
+}
+
+.planoTexto h2 {
+  font-size: 1.2rem;
+  font-weight: 650;
+}
+
+.planoTexto p {
+  margin-top: 2px;
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 2. linha de estado ---------- */
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: -12px; /* fica colada ao plano */
+  padding: 12px 14px 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-fundo-2);
+}
+
+.estado > svg {
+  flex-shrink: 0;
+  color: var(--cor-texto-suave);
+}
+
+.estado p {
+  flex: 1;
+  font-size: 0.92rem;
+}
+
+.estado form {
+  display: contents;
+}
+
+.avisoLinha {
+  border-color: rgb(245 158 11 / 0.35);
+}
+
+.avisoLinha > svg {
+  color: var(--cor-aviso-texto);
+}
+
+.perigoLinha {
+  border-color: rgb(239 68 68 / 0.4);
+}
+
+.perigoLinha > svg {
+  color: var(--cor-perigo-texto);
+}
+
+.nota {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+/* ---------- 3, 4 e 5: secções ---------- */
+.seccao {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.seccao h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.topoSeccao {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.topoSeccao p {
+  margin-top: 2px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+}
+
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.92rem;
+}
+
+/* uma linha com texto à esquerda e ações à direita (cartão, NIF) */
+.linha {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.linhaTexto {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.linhaTexto strong {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.linhaTexto > span {
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.linhaAcoes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* emblema da marca do cartão (desenhado, sem imagens de marcas) */
+.emblema {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 30px;
+  align-self: flex-start;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #1f3a8a, #2563eb);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.principal {
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: rgb(var(--rgb-destaque) / 0.14);
+  color: var(--cor-destaque);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.caduca {
+  color: var(--cor-aviso-texto) !important;
+}
+
+.ligacaoPerigo {
+  color: var(--cor-perigo-texto);
+  font-size: 0.88rem;
+}
+
+.ligacaoPerigo:hover {
+  text-decoration: underline;
+}
+
+/* ---------- tabela das faturas ---------- */
+.tabelaCaixa {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--cor-contorno);
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.tabela th {
+  padding: 10px 16px;
+  background: var(--cor-fundo-2);
+  color: var(--cor-texto-suave);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.tabela td {
+  padding: 12px 16px;
+  border-top: 1px solid var(--cor-contorno);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela .numero {
+  text-align: right;
+}
+
+.paga {
+  color: var(--cor-destaque);
+}
+
+.porPagar {
+  color: var(--cor-aviso-texto);
+}
+
+.acoesFatura {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  white-space: nowrap;
+}
+
+.acoesFatura a {
+  color: var(--cor-destaque);
+}
+
+.acoesFatura a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- cancelar ---------- */
+.cancelar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.cancelar p {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .painel {
+    padding: 20px 18px;
+  }
+
+  .plano {
+    flex-wrap: wrap;
+  }
+
+  .topoSeccao,
+  .cancelar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .estado {
+    flex-wrap: wrap;
+  }
+
+  .opcional {
+    display: none;
+  }
+}
