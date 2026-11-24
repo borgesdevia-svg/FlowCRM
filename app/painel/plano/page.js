@@ -4,7 +4,7 @@ import Icone from "@/components/Icone";
 import BotaoPlano from "@/components/painel/BotaoPlano";
 import { obterSessao } from "@/lib/sessao";
 import { formatarData } from "@/lib/estados";
-import { DIAS_TESTE, FUNCOES, MESES_PAGOS_NO_ANUAL, PLANOS, precoPlano, textoDiasRestantes } from "@/lib/planos";
+import { FUNCOES, MESES_PAGOS_NO_ANUAL, PLANOS, precoPlano, textoDiasRestantes } from "@/lib/planos";
 import { confirmarPagamento, lerMudancaAgendada, sincronizarAssinatura, stripeConfigurada } from "@/lib/pagamentos";
 import { anularMudanca, escolherPlano } from "@/lib/acoes/pagamentos";
 import styles from "./plano.module.css";
@@ -135,19 +135,31 @@ export default async function PaginaPlano({ searchParams }) {
         <section className={styles.bloqueio}>
           <Icone nome="cadeado" tamanho={22} />
           <div>
-            <h2>O CRM está em pausa</h2>
-            <p>
-              {plano.fimTeste && !plano.pago
-                ? `Os ${DIAS_TESTE} dias grátis acabaram a ${formatarData(plano.fimTeste)} sem um plano escolhido.`
-                : "A empresa não tem nenhum plano ativo."}{" "}
-              Os dados estão todos guardados e o formulário público continua a receber leads.{" "}
-              {eAdmin
-                ? "Escolhe um plano em baixo para voltar a usar o CRM."
-                : "Pede a um administrador da empresa para escolher um plano."}
-            </p>
-            <a href="/painel/clientes/exportar" className="botao botao-secundario" download>
-              <Icone nome="documento" tamanho={16} /> Exportar os leads (CSV)
-            </a>
+            {plano.novo ? (
+              <>
+                <h2>Falta escolher o plano</h2>
+                <p>
+                  A conta da empresa está criada.{" "}
+                  {eAdmin
+                    ? "Escolhe o plano em baixo e paga com cartão para começar a usar o CRM."
+                    : "Pede a um administrador da empresa para escolher um plano."}
+                </p>
+              </>
+            ) : (
+              <>
+                <h2>O CRM está em pausa</h2>
+                <p>
+                  A empresa não tem nenhum plano ativo. Os dados estão todos guardados e o formulário público continua
+                  a receber leads.{" "}
+                  {eAdmin
+                    ? "Escolhe um plano em baixo para voltar a usar o CRM."
+                    : "Pede a um administrador da empresa para escolher um plano."}
+                </p>
+                <a href="/painel/clientes/exportar" className="botao botao-secundario" download>
+                  <Icone nome="documento" tamanho={16} /> Exportar os leads (CSV)
+                </a>
+              </>
+            )}
           </div>
         </section>
       )}

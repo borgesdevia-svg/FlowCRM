@@ -84,6 +84,10 @@ export default async function PaginaCobranca({ searchParams }) {
   const emAtraso = cobranca?.estado === "past_due" || cobranca?.estado === "unpaid";
   const faturaPorPagar = faturas.find((f) => f.estado === "open");
   const pagoAte = plano.pago ? plano.proximoPagamento : null;
+  // pagou durante o teste grátis: o cartão está guardado, mas a primeira cobrança só é no fim do
+  // teste (a Stripe chama-lhe "trialing"); até lá a data guardada é o fim do teste, não do período pago
+  const testeComCartao = plano.pago && cobranca?.estado === "trialing";
+  const ateQuando = testeComCartao ? "grátis" : "pago";
   // o próximo pagamento já tem o preço do plano agendado, se houver mudança
   const proximo = mudanca ?? (plano.pago ? { plano: plano.chave, ciclo: plano.ciclo } : null);
   const renova = plano.pago && !plano.cancelaNoFim;
@@ -137,6 +141,10 @@ export default async function PaginaCobranca({ searchParams }) {
     estado = {
       texto: `Estás a experimentar o CRM Pro até ${formatarData(plano.fimTeste)}. Não há nada a pagar até lá.`,
     };
+  else if (testeComCartao && !plano.cancelaNoFim && proximo && !mudanca)
+    estado = {
+      texto: `Teste grátis até ${formatarData(pagoAte)}. Nesse dia são cobrados ${euros(precoPlano(proximo.plano, proximo.ciclo))} e o plano fica pago ${proximo.ciclo === "anual" ? "por um ano" : "por um mês"}.`,
+    };
   else if (plano.pago && plano.cancelaNoFim)
     estado = {
       tom: styles.avisoLinha,
@@ -185,7 +193,7 @@ export default async function PaginaCobranca({ searchParams }) {
           <h2 id="t-cancelar">Cancelar o plano?</h2>
           <p>
             O plano não é tirado agora: continuas com o <strong>{plano.nome}</strong> até{" "}
-            <strong>{formatarData(plano.proximoPagamento)}</strong>, que já está pago. Nesse dia a subscrição acaba, não é
+            <strong>{formatarData(plano.proximoPagamento)}</strong>, que já está {ateQuando}. Nesse dia a subscrição acaba, não é
             cobrado mais nada e o CRM fica em pausa até escolheres um plano outra vez. Os dados ficam todos guardados e o
             cartão continua guardado (podes retomar até lá).
           </p>
@@ -210,7 +218,7 @@ export default async function PaginaCobranca({ searchParams }) {
           {renova ? (
             <p>
               Sem cartão não há como cobrar a renovação, por isso <strong>o plano também é cancelado</strong>. Continuas
-              com o {plano.nome} até <strong>{formatarData(plano.proximoPagamento)}</strong>, que já está pago; depois o
+              com o {plano.nome} até <strong>{formatarData(plano.proximoPagamento)}</strong>, que já está {ateQuando}; depois o
               CRM fica em pausa. Se só queres cancelar e manter o cartão, usa “Cancelar o plano”.
             </p>
           ) : (
@@ -370,7 +378,7 @@ export default async function PaginaCobranca({ searchParams }) {
               <dd>{plano.pago ? nomeCiclo(plano.ciclo) : "—"}</dd>
             </div>
             <div>
-              <dt>{renova ? "Pago até" : "Ativo até"}</dt>
+              <dt>{testeComCartao ? "Teste grátis até" : renova ? "Pago até" : "Ativo até"}</dt>
               <dd>{pagoAte ? formatarData(pagoAte) : plano.emTeste ? formatarData(plano.fimTeste) : "—"}</dd>
             </div>
             <div>
