@@ -31,6 +31,20 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
     <>
       {estado.mensagem && <p className="alerta alerta-erro" role="alert">{estado.mensagem}</p>}
 
+      {/* já existe um lead com o mesmo email ou telefone: avisa, mas deixa guardar na mesma */}
+      {estado.duplicado && (
+        <div className={`alerta ${styles.duplicado}`} role="alert">
+          <p>
+            Já existe{" "}
+            <Link href={`/painel/clientes/${estado.duplicado.id}`} target="_blank">
+              {estado.duplicado.nome}
+            </Link>{" "}
+            com {estado.duplicado.campo === "email" ? "este email" : "este telefone"}. Confirma que não é a mesma pessoa.
+          </p>
+          <input type="hidden" name="confirmar_duplicado" value={estado.duplicado.assinatura} />
+        </div>
+      )}
+
       {/* ---------- Contacto ---------- */}
       <fieldset className={styles.grupo}>
         <legend className={styles.tituloGrupo}>
@@ -130,7 +144,7 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
 
       <div className={styles.acoes}>
         <button type="submit" className="botao" disabled={pendente}>
-          {pendente ? "A guardar..." : aEditar ? "Guardar alterações" : (
+          {pendente ? "A guardar..." : estado.duplicado ? "Guardar mesmo assim" : aEditar ? "Guardar alterações" : (
             <>
               <Icone nome="mais" tamanho={16} /> Adicionar lead
             </>

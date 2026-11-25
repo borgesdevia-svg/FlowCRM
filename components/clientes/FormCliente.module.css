@@ -276,3 +276,17 @@
     padding: 14px;
   }
 }
+
+/* aviso de lead duplicado: cor de aviso (amarelo), não de erro */
+.duplicado {
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.08);
+  color: var(--cor-aviso-texto);
+}
+
+.duplicado a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

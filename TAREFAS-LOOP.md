@@ -43,7 +43,7 @@ em "Notas" com o que fez (ou porque saltou).
 
 ## B. Funções novas pequenas (só código)
 
-- [ ] **B1. Aviso de lead duplicado.** Ao criar ou editar um lead (`lib/acoes/clientes.js` e o
+- [x] **B1. Aviso de lead duplicado.** Ao criar ou editar um lead (`lib/acoes/clientes.js` e o
   formulário), se já existir outro lead da empresa com o mesmo email ou telefone, mostrar um aviso
   com link para esse lead ("Já existe a Marta Silva com este email"). Não bloquear a gravação:
   só avisar. Respeitar o RLS (o comercial só vê os seus). Testes para a função que compara.
@@ -76,6 +76,7 @@ em "Notas" com o que fez (ou porque saltou).
 - A3: hovers que mexem (sobe/cresce) nas Configurações e no editor do formulário só com rato; alturas com dvh (painel, menu lateral, pipeline, formulário público, proposta, páginas de erro); todas as caixas de texto com 16px no telemóvel (o iPhone deixa de fazer zoom nas pesquisas); touch-action: manipulation em links e botões. Os outros ~140 hovers só mudam cor/fundo: deixados como estão.
 - A4: sem `transition: all`, sem `ease-in`, sem `scale(0)` no painel. Encurtado o que se vê dezenas de vezes por dia: entrada das páginas do painel 300→200ms com atraso máx. 60ms (a ficha chegava a 500ms no total); Atividade recente 600ms + cascata de 300ms → 250ms + 120ms; aviso da lista de leads 400→250ms. O resto (janelas 200ms, tutorial, formulário público) já estava dentro das regras.
 - A5: tirados brilhos e degradês decorativos do painel — barra de progresso do Início (degradê + brilho → verde liso), cartão da empresa do comercial, inicial da empresa e avatar do menu (degradê → cor lisa), brilho no canto do plano Pro (página Plano), do aviso "Função do CRM Pro" e do cartão de estado no formulário do lead. Mantido: etiquetas de estado (dão informação), cartão de crédito azul na Cobrança (imita um cartão), brilho do carregamento. Não há textos de marketing no painel.
+- B1: ao criar/editar um lead, se já houver outro com o mesmo email (sem maiúsculas) ou telefone (sem espaços nem +351), aparece um aviso amarelo com link para esse lead e o botão passa a "Guardar mesmo assim". Não bloqueia; se mudares o email/telefone volta a verificar. Funções em lib/duplicados.js com 5 testes. Respeita o RLS (o comercial só compara com os seus). Não verifica no importar CSV nem no formulário público.
 
 ## Precisa do aluno
 
