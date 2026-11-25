@@ -26,7 +26,7 @@
   top: 0;
   height: 100vh;
   height: 100svh; /* svh = altura real no telemóvel (sem a barra do browser) */
-  overflow: hidden; /* corta o "planeta" decorativo, que é muito maior do que o ecrã */
+  overflow: hidden;
   padding: calc(var(--altura-barra) + 12px) 16px 16px;
   display: flex;
   flex-direction: column;
@@ -115,55 +115,14 @@
   max-width: 1080px;
 }
 
-/* Decoração por trás da janela: um "horizonte" com brilho, como um planeta visto de perto.
-   São dois círculos enormes, um por cima do outro (z-index: -1 = atrás da janela):
-   1) ::before — círculo colorido e desfocado (azul à esquerda, verde ao meio, laranja à direita);
-   2) ::after  — círculo preto um pouco mais pequeno, que tapa o de trás e deixa
-                 ver só a borda a brilhar. */
-.palco::before,
-.palco::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  border-radius: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.palco::before {
-  top: -30px;
-  width: 2880px;
-  height: 2880px;
-  background: linear-gradient(
-    90deg,
-    transparent 24%,
-    #3b82f6 34%,
-    #22c55e 46%,
-    #a3e635 52%,
-    #fb923c 66%,
-    transparent 76%
-  );
-  filter: blur(40px);
-  opacity: 0.8;
-}
-
-.palco::after {
-  top: 40px;
-  width: 2800px;
-  height: 2800px;
-  background: var(--cor-fundo);
-}
-
 .janela {
   /* nunca mais alta do que o espaço livre no ecrã (barra + separadores + legenda) */
   height: min(590px, calc(100svh - 250px));
   min-height: 320px;
   display: flex;
   flex-direction: column;
-  /* efeito vidro: fundo meio transparente + desfoque do brilho que está por trás */
-  background: rgba(19, 22, 27, 0.72);
-  backdrop-filter: blur(24px);
+  /* fundo liso: já não há brilho por trás para desfocar */
+  background: var(--cor-fundo-2);
   border: 1px solid rgb(var(--rgb-tinta) / 0.14);
   border-radius: 24px;
   overflow: hidden;

@@ -6,69 +6,11 @@
 
 .caixa {
   position: relative;
-  overflow: hidden;
-  isolation: isolate; /* as decorações (z-index -1) ficam dentro da caixa, atrás do texto */
-  padding: 104px 24px 168px;
+  padding: 96px 24px;
   border-radius: 28px;
   border: 1px solid var(--cor-contorno);
   background: var(--cor-fundo);
   text-align: center;
-}
-
-/* Horizonte: a mesma técnica da janela do topo, mas virada ao contrário.
-   Um círculo enorme colorido e desfocado (.horizonte) e, por cima dele, um círculo
-   preto um pouco mais pequeno (::after) que só deixa ver a borda a brilhar. */
-.horizonte {
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  top: calc(100% - 110px);
-  width: 2000px;
-  height: 2000px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: linear-gradient(
-    90deg,
-    transparent 28%,
-    #3b82f6 38%,
-    #22c55e 48%,
-    #a3e635 54%,
-    #fb923c 64%,
-    transparent 74%
-  );
-  filter: blur(36px);
-  opacity: 0.75;
-  animation: respirar 6s ease-in-out infinite alternate;
-}
-
-.horizonte::after {
-  content: "";
-  position: absolute;
-  inset: 60px; /* 60px mais pequeno de cada lado: é esta "borda" que brilha */
-  border-radius: 50%;
-  background: var(--cor-fundo);
-  filter: blur(8px);
-}
-
-/* o brilho "respira": fica mais forte e mais fraco devagar */
-@keyframes respirar {
-  from {
-    opacity: 0.55;
-  }
-  to {
-    opacity: 0.85;
-  }
-}
-
-.etiqueta {
-  display: inline-block;
-  margin-bottom: 20px;
-  padding: 5px 14px;
-  border: 1px solid rgb(var(--rgb-tinta) / 0.12);
-  border-radius: 999px;
-  background: rgb(var(--rgb-tinta) / 0.03);
-  color: var(--cor-destaque-claro);
-  font-size: 0.85rem;
 }
 
 .caixa h2 {
@@ -99,20 +41,9 @@
   font-size: 1rem;
 }
 
-/* botão principal em "vidro verde", igual ao do destaque */
-.botoes .principal {
-  padding: 14px 36px;
-  color: #fff;
-  background: linear-gradient(180deg, rgb(var(--rgb-destaque) / 0.3), rgb(var(--rgb-destaque) / 0.08));
-  border-color: rgba(74, 222, 128, 0.55);
-  box-shadow:
-    0 0 32px rgb(var(--rgb-destaque) / 0.3),
-    inset 0 1px 0 rgb(var(--rgb-tinta) / 0.2);
-}
-
 @media (max-width: 640px) {
   .caixa {
-    padding: 64px 20px 128px;
+    padding: 64px 20px;
     border-radius: 20px;
   }
 }

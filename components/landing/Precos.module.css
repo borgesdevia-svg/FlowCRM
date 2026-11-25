@@ -62,10 +62,9 @@
   padding: 40px;
 }
 
-/* o Pro: linha a separar e um brilho verde suave no canto (sem cor de cartão diferente) */
+/* o Pro: só uma linha a separar do Essencial */
 .pro {
   border-left: 1px solid var(--cor-contorno);
-  background: radial-gradient(circle at 100% 0%, rgb(var(--rgb-destaque) / 0.13), transparent 60%);
 }
 
 .plano h3 {
