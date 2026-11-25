@@ -1,13 +1,11 @@
-/* aviso de função do CRM Pro: moldura com um brilho verde suave no canto (como o plano Pro da landing) */
+/* aviso de função do CRM Pro: moldura simples, como os outros cartões */
 .aviso {
   display: flex;
   gap: 18px;
   padding: 16px;
   border: 1px solid var(--painel-contorno, var(--cor-contorno));
   border-radius: 7px;
-  background:
-    radial-gradient(circle at 100% 0%, rgb(var(--rgb-destaque) / 0.12), transparent 55%),
-    var(--painel-cartao, var(--cor-cartao));
+  background: var(--painel-cartao, var(--cor-cartao));
 }
 
 .icone {

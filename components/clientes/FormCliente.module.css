@@ -175,9 +175,7 @@
   padding: 14px;
   border-radius: 7px;
   border: 1px solid color-mix(in srgb, var(--cor) 40%, var(--cor-contorno));
-  background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--cor) 22%, transparent), transparent 60%),
-    var(--cor-cartao);
+  background: var(--cor-cartao); /* a cor do estado fica só no contorno */
   transition: border-color 0.3s;
 }
 

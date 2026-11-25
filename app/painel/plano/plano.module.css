@@ -34,9 +34,7 @@
 }
 
 .atualPro {
-  background:
-    radial-gradient(circle at 100% 0%, rgb(var(--rgb-destaque) / 0.12), transparent 55%),
-    var(--cor-cartao);
+  border-color: rgb(var(--rgb-destaque) / 0.35); /* o Pro distingue-se pelo contorno, sem brilho */
 }
 
 .atualTexto {
@@ -109,7 +107,6 @@
 
 .pro {
   border-left: 1px solid var(--cor-contorno);
-  background: radial-gradient(circle at 100% 0%, rgb(var(--rgb-destaque) / 0.1), transparent 55%);
 }
 
 .topoPlano {

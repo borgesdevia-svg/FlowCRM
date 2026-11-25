@@ -353,7 +353,7 @@
   font-size: 1.1rem;
 }
 
-/* barra de progresso verde com brilho */
+/* barra de progresso verde (cor lisa, sem brilho) */
 .progresso {
   height: 6px;
   border-radius: 999px;
@@ -365,8 +365,7 @@
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--cor-destaque-escuro), var(--cor-destaque));
-  box-shadow: 0 0 12px rgb(var(--rgb-destaque) / 0.5);
+  background: var(--cor-destaque);
 }
 
 .passos {
@@ -465,8 +464,8 @@
   gap: 18px;
   padding: 16px 18px;
   border-radius: 7px;
-  border: 1px solid rgb(var(--rgb-destaque) / 0.25);
-  background: linear-gradient(120deg, rgb(var(--rgb-destaque) / 0.12), rgb(var(--rgb-destaque) / 0.03) 60%), var(--cor-cartao);
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
 }
 
 .logoEmpresa,
@@ -486,7 +485,7 @@
 .inicialEmpresa {
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--cor-destaque-claro), var(--cor-destaque-escuro));
+  background: var(--cor-destaque);
   color: var(--cor-sobre-destaque);
   font-size: 1.5rem;
   font-weight: 700;

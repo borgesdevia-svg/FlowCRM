@@ -36,7 +36,7 @@ em "Notas" com o que fez (ou porque saltou).
 - [x] **A4. Rever animações** (skill `review-animations`). Todo o CSS de `app/` e `components/`
   (menos a landing): `transition: all`, `ease-in`, durações acima de 300 ms em coisas pequenas,
   `scale(0)`, keyframes em coisas que se abrem/fecham depressa. Usar `--ease-out` do globals.css.
-- [ ] **A5. "Ar de IA" no painel.** Procurar no painel o mesmo que tirámos da landing:
+- [x] **A5. "Ar de IA" no painel.** Procurar no painel o mesmo que tirámos da landing:
   etiquetas/comprimidos decorativos, ícones dentro de quadrados coloridos, gradientes e brilhos
   só para enfeitar, textos de marketing ("num relance", "trabalha sozinho"). Corrigir o que for
   claramente decoração; dúvidas vão para "Precisa do aluno".
@@ -75,8 +75,11 @@ em "Notas" com o que fez (ou porque saltou).
 - A2: pipeline e tarefas já estavam bem protegidos (nomes partem, colunas com scroll, "Ver todos" quando há muitos). Corrigido: nome do lead sem espaços nas tarefas saía da linha; textos cortados com "…" (email/responsável no cartão do pipeline, títulos no calendário) mostram-se inteiros ao passar o rato.
 - A3: hovers que mexem (sobe/cresce) nas Configurações e no editor do formulário só com rato; alturas com dvh (painel, menu lateral, pipeline, formulário público, proposta, páginas de erro); todas as caixas de texto com 16px no telemóvel (o iPhone deixa de fazer zoom nas pesquisas); touch-action: manipulation em links e botões. Os outros ~140 hovers só mudam cor/fundo: deixados como estão.
 - A4: sem `transition: all`, sem `ease-in`, sem `scale(0)` no painel. Encurtado o que se vê dezenas de vezes por dia: entrada das páginas do painel 300→200ms com atraso máx. 60ms (a ficha chegava a 500ms no total); Atividade recente 600ms + cascata de 300ms → 250ms + 120ms; aviso da lista de leads 400→250ms. O resto (janelas 200ms, tutorial, formulário público) já estava dentro das regras.
+- A5: tirados brilhos e degradês decorativos do painel — barra de progresso do Início (degradê + brilho → verde liso), cartão da empresa do comercial, inicial da empresa e avatar do menu (degradê → cor lisa), brilho no canto do plano Pro (página Plano), do aviso "Função do CRM Pro" e do cartão de estado no formulário do lead. Mantido: etiquetas de estado (dão informação), cartão de crédito azul na Cobrança (imita um cartão), brilho do carregamento. Não há textos de marketing no painel.
 
 ## Precisa do aluno
+
+- A5: o logótipo no site (barra de cima, rodapé, login) tem um brilho verde à volta. É pequeno, mas é "brilho". Tirar também?
 
 - A4: os números do Início "contam" de 0 até ao valor (900ms) sempre que a página abre. A skill desaconselha (página vista muitas vezes por dia), mas foste tu que pediste "números a contar". Queres manter, encurtar para ~400ms, ou só contar na primeira visita do dia?
 
