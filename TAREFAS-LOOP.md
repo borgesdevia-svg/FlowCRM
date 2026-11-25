@@ -72,6 +72,7 @@ em "Notas" com o que fez (ou porque saltou).
 ## Notas (o que foi feito)
 
 - A1: lista de leads — emails (até 254 letras) e nomes sem espaços partem em vez de alargar a tabela; nome do responsável parte em 2 linhas (máx. 200px). Ficha — nome do responsável parte dentro da caixa; no telemóvel as caixas Valor/Responsável descem quando o valor é grande. Verificado pelo CSS (sem browser). Lista vazia e 1 lead já estavam bem (textos próprios; paginação de 25).
+- A2: pipeline e tarefas já estavam bem protegidos (nomes partem, colunas com scroll, "Ver todos" quando há muitos). Corrigido: nome do lead sem espaços nas tarefas saía da linha; textos cortados com "…" (email/responsável no cartão do pipeline, títulos no calendário) mostram-se inteiros ao passar o rato.
 
 ## Precisa do aluno
 
