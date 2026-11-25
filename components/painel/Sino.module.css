@@ -40,10 +40,14 @@
   font-size: 0.68rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  animation: pulsar 2.4s ease-in-out infinite;
 }
 
-/* brilho vermelho a "respirar" para chamar a atenção */
+/* só quando chegou alguma coisa nova: o brilho vermelho "respira" 3 vezes e pára
+   (um painel que se usa o dia todo não deve ter nada sempre a mexer) */
+.novo {
+  animation: pulsar 2.4s ease-in-out 3;
+}
+
 @keyframes pulsar {
   50% {
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18);
@@ -51,7 +55,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .numero {
+  .novo {
     animation: none;
   }
 }
@@ -69,13 +73,14 @@
   border: 1px solid var(--cor-contorno);
   background: var(--cor-cartao);
   box-shadow: 0 12px 32px -8px rgb(16 24 40 / 0.18), 0 4px 8px -4px rgb(16 24 40 / 0.08);
-  animation: abrir 0.18s var(--curva);
+  transform-origin: top right; /* cresce a partir do sino, que está em cima à direita */
+  animation: abrir 180ms var(--ease-out);
 }
 
 @keyframes abrir {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: scale(0.96);
   }
 }
 

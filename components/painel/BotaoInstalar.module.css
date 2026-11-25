@@ -20,6 +20,18 @@
   box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9);
 }
 
+/* abre como as outras janelas (Editar tarefa, chave), em vez de aparecer de repente */
+.dialogo[open] {
+  animation: abrir 0.2s var(--ease-out);
+}
+
+@keyframes abrir {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
 .dialogo::backdrop {
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(3px);

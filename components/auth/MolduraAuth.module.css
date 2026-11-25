@@ -2,6 +2,7 @@
   position: relative;
   isolation: isolate;
   min-height: 100vh;
+  min-height: 100dvh; /* no telemóvel conta com as barras do browser */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,18 +12,29 @@
   overflow: hidden;
 }
 
-/* mesma grelha + brilho da landing */
+/* só o brilho verde no topo, sem grelha de quadrados (como a landing) */
 .fundo {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(ellipse 50% 40% at 50% 0%, rgb(var(--rgb-destaque) / 0.18), transparent 70%),
-    linear-gradient(rgb(var(--rgb-tinta) / 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(var(--rgb-tinta) / 0.04) 1px, transparent 1px);
-  background-size: 100% 100%, 56px 56px, 56px 56px;
-  mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, #000 30%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 30%, #000 30%, transparent 100%);
+  background: radial-gradient(ellipse 50% 40% at 50% 0%, rgb(var(--rgb-destaque) / 0.18), transparent 70%);
+}
+
+/* entrada curta: quem vem entrar quer escrever já, não esperar quase 1 segundo */
+.pagina :global(.entrar) {
+  animation: entrarAuth 350ms var(--ease-out) forwards;
+  animation-delay: var(--atraso, 0ms);
+}
+
+@keyframes entrarAuth {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .logo {

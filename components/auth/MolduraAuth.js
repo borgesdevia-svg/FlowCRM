@@ -3,7 +3,7 @@ import styles from "./MolduraAuth.module.css";
 import SimboloLogo from "@/components/SimboloLogo";
 
 // Moldura comum às páginas de login e registo:
-// fundo com grelha e brilho (igual à landing) e um cartão central.
+// fundo com brilho verde (sem grelha) e um cartão central.
 // Props: titulo, subtitulo, children (o formulário) e rodape (link para a outra página).
 export default function MolduraAuth({ titulo, subtitulo, children, rodape }) {
   return (
@@ -17,13 +17,13 @@ export default function MolduraAuth({ titulo, subtitulo, children, rodape }) {
         </span>
       </Link>
 
-      <div className={`entrar ${styles.cartao}`} style={{ "--atraso": "100ms" }}>
+      <div className={`entrar ${styles.cartao}`} style={{ "--atraso": "50ms" }}>
         <h1>{titulo}</h1>
         <p className={styles.subtitulo}>{subtitulo}</p>
         {children}
       </div>
 
-      <p className={`entrar ${styles.rodape}`} style={{ "--atraso": "200ms" }}>
+      <p className={`entrar ${styles.rodape}`} style={{ "--atraso": "100ms" }}>
         {rodape}
       </p>
     </main>

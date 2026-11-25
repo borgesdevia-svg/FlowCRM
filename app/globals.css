@@ -47,6 +47,8 @@
 
   /* curva de animação "suave a travar", usada em todo o site */
   --curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+  /* curva mais "decidida" para respostas rápidas (carregar num botão, abrir um menu) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
   /* diz ao browser que o site é escuro (barras de scroll, campos, etc.) */
   color-scheme: dark;
@@ -80,6 +82,7 @@
 
 html {
   scroll-behavior: smooth; /* ao clicar em #funcionalidades, desliza em vez de saltar */
+  -webkit-tap-highlight-color: transparent; /* sem o "flash" cinzento ao tocar no telemóvel */
 }
 
 /* "clip" corta o que sair para os lados (sem scroll horizontal) mas, ao contrário
@@ -135,12 +138,20 @@ a {
   font-size: 0.95rem;
   cursor: pointer;
   box-shadow: 0 0 0 0 rgb(var(--rgb-destaque) / 0);
-  transition: transform 0.2s var(--curva), box-shadow 0.2s var(--curva), background 0.2s;
+  transition: transform 160ms var(--ease-out), box-shadow 0.2s var(--curva), background 0.2s;
 }
 
-.botao:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 30px -6px rgb(var(--rgb-destaque) / 0.55);
+/* o "levantar" só com rato: no telemóvel o hover ficava preso depois de tocar */
+@media (hover: hover) and (pointer: fine) {
+  .botao:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px -6px rgb(var(--rgb-destaque) / 0.55);
+  }
+}
+
+/* ao carregar, o botão encolhe um pouco: mostra que ouviu o clique */
+.botao:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .botao-secundario {
@@ -297,6 +308,15 @@ a {
   box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
 }
 
+/* no telemóvel as caixas têm pelo menos 16px: abaixo disso o iPhone faz zoom ao tocar */
+@media (pointer: coarse) {
+  .campo input,
+  .campo select,
+  .campo textarea {
+    font-size: 16px;
+  }
+}
+
 /* campo com erro: contorno vermelho */
 .campo input[aria-invalid="true"] {
   border-color: var(--cor-perigo-texto);
@@ -367,11 +387,17 @@ a {
   color: var(--cor-texto);
 }
 
-/* caixas de mensagem (erro geral ou sucesso) */
+/* caixas de mensagem (erro geral ou sucesso): aparecem com um fade curto em vez de saltar */
 .alerta {
   padding: 12px 14px;
   border-radius: var(--raio);
   font-size: 0.9rem;
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
 .alerta-erro {
@@ -443,6 +469,13 @@ a {
   }
 }
 
+/* Pipeline: o cartão de um lead desliza da coluna antiga para a nova (ver Arrastar.js).
+   Movimento no ecrã: curva ease-in-out; 300ms chega para se ver para onde foi. */
+::view-transition-group(.mover-lead) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
 /* Revelar ao fazer scroll (usado pelo componente <Revelar>).
    Começa invisível; quando o componente acrescenta a classe "visivel", aparece. */
 .revelar {
@@ -485,5 +518,12 @@ summary:focus-visible {
     opacity: 1;
     transform: none;
     filter: none;
+  }
+
+  /* o cartão do pipeline muda de coluna sem deslizar */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

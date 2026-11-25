@@ -10,17 +10,49 @@
 // O número só desce quando a tarefa é concluída (não há "marcar como lida").
 // Só chegam as primeiras 5; "total" diz quantas há, e a lista inteira está
 // na página /painel/notificacoes.
+// A bolinha vermelha só "pulsa" quando há notificações novas desde a última vez que
+// a pessoa abriu o sino (o número visto fica guardado no browser, em localStorage).
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { formatarDiaCurto, tempoRelativo, urgenciaSemResponsavel } from "@/lib/datas";
 import AtribuirCliente from "@/components/painel/AtribuirCliente";
 import Icone from "@/components/Icone";
 import styles from "./Sino.module.css";
 
+// número de notificações que a pessoa já viu, guardado no browser.
+// useSyncExternalStore lê o localStorage sem estragar a hidratação (no servidor é null).
+const CHAVE_VISTO = "flowcrm_sino_visto";
+const EVENTO_VISTO = "flowcrm-sino-visto";
+
+function guardarVisto(n) {
+  localStorage.setItem(CHAVE_VISTO, String(n));
+  window.dispatchEvent(new Event(EVENTO_VISTO)); // avisa quem está a ler
+}
+
+function subscreverVisto(avisar) {
+  window.addEventListener(EVENTO_VISTO, avisar);
+  window.addEventListener("storage", avisar); // outro separador abriu o sino
+  return () => {
+    window.removeEventListener(EVENTO_VISTO, avisar);
+    window.removeEventListener("storage", avisar);
+  };
+}
+
+const lerVisto = () => Number(localStorage.getItem(CHAVE_VISTO) ?? 0);
+const lerVistoServidor = () => null;
+
 export default function Sino({ tarefas, semResponsavel = [], nSemResponsavel = 0, equipa = [], total, hoje }) {
   const [aberto, setAberto] = useState(false);
   const refContentor = useRef(null);
+  const visto = useSyncExternalStore(subscreverVisto, lerVisto, lerVistoServidor);
+  // há mais notificações do que da última vez que abriu o sino?
+  const novo = visto !== null && !aberto && total > visto;
+
+  // abriu o sino, ou o número desceu (tarefas feitas): o total atual passa a "visto"
+  useEffect(() => {
+    if (visto !== null && (aberto || total < visto)) guardarVisto(total);
+  }, [aberto, total, visto]);
 
   // fechar ao clicar fora ou com a tecla Esc
   useEffect(() => {
@@ -51,7 +83,7 @@ export default function Sino({ tarefas, semResponsavel = [], nSemResponsavel = 0
       >
         <Icone nome="sino" tamanho={18} />
         {/* bolinha com o número (só aparece se houver alguma coisa) */}
-        {total > 0 && <span className={styles.numero}>{total > 9 ? "9+" : total}</span>}
+        {total > 0 && <span className={novo ? `${styles.numero} ${styles.novo}` : styles.numero}>{total > 9 ? "9+" : total}</span>}
       </button>
 
       {aberto && (

@@ -8,8 +8,13 @@
 // o RLS e o registo no histórico são exatamente os mesmos.
 // O conteúdo dos cartões continua a ser feito no servidor e chega aqui como "children".
 // No telemóvel o arrastar não funciona bem, por isso os botões de fase continuam lá.
+//
+// Cada cartão está dentro de um <ViewTransition> com o nome do lead: quando o servidor
+// devolve o pipeline atualizado, o browser vê que o "lead-123" mudou de sítio e faz o
+// cartão deslizar da coluna antiga para a nova (em vez de desaparecer e aparecer).
+// Funciona também com os botões de fase. Nos browsers sem suporte, o cartão só salta, como antes.
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, ViewTransition } from "react";
 import { mudarEstado } from "@/lib/acoes/clientes";
 import styles from "./Arrastar.module.css";
 
@@ -28,14 +33,18 @@ export function CartaoArrastavel({ id, estado, className, children }) {
   }
 
   return (
-    <article
-      draggable
-      onDragStart={comecar}
-      onDragEnd={() => setAArrastar(false)}
-      className={`${className} ${styles.cartao} ${aArrastar ? styles.aArrastar : ""}`}
-    >
-      {children}
-    </article>
+    // share="mover-lead": a classe usada no CSS (globals.css) para o deslizar.
+    // default="none": não anima em mais nenhuma situação (ex.: ao mudar de página).
+    <ViewTransition name={`lead-${id}`} share="mover-lead" default="none">
+      <article
+        draggable
+        onDragStart={comecar}
+        onDragEnd={() => setAArrastar(false)}
+        className={`${className} ${styles.cartao} ${aArrastar ? styles.aArrastar : ""}`}
+      >
+        {children}
+      </article>
+    </ViewTransition>
   );
 }
 
