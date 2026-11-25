@@ -56,7 +56,7 @@
 
 /* aviso de confirmação: entra a deslizar (resposta a uma ação do utilizador) */
 .aviso {
-  animation: aviso 0.4s var(--curva);
+  animation: aviso 250ms var(--ease-out);
 }
 
 @keyframes aviso {

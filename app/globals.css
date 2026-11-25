@@ -449,13 +449,16 @@ label,
    não deve esperar pela animação (a de cima fica para a landing e o login). */
 .painel-conteudo .entrar {
   animation-name: aparecer-leve;
-  animation-duration: 0.3s;
+  animation-duration: 200ms;
+  animation-timing-function: var(--ease-out);
+  /* as páginas do painel abrem dezenas de vezes por dia: o atraso entre blocos fica no máximo 60ms */
+  animation-delay: min(var(--atraso, 0ms), 60ms);
 }
 
 @keyframes aparecer-leve {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
