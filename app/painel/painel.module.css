@@ -12,6 +12,7 @@
   display: grid;
   grid-template-columns: 236px minmax(0, 1fr);
   min-height: 100vh;
+  min-height: 100dvh; /* no telemóvel conta com as barras do browser */
   background: var(--cor-fundo);
 }
 
@@ -77,6 +78,7 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   gap: 18px;

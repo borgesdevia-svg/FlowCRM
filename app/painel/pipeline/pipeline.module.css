@@ -51,6 +51,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   height: clamp(440px, calc(100vh - 250px), 1000px);
+  height: clamp(440px, calc(100dvh - 250px), 1000px); /* dvh: altura real no telemóvel */
 }
 
 .coluna {

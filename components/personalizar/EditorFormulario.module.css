@@ -699,8 +699,10 @@
   transition: transform 0.15s;
 }
 
-.amostraCor:hover {
-  transform: scale(1.08);
+@media (hover: hover) and (pointer: fine) {
+  .amostraCor:hover {
+    transform: scale(1.08);
+  }
 }
 
 .amostraCor[aria-checked="true"] {

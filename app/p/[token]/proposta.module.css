@@ -7,6 +7,7 @@
   --verde: #16a34a;
   color-scheme: light;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: clamp(16px, 5vw, 56px) 16px 32px;
   background: #f2f4f7;
   color: var(--cor-texto);

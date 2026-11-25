@@ -308,13 +308,23 @@ a {
   box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
 }
 
-/* no telemóvel as caixas têm pelo menos 16px: abaixo disso o iPhone faz zoom ao tocar */
+/* no telemóvel as caixas têm pelo menos 16px: abaixo disso o iPhone faz zoom ao tocar.
+   O :not() dá força suficiente para ganhar às caixas de pesquisa com tamanho próprio. */
 @media (pointer: coarse) {
-  .campo input,
-  .campo select,
-  .campo textarea {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select:not([multiple]),
+  textarea:not([readonly]) {
     font-size: 16px;
   }
+}
+
+/* toques rápidos sem o atraso do "duplo toque para zoom" */
+a,
+button,
+summary,
+label,
+[role="button"] {
+  touch-action: manipulation;
 }
 
 /* campo com erro: contorno vermelho */

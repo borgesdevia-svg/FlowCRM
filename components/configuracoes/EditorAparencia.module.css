@@ -71,10 +71,13 @@
   cursor: pointer;
 }
 
-.modelo:hover,
-.grafico:hover {
-  border-color: rgb(var(--rgb-tinta) / 0.2);
-  transform: translateY(-1px);
+/* só com rato: no telemóvel o hover ficava preso depois de tocar */
+@media (hover: hover) and (pointer: fine) {
+  .modelo:hover,
+  .grafico:hover {
+    border-color: rgb(var(--rgb-tinta) / 0.2);
+    transform: translateY(-1px);
+  }
 }
 
 .modeloAtivo,

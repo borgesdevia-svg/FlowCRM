@@ -10,6 +10,7 @@
   --rgb-tinta: 16 24 40;
   color-scheme: light;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,6 +1,7 @@
 /* Estilos partilhados pelas páginas 404 (not-found.js) e de erro (error.js) */
 .pagina {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;

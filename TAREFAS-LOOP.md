@@ -30,7 +30,7 @@ em "Notas" com o que fez (ou porque saltou).
   muitos leads. Corrigir o que parte (texto a sair, colunas a saltar). Sem deixar o "toggle" de teste no código.
 - [x] **A2. Pipeline e Tarefas com dados extremos** (skill `break-ui`). `/painel/pipeline`,
   `/painel/tarefas`, calendário e fila: títulos longos, colunas vazias, muitas tarefas no mesmo dia.
-- [ ] **A3. Telemóvel** (skill `mobile-native`). Rever o CSS do painel: hovers que ficam presos
+- [x] **A3. Telemóvel** (skill `mobile-native`). Rever o CSS do painel: hovers que ficam presos
   ao tocar (pôr em `@media (hover: hover) and (pointer: fine)`), `touch-action: manipulation` nos
   botões, alturas com `dvh`, `viewport-fit=cover` + `env(safe-area-inset-*)` para a app instalada.
 - [ ] **A4. Rever animações** (skill `review-animations`). Todo o CSS de `app/` e `components/`
@@ -73,6 +73,9 @@ em "Notas" com o que fez (ou porque saltou).
 
 - A1: lista de leads — emails (até 254 letras) e nomes sem espaços partem em vez de alargar a tabela; nome do responsável parte em 2 linhas (máx. 200px). Ficha — nome do responsável parte dentro da caixa; no telemóvel as caixas Valor/Responsável descem quando o valor é grande. Verificado pelo CSS (sem browser). Lista vazia e 1 lead já estavam bem (textos próprios; paginação de 25).
 - A2: pipeline e tarefas já estavam bem protegidos (nomes partem, colunas com scroll, "Ver todos" quando há muitos). Corrigido: nome do lead sem espaços nas tarefas saía da linha; textos cortados com "…" (email/responsável no cartão do pipeline, títulos no calendário) mostram-se inteiros ao passar o rato.
+- A3: hovers que mexem (sobe/cresce) nas Configurações e no editor do formulário só com rato; alturas com dvh (painel, menu lateral, pipeline, formulário público, proposta, páginas de erro); todas as caixas de texto com 16px no telemóvel (o iPhone deixa de fazer zoom nas pesquisas); touch-action: manipulation em links e botões. Os outros ~140 hovers só mudam cor/fundo: deixados como estão.
 
 ## Precisa do aluno
+
+- A3: `viewport-fit=cover` + margens `env(safe-area-inset-*)` para a app instalada no iPhone (conteúdo por baixo do notch) NÃO foi feito: sem um iPhone para testar, arrisca pôr a barra de cima por baixo do relógio. Testar quando tiveres o iPhone à mão.
 
