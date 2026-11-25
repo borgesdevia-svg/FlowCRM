@@ -178,7 +178,7 @@ export default async function PaginaCalendario({ searchParams }) {
               {/* no computador: os títulos das primeiras tarefas */}
               <span className={styles.tarefasDia}>
                 {tarefas.slice(0, NO_DIA).map((t) => (
-                  <span key={t.id} className={`${styles.tarefa} ${classeTarefa(t)}`}>
+                  <span key={t.id} className={`${styles.tarefa} ${classeTarefa(t)}`} title={t.titulo}>
                     {t.titulo}
                   </span>
                 ))}

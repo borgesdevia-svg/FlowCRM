@@ -72,13 +72,14 @@ export default async function PaginaPipeline({ searchParams }) {
       <dl className={styles.dados}>
         <div>
           <dt>Email</dt>
-          <dd>{c.email ?? "Sem email"}</dd>
+          {/* o texto pode ser cortado com "...": o title mostra-o inteiro ao passar o rato */}
+          <dd title={c.email ?? undefined}>{c.email ?? "Sem email"}</dd>
         </div>
         {/* o admin vê quem é o responsável; o comercial já sabe que é ele */}
         {eAdmin && (
           <div>
             <dt>Responsável</dt>
-            <dd>{c.perfis?.nome ?? "Por atribuir"}</dd>
+            <dd title={c.perfis?.nome ?? undefined}>{c.perfis?.nome ?? "Por atribuir"}</dd>
           </div>
         )}
       </dl>

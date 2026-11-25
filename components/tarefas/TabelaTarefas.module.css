@@ -186,8 +186,10 @@
 }
 
 .detalhes {
+  max-width: 100%;
   color: var(--cor-texto-fraco);
   font-size: 0.82rem;
+  overflow-wrap: anywhere; /* nome do lead sem espaços não sai da linha */
 }
 
 .cliente {

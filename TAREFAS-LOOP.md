@@ -28,7 +28,7 @@ em "Notas" com o que fez (ou porque saltou).
 - [x] **A1. Leads com dados extremos** (skill `break-ui`). Página `/painel/clientes` e ficha
   `/painel/clientes/[id]`: nomes e emails enormes, empresa vazia, valor 9 999 999 €, lista vazia,
   muitos leads. Corrigir o que parte (texto a sair, colunas a saltar). Sem deixar o "toggle" de teste no código.
-- [ ] **A2. Pipeline e Tarefas com dados extremos** (skill `break-ui`). `/painel/pipeline`,
+- [x] **A2. Pipeline e Tarefas com dados extremos** (skill `break-ui`). `/painel/pipeline`,
   `/painel/tarefas`, calendário e fila: títulos longos, colunas vazias, muitas tarefas no mesmo dia.
 - [ ] **A3. Telemóvel** (skill `mobile-native`). Rever o CSS do painel: hovers que ficam presos
   ao tocar (pôr em `@media (hover: hover) and (pointer: fine)`), `touch-action: manipulation` nos
