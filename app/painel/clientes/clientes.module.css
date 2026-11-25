@@ -262,6 +262,7 @@
 .linkCliente {
   color: var(--cor-texto);
   font-weight: 600;
+  overflow-wrap: anywhere; /* nome sem espaços (ex.: "Contabilidade-Fernandes&Filhos") não alarga a tabela */
 }
 
 /* truque: um pseudo-elemento do link estica-se por cima da linha inteira */
@@ -295,10 +296,17 @@
 
 .nomeEmail small {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 2px 8px;
   color: var(--cor-texto-fraco);
   font-size: 0.82rem;
+}
+
+/* emails compridos (até 254 letras) partem em vez de empurrar as outras colunas */
+.email {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* "Formulário": o lead chegou pelo formulário público */
@@ -313,10 +321,16 @@
 }
 
 .colTelefone,
-.colData,
-.colResponsavel {
+.colData {
   color: var(--cor-texto-suave);
   white-space: nowrap;
+}
+
+/* o nome do responsável pode ser comprido: parte em 2 linhas em vez de alargar a coluna */
+.colResponsavel {
+  max-width: 200px;
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
 }
 
 .colValor {

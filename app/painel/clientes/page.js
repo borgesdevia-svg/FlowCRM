@@ -203,7 +203,8 @@ export default async function PaginaClientes({ searchParams }) {
                             {c.nome}
                           </Link>
                           <small>
-                            {c.email ?? "Sem email"}
+                            {/* o email fica num span próprio: assim pode partir se for muito comprido */}
+                            <span className={styles.email}>{c.email ?? "Sem email"}</span>
                             {c.origem === "formulario" && <em className={styles.origem}>Formulário</em>}
                           </small>
                         </div>

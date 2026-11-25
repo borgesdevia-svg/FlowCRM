@@ -25,7 +25,7 @@ em "Notas" com o que fez (ou porque saltou).
 
 ## A. Polir o que existe
 
-- [ ] **A1. Leads com dados extremos** (skill `break-ui`). Página `/painel/clientes` e ficha
+- [x] **A1. Leads com dados extremos** (skill `break-ui`). Página `/painel/clientes` e ficha
   `/painel/clientes/[id]`: nomes e emails enormes, empresa vazia, valor 9 999 999 €, lista vazia,
   muitos leads. Corrigir o que parte (texto a sair, colunas a saltar). Sem deixar o "toggle" de teste no código.
 - [ ] **A2. Pipeline e Tarefas com dados extremos** (skill `break-ui`). `/painel/pipeline`,
@@ -70,6 +70,8 @@ em "Notas" com o que fez (ou porque saltou).
   demais, redirecionamentos abertos. Corrigir no código.
 
 ## Notas (o que foi feito)
+
+- A1: lista de leads — emails (até 254 letras) e nomes sem espaços partem em vez de alargar a tabela; nome do responsável parte em 2 linhas (máx. 200px). Ficha — nome do responsável parte dentro da caixa; no telemóvel as caixas Valor/Responsável descem quando o valor é grande. Verificado pelo CSS (sem browser). Lista vazia e 1 lead já estavam bem (textos próprios; paginação de 25).
 
 ## Precisa do aluno
 

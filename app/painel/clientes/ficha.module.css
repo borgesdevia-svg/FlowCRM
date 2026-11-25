@@ -176,6 +176,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.95rem;
+  overflow-wrap: anywhere; /* nomes compridos partem dentro da caixa */
 }
 
 .responsavel b {
@@ -338,8 +339,13 @@
   }
 
 
+  /* valores grandes (ex.: 9 999 999,00 €) não cabem lado a lado: as caixas descem */
+  .numerosCliente {
+    flex-wrap: wrap;
+  }
+
   .numerosCliente > div {
-    flex: 1;
+    flex: 1 1 140px;
     min-width: 0;
   }
 }
