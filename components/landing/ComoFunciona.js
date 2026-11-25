@@ -7,7 +7,7 @@ import styles from "./ComoFunciona.module.css";
 // que se "desenha" quando a secção aparece no ecrã.
 
 const passos = [
-  { titulo: "Regista a tua empresa", texto: "Cria a conta em poucos minutos. Quem regista fica como administrador." },
+  { titulo: "Regista a empresa e escolhe o plano", texto: "Cria a conta e paga com cartão, por mês ou por ano. Quem regista fica como administrador." },
   { titulo: "Junta a tua equipa", texto: "Adiciona os comerciais. Cada um vê os seus leads; o admin vê todos." },
   { titulo: "Recebe e acompanha leads", texto: "Partilha o formulário público e segue cada negócio a partir do painel." },
 ];
@@ -39,7 +39,7 @@ export default function ComoFunciona() {
         <Link href="/registo" className="botao">
           Criar a conta da empresa
         </Link>
-        <small>14 dias grátis, sem cartão.</small>
+        <small>Cancelas quando quiseres.</small>
       </Revelar>
     </section>
   );

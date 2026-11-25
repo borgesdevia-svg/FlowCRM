@@ -29,8 +29,8 @@ export default function BarraTopo() {
           <Link href="/login" className={styles.entrar}>
             Entrar
           </Link>
-          <Link href="/registo" className="botao">
-            Experimentar grátis
+          <Link href="/#precos" className="botao">
+            Escolher um plano
           </Link>
         </div>
       </div>

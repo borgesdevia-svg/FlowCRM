@@ -10,20 +10,18 @@ export default function Destaque() {
   return (
     <section className={styles.destaque}>
       <div className={styles.conteudo}>
-        <p className={`entrar ${styles.etiqueta}`}>CRM para pequenas equipas de vendas</p>
-
-        <h1 className="entrar" style={{ "--atraso": "80ms" }}>
+        <h1 className="entrar">
           Todos os teus clientes, num só fluxo.
         </h1>
 
-        <p className={`entrar ${styles.descricao}`} style={{ "--atraso": "160ms" }}>
-          Organiza os clientes, acompanha cada negócio e recebe os novos contactos
-          do teu site. Tudo num só sítio, sem folhas de Excel.
+        <p className={`entrar ${styles.descricao}`} style={{ "--atraso": "80ms" }}>
+          O CRM para pequenas equipas de vendas. Organiza os clientes, acompanha cada
+          negócio e recebe os novos contactos do teu site, sem folhas de Excel.
         </p>
 
-        <div className={`entrar ${styles.botoes}`} style={{ "--atraso": "240ms" }}>
-          <Link href="/registo" className={`botao ${styles.botaoVidro}`}>
-            Experimentar 14 dias grátis
+        <div className={`entrar ${styles.botoes}`} style={{ "--atraso": "160ms" }}>
+          <Link href="/#precos" className="botao">
+            Escolher um plano
           </Link>
           <Link href="/#demonstracao" className="botao botao-secundario">
             Explorar plataforma

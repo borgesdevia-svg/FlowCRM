@@ -9,7 +9,7 @@ export default function PaginaRegisto() {
   return (
     <MolduraAuth
       titulo="Cria a conta da tua empresa"
-      subtitulo="Em 2 minutos tens o teu CRM pronto a usar."
+      subtitulo="Depois de criares a conta, escolhes o plano e pagas com cartão."
       rodape={
         <>
           Já tens conta? <Link href="/login">Entrar</Link>

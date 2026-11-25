@@ -2,7 +2,7 @@
 // Secção de preços: dois planos lado a lado, preço POR EMPRESA (não por pessoa).
 // Decidido com o aluno a 2026-11-22: CRM Essencial 15 €/mês (até 5 pessoas) e
 // CRM Pro 35 €/mês (até 20 pessoas); no anual pagam-se 10 meses (2 grátis);
-// 14 dias grátis do Pro, sem cartão. Depois, paga-se com a Stripe na página Plano do painel.
+// Sem dias grátis: cria-se a conta e paga-se logo com a Stripe, na página Plano do painel.
 //
 // É um componente de cliente ("use client") só por causa do interruptor Mensal | Anual:
 // o useState guarda a escolha e os preços mudam sem recarregar a página.
@@ -32,7 +32,7 @@ export default function Precos() {
     <section id="precos" className={styles.seccao}>
       <CabecalhoSeccao
         titulo="Um preço para a empresa toda"
-        subtitulo="Pagas por empresa, não por pessoa. Experimenta o Pro durante 14 dias, sem cartão."
+        subtitulo="Pagas por empresa, não por pessoa. Por mês ou por ano, e cancelas quando quiseres."
       />
 
       {/* interruptor Mensal | Anual: dois botões, o ativo fica marcado (aria-pressed) */}
@@ -63,7 +63,7 @@ export default function Precos() {
             </p>
 
             <Link href="/registo" className={p.destaque ? "botao" : "botao botao-secundario"}>
-              Experimentar 14 dias grátis
+              Começar com o {p.nome}
             </Link>
 
             <p className={styles.pessoas}>

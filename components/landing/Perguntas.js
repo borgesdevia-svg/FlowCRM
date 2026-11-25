@@ -41,9 +41,9 @@ const perguntas = [
       "O Essencial tem o necessário para organizar os leads: pipeline, tarefas, formulário, WhatsApp e importar/exportar, para até 5 pessoas. O Pro junta as automações, as propostas aceites online, o design do formulário e os relatórios da equipa, para até 20 pessoas. O preço é por empresa, não por pessoa.",
   },
   {
-    pergunta: "O que acontece quando acabam os 14 dias grátis?",
+    pergunta: "Como pago e como cancelo?",
     resposta:
-      "Não pedimos cartão, por isso nada é cobrado sozinho. Três dias antes, o painel avisa. Quando acabam, escolhes o CRM Essencial ou o CRM Pro, por mês ou por ano, e pagas com cartão. Até lá o CRM fica em pausa, mas os dados ficam todos guardados, podes exportar os leads e o formulário continua a recebê-los.",
+      "Crias a conta, escolhes o CRM Essencial ou o CRM Pro, por mês ou por ano, e pagas com cartão. Podes cancelar quando quiseres na página Cobrança: o plano fica ativo até ao fim do período já pago. Depois o CRM fica em pausa, mas os dados ficam guardados, podes exportar os leads e o formulário continua a recebê-los.",
   },
   {
     pergunta: "Posso tirar os meus leads do FlowCRM?",

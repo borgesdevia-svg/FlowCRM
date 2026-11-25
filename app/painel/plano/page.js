@@ -4,7 +4,7 @@ import Icone from "@/components/Icone";
 import BotaoPlano from "@/components/painel/BotaoPlano";
 import { obterSessao } from "@/lib/sessao";
 import { formatarData } from "@/lib/estados";
-import { DIAS_TESTE, FUNCOES, MESES_PAGOS_NO_ANUAL, PLANOS, precoPlano, textoDiasRestantes } from "@/lib/planos";
+import { FUNCOES, MESES_PAGOS_NO_ANUAL, PLANOS, precoPlano, textoDiasRestantes } from "@/lib/planos";
 import { confirmarPagamento, lerMudancaAgendada, sincronizarAssinatura, stripeConfigurada } from "@/lib/pagamentos";
 import { anularMudanca, escolherPlano } from "@/lib/acoes/pagamentos";
 import styles from "./plano.module.css";
@@ -75,7 +75,9 @@ export default async function PaginaPlano({ searchParams }) {
 
   let estado;
   if (plano.bloqueada) {
-    estado = "Sem plano ativo. Escolhe um plano para voltar a usar o CRM.";
+    estado = plano.semPrimeiroPlano
+      ? "Escolhe um plano para começar a usar o CRM."
+      : "Sem plano ativo. Escolhe um plano para voltar a usar o CRM.";
   } else if (plano.emTeste) {
     estado = `A experimentar o CRM Pro: ${textoDiasRestantes(plano.diasRestantes)} (até ${formatarData(plano.fimTeste)}). Depois, escolhe um plano para continuar.`;
   } else if (plano.pago && plano.cancelaNoFim) {
@@ -135,19 +137,21 @@ export default async function PaginaPlano({ searchParams }) {
         <section className={styles.bloqueio}>
           <Icone nome="cadeado" tamanho={22} />
           <div>
-            <h2>O CRM está em pausa</h2>
+            <h2>{plano.semPrimeiroPlano ? "Falta escolher o plano" : "O CRM está em pausa"}</h2>
             <p>
-              {plano.fimTeste && !plano.pago
-                ? `Os ${DIAS_TESTE} dias grátis acabaram a ${formatarData(plano.fimTeste)} sem um plano escolhido.`
-                : "A empresa não tem nenhum plano ativo."}{" "}
-              Os dados estão todos guardados e o formulário público continua a receber leads.{" "}
+              {plano.semPrimeiroPlano
+                ? "A conta da empresa está criada. Escolhe o CRM Essencial ou o CRM Pro, por mês ou por ano, e o CRM abre logo a seguir ao pagamento."
+                : "A empresa não tem nenhum plano ativo. Os dados estão todos guardados e o formulário público continua a receber leads."}{" "}
               {eAdmin
                 ? "Escolhe um plano em baixo para voltar a usar o CRM."
                 : "Pede a um administrador da empresa para escolher um plano."}
             </p>
-            <a href="/painel/clientes/exportar" className="botao botao-secundario" download>
-              <Icone nome="documento" tamanho={16} /> Exportar os leads (CSV)
-            </a>
+            {/* uma empresa acabada de criar ainda não tem leads para exportar */}
+            {!plano.semPrimeiroPlano && (
+              <a href="/painel/clientes/exportar" className="botao botao-secundario" download>
+                <Icone nome="documento" tamanho={16} /> Exportar os leads (CSV)
+              </a>
+            )}
           </div>
         </section>
       )}

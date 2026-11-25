@@ -23,7 +23,7 @@ const colunas = [
     titulo: "Conta",
     links: [
       { texto: "Entrar", href: "/login" },
-      { texto: "Experimentar grátis", href: "/registo" },
+      { texto: "Escolher um plano", href: "/#precos" },
     ],
   },
   {
