@@ -106,3 +106,10 @@ Todas as tarefas feitas, 1 commit por tarefa no branch `loop-melhorias` (sem pus
 - Limpeza: ~300 linhas de CSS e 2 funções sem uso apagadas; lint limpo; testes 65 → 72.
 - Segurança: ids e slugs validados em todas as ações e páginas públicas; webhook, recuperação e redirecionamentos revistos (estavam bem).
 - Falta: as decisões em "Precisa do aluno" (metas, brilho do logótipo, números a contar, iPhone, mensagem do registo, spam no formulário). Para levar para o `main`: `git checkout main` e `git merge loop-melhorias`.
+
+## Decisões do aluno (2026-11-26)
+
+- Metas: meta da empresa toda, nos dois planos. Feito: bloco "Meta de <mês>" na Visão geral (só admin).
+- Brilho do logótipo: tirado. Números do Início: contam em 400ms.
+- Spam no formulário: limite por IP (migração 33, 5 envios por hora). Mensagem do registo: mantém-se.
+- iPhone (viewport-fit=cover): fica para quando houver um iPhone para testar.
