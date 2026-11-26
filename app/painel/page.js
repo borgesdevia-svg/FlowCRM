@@ -10,6 +10,8 @@ import Icone from "@/components/Icone";
 import AtividadeRecente from "@/components/painel/AtividadeRecente";
 import Grafico from "@/components/painel/Grafico";
 import ContarNumero from "@/components/painel/ContarNumero";
+import MetaMes from "@/components/painel/MetaMes";
+import { ganhoDoMes } from "@/lib/metas";
 import styles from "./inicio.module.css";
 
 // Junta numa só lista os eventos para a "Atividade recente", do mais recente para o mais antigo:
@@ -133,6 +135,8 @@ export default async function PaginaPainel() {
     { data: fechos }, // cada "Passou para Ativo", para o tempo médio até fechar
     { count: novosMesAnterior }, // leads que entraram no mês passado (para a variação)
     { count: totalFormulario }, // quantos leads vieram do formulário público (origem)
+    { data: meta }, // meta de vendas deste mês (migração 32)
+    { data: passagensMes }, // cada "Passou para Ativo" deste mês, com o valor do lead (para a meta)
     ...porSemana // um número por semana, para o gráfico
   ] = await Promise.all([
     supabase.rpc("resumo_clientes", { termo: "" }),
@@ -172,6 +176,17 @@ export default async function PaginaPainel() {
       .limit(1000),
     contarClientes().gte("criado_em", inicioMesAnterior).lt("criado_em", inicioMes),
     contarClientes().eq("origem", "formulario"),
+    supabase.from("metas").select("valor").eq("mes", inicioMes).maybeSingle(),
+    // só o admin vê a meta (o comercial só vê os seus leads, a soma ficaria errada)
+    eAdmin
+      ? supabase
+          .from("interacoes")
+          .select("cliente_id, clientes(estado, valor_previsto)")
+          .eq("tipo", "sistema")
+          .eq("nota", textoMudancaFase("ativo"))
+          .gte("criado_em", inicioMes)
+          .limit(1000)
+      : { data: null },
     ...semanas.map((s) => contarClientes().gt("criado_em", s.inicio).lte("criado_em", s.fim)),
   ]);
 
@@ -380,6 +395,9 @@ export default async function PaginaPainel() {
           </article>
         ))}
       </section>
+
+      {/* meta de vendas da empresa este mês (só o admin: é ele que a define e vê a empresa toda) */}
+      {eAdmin && <MetaMes meta={meta ? Number(meta.valor) : null} ganho={ganhoDoMes(passagensMes)} nomeMes={nomeMes} />}
 
       {/* gráfico grande à esquerda + origem dos leads à direita (como "Sales Overview" e "Lead Source") */}
       {!semDados && (

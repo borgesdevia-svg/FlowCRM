@@ -1,0 +1,80 @@
+/* Bloco da meta do mês na Visão geral (mesmo aspeto dos outros blocos do Início) */
+.bloco {
+  padding: 16px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+  box-shadow: var(--sombra-cartao);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topo h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.subtitulo {
+  margin-top: 4px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.botaoPequeno {
+  padding: 7px 14px;
+  font-size: 0.85rem;
+}
+
+/* "7 400,00 € de 12 000,00 € (62%)" */
+.valores {
+  color: var(--cor-texto-suave);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.valores strong {
+  color: var(--cor-texto);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-right: 4px;
+}
+
+.barra {
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.08);
+  overflow: hidden;
+}
+
+.barra span {
+  display: block;
+  height: 100%;
+  background: var(--cor-destaque);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.caixa {
+  width: 180px;
+}
