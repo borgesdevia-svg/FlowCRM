@@ -55,7 +55,7 @@ export default function FormRegisto() {
       <div className="campo">
         <label htmlFor="confirmacao">Confirmar password</label>
         <CampoPassword id="confirmacao" name="confirmacao" autoComplete="new-password"
-          placeholder="Escreve a mesma password" invalido={!!erros.confirmacao} />
+          placeholder="Repete a password" invalido={!!erros.confirmacao} />
         {erros.confirmacao && <p className="erro-campo">{erros.confirmacao}</p>}
       </div>
 

@@ -89,7 +89,7 @@ export default function FormMembro() {
           id="confirmacao"
           name="confirmacao"
           autoComplete="new-password"
-          placeholder="Escreve a mesma password"
+          placeholder="Repete a password"
           invalido={!!erros.confirmacao}
         />
         {erros.confirmacao && <p className="erro-campo">{erros.confirmacao}</p>}

@@ -20,6 +20,9 @@
 .formulario > :global(.campo) > label:first-child::before,
 .formulario > :global(.campo) legend::before {
   content: counter(pergunta) ". ";
+  /* o número é só visual: os leitores de ecrã leem "Nome" e não ". Nome"
+     (os browsers que não conhecem o "/ ''" ficam com a linha de cima) */
+  content: counter(pergunta) ". " / "";
   color: var(--cor-texto-fraco);
   font-weight: 500;
 }
