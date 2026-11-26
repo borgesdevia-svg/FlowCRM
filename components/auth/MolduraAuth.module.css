@@ -51,10 +51,9 @@
   color: var(--cor-destaque);
 }
 
-/* símbolo do logótipo (SVG), com um brilho verde suave */
+/* símbolo do logótipo (SVG) */
 .simbolo {
   flex-shrink: 0;
-  filter: drop-shadow(0 0 10px rgb(var(--rgb-destaque) / 0.35));
 }
 
 .cartao {

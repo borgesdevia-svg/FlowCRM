@@ -6,7 +6,7 @@
 
 import { useEffect, useState } from "react";
 
-const DURACAO = 900; // milissegundos
+const DURACAO = 400; // milissegundos
 const euros = new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 
 export default function ContarNumero({ valor, sufixo = "", formato }) {

@@ -34,11 +34,9 @@
   color: var(--cor-destaque);
 }
 
-/* pequeno símbolo do logótipo: quadrado verde com brilho */
-/* símbolo do logótipo (SVG), com um brilho verde suave */
+/* símbolo do logótipo (SVG) */
 .simbolo {
   flex-shrink: 0;
-  filter: drop-shadow(0 0 10px rgb(var(--rgb-destaque) / 0.35));
 }
 
 .menu {
