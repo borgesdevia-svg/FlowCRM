@@ -7,7 +7,7 @@ import { guardarMeta } from "@/lib/acoes/metas";
 import { formatarEuros } from "@/lib/estados";
 import styles from "./MetaMes.module.css";
 
-export default function MetaMes({ meta, ganho, nomeMes }) {
+export default function MetaMes({ meta, ganho, nomeMes, previsao }) {
   const [estado, accao, pendente] = useActionState(guardarMeta, {});
   // sem meta, a caixa aparece logo; com meta, só depois de carregar em "Mudar meta"
   const [aEditar, setAEditar] = useState(!meta);
@@ -51,6 +51,34 @@ export default function MetaMes({ meta, ganho, nomeMes }) {
           >
             <span style={{ width: `${Math.min(100, percentagem)}%` }}></span>
           </div>
+          {/* previsão: quanto falta, a que ritmo se vai e quanto está em negociação */}
+          {previsao && (
+            <ul className={styles.previsao}>
+              {previsao.falta === 0 ? (
+                <li>
+                  <strong>Meta batida.</strong> Mais {formatarEuros(ganho - meta)} do que o previsto.
+                </li>
+              ) : (
+                <li>
+                  Faltam <strong>{formatarEuros(previsao.falta)}</strong> em {previsao.diasRestantes}{" "}
+                  {previsao.diasRestantes === 1 ? "dia" : "dias"}.
+                </li>
+              )}
+              {previsao.ritmo !== null && previsao.falta > 0 && (
+                <li>
+                  Ao ritmo atual, o mês fecha com cerca de <strong>{formatarEuros(previsao.ritmo)}</strong> (
+                  {Math.round((previsao.ritmo / meta) * 100)}% da meta).
+                </li>
+              )}
+              {previsao.falta > 0 && previsao.comNegociacao > ganho && (
+                <li>
+                  Se fecharem todos os leads em negociação, chegas a{" "}
+                  <strong>{formatarEuros(previsao.comNegociacao)}</strong> (
+                  {Math.round((previsao.comNegociacao / meta) * 100)}%).
+                </li>
+              )}
+            </ul>
+          )}
         </>
       )}
 

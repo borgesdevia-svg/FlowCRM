@@ -11,7 +11,7 @@ import AtividadeRecente from "@/components/painel/AtividadeRecente";
 import Grafico from "@/components/painel/Grafico";
 import ContarNumero from "@/components/painel/ContarNumero";
 import MetaMes from "@/components/painel/MetaMes";
-import { ganhoDoMes } from "@/lib/metas";
+import { ganhoDoMes, previsaoMes } from "@/lib/metas";
 import styles from "./inicio.module.css";
 
 // Junta numa só lista os eventos para a "Atividade recente", do mais recente para o mais antigo:
@@ -238,6 +238,7 @@ export default async function PaginaPainel() {
     (novosMesAnterior ?? 0) > 0 ? Math.round((((novosEsteMes ?? 0) - novosMesAnterior) / novosMesAnterior) * 100) : null;
   const nomeMes = new Intl.DateTimeFormat("pt-PT", { month: "long", timeZone: "Europe/Lisbon" }).format(new Date());
   const porFechar = (contagem.novo ?? 0) + (contagem.negociacao ?? 0);
+  const ganhoMes = ganhoDoMes(passagensMes); // valor ganho este mês (para a meta)
 
   // os 3 cartões grandes do topo (ao estilo da referência Octax):
   //  - em cima, num painel de cor suave: ícone + nome, variação (se houver) e o número grande;
@@ -397,7 +398,24 @@ export default async function PaginaPainel() {
       </section>
 
       {/* meta de vendas da empresa este mês (só o admin: é ele que a define e vê a empresa toda) */}
-      {eAdmin && <MetaMes meta={meta ? Number(meta.valor) : null} ganho={ganhoDoMes(passagensMes)} nomeMes={nomeMes} />}
+      {eAdmin && (
+        <MetaMes
+          meta={meta ? Number(meta.valor) : null}
+          ganho={ganhoMes}
+          nomeMes={nomeMes}
+          previsao={
+            meta
+              ? previsaoMes({
+                  ganho: ganhoMes,
+                  meta: Number(meta.valor),
+                  dia: Number(hoje.slice(8, 10)),
+                  diasMes: new Date(ano, mes, 0).getDate(), // dia 0 do mês seguinte = último dia deste
+                  negociacao: valorNegociacao,
+                })
+              : null
+          }
+        />
+      )}
 
       {/* gráfico grande à esquerda + origem dos leads à direita (como "Sales Overview" e "Lead Source") */}
       {!semDados && (

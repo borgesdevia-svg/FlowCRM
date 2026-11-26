@@ -78,3 +78,19 @@
 .caixa {
   width: 180px;
 }
+
+/* previsão por baixo da barra: frases curtas, uma por linha */
+.previsao {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.previsao strong {
+  color: var(--cor-texto);
+  font-weight: 600;
+}
