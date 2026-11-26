@@ -5,7 +5,7 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { guardarHorario } from "@/lib/acoes/marcacoes";
-import { DURACOES, NOMES_DIAS } from "@/lib/marcacoes";
+import { DURACOES, MAX_TEXTO_MARCACOES, MAX_TITULO_MARCACOES, NOMES_DIAS, TEXTOS_MARCACOES } from "@/lib/marcacoes";
 import styles from "./FormHorario.module.css";
 
 // segunda primeiro, domingo no fim (como num calendário português)
@@ -82,12 +82,40 @@ export default function FormHorario({ inicial }) {
         </div>
       </div>
 
+      {/* o que o cliente lê no topo da página de marcações (vazio = o texto padrão) */}
+      <fieldset className={styles.grupo}>
+        <legend>Página de marcações</legend>
+        <div className={styles.textos}>
+          <div className="campo">
+            <label htmlFor="h-titulo">Título</label>
+            <input
+              id="h-titulo"
+              name="titulo"
+              maxLength={MAX_TITULO_MARCACOES}
+              defaultValue={inicial.titulo ?? ""}
+              placeholder={TEXTOS_MARCACOES.titulo}
+            />
+          </div>
+          <div className="campo">
+            <label htmlFor="h-texto">Texto</label>
+            <textarea
+              id="h-texto"
+              name="texto"
+              rows={2}
+              maxLength={MAX_TEXTO_MARCACOES}
+              defaultValue={inicial.texto ?? ""}
+              placeholder={TEXTOS_MARCACOES.texto(inicial.duracao)}
+            />
+          </div>
+        </div>
+      </fieldset>
+
       <div className={styles.rodape}>
         <p className={estado.erro ? styles.erro : styles.sucesso} role="status">
           {estado.erro ?? estado.sucesso ?? ""}
         </p>
         <button type="submit" className="botao" disabled={pendente}>
-          {pendente ? "A guardar…" : "Guardar horário"}
+          {pendente ? "A guardar…" : "Guardar"}
         </button>
       </div>
     </form>

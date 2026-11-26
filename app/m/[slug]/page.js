@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { eSlug } from "@/lib/validacao";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { criarClienteAdmin } from "@/lib/supabase/admin";
-import { diasComHorarios, normalizarConfig } from "@/lib/marcacoes";
+import { TEXTOS_MARCACOES, diasComHorarios, normalizarConfig } from "@/lib/marcacoes";
 import CartaoFormulario, { CenaFormulario } from "@/components/formulario/CartaoFormulario";
 import EscolherHorario from "@/components/marcacoes/EscolherHorario";
 import { normalizarDesign } from "@/lib/formularioDesign";
@@ -63,8 +63,8 @@ export default async function PaginaMarcacoes({ params }) {
         design={design}
         nome={formulario.nome}
         logo={formulario.logo_url}
-        titulo="Marcar uma reunião"
-        texto={`Escolhe o dia e a hora que te dão mais jeito. Cada marcação dura ${config.duracao} minutos.`}
+        titulo={config.titulo ?? TEXTOS_MARCACOES.titulo}
+        texto={config.texto ?? TEXTOS_MARCACOES.texto(config.duracao)}
       >
         <EscolherHorario slug={slug} dias={dias} nomeEmpresa={formulario.nome} />
       </CartaoFormulario>

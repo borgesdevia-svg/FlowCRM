@@ -110,3 +110,10 @@ test("configDaEquipa: sem antecedência e até 90 dias, mesmo desligada", async 
   const agora = Date.parse("2026-12-02T09:10:00Z"); // quarta 09:10: a equipa ainda pode marcar às 09:30
   assert.deepEqual(horariosDoDia({ config: c, dia: "2026-12-02", agora }).map((h) => h.hora), ["09:30", "10:00", "10:30", "11:00", "11:30"]);
 });
+
+test("normalizarConfig: título e texto da empresa (vazio = padrão)", () => {
+  const c = normalizarConfig({ titulo: "  Marcar   consulta ", texto: "" });
+  assert.equal(c.titulo, "Marcar consulta");
+  assert.equal(c.texto, null);
+  assert.equal(normalizarConfig({ titulo: "x".repeat(200) }).titulo.length, 80);
+});

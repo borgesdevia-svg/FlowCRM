@@ -125,6 +125,13 @@
   accent-color: var(--cor-destaque);
 }
 
+/* título e texto da página pública, um por baixo do outro */
+.textos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 /* ---------- horas e regras ---------- */
 .linhas {
   display: grid;
