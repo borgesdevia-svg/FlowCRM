@@ -90,7 +90,7 @@ em "Notas" com o que fez (ou porque saltou).
 
 - D1: no registo, "Já existe uma conta com este email" deixa alguém descobrir que emails usam o FlowCRM (a recuperação já tem cuidado com isso). Trocar por uma mensagem neutra torna o registo mais confuso para quem se engana. Para um CRM pequeno parece-me aceitável manter; decide tu.
 
-- B2 (metas de vendas): 1) autorizar a migração 32_metas.sql; 2) depois faço: em Configurações (ou na Visão geral, só admin) uma caixa "Meta deste mês: ____ €"; na Visão geral uma barra "7 400 € de 12 000 € (62%)" com o valor dos leads que passaram a Ativo este mês; 3) decidir: é só para o Pro ou para os dois planos? meta da empresa toda ou também por comercial?
+- B2 (metas de vendas): 1) migração 32_metas.sql APLICADA a 2026-11-26; 2) depois faço: em Configurações (ou na Visão geral, só admin) uma caixa "Meta deste mês: ____ €"; na Visão geral uma barra "7 400 € de 12 000 € (62%)" com o valor dos leads que passaram a Ativo este mês; 3) decidir: é só para o Pro ou para os dois planos? meta da empresa toda ou também por comercial?
 
 - A5: o logótipo no site (barra de cima, rodapé, login) tem um brilho verde à volta. É pequeno, mas é "brilho". Tirar também?
 

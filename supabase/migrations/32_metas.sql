@@ -1,4 +1,4 @@
--- 32: metas de vendas por mês (PREPARADA, AINDA NÃO APLICADA — precisa da autorização do aluno).
+-- 32: metas de vendas por mês (aplicada a 2026-11-26).
 --
 -- Uma meta = quanto a empresa quer fechar (em euros) num mês.
 -- Ex.: em dezembro de 2026, 12 000 €. A Visão geral compara com o valor dos leads
