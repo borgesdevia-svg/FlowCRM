@@ -1,0 +1,40 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 12px;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+}
+
+.opcional {
+  color: var(--cor-texto-fraco);
+  font-weight: 400;
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.erro {
+  color: var(--cor-perigo-texto);
+  font-size: 0.86rem;
+}
+
+.sucesso {
+  color: var(--cor-destaque);
+  font-size: 0.86rem;
+}
+
+.vazio {
+  padding-top: 10px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+}

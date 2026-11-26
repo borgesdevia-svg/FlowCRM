@@ -100,3 +100,13 @@ test("ficheiroIcs e linkGoogleCalendar", async () => {
   assert.equal(link.searchParams.get("dates"), "20261202T093000Z/20261202T100000Z");
   assert.equal(link.searchParams.get("text"), "Reunião");
 });
+
+test("configDaEquipa: sem antecedência e até 90 dias, mesmo desligada", async () => {
+  const { configDaEquipa, horariosDoDia } = await import("../lib/marcacoes.js");
+  const c = configDaEquipa({ ...config, ligada: false });
+  assert.equal(c.ligada, true);
+  assert.equal(c.antecedencia_horas, 0);
+  assert.equal(c.dias_frente, 90);
+  const agora = Date.parse("2026-12-02T09:10:00Z"); // quarta 09:10: a equipa ainda pode marcar às 09:30
+  assert.deepEqual(horariosDoDia({ config: c, dia: "2026-12-02", agora }).map((h) => h.hora), ["09:30", "10:00", "10:30", "11:00", "11:30"]);
+});

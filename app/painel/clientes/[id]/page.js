@@ -18,7 +18,9 @@ import { tempoRelativo } from "@/lib/datas";
 import { eEmail, eUuid } from "@/lib/validacao";
 import { nomeCanal } from "@/lib/canais";
 import { procurarDuplicado } from "@/lib/procurarDuplicado";
-import { textoMarcacao } from "@/lib/marcacoes";
+import { configDaEquipa, diasComHorarios, textoMarcacao } from "@/lib/marcacoes";
+import { criarClienteAdmin } from "@/lib/supabase/admin";
+import FormMarcarReuniao from "@/components/marcacoes/FormMarcarReuniao";
 import BotaoCancelarMarcacao from "@/components/marcacoes/BotaoCancelarMarcacao";
 import styles from "../ficha.module.css";
 
@@ -33,6 +35,25 @@ const HISTORICO = 30;
 const MAX_HISTORICO = 1000;
 const MAX_POR_FAZER = 50;
 const FEITAS_RECENTES = 10;
+
+// Horas livres para a equipa marcar uma reunião (Marcações, migração 36): o horário da empresa
+// sem antecedência mínima. As horas ocupadas são as de TODA a empresa (o comercial não vê as
+// marcações dos outros pelo RLS), por isso leem-se com a chave secreta; só as horas, nada mais.
+async function horasLivresDaEquipa(supabase, empresaId) {
+  const { data: bruto, error } = await supabase.from("marcacoes_config").select("*").eq("empresa_id", empresaId).maybeSingle();
+  if (error) return [];
+  const config = configDaEquipa(bruto);
+  const agora = Date.now();
+  const { data: ocupados } = await criarClienteAdmin()
+    .from("marcacoes")
+    .select("inicio, fim")
+    .eq("empresa_id", empresaId)
+    .eq("estado", "marcada")
+    .gte("fim", new Date(agora).toISOString())
+    .lte("inicio", new Date(agora + (config.dias_frente + 2) * 86400000).toISOString())
+    .limit(5000);
+  return diasComHorarios({ config, ocupados: ocupados ?? [], agora });
+}
 
 export default async function PaginaCliente({ params, searchParams }) {
   const { id } = await params;
@@ -98,6 +119,7 @@ export default async function PaginaCliente({ params, searchParams }) {
       .limit(10),
   ]);
   const marcacoes = marcacoesRes.data ?? [];
+  const diasLivres = await horasLivresDaEquipa(supabase, perfil.empresa_id);
   const canal = nomeCanal(canalRes.data?.canal);
   // outro lead com o mesmo email ou telefone (ex.: a pessoa preencheu o formulário duas vezes)
   const duplicado = await procurarDuplicado(supabase, { email: cliente.email ?? "", telefone: cliente.telefone ?? "" }, cliente.id);
@@ -114,6 +136,35 @@ export default async function PaginaCliente({ params, searchParams }) {
   // o histórico vem do mais recente para o mais antigo: o primeiro que não é automático
   const ultimoContacto = (interacoes ?? []).find((i) => i.tipo !== "sistema");
   const est = obterEstado(cliente.estado);
+
+  // cartão das reuniões: as marcadas (online ou pela equipa) e "Marcar reunião" nas horas livres.
+  // Fica no topo quando há reuniões; sem reuniões, fica discreto a seguir às tarefas.
+  const cartaoMarcacoes = (
+    <section className={`entrar ${styles.cartao}`} style={{ "--atraso": marcacoes.length ? "50ms" : "160ms" }}>
+      <header className={styles.topoCartao}>
+        <h2>
+          Reuniões {marcacoes.length > 0 && <span>{marcacoes.length}</span>}
+        </h2>
+      </header>
+      {marcacoes.length > 0 && (
+        <ul className={styles.marcacoes}>
+          {marcacoes.map((m) => (
+            <li key={m.id}>
+              <div>
+                <strong>{textoMarcacao(m.inicio)}</strong>
+                {m.nota && <p>{m.nota}</p>}
+              </div>
+              <BotaoCancelarMarcacao id={m.id} />
+            </li>
+          ))}
+        </ul>
+      )}
+      <details className={styles.marcarReuniao}>
+        <summary>Marcar reunião</summary>
+        <FormMarcarReuniao clienteId={cliente.id} dias={diasLivres} />
+      </details>
+    </section>
+  );
   const responsavel = cliente.perfis?.nome;
 
   return (
@@ -212,27 +263,8 @@ export default async function PaginaCliente({ params, searchParams }) {
       {/* ---------- duas colunas: dados + tarefas | histórico ---------- */}
       <div className={styles.colunas}>
         <div className={styles.coluna}>
-          {/* reuniões que o lead marcou online e ainda não aconteceram */}
-          {marcacoes.length > 0 && (
-            <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "50ms" }}>
-              <header className={styles.topoCartao}>
-                <h2>
-                  Marcações <span>{marcacoes.length}</span>
-                </h2>
-              </header>
-              <ul className={styles.marcacoes}>
-                {marcacoes.map((m) => (
-                  <li key={m.id}>
-                    <div>
-                      <strong>{textoMarcacao(m.inicio)}</strong>
-                      {m.nota && <p>{m.nota}</p>}
-                    </div>
-                    <BotaoCancelarMarcacao id={m.id} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+          {/* com reuniões marcadas, o cartão fica no topo */}
+          {marcacoes.length > 0 && cartaoMarcacoes}
 
           {/* respostas às perguntas extra do formulário público (se o cliente veio de lá) */}
           {cliente.respostas?.length > 0 && (
@@ -321,6 +353,8 @@ export default async function PaginaCliente({ params, searchParams }) {
               </p>
             )}
           </section>
+
+          {marcacoes.length === 0 && cartaoMarcacoes}
 
           {/* RGPD: o lead pode pedir uma cópia de tudo o que a empresa guarda sobre ele */}
           <section className={`entrar ${styles.zonaDados}`} style={{ "--atraso": "180ms" }}>

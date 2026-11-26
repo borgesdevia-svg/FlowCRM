@@ -436,3 +436,20 @@
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
+
+/* "Marcar reunião": fechado por defeito, abre o formulário */
+.marcarReuniao summary {
+  width: fit-content;
+  color: var(--cor-destaque);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.marcarReuniao summary:hover {
+  text-decoration: underline;
+}
+
+.marcacoes + .marcarReuniao {
+  margin-top: 10px;
+}
