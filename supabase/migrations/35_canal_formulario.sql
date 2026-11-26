@@ -1,4 +1,4 @@
--- 35: de onde veio cada lead do formulário (Instagram, Facebook, site, …).
+-- 35: de onde veio cada lead do formulário (Instagram, Facebook, site, …) — aplicada a 2026-11-26.
 --
 -- A empresa partilha o link do formulário com um "de" no fim, por exemplo
 --   /f/clinica-sol?de=instagram   (na bio do Instagram)
