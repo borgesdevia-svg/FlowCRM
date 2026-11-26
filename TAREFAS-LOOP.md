@@ -47,7 +47,7 @@ em "Notas" com o que fez (ou porque saltou).
   formulário), se já existir outro lead da empresa com o mesmo email ou telefone, mostrar um aviso
   com link para esse lead ("Já existe a Marta Silva com este email"). Não bloquear a gravação:
   só avisar. Respeitar o RLS (o comercial só vê os seus). Testes para a função que compara.
-- [ ] **B2. Metas de vendas (só preparar).** Escrever a migração (tabela `metas`: empresa, mês,
+- [x] **B2. Metas de vendas (só preparar).** Escrever a migração (tabela `metas`: empresa, mês,
   valor; RLS por empresa, só admin escreve) e um plano curto em "Precisa do aluno". NÃO aplicar
   e NÃO fazer a interface (depende da migração).
 
@@ -77,8 +77,11 @@ em "Notas" com o que fez (ou porque saltou).
 - A4: sem `transition: all`, sem `ease-in`, sem `scale(0)` no painel. Encurtado o que se vê dezenas de vezes por dia: entrada das páginas do painel 300→200ms com atraso máx. 60ms (a ficha chegava a 500ms no total); Atividade recente 600ms + cascata de 300ms → 250ms + 120ms; aviso da lista de leads 400→250ms. O resto (janelas 200ms, tutorial, formulário público) já estava dentro das regras.
 - A5: tirados brilhos e degradês decorativos do painel — barra de progresso do Início (degradê + brilho → verde liso), cartão da empresa do comercial, inicial da empresa e avatar do menu (degradê → cor lisa), brilho no canto do plano Pro (página Plano), do aviso "Função do CRM Pro" e do cartão de estado no formulário do lead. Mantido: etiquetas de estado (dão informação), cartão de crédito azul na Cobrança (imita um cartão), brilho do carregamento. Não há textos de marketing no painel.
 - B1: ao criar/editar um lead, se já houver outro com o mesmo email (sem maiúsculas) ou telefone (sem espaços nem +351), aparece um aviso amarelo com link para esse lead e o botão passa a "Guardar mesmo assim". Não bloqueia; se mudares o email/telefone volta a verificar. Funções em lib/duplicados.js com 5 testes. Respeita o RLS (o comercial só compara com os seus). Não verifica no importar CSV nem no formulário público.
+- B2: migração `supabase/migrations/32_metas.sql` escrita, NÃO aplicada (tabela metas: empresa, mês, valor; todos veem, só admin escreve, nada com a empresa bloqueada).
 
 ## Precisa do aluno
+
+- B2 (metas de vendas): 1) autorizar a migração 32_metas.sql; 2) depois faço: em Configurações (ou na Visão geral, só admin) uma caixa "Meta deste mês: ____ €"; na Visão geral uma barra "7 400 € de 12 000 € (62%)" com o valor dos leads que passaram a Ativo este mês; 3) decidir: é só para o Pro ou para os dois planos? meta da empresa toda ou também por comercial?
 
 - A5: o logótipo no site (barra de cima, rodapé, login) tem um brilho verde à volta. É pequeno, mas é "brilho". Tirar também?
 
