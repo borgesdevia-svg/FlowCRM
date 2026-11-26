@@ -139,9 +139,11 @@ export default async function PaginaCliente({ params, searchParams }) {
               <span className={styles.etiquetaEstado}>{est.texto}</span>
             </div>
             <p className={styles.meta}>
-              {cliente.origem === "formulario"
-                ? `Chegou pelo formulário público${canal ? ` (${canal})` : ""}`
-                : "Adicionado à mão"}{" "}
+              {cliente.origem !== "formulario"
+                ? "Adicionado à mão"
+                : canalRes.data?.canal === "marcacoes"
+                  ? "Chegou pelas marcações online"
+                  : `Chegou pelo formulário público${canal ? ` (${canal})` : ""}`}{" "}
               em{" "}
               {formatarData(cliente.criado_em)}
               {/* último contacto registado (nota, chamada, email, reunião ou WhatsApp; os automáticos não contam) */}

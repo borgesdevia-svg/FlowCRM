@@ -70,6 +70,10 @@ function prepararAtividade(clientes, sistema) {
         antes: "",
         depois: (aceite ? "aceitou" : "recusou") + nota.slice(7).replace(/, assinada por .*$/, ""),
       });
+    } else if (nota.startsWith("Marcou online: ")) {
+      // "Marta marcou uma reunião para sexta-feira, 27 de novembro às 09:30" (sem a nota do cliente)
+      const quando = nota.replace("Marcou online: ", "").split("\n")[0].replace(/\.$/, "");
+      eventos.push({ ...base, tipo: "outro", antes: "", depois: `marcou uma reunião para ${quando}` });
     } else {
       eventos.push({ ...base, tipo: "outro", antes: "", depois: `· ${nota}` });
     }
