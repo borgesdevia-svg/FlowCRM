@@ -121,6 +121,7 @@ export default function EscolherHorario({ slug, dias, nomeEmpresa }) {
           ))}
         </div>
         {erros.inicio && <p className="erro-campo">{erros.inicio}</p>}
+        <p className={styles.fuso}>Horas de Portugal continental.</p>
       </fieldset>
 
       {/* os dados só aparecem depois de escolher a hora: um passo de cada vez */}

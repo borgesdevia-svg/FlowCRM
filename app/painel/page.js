@@ -13,6 +13,7 @@ import MetaMes from "@/components/painel/MetaMes";
 import LinkFormulario from "@/components/painel/LinkFormulario";
 import { ganhoDoMes, previsaoMes } from "@/lib/metas";
 import { nomeCanal } from "@/lib/canais";
+import { FUSO, instanteLisboa, somarDias } from "@/lib/marcacoes";
 import styles from "./inicio.module.css";
 
 // Junta numa só lista os eventos para a "Atividade recente", do mais recente para o mais antigo:
@@ -118,6 +119,17 @@ export default async function PaginaPainel() {
   const inicioMesAnterior = mes === 1 ? `${ano - 1}-12-01` : `${ano}-${String(mes - 1).padStart(2, "0")}-01`;
   const semanas = ultimasSemanas();
 
+  // reuniões marcadas online para hoje (migração 36), pedidas ao mesmo tempo que o resto.
+  // O RLS mostra ao comercial só as dos seus leads. Sem a tabela, vem um erro e a faixa não aparece.
+  const pedidoMarcacoesHoje = supabase
+    .from("marcacoes")
+    .select("id, inicio, cliente_id, clientes(nome)")
+    .eq("estado", "marcada")
+    .gte("inicio", instanteLisboa(hoje, 0).toISOString())
+    .lt("inicio", instanteLisboa(somarDias(hoje, 1), 0).toISOString())
+    .order("inicio")
+    .limit(12);
+
   // ESCALA: a página não lê os clientes todos (com milhares, o Supabase corta em 1000 linhas
   // e os números ficavam errados). Cada número é pedido já contado à base de dados:
   // count: "exact" + head: true devolve só o número, sem as linhas.
@@ -196,6 +208,8 @@ export default async function PaginaPainel() {
   ]);
 
   const tarefas = minhasTarefas ?? [];
+  const { data: marcacoesHoje } = await pedidoMarcacoesHoje;
+  const horaLisboa = new Intl.DateTimeFormat("pt-PT", { timeZone: FUSO, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
   // nomes dos administradores ("Ana e Rui"), para o comercial saber a quem pedir clientes
   const nomesAdmins = (equipa ?? []).filter((m) => m.papel === "admin").map((m) => m.nome);
   const quemAtribui =
@@ -488,6 +502,33 @@ export default async function PaginaPainel() {
               ))}
             </ul>
           </article>
+        </section>
+      )}
+
+      {/* reuniões de hoje (marcações online): só aparece quando há */}
+      {marcacoesHoje?.length > 0 && (
+        <section className={styles.bloco} aria-labelledby="titulo-marcacoes-hoje">
+          <header className={styles.topoBloco}>
+            <div>
+              <h2 id="titulo-marcacoes-hoje">Marcações de hoje</h2>
+              <p className={styles.subtitulo}>
+                {marcacoesHoje.length === 1 ? "1 reunião marcada online." : `${marcacoesHoje.length} reuniões marcadas online.`}
+              </p>
+            </div>
+            <Link href="/painel/marcacoes" className={`botao botao-secundario ${styles.botaoPequeno}`}>
+              Ver marcações
+            </Link>
+          </header>
+          <ul className={styles.listaMarcacoes}>
+            {marcacoesHoje.map((m) => (
+              <li key={m.id}>
+                <Link href={`/painel/clientes/${m.cliente_id}`}>
+                  <strong>{horaLisboa.format(new Date(m.inicio))}</strong>
+                  <span>{m.clientes?.nome ?? "Lead"}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

@@ -850,3 +850,35 @@
     font-size: 0.8rem;
   }
 }
+
+/* ---------- marcações de hoje (faixa por cima das tarefas) ---------- */
+.listaMarcacoes {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.listaMarcacoes a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  color: var(--cor-texto);
+  font-size: 0.9rem;
+  transition: border-color 150ms;
+}
+
+.listaMarcacoes a:hover {
+  border-color: rgb(var(--rgb-destaque) / 0.45);
+}
+
+.listaMarcacoes strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.listaMarcacoes span {
+  color: var(--cor-texto-suave);
+}

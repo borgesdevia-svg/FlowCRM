@@ -107,6 +107,11 @@
   opacity: 0.85;
 }
 
+.fuso {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
 /* ---------- resumo e dados ---------- */
 .resumo {
   display: flex;

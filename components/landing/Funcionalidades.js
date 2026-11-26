@@ -50,6 +50,16 @@ const FUNCIONALIDADES = [
     texto: "Cada empresa tem um link próprio, com as suas perguntas. Quem o preenche entra logo no CRM como lead.",
   },
   {
+    icone: "relogio",
+    titulo: "Marcações online",
+    texto: "Os clientes escolhem o dia e a hora livres no teu horário. A reunião entra no CRM com o lead e a tarefa para esse dia.",
+  },
+  {
+    icone: "alvo",
+    titulo: "Meta do mês",
+    texto: "Define quanto queres vender este mês e vê quanto falta, o ritmo necessário e o que ainda está em negociação.",
+  },
+  {
     icone: "caixaEntrada",
     titulo: "Importar e exportar",
     texto: "Traz os contactos que já tens num ficheiro CSV, com pré-visualização. E exporta para Excel quando precisares.",
