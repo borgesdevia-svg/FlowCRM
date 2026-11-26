@@ -3,7 +3,7 @@ import styles from "./MolduraAuth.module.css";
 import SimboloLogo from "@/components/SimboloLogo";
 
 // Moldura comum às páginas de login e registo:
-// fundo com brilho verde (sem grelha) e um cartão central.
+// fundo liso e um cartão central.
 // Props: titulo, subtitulo, children (o formulário) e rodape (link para a outra página).
 export default function MolduraAuth({ titulo, subtitulo, children, rodape }) {
   return (
