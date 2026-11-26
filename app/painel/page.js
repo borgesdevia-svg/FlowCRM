@@ -437,6 +437,33 @@ export default async function PaginaPainel() {
         ))}
       </section>
 
+      {/* reuniões de hoje (marcações online): só aparece quando há */}
+      {marcacoesHoje?.length > 0 && (
+        <section className={styles.bloco} aria-labelledby="titulo-marcacoes-hoje">
+          <header className={styles.topoBloco}>
+            <div>
+              <h2 id="titulo-marcacoes-hoje">Marcações de hoje</h2>
+              <p className={styles.subtitulo}>
+                {marcacoesHoje.length === 1 ? "1 reunião marcada online." : `${marcacoesHoje.length} reuniões marcadas online.`}
+              </p>
+            </div>
+            <Link href="/painel/marcacoes" className={`botao botao-secundario ${styles.botaoPequeno}`}>
+              Ver marcações
+            </Link>
+          </header>
+          <ul className={styles.listaMarcacoes}>
+            {marcacoesHoje.map((m) => (
+              <li key={m.id}>
+                <Link href={`/painel/clientes/${m.cliente_id}`}>
+                  <strong>{horaLisboa.format(new Date(m.inicio))}</strong>
+                  <span>{m.clientes?.nome ?? "Lead"}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* meta de vendas da empresa este mês (só o admin: é ele que a define e vê a empresa toda) */}
       {eAdmin && (
         <MetaMes
@@ -506,33 +533,6 @@ export default async function PaginaPainel() {
               ))}
             </ul>
           </article>
-        </section>
-      )}
-
-      {/* reuniões de hoje (marcações online): só aparece quando há */}
-      {marcacoesHoje?.length > 0 && (
-        <section className={styles.bloco} aria-labelledby="titulo-marcacoes-hoje">
-          <header className={styles.topoBloco}>
-            <div>
-              <h2 id="titulo-marcacoes-hoje">Marcações de hoje</h2>
-              <p className={styles.subtitulo}>
-                {marcacoesHoje.length === 1 ? "1 reunião marcada online." : `${marcacoesHoje.length} reuniões marcadas online.`}
-              </p>
-            </div>
-            <Link href="/painel/marcacoes" className={`botao botao-secundario ${styles.botaoPequeno}`}>
-              Ver marcações
-            </Link>
-          </header>
-          <ul className={styles.listaMarcacoes}>
-            {marcacoesHoje.map((m) => (
-              <li key={m.id}>
-                <Link href={`/painel/clientes/${m.cliente_id}`}>
-                  <strong>{horaLisboa.format(new Date(m.inicio))}</strong>
-                  <span>{m.clientes?.nome ?? "Lead"}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
         </section>
       )}
 
