@@ -1,6 +1,7 @@
 import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { eSlug } from "@/lib/validacao";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { papelNaEmpresaDoFormulario } from "@/lib/sessao";
 import FormLead from "@/components/formulario/FormLead";
@@ -15,6 +16,7 @@ import styles from "./formulario.module.css";
 // que só devolve isso (nunca outros dados da empresa). cache(): a página e o título
 // do separador pedem a mesma coisa, assim só vai uma vez à base de dados.
 const obterFormulario = cache(async function obterFormulario(slug) {
+  if (!eSlug(slug)) return null; // endereço estragado: 404 sem ir à base de dados
   const supabase = await criarClienteServidor();
   const { data } = await supabase.rpc("formulario_publico", { p_slug: slug });
   return data;

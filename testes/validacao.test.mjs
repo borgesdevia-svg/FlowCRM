@@ -1,7 +1,7 @@
 // Testes das validações partilhadas (lib/validacao.js). Correr com: npm test
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { eUuid } from "../lib/validacao.js";
+import { eSlug, eUuid } from "../lib/validacao.js";
 
 test("eUuid: aceita ids do Supabase e recusa o resto", () => {
   assert.equal(eUuid("3f2a9c1e-8b7d-4e6f-9a1b-2c3d4e5f6a7b"), true);
@@ -12,4 +12,15 @@ test("eUuid: aceita ids do Supabase e recusa o resto", () => {
   assert.equal(eUuid(""), false);
   assert.equal(eUuid(null), false);
   assert.equal(eUuid(123), false);
+});
+
+test("eSlug: a mesma regra da base de dados", () => {
+  assert.equal(eSlug("padaria-central"), true);
+  assert.equal(eSlug("loja2"), true);
+  assert.equal(eSlug("Padaria"), false);
+  assert.equal(eSlug("-padaria"), false);
+  assert.equal(eSlug("padaria--central"), false);
+  assert.equal(eSlug("../admin"), false);
+  assert.equal(eSlug("a".repeat(81)), false);
+  assert.equal(eSlug(undefined), false);
 });

@@ -65,7 +65,7 @@ em "Notas" com o que fez (ou porque saltou).
 - [x] **D1. Server Actions.** Ler cada ficheiro de `lib/acoes/`: cada ação verifica a sessão,
   o papel (admin quando deve) e valida o que vem do formulário? Corrigir no código. O que só se
   resolve na base de dados vai para "Precisa do aluno".
-- [ ] **D2. Páginas públicas e webhook.** `app/f/[slug]`, `app/p/[token]`, `app/api/stripe/webhook`,
+- [x] **D2. Páginas públicas e webhook.** `app/f/[slug]`, `app/p/[token]`, `app/api/stripe/webhook`,
   `/recuperar`: validação de entradas, assinatura do webhook, mensagens de erro que não revelam
   demais, redirecionamentos abertos. Corrigir no código.
 
@@ -82,8 +82,11 @@ em "Notas" com o que fez (ou porque saltou).
 - C2: 5 testes novos em testes/planos.test.mjs — empresa nova sem dias grátis (bloqueada + semPrimeiroPlano), cancelou depois de pagar, a pagar, teste antigo ainda a correr, cancelado com fim marcado. 70 testes a passar.
 - C3: `npx eslint .` já passa sem erros nem avisos (nada a corrigir).
 - D1: todas as ações de lib/acoes verificam a sessão (obterSessao manda para o login), as de admin verificam eAdmin no servidor, e o RLS repete tudo. O responsável de um lead tem de ser da mesma empresa (chave estrangeira com empresa_id). Corrigido: 9 ações aceitavam qualquer texto como id (apagar lead/nota/proposta, mudar fase, marcar tarefa, WhatsApp, atribuir, remover membro, mudar papel); agora todos os ids passam por eUuid (lib/validacao.js, com teste). O regex antigo aceitava 36 traços. Email do registo limitado a 254 letras.
+- D2: webhook da Stripe já estava bem (verifica a assinatura antes de tudo, liga à empresa pela metadata posta pelo servidor, ignora avisos atrasados de assinaturas antigas, 500 para a Stripe repetir). Sem redirecionamentos abertos (só para caminhos fixos ou páginas da Stripe). Recuperação já dava a mesma resposta para email e chave errados. Corrigido: /f/[slug] e o envio do formulário confirmam o formato do slug (eSlug, a mesma regra da base de dados) antes de ir ao Supabase; /p/[token] usa o eUuid partilhado (o antigo aceitava 36 traços); /recuperar fora do Google (noindex). 72 testes a passar.
 
 ## Precisa do aluno
+
+- D2: o formulário público só tem o campo "armadilha" contra spam. Um robô mais esperto pode enviar centenas de leads falsos. Para travar a sério é preciso um limite por IP (função na base de dados ou a firewall da Vercel) ou um captcha (Cloudflare Turnstile, grátis). Ambos precisam de uma decisão tua e de configuração fora do código.
 
 - D1: no registo, "Já existe uma conta com este email" deixa alguém descobrir que emails usam o FlowCRM (a recuperação já tem cuidado com isso). Trocar por uma mensagem neutra torna o registo mais confuso para quem se engana. Para um CRM pequeno parece-me aceitável manter; decide tu.
 
@@ -95,3 +98,11 @@ em "Notas" com o que fez (ou porque saltou).
 
 - A3: `viewport-fit=cover` + margens `env(safe-area-inset-*)` para a app instalada no iPhone (conteúdo por baixo do notch) NÃO foi feito: sem um iPhone para testar, arrisca pôr a barra de cima por baixo do relógio. Testar quando tiveres o iPhone à mão.
 
+## Resumo do loop (2026-11-26)
+
+Todas as tarefas feitas, 1 commit por tarefa no branch `loop-melhorias` (sem push, `main` intocado).
+- Polir: textos enormes já não partem a lista, a ficha, a pipeline nem o calendário; telemóvel (hovers presos, dvh, 16px nas caixas); animações mais curtas; brilhos e degradês do painel tirados.
+- Novo: aviso de lead duplicado (email/telefone) ao criar ou editar; migração das metas de vendas escrita mas NÃO aplicada.
+- Limpeza: ~300 linhas de CSS e 2 funções sem uso apagadas; lint limpo; testes 65 → 72.
+- Segurança: ids e slugs validados em todas as ações e páginas públicas; webhook, recuperação e redirecionamentos revistos (estavam bem).
+- Falta: as decisões em "Precisa do aluno" (metas, brilho do logótipo, números a contar, iPhone, mensagem do registo, spam no formulário). Para levar para o `main`: `git checkout main` e `git merge loop-melhorias`.

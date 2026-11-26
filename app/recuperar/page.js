@@ -4,7 +4,10 @@ import FormRecuperar from "@/components/auth/FormRecuperar";
 
 // Rota /recuperar — "Esqueci-me da password", sem email:
 // usa a chave de recuperação que cada pessoa guardou ao entrar no painel.
-export const metadata = { title: "Recuperar password · FlowCRM" };
+export const metadata = {
+  title: "Recuperar password · FlowCRM",
+  robots: { index: false, follow: false }, // página só para quem perdeu a password: fora do Google
+};
 
 export default function PaginaRecuperar() {
   return (

@@ -1,6 +1,7 @@
 import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { eUuid } from "@/lib/validacao";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { formatarData, formatarEuros } from "@/lib/estados";
 import { estadoProposta, totalLinha } from "@/lib/propostas";
@@ -11,10 +12,9 @@ import styles from "./proposta.module.css";
 // O token é aleatório e impossível de adivinhar; a função proposta_publica só devolve
 // o que aparece nesta página (nunca outros dados da empresa ou do lead).
 
-const REGEX_UUID = /^[0-9a-f-]{36}$/i;
 
 const obterProposta = cache(async function obterProposta(token) {
-  if (!REGEX_UUID.test(token)) return null;
+  if (!eUuid(token)) return null;
   const supabase = await criarClienteServidor();
   const { data } = await supabase.rpc("proposta_publica", { p_token: token });
   return data;
