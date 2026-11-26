@@ -53,7 +53,9 @@ function AdicionarCalendario({ inicio, fim, nomeEmpresa }) {
 export default function EscolherHorario({ slug, dias, nomeEmpresa }) {
   const router = useRouter();
   const [estado, accao, pendente] = useActionState(marcar, {});
-  const [dia, setDia] = useState(dias[0]?.dia ?? "");
+  const [diaEscolhido, setDia] = useState(dias[0]?.dia ?? "");
+  // se o dia escolhido ficou sem horas livres (a lista foi atualizada), passa para o primeiro
+  const dia = dias.some((d) => d.dia === diaEscolhido) ? diaEscolhido : (dias[0]?.dia ?? "");
   const [inicio, setInicio] = useState("");
   const valores = estado.valores ?? {};
   const erros = estado.erros ?? {};

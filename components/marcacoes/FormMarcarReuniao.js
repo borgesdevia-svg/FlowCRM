@@ -11,7 +11,9 @@ const formatoDia = new Intl.DateTimeFormat("pt-PT", { timeZone: FUSO, weekday: "
 
 export default function FormMarcarReuniao({ clienteId, dias }) {
   const [estado, accao, pendente] = useActionState(marcarPeloPainel, {});
-  const [dia, setDia] = useState(dias[0]?.dia ?? "");
+  const [diaEscolhido, setDia] = useState(dias[0]?.dia ?? "");
+  // depois de marcar, o dia pode ficar sem horas livres: passa para o primeiro que ainda tem
+  const dia = dias.some((d) => d.dia === diaEscolhido) ? diaEscolhido : (dias[0]?.dia ?? "");
   const horarios = dias.find((d) => d.dia === dia)?.horarios ?? [];
 
   if (!dias.length) {
