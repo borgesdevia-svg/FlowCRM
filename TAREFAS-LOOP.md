@@ -58,7 +58,7 @@ em "Notas" com o que fez (ou porque saltou).
   (ex.: "14 dias grátis", "grelha", "planeta"). Apagar com cuidado.
 - [x] **C2. Testes para os planos.** Em `testes/planos.test.mjs`: empresa nova sem plano
   (`semPrimeiroPlano`), teste antigo ainda a correr, pago, cancelado/bloqueado.
-- [ ] **C3. Lint do projeto inteiro.** `npx eslint .` sem erros nem avisos.
+- [x] **C3. Lint do projeto inteiro.** `npx eslint .` sem erros nem avisos.
 
 ## D. Segurança (só código)
 
@@ -80,6 +80,7 @@ em "Notas" com o que fez (ou porque saltou).
 - B2: migração `supabase/migrations/32_metas.sql` escrita, NÃO aplicada (tabela metas: empresa, mês, valor; todos veem, só admin escreve, nada com a empresa bloqueada).
 - C1: ~300 linhas de CSS sem uso apagadas (sobretudo o editor de perguntas antigo em Personalizar.module.css, setas de tendência antigas do Início, botões de modo das Configurações, .sucesso e .voltar soltos). Apagadas 2 funções que ninguém chamava: estiloCor (lib/formulario.js) e a Server Action apagarTarefa (já existe apagarTarefas, para várias). Inicial do logótipo sem degradê. Classes usadas de forma dinâmica (styles[`tipo-${x}`]) foram deixadas.
 - C2: 5 testes novos em testes/planos.test.mjs — empresa nova sem dias grátis (bloqueada + semPrimeiroPlano), cancelou depois de pagar, a pagar, teste antigo ainda a correr, cancelado com fim marcado. 70 testes a passar.
+- C3: `npx eslint .` já passa sem erros nem avisos (nada a corrigir).
 
 ## Precisa do aluno
 
