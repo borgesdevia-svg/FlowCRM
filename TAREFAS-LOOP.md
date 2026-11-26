@@ -62,7 +62,7 @@ em "Notas" com o que fez (ou porque saltou).
 
 ## D. Segurança (só código)
 
-- [ ] **D1. Server Actions.** Ler cada ficheiro de `lib/acoes/`: cada ação verifica a sessão,
+- [x] **D1. Server Actions.** Ler cada ficheiro de `lib/acoes/`: cada ação verifica a sessão,
   o papel (admin quando deve) e valida o que vem do formulário? Corrigir no código. O que só se
   resolve na base de dados vai para "Precisa do aluno".
 - [ ] **D2. Páginas públicas e webhook.** `app/f/[slug]`, `app/p/[token]`, `app/api/stripe/webhook`,
@@ -81,8 +81,11 @@ em "Notas" com o que fez (ou porque saltou).
 - C1: ~300 linhas de CSS sem uso apagadas (sobretudo o editor de perguntas antigo em Personalizar.module.css, setas de tendência antigas do Início, botões de modo das Configurações, .sucesso e .voltar soltos). Apagadas 2 funções que ninguém chamava: estiloCor (lib/formulario.js) e a Server Action apagarTarefa (já existe apagarTarefas, para várias). Inicial do logótipo sem degradê. Classes usadas de forma dinâmica (styles[`tipo-${x}`]) foram deixadas.
 - C2: 5 testes novos em testes/planos.test.mjs — empresa nova sem dias grátis (bloqueada + semPrimeiroPlano), cancelou depois de pagar, a pagar, teste antigo ainda a correr, cancelado com fim marcado. 70 testes a passar.
 - C3: `npx eslint .` já passa sem erros nem avisos (nada a corrigir).
+- D1: todas as ações de lib/acoes verificam a sessão (obterSessao manda para o login), as de admin verificam eAdmin no servidor, e o RLS repete tudo. O responsável de um lead tem de ser da mesma empresa (chave estrangeira com empresa_id). Corrigido: 9 ações aceitavam qualquer texto como id (apagar lead/nota/proposta, mudar fase, marcar tarefa, WhatsApp, atribuir, remover membro, mudar papel); agora todos os ids passam por eUuid (lib/validacao.js, com teste). O regex antigo aceitava 36 traços. Email do registo limitado a 254 letras.
 
 ## Precisa do aluno
+
+- D1: no registo, "Já existe uma conta com este email" deixa alguém descobrir que emails usam o FlowCRM (a recuperação já tem cuidado com isso). Trocar por uma mensagem neutra torna o registo mais confuso para quem se engana. Para um CRM pequeno parece-me aceitável manter; decide tu.
 
 - B2 (metas de vendas): 1) autorizar a migração 32_metas.sql; 2) depois faço: em Configurações (ou na Visão geral, só admin) uma caixa "Meta deste mês: ____ €"; na Visão geral uma barra "7 400 € de 12 000 € (62%)" com o valor dos leads que passaram a Ativo este mês; 3) decidir: é só para o Pro ou para os dois planos? meta da empresa toda ou também por comercial?
 
