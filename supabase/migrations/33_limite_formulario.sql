@@ -7,7 +7,8 @@
 --  3. criar_lead deixa de poder ser chamada por visitantes (anon) e utilizadores (authenticated)
 --     diretamente, por isso não há forma de saltar o limite.
 --
--- Limite: 5 envios por IP em cada hora (somando todas as empresas).
+-- Limite: 10 envios por IP em cada hora (somando todas as empresas). 10 e não menos porque
+-- várias pessoas podem partilhar o mesmo IP (escritório, escola, rede do telemóvel).
 -- O IP não é guardado: guarda-se só o seu hash SHA-256 (feito no servidor), e as linhas
 -- com mais de um dia são apagadas sempre que alguém envia.
 --
@@ -49,7 +50,7 @@ begin
   from public.envios_formulario
   where ip_hash = p_ip_hash and criado_em > now() - interval '1 hour';
 
-  if v_recentes >= 5 then
+  if v_recentes >= 10 then
     return false;
   end if;
 
