@@ -14,13 +14,13 @@ import BotaoEmail from "@/components/clientes/BotaoEmail";
 import ListaPropostas from "@/components/propostas/ListaPropostas";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
+import { tempoRelativo } from "@/lib/datas";
+import { eUuid } from "@/lib/validacao";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
 // Ex.: /painel/clientes/3f2a...  ->  params.id = "3f2a..."
 export const metadata = { title: "Lead · FlowCRM" };
-
-const REGEX_UUID = /^[0-9a-f-]{36}$/i;
 
 // ESCALA: um cliente antigo pode ter centenas de registos e tarefas.
 // O histórico mostra HISTORICO registos de cada vez ("Ver mais antigos" pede mais, pelo URL ?historico=60);
@@ -35,7 +35,7 @@ export default async function PaginaCliente({ params, searchParams }) {
   const { historico = "", proposta = "" } = await searchParams;
   // quantos registos mostrar: número do URL, entre HISTORICO e MAX_HISTORICO
   const nHistorico = Math.min(MAX_HISTORICO, Math.max(HISTORICO, Number.parseInt(historico, 10) || HISTORICO));
-  if (!REGEX_UUID.test(id)) notFound();
+  if (!eUuid(id)) notFound();
 
   const { supabase, perfil, empresa, eAdmin, plano } = await obterSessao();
 
@@ -89,6 +89,8 @@ export default async function PaginaCliente({ params, searchParams }) {
   // tarefas que não aparecem aqui (por fazer além das 50, feitas mais antigas)
   const tarefasEscondidas = porFazer + (feitasRes.count ?? 0) - listaTarefas.length;
 
+  // o histórico vem do mais recente para o mais antigo: o primeiro que não é automático
+  const ultimoContacto = (interacoes ?? []).find((i) => i.tipo !== "sistema");
   const est = obterEstado(cliente.estado);
   const responsavel = cliente.perfis?.nome;
 
@@ -109,6 +111,9 @@ export default async function PaginaCliente({ params, searchParams }) {
             <p className={styles.meta}>
               {cliente.origem === "formulario" ? "Chegou pelo formulário público" : "Adicionado à mão"} em{" "}
               {formatarData(cliente.criado_em)}
+              {/* último contacto registado (nota, chamada, email, reunião ou WhatsApp; os automáticos não contam) */}
+              {" · "}
+              {ultimoContacto ? `Último contacto ${tempoRelativo(ultimoContacto.criado_em)}` : "Ainda sem contactos registados"}
             </p>
 
             {/* contactos clicáveis: mailto abre o email, tel liga (no telemóvel) */}
