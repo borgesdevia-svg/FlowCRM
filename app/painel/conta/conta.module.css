@@ -26,8 +26,10 @@
   font-weight: 600;
 }
 
+/* pelo menos 220px para o nome e o email: no telemóvel o botão
+   "Terminar sessão" passa para a linha de baixo em vez de apertar o texto */
 .quem {
-  flex: 1;
+  flex: 1 1 220px;
   min-width: 0;
 }
 
@@ -204,6 +206,12 @@
 }
 
 @media (max-width: 520px) {
+  .cabecalho > form,
+  .cabecalho > form :global(.botao) {
+    width: 100%;
+    justify-content: center;
+  }
+
   .numeros {
     grid-template-columns: minmax(0, 1fr);
   }
