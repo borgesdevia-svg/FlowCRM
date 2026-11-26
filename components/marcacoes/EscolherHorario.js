@@ -7,7 +7,7 @@
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { marcar } from "@/lib/acoes/marcacoes";
-import { FUSO, textoMarcacao } from "@/lib/marcacoes";
+import { FUSO, ficheiroIcs, linkGoogleCalendar, textoMarcacao } from "@/lib/marcacoes";
 import styles from "./EscolherHorario.module.css";
 
 // "2026-12-02" -> { semana: "qua", numero: "2", mes: "dez" } (meio-dia UTC: nunca muda de dia)
@@ -15,6 +15,39 @@ function partesDoDia(dia) {
   const data = new Date(`${dia}T12:00:00Z`);
   const formato = (opcoes) => new Intl.DateTimeFormat("pt-PT", { timeZone: FUSO, ...opcoes }).format(data).replace(".", "");
   return { semana: formato({ weekday: "short" }), numero: formato({ day: "numeric" }), mes: formato({ month: "short" }) };
+}
+
+// Depois de marcar: guardar a reunião no calendário do telemóvel/PC (.ics) ou no Google Calendar.
+// O .ics é criado no browser (Blob), sem pedir nada ao servidor.
+function AdicionarCalendario({ inicio, fim, nomeEmpresa }) {
+  const titulo = `Reunião com ${nomeEmpresa}`;
+  const descricao = `Marcada online com ${nomeEmpresa}.`;
+
+  function descarregar() {
+    const ics = ficheiroIcs({ id: `${inicio}-${nomeEmpresa}`, inicio, fim, titulo, descricao });
+    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "reuniao.ics";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  return (
+    <div className={styles.calendario}>
+      <button type="button" className="botao" onClick={descarregar}>
+        Adicionar ao calendário
+      </button>
+      <a
+        href={linkGoogleCalendar({ inicio, fim, titulo, descricao })}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`botao ${styles.secundario}`}
+      >
+        Google Calendar
+      </a>
+    </div>
+  );
 }
 
 export default function EscolherHorario({ slug, dias, nomeEmpresa }) {
@@ -47,6 +80,7 @@ export default function EscolherHorario({ slug, dias, nomeEmpresa }) {
             contacta a empresa.
           </p>
         )}
+        {estado.inicio && <AdicionarCalendario inicio={estado.inicio} fim={estado.fim} nomeEmpresa={nomeEmpresa} />}
       </div>
     );
   }

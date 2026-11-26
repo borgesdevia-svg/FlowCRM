@@ -80,3 +80,23 @@ test("diasComHorarios e normalizarConfig", () => {
 test("textoMarcacao: em português, na hora de Lisboa", () => {
   assert.equal(textoMarcacao("2026-07-15T14:30:00Z"), "quarta-feira, 15 de julho às 15:30");
 });
+
+test("ficheiroIcs e linkGoogleCalendar", async () => {
+  const { ficheiroIcs, linkGoogleCalendar } = await import("../lib/marcacoes.js");
+  const ics = ficheiroIcs({
+    id: "abc",
+    inicio: "2026-12-02T09:30:00.000Z",
+    fim: "2026-12-02T10:00:00.000Z",
+    titulo: "Reunião com Clínica Sol, Lda",
+    descricao: "Linha 1\nLinha 2; fim",
+    agora: Date.parse("2026-11-26T20:00:00Z"),
+  });
+  assert.ok(ics.includes("DTSTART:20261202T093000Z\r\n"));
+  assert.ok(ics.includes("DTEND:20261202T100000Z\r\n"));
+  assert.ok(ics.includes("SUMMARY:Reunião com Clínica Sol\\, Lda\r\n"));
+  assert.ok(ics.includes("DESCRIPTION:Linha 1\\nLinha 2\\; fim\r\n"));
+  assert.ok(ics.startsWith("BEGIN:VCALENDAR\r\n") && ics.endsWith("END:VCALENDAR\r\n"));
+  const link = new URL(linkGoogleCalendar({ inicio: "2026-12-02T09:30:00.000Z", fim: "2026-12-02T10:00:00.000Z", titulo: "Reunião" }));
+  assert.equal(link.searchParams.get("dates"), "20261202T093000Z/20261202T100000Z");
+  assert.equal(link.searchParams.get("text"), "Reunião");
+});
