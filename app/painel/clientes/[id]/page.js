@@ -17,6 +17,7 @@ import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import { tempoRelativo } from "@/lib/datas";
 import { eEmail, eUuid } from "@/lib/validacao";
 import { nomeCanal } from "@/lib/canais";
+import { procurarDuplicado } from "@/lib/procurarDuplicado";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
@@ -86,6 +87,8 @@ export default async function PaginaCliente({ params, searchParams }) {
       : Promise.resolve({ data: null }),
   ]);
   const canal = nomeCanal(canalRes.data?.canal);
+  // outro lead com o mesmo email ou telefone (ex.: a pessoa preencheu o formulário duas vezes)
+  const duplicado = await procurarDuplicado(supabase, { email: cliente.email ?? "", telefone: cliente.telefone ?? "" }, cliente.id);
   const propostas = propostasRes.data ?? [];
   // a própria pessoa aparece como "(eu)" na escolha do responsável
   const membros = eAdmin
@@ -106,6 +109,14 @@ export default async function PaginaCliente({ params, searchParams }) {
       <Link href="/painel/clientes" className={styles.voltar}>
         Leads
       </Link>
+
+      {duplicado && (
+        <p className={`alerta ${styles.avisoDuplicado}`} role="status">
+          Parece repetido: <Link href={`/painel/clientes/${duplicado.id}`}>{duplicado.nome}</Link> tem o mesmo{" "}
+          {duplicado.campo === "email" ? "email" : "telefone"}. Se for a mesma pessoa, junta as notas num deles e apaga o
+          outro.
+        </p>
+      )}
 
       {/* ---------- cabeçalho grande do cliente ---------- */}
       <header className={`entrar ${styles.cabecalhoFicha}`} style={{ "--cor": est.cor }}>
