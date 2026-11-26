@@ -16,6 +16,7 @@ import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import { tempoRelativo } from "@/lib/datas";
 import { eUuid } from "@/lib/validacao";
+import { nomeCanal } from "@/lib/canais";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
@@ -61,7 +62,7 @@ export default async function PaginaCliente({ params, searchParams }) {
       .select("id, cliente_id, responsavel_id, titulo, data_limite, concluida", { count: "exact" })
       .eq("cliente_id", id)
       .eq("concluida", concluida);
-  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes] = await Promise.all([
+  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes, canalRes] = await Promise.all([
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
     supabase
       .from("interacoes")
@@ -78,7 +79,13 @@ export default async function PaginaCliente({ params, searchParams }) {
       .eq("cliente_id", id)
       .order("criado_em", { ascending: false })
       .limit(20),
+    // de onde veio (?de=instagram, migração 35). Pedido à parte: antes da migração a coluna
+    // não existe, vem um erro e a ficha mostra-se na mesma, só sem o sítio.
+    cliente.origem === "formulario"
+      ? supabase.from("clientes").select("canal").eq("id", id).maybeSingle()
+      : Promise.resolve({ data: null }),
   ]);
+  const canal = nomeCanal(canalRes.data?.canal);
   const propostas = propostasRes.data ?? [];
   // a própria pessoa aparece como "(eu)" na escolha do responsável
   const membros = eAdmin
@@ -109,7 +116,10 @@ export default async function PaginaCliente({ params, searchParams }) {
               <span className={styles.etiquetaEstado}>{est.texto}</span>
             </div>
             <p className={styles.meta}>
-              {cliente.origem === "formulario" ? "Chegou pelo formulário público" : "Adicionado à mão"} em{" "}
+              {cliente.origem === "formulario"
+                ? `Chegou pelo formulário público${canal ? ` (${canal})` : ""}`
+                : "Adicionado à mão"}{" "}
+              em{" "}
               {formatarData(cliente.criado_em)}
               {/* último contacto registado (nota, chamada, email, reunião ou WhatsApp; os automáticos não contam) */}
               {" · "}

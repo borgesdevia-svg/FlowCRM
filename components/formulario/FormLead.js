@@ -15,7 +15,7 @@ import { TEXTOS_PADRAO } from "@/lib/formulario";
 import { TEXTO_BOTAO_PADRAO } from "@/lib/formularioDesign";
 import styles from "./FormLead.module.css";
 
-export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado = {}, previa = false, mostrarObrigado = false, textoBotao = "" }) {
+export default function FormLead({ slug, canal = null, nomeEmpresa, perguntas = [], obrigado = {}, previa = false, mostrarObrigado = false, textoBotao = "" }) {
   const [estado, accao, pendente] = useActionState(enviarLead, {});
   const erros = estado.erros ?? {};
   const valores = estado.valores ?? {};
@@ -53,6 +53,8 @@ export default function FormLead({ slug, nomeEmpresa, perguntas = [], obrigado =
       noValidate
     >
       <input type="hidden" name="slug" value={slug ?? ""} />
+      {/* de onde veio a pessoa (?de=instagram no link), para a empresa saber o que resulta */}
+      {canal && <input type="hidden" name="de" value={canal} />}
 
       {/* campo armadilha para robôs: escondido de pessoas e de leitores de ecrã */}
       <div className={styles.armadilha} aria-hidden="true">

@@ -5,6 +5,7 @@ import { eSlug } from "@/lib/validacao";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { papelNaEmpresaDoFormulario } from "@/lib/sessao";
 import FormLead from "@/components/formulario/FormLead";
+import { limparCanal } from "@/lib/canais";
 import CartaoFormulario, { CenaFormulario } from "@/components/formulario/CartaoFormulario";
 import { normalizarDesign } from "@/lib/formularioDesign";
 import styles from "./formulario.module.css";
@@ -29,8 +30,11 @@ export async function generateMetadata({ params }) {
   return { title: formulario ? `Contactar ${formulario.nome}` : "Formulário não encontrado" };
 }
 
-export default async function PaginaFormulario({ params }) {
+export default async function PaginaFormulario({ params, searchParams }) {
   const { slug } = await params;
+  // de onde veio a pessoa: /f/<slug>?de=instagram (migração 35); limpo outra vez no servidor ao enviar
+  const { de } = await searchParams;
+  const canal = limparCanal(Array.isArray(de) ? de[0] : de);
   const formulario = await obterFormulario(slug);
 
   // slug que não existe -> página 404
@@ -73,6 +77,7 @@ export default async function PaginaFormulario({ params }) {
             )}
             <FormLead
               slug={slug}
+              canal={canal}
               nomeEmpresa={nomeEmpresa}
               perguntas={formulario.perguntas ?? []}
               textoBotao={design.botao}

@@ -4,14 +4,15 @@ import { ESTADOS, formatarEuros } from "@/lib/estados";
 import { hojeEmPortugal } from "@/lib/datas";
 import { textoMudancaFase } from "@/lib/eventos";
 import { taxaFecho, tempoAteFechar, textoDias } from "@/lib/relatorios";
-import BotaoCopiar from "@/components/painel/BotaoCopiar";
 import TabelaTarefas from "@/components/tarefas/TabelaTarefas";
 import Icone from "@/components/Icone";
 import AtividadeRecente from "@/components/painel/AtividadeRecente";
 import Grafico from "@/components/painel/Grafico";
 import ContarNumero from "@/components/painel/ContarNumero";
 import MetaMes from "@/components/painel/MetaMes";
+import LinkFormulario from "@/components/painel/LinkFormulario";
 import { ganhoDoMes, previsaoMes } from "@/lib/metas";
+import { nomeCanal } from "@/lib/canais";
 import styles from "./inicio.module.css";
 
 // Junta numa só lista os eventos para a "Atividade recente", do mais recente para o mais antigo:
@@ -137,6 +138,7 @@ export default async function PaginaPainel() {
     { count: totalFormulario }, // quantos leads vieram do formulário público (origem)
     { data: meta }, // meta de vendas deste mês (migração 32)
     { data: passagensMes }, // cada "Passou para Ativo" deste mês, com o valor do lead (para a meta)
+    { data: comCanal }, // leads do formulário com o sítio de onde vieram (?de=instagram, migração 35)
     ...porSemana // um número por semana, para o gráfico
   ] = await Promise.all([
     supabase.rpc("resumo_clientes", { termo: "" }),
@@ -187,6 +189,9 @@ export default async function PaginaPainel() {
           .gte("criado_em", inicioMes)
           .limit(1000)
       : { data: null },
+    // só a coluna "canal" (texto curto); até 5000 chega para uma empresa pequena.
+    // Antes da migração 35 a coluna não existe: vem um erro, data fica null e a lista fica como antes.
+    supabase.from("clientes").select("canal").eq("origem", "formulario").not("canal", "is", null).limit(5000),
     ...semanas.map((s) => contarClientes().gt("criado_em", s.inicio).lte("criado_em", s.fim)),
   ]);
 
@@ -273,8 +278,26 @@ export default async function PaginaPainel() {
     },
   ];
   // origem dos leads: formulário público ou adicionados à mão (inclui os importados)
+  // o formulário divide-se pelos sítios de onde vieram (Instagram, Facebook…): os 4 com mais leads,
+  // cada um com um tom de verde mais claro; o resto do formulário fica em "Formulário público"
+  const porCanal = {};
+  for (const { canal } of comCanal ?? []) porCanal[canal] = (porCanal[canal] ?? 0) + 1;
+  const canaisTopo = Object.entries(porCanal)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([chave, n], i) => ({
+      nome: nomeCanal(chave),
+      n,
+      cor: `color-mix(in srgb, var(--cor-destaque) ${100 - i * 18}%, transparent)`,
+    }));
+  const noTopo = canaisTopo.reduce((soma, c) => soma + c.n, 0);
   const origens = [
-    { nome: "Formulário público", n: totalFormulario ?? 0, cor: "var(--cor-destaque)" },
+    ...canaisTopo,
+    {
+      nome: canaisTopo.length ? "Formulário (outros sítios)" : "Formulário público",
+      n: Math.max(0, (totalFormulario ?? 0) - noTopo),
+      cor: canaisTopo.length ? "color-mix(in srgb, var(--cor-destaque) 25%, transparent)" : "var(--cor-destaque)",
+    },
     { nome: "Adicionados à mão", n: Math.max(0, totalClientes - (totalFormulario ?? 0)), cor: "var(--cor-texto-fraco)" },
   ];
 
@@ -302,7 +325,6 @@ export default async function PaginaPainel() {
     new Intl.DateTimeFormat("pt-PT", { hour: "numeric", hourCycle: "h23", timeZone: "Europe/Lisbon" }).format(new Date())
   );
   const saudacao = hora < 12 ? "Bom dia" : hora < 20 ? "Boa tarde" : "Boa noite";
-  const linkFormulario = `/f/${empresa.slug}`;
   const totalSemanas = valoresSemanas.reduce((a, b) => a + b, 0);
 
   return (
@@ -647,16 +669,11 @@ export default async function PaginaPainel() {
             <h2>{eAdmin ? "O teu formulário público" : `Formulário da ${empresa.nome}`}</h2>
             <p className={styles.subtitulo}>
               Partilha este link no site, nas redes sociais ou por email. Quem o preencher entra como lead
-              &quot;Novo&quot;.
+              &quot;Novo&quot;. Escolhe onde o vais pôr para saberes de onde vêm os leads.
             </p>
           </div>
-          <div className={styles.linhaLink}>
-            {/* target="_blank" abre num separador novo, para o painel continuar aberto */}
-            <Link href={linkFormulario} target="_blank" className={styles.link}>
-              {linkFormulario}
-            </Link>
-            <BotaoCopiar caminho={linkFormulario} className={`botao botao-secundario ${styles.botaoPequeno}`} />
-          </div>
+          {/* o link, com a escolha do sítio onde vai ser partilhado (?de=instagram) */}
+          <LinkFormulario slug={empresa.slug} classeBotao={`botao botao-secundario ${styles.botaoPequeno}`} />
         </article>
 
         {mostrarPassos && (
