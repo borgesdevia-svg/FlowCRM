@@ -45,13 +45,13 @@ test("assinatura cancelada (teste_ate posto no passado) também bloqueia, mesmo 
   assert.equal(p.pago, false);
 });
 
-test("empresa nova (sem teste grátis) nasce bloqueada e marcada como nova até pagar", () => {
+test("empresa nova (sem teste grátis) nasce bloqueada e à espera do primeiro plano", () => {
   const nova = estadoPlano({ plano: "pro", teste_ate: "2026-11-22T11:59:00Z" }, agora);
   assert.equal(nova.bloqueada, true);
-  assert.equal(nova.novo, true);
+  assert.equal(nova.semPrimeiroPlano, true);
   // já pagou alguma vez (tem cliente na Stripe): está em pausa, não é nova
   const antiga = estadoPlano({ plano: "pro", teste_ate: "2026-11-21T00:00:00Z", stripe_cliente: "cus_1" }, agora);
-  assert.equal(antiga.novo, false);
+  assert.equal(antiga.semPrimeiroPlano, false);
 });
 
 test("Essencial pago e empresa sem dados", () => {
