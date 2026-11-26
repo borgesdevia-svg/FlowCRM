@@ -1,4 +1,4 @@
--- 34: avisos no telemóvel/PC (web push) quando entra um lead novo pelo formulário.
+-- 34: avisos no telemóvel/PC (web push) quando entra um lead novo pelo formulário (aplicada a 2026-11-26).
 --
 -- Cada browser onde alguém liga os avisos (em A minha conta) guarda aqui uma "subscrição":
 -- o endereço do serviço de avisos do browser (endpoint) e as duas chaves para cifrar a mensagem.
