@@ -150,6 +150,13 @@
   transition: color 0.2s, border-color 0.2s;
 }
 
+/* WhatsApp e email são botões (abrem uma janela): mesmo aspeto dos links */
+.contactoBotao {
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
 .contacto:hover {
   color: var(--cor-destaque);
   border-color: rgb(var(--rgb-destaque) / 0.4);

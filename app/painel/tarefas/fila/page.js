@@ -4,6 +4,8 @@ import { hojeEmPortugal, formatarDiaCurto, tempoRelativo } from "@/lib/datas";
 import { obterEstado } from "@/lib/estados";
 import { alternarTarefa, adiarTarefa } from "@/lib/acoes/tarefas";
 import FormNota from "@/components/clientes/FormNota";
+import BotaoWhatsapp from "@/components/clientes/BotaoWhatsapp";
+import BotaoEmail from "@/components/clientes/BotaoEmail";
 import Icone from "@/components/Icone";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import VistasTarefas from "@/components/tarefas/VistasTarefas";
@@ -40,7 +42,7 @@ function prazo(dataLimite, hoje) {
 
 export default async function PaginaFila({ searchParams }) {
   const { pos = "0", vista = "" } = await searchParams;
-  const { supabase, perfil } = await obterSessao();
+  const { supabase, perfil, empresa } = await obterSessao();
   const hoje = hojeEmPortugal();
   const todas = vista === "todas";
   const posicao = Math.max(0, Number.parseInt(pos, 10) || 0);
@@ -138,10 +140,26 @@ export default async function PaginaFila({ searchParams }) {
                   <Icone nome="telemovel" tamanho={15} /> {formatarTelefone(tarefa.clientes.telefone)}
                 </a>
               )}
+              {/* WhatsApp e email com mensagens prontas, como na ficha (ficam no histórico do lead) */}
+              {tarefa.clientes?.telefone && (
+                <BotaoWhatsapp
+                  clienteId={tarefa.cliente_id}
+                  nome={tarefa.clientes.nome}
+                  telefone={tarefa.clientes.telefone}
+                  empresa={empresa.nome}
+                  eu={perfil.nome}
+                  className={`${styles.contacto} ${styles.contactoBotao}`}
+                />
+              )}
               {tarefa.clientes?.email && (
-                <a href={`mailto:${tarefa.clientes.email}`} className={styles.contacto}>
-                  <Icone nome="email" tamanho={15} /> {tarefa.clientes.email}
-                </a>
+                <BotaoEmail
+                  clienteId={tarefa.cliente_id}
+                  nome={tarefa.clientes.nome}
+                  email={tarefa.clientes.email}
+                  empresa={empresa.nome}
+                  eu={perfil.nome}
+                  className={`${styles.contacto} ${styles.contactoBotao}`}
+                />
               )}
               {!tarefa.clientes?.telefone && !tarefa.clientes?.email && (
                 <span className={styles.fraco}>Sem contactos registados</span>
