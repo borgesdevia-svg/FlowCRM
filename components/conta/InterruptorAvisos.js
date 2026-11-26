@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 import { ligarAvisos, desligarAvisos } from "@/lib/acoes/avisos";
 import styles from "./InterruptorAvisos.module.css";
 
-const CHAVE_PUBLICA = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+// .trim() e sem aspas: uma chave colada na Vercel com um espaço ou aspas a mais estragava tudo
+const CHAVE_PUBLICA = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY?.trim().replace(/^["']|["']$/g, "");
 
 // a chave pública vem em base64url; o browser quer os bytes
 function chaveEmBytes(base64) {
@@ -17,8 +18,11 @@ function chaveEmBytes(base64) {
   return Uint8Array.from(atob(normal), (c) => c.charCodeAt(0));
 }
 
+// regista o service worker e espera que fique ATIVO: na primeira vez ainda está a instalar,
+// e o Chrome recusa criar a subscrição sem um service worker ativo
 async function registo() {
-  return navigator.serviceWorker.register("/sw.js", { scope: "/", updateViaCache: "none" });
+  await navigator.serviceWorker.register("/sw.js", { scope: "/", updateViaCache: "none" });
+  return navigator.serviceWorker.ready;
 }
 
 export default function InterruptorAvisos() {
@@ -77,8 +81,10 @@ export default function InterruptorAvisos() {
         }
         setEstado("desligado");
       }
-    } catch {
-      setErro("Não foi possível mudar os avisos neste browser. Tenta outra vez.");
+    } catch (e) {
+      // o nome do erro ajuda a perceber o que falhou (ex.: AbortError = serviço de avisos do browser)
+      console.error("avisos:", e);
+      setErro(`Não foi possível mudar os avisos neste browser (${e?.name ?? "erro"}: ${e?.message ?? ""}).`);
     } finally {
       setPendente(false);
     }
