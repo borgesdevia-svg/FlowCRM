@@ -15,6 +15,7 @@ import SimboloLogo from "@/components/SimboloLogo";
 import Tutorial from "@/components/painel/Tutorial";
 import BarraTopo from "@/components/painel/BarraTopo";
 import JanelaChave from "@/components/painel/JanelaChave";
+import VigiaLeads from "@/components/painel/VigiaLeads";
 import BotaoInstalar from "@/components/painel/BotaoInstalar";
 import BotaoTema from "@/components/painel/BotaoTema";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
@@ -266,6 +267,8 @@ export default async function LayoutPainel({ children }) {
 
       {/* chave de recuperação da password: aparece até a pessoa confirmar que a guardou */}
       {mostrarChave && <JanelaChave email={perfil.email} />}
+      {/* avisos de leads novos com o CRM aberto, nos browsers sem avisos com ele fechado (não desenha nada) */}
+      {!bloqueada && <VigiaLeads />}
     </div>
   );
 }

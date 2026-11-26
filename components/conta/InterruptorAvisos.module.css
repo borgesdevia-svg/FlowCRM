@@ -92,3 +92,15 @@
   flex-direction: column;
   gap: 4px;
 }
+
+/* passos do Brave: caixa suave, sem cor de erro (é uma dica, não uma falha) */
+.dica {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgb(var(--rgb-tinta) / 0.04);
+  font-size: 0.9rem;
+}
+
+.dica code {
+  font-size: 0.85rem;
+}
