@@ -6,6 +6,7 @@
 //  - comPrevia: mostra ao lado uma pré-visualização do cartão (página "Novo cliente")
 //  - children: conteúdo extra por baixo da pré-visualização (ex.: uma dica)
 
+import { lerEuros } from "@/lib/dinheiro";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { guardarCliente } from "@/lib/acoes/clientes";
@@ -170,7 +171,7 @@ export default function FormCliente({ cliente = {}, membros = null, comPrevia = 
   // ---------- página "Novo cliente": formulário + pré-visualização ao lado ----------
   const fase = obterEstado(previa.estado ?? "novo");
   const nome = (previa.nome ?? "").trim();
-  const valor = Number(String(previa.valor_previsto ?? "").replace(",", "."));
+  const valor = lerEuros(previa.valor_previsto ?? ""); // as mesmas regras do servidor ("12.000" = 12 000 €)
   const responsavel = membros?.find((m) => m.id === previa.responsavel_id)?.nome;
 
   return (
