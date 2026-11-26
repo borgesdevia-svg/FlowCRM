@@ -15,7 +15,7 @@ import ListaPropostas from "@/components/propostas/ListaPropostas";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import { tempoRelativo } from "@/lib/datas";
-import { eUuid } from "@/lib/validacao";
+import { eEmail, eUuid } from "@/lib/validacao";
 import { nomeCanal } from "@/lib/canais";
 import styles from "../ficha.module.css";
 
@@ -197,7 +197,18 @@ export default async function PaginaCliente({ params, searchParams }) {
                 {cliente.respostas.map((r, i) => (
                   <div key={i}>
                     <dt>{r.pergunta}</dt>
-                    <dd>{r.resposta}</dd>
+                    <dd>
+                      {/* sites e emails das perguntas "Site ou link" e "Email" abrem-se com um clique */}
+                      {/^https?:\/\/\S+$/.test(r.resposta) ? (
+                        <a href={r.resposta} target="_blank" rel="noopener noreferrer nofollow">
+                          {r.resposta}
+                        </a>
+                      ) : eEmail(r.resposta) ? (
+                        <a href={`mailto:${r.resposta}`}>{r.resposta}</a>
+                      ) : (
+                        r.resposta
+                      )}
+                    </dd>
                   </div>
                 ))}
               </dl>

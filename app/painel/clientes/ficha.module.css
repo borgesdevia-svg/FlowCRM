@@ -374,3 +374,15 @@
   color: var(--cor-texto-fraco);
   font-size: 0.82rem;
 }
+
+/* links e emails nas respostas do formulário */
+.respostas dd a {
+  color: var(--cor-destaque);
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .respostas dd a:hover {
+    text-decoration: underline;
+  }
+}

@@ -202,6 +202,24 @@ function Pergunta({ pergunta: p, valor, erro }) {
         className={styles.campoCurto}
       />
     );
+  } else if (p.tipo === "email" || p.tipo === "telefone" || p.tipo === "link") {
+    // teclado próprio no telemóvel (@ no email, números no telefone, .pt no site)
+    const tipos = { email: ["email", "email", "nome@exemplo.pt"], telefone: ["tel", "tel", "912 345 678"], link: ["url", "url", "empresa.pt"] };
+    const [tipoInput, autoComplete, exemplo] = tipos[p.tipo];
+    campo = (
+      <input
+        id={nome}
+        name={nome}
+        type={p.tipo === "link" ? "text" : tipoInput}
+        inputMode={p.tipo === "link" ? "url" : undefined}
+        autoComplete={autoComplete}
+        placeholder={exemplo}
+        maxLength={p.tipo === "link" ? 300 : 254}
+        defaultValue={valor}
+        aria-invalid={!!erro}
+        aria-describedby={idAjuda}
+      />
+    );
   } else {
     campo = <input id={nome} name={nome} maxLength={500} defaultValue={valor} aria-invalid={!!erro} aria-describedby={idAjuda} />;
   }
