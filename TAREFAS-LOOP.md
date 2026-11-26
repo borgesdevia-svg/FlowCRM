@@ -111,5 +111,5 @@ Todas as tarefas feitas, 1 commit por tarefa no branch `loop-melhorias` (sem pus
 
 - Metas: meta da empresa toda, nos dois planos. Feito: bloco "Meta de <mês>" na Visão geral (só admin).
 - Brilho do logótipo: tirado. Números do Início: contam em 400ms.
-- Spam no formulário: limite por IP (migração 33, 10 envios por hora). Mensagem do registo: mantém-se.
+- Spam no formulário: limite por IP (migração 33 aplicada, 10 envios por hora). Mensagem do registo: mantém-se.
 - iPhone (viewport-fit=cover): fica para quando houver um iPhone para testar.

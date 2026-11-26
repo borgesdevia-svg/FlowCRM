@@ -1,4 +1,4 @@
--- 33: limite de envios do formulário público por IP (contra spam).
+-- 33: limite de envios do formulário público por IP, contra spam (aplicada a 2026-11-26).
 --
 -- Até aqui, qualquer pessoa podia chamar a função criar_lead diretamente (com a chave pública)
 -- e criar centenas de leads falsos. Agora:
