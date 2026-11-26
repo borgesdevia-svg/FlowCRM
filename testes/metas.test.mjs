@@ -8,6 +8,8 @@ test("lerValorMeta: aceita as formas portuguesas de escrever euros", () => {
   assert.equal(lerValorMeta("12 000"), 12000);
   assert.equal(lerValorMeta("12.000"), 12000);
   assert.equal(lerValorMeta("12 000,50 €"), 12000.5);
+  assert.equal(lerValorMeta("1500.50"), 1500.5); // ponto decimal à inglesa
+  assert.equal(lerValorMeta("1.250.000"), 1250000);
   assert.equal(lerValorMeta("0"), null);
   assert.equal(lerValorMeta("-5"), null);
   assert.equal(lerValorMeta("abc"), null);
