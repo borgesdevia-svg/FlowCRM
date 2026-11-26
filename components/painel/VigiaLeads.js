@@ -9,10 +9,17 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { criarClienteBrowser } from "@/lib/supabase/cliente";
+import { nomeCanal } from "@/lib/canais";
 
 export const CHAVE_AVISOS_ABA = "flowcrm_avisos_aba"; // "1" = ligado neste browser
 const CHAVE_ULTIMO = "flowcrm_avisos_ultimo"; // data do último lead já avisado (partilhada entre abas)
 const INTERVALO = 60 * 1000; // 1 minuto (com a aba em segundo plano o browser não deixa menos)
+
+// "Chegou pelo Instagram." / "Marcou uma reunião online." / "Chegou pelo formulário."
+function textoOrigem(canal) {
+  if (canal === "marcacoes") return "Marcou uma reunião online.";
+  return `Chegou pelo ${canal ? nomeCanal(canal) : "formulário"}.`;
+}
 
 async function mostrarAviso(titulo, texto, url) {
   // no Android só os avisos do service worker funcionam; no PC qualquer um serve
@@ -46,7 +53,7 @@ export default function VigiaLeads() {
       const desde = localStorage.getItem(CHAVE_ULTIMO);
       const { data: novos } = await supabase
         .from("clientes")
-        .select("id, nome, criado_em")
+        .select("id, nome, criado_em, canal")
         .eq("origem", "formulario")
         .gt("criado_em", desde)
         .order("criado_em", { ascending: true })
@@ -58,7 +65,7 @@ export default function VigiaLeads() {
       localStorage.setItem(CHAVE_ULTIMO, novos.at(-1).criado_em);
 
       for (const lead of novos) {
-        await mostrarAviso(`Lead novo: ${lead.nome}`, "Chegou pelo formulário.", `/painel/clientes/${lead.id}`);
+        await mostrarAviso(`Lead novo: ${lead.nome}`, textoOrigem(lead.canal), `/painel/clientes/${lead.id}`);
       }
       router.refresh(); // atualiza os números e a lista da página aberta
     }
