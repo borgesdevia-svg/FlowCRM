@@ -10,6 +10,7 @@ import FormTarefa from "@/components/tarefas/FormTarefa";
 import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import Icone from "@/components/Icone";
 import BotaoWhatsapp from "@/components/clientes/BotaoWhatsapp";
+import BotaoEmail from "@/components/clientes/BotaoEmail";
 import ListaPropostas from "@/components/propostas/ListaPropostas";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
@@ -112,11 +113,16 @@ export default async function PaginaCliente({ params, searchParams }) {
 
             {/* contactos clicáveis: mailto abre o email, tel liga (no telemóvel) */}
             <div className={styles.contactos}>
+              {/* email: abre a janela com mensagens prontas (e regista no histórico) */}
               {cliente.email && (
-                <a href={`mailto:${cliente.email}`} className={styles.contacto}>
-                  <Icone nome="email" tamanho={15} />
-                  {cliente.email}
-                </a>
+                <BotaoEmail
+                  clienteId={cliente.id}
+                  nome={cliente.nome}
+                  email={cliente.email}
+                  empresa={empresa.nome}
+                  eu={perfil.nome}
+                  className={`${styles.contacto} ${styles.contactoBotao}`}
+                />
               )}
               {cliente.telefone && (
                 <a href={linkTelefone(cliente.telefone)} className={styles.contacto}>

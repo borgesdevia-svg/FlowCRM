@@ -237,13 +237,15 @@
   font-size: 0.88rem;
 }
 
-/* o botão do WhatsApp parece mais um contacto, com o verde da marca ao passar */
+/* contactos que são botões (email e WhatsApp abrem uma janela): mesmo aspeto dos links */
+.contactoBotao,
 .contactoWhatsapp {
   font: inherit;
   font-size: 0.86rem;
   cursor: pointer;
 }
 
+/* o do WhatsApp ganha o verde da marca ao passar */
 .contactoWhatsapp:hover {
   color: #25d366;
   border-color: rgb(37 211 102 / 0.45);
