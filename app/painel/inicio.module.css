@@ -78,31 +78,6 @@
   color: var(--cor-texto);
 }
 
-/* etiqueta no canto: verde = bom, vermelho = atenção, cinzento = neutro */
-.etiqueta {
-  flex-shrink: 0;
-  padding: 1px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.bom {
-  background: rgb(var(--rgb-destaque) / 0.12);
-  color: var(--cor-destaque);
-}
-
-.mau {
-  background: rgb(239 68 68 / 0.1);
-  color: var(--cor-perigo-texto);
-}
-
-.neutro {
-  background: rgb(var(--rgb-tinta) / 0.06);
-  color: var(--cor-texto-fraco);
-}
-
 /* variação face ao mês passado: seta + percentagem, verde a subir e vermelho a descer */
 .tendenciaBoa,
 .tendenciaMa {
@@ -166,7 +141,6 @@
   background: rgb(var(--rgb-tinta) / 0.09);
 }
 
-/* ---------- blocos ---------- */
 /* gráfico grande (mais largo) + atividade recente (mais estreita) */
 .linhaPrincipal {
   display: grid;
@@ -240,13 +214,11 @@
   justify-content: space-between;
 }
 
-/* --- gráficos --- */
 /* o Chart.js ocupa a altura do contentor (maintainAspectRatio: false) */
 .areaGrafico {
   position: relative;
   height: 220px;
 }
-
 
 /* donut à esquerda, legenda à direita */
 .donut {
@@ -610,7 +582,6 @@
   }
 }
 
-/* ---------- redesign Octax: cabeçalho, títulos com ícone e origem dos leads ---------- */
 /* "comprimidos" por baixo da saudação: a data de hoje e o âmbito (empresa toda ou os meus) */
 .comprimidos {
   display: flex;

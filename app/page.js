@@ -14,7 +14,7 @@ import ChamadaFinal from "@/components/landing/ChamadaFinal";
 // A ordem das secções responde, por ordem, às perguntas de quem chega:
 // o que é e como é por dentro? -> quanto custa (e o que tem cada plano)? -> o que faz?
 // -> como começo? -> porquê usar? -> dúvidas -> chamada final
-// Os layouts alternam (centrado, linhas texto/imagem, grelha de cartões, planos lado a lado)
+// Os layouts alternam (centrado, janela da app, planos lado a lado, listas com linhas finas)
 // para a página não ficar repetitiva.
 export default function Inicio() {
   return (

@@ -105,50 +105,6 @@
   cursor: pointer;
 }
 
-/* sol e lua por baixo de cada modelo */
-.modos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  padding: 3px;
-  border-radius: 7px;
-  background: rgb(var(--rgb-tinta) / 0.05);
-}
-
-.modo,
-.modoAtivo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px 8px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.modo:hover {
-  background: rgb(var(--rgb-tinta) / 0.07);
-  color: var(--cor-texto);
-}
-
-.modoAtivo {
-  background: var(--cor-destaque);
-  color: var(--cor-sobre-destaque);
-}
-
-.modo:focus-visible,
-.modoAtivo:focus-visible {
-  outline: 2px solid var(--cor-destaque);
-  outline-offset: 2px;
-}
-
 /* miniatura do painel: barra lateral + título + dois cartões */
 .miniatura {
   display: flex;

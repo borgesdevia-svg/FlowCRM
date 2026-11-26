@@ -111,11 +111,6 @@
   margin-inline: auto;
 }
 
-.voltar {
-  color: var(--cor-texto-suave);
-  font-size: 0.9rem;
-}
-
 .cabecalho h1 {
   font-size: 1.5rem;
   font-weight: 600;

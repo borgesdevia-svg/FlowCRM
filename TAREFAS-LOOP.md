@@ -53,7 +53,7 @@ em "Notas" com o que fez (ou porque saltou).
 
 ## C. Limpeza e testes
 
-- [ ] **C1. CSS e código que já não se usam.** Classes CSS sem uso em `.module.css`, componentes
+- [x] **C1. CSS e código que já não se usam.** Classes CSS sem uso em `.module.css`, componentes
   e funções exportadas que ninguém importa, comentários que falam de coisas que já não existem
   (ex.: "14 dias grátis", "grelha", "planeta"). Apagar com cuidado.
 - [ ] **C2. Testes para os planos.** Em `testes/planos.test.mjs`: empresa nova sem plano
@@ -78,6 +78,7 @@ em "Notas" com o que fez (ou porque saltou).
 - A5: tirados brilhos e degradês decorativos do painel — barra de progresso do Início (degradê + brilho → verde liso), cartão da empresa do comercial, inicial da empresa e avatar do menu (degradê → cor lisa), brilho no canto do plano Pro (página Plano), do aviso "Função do CRM Pro" e do cartão de estado no formulário do lead. Mantido: etiquetas de estado (dão informação), cartão de crédito azul na Cobrança (imita um cartão), brilho do carregamento. Não há textos de marketing no painel.
 - B1: ao criar/editar um lead, se já houver outro com o mesmo email (sem maiúsculas) ou telefone (sem espaços nem +351), aparece um aviso amarelo com link para esse lead e o botão passa a "Guardar mesmo assim". Não bloqueia; se mudares o email/telefone volta a verificar. Funções em lib/duplicados.js com 5 testes. Respeita o RLS (o comercial só compara com os seus). Não verifica no importar CSV nem no formulário público.
 - B2: migração `supabase/migrations/32_metas.sql` escrita, NÃO aplicada (tabela metas: empresa, mês, valor; todos veem, só admin escreve, nada com a empresa bloqueada).
+- C1: ~300 linhas de CSS sem uso apagadas (sobretudo o editor de perguntas antigo em Personalizar.module.css, setas de tendência antigas do Início, botões de modo das Configurações, .sucesso e .voltar soltos). Apagadas 2 funções que ninguém chamava: estiloCor (lib/formulario.js) e a Server Action apagarTarefa (já existe apagarTarefas, para várias). Inicial do logótipo sem degradê. Classes usadas de forma dinâmica (styles[`tipo-${x}`]) foram deixadas.
 
 ## Precisa do aluno
 
