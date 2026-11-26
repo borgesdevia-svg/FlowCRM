@@ -71,3 +71,45 @@ test("aviso do fim do teste: só nos últimos 3 dias", () => {
   assert.equal(aviso("2026-11-21T12:00:00Z"), null); // acabou: bloqueado, sem aviso
   assert.equal(avisoPlano(estadoPlano({ plano: "pro", teste_ate: null }, agora)), null); // Pro pago
 });
+
+// Desde 2026-11-25 não há dias grátis: uma empresa nova nasce com teste_ate = agora
+// (migração 31), ou seja, bloqueada até pagar o primeiro plano.
+test("empresa acabada de criar (sem dias grátis): bloqueada e à espera do primeiro plano", () => {
+  const p = estadoPlano({ plano: "pro", teste_ate: agora.toISOString(), stripe_cliente: null }, agora);
+  assert.equal(p.bloqueada, true);
+  assert.equal(p.semPrimeiroPlano, true);
+  assert.equal(p.pro, false);
+  assert.equal(p.emTeste, false);
+  assert.equal(p.pago, false);
+  assert.equal(avisoPlano(p), null); // bloqueada não tem aviso: o painel abre logo na página Plano
+});
+
+test("já pagou antes e cancelou: bloqueada, mas não é o 'primeiro plano'", () => {
+  const p = estadoPlano({ plano: "essencial", teste_ate: "2026-11-21T00:00:00Z", stripe_cliente: "cus_1" }, agora);
+  assert.equal(p.bloqueada, true);
+  assert.equal(p.semPrimeiroPlano, false);
+});
+
+test("a pagar: semPrimeiroPlano é sempre false", () => {
+  const p = estadoPlano({ plano: "pro", teste_ate: null, stripe_assinatura: "sub_1", stripe_cliente: "cus_1" }, agora);
+  assert.equal(p.semPrimeiroPlano, false);
+  assert.equal(p.pago, true);
+});
+
+test("teste antigo ainda a correr: continua no Pro até ao fim", () => {
+  const p = estadoPlano({ plano: "pro", teste_ate: "2026-11-30T12:00:00Z", stripe_cliente: null }, agora);
+  assert.equal(p.emTeste, true);
+  assert.equal(p.pro, true);
+  assert.equal(p.semPrimeiroPlano, false);
+});
+
+test("cancelado com fim marcado: continua pago e com o plano até ao fim do período", () => {
+  const p = estadoPlano(
+    { plano: "pro", teste_ate: null, stripe_assinatura: "sub_1", cancela_no_fim: true, proximo_pagamento: "2026-12-22T00:00:00Z" },
+    agora
+  );
+  assert.equal(p.pago, true);
+  assert.equal(p.pro, true);
+  assert.equal(p.cancelaNoFim, true);
+  assert.equal(p.proximoPagamento, "2026-12-22T00:00:00Z");
+});
