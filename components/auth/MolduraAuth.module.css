@@ -12,14 +12,6 @@
   overflow: hidden;
 }
 
-/* só o brilho verde no topo, sem grelha de quadrados (como a landing) */
-.fundo {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(ellipse 50% 40% at 50% 0%, rgb(var(--rgb-destaque) / 0.18), transparent 70%);
-}
-
 /* entrada curta: quem vem entrar quer escrever já, não esperar quase 1 segundo */
 .pagina :global(.entrar) {
   animation: entrarAuth 350ms var(--ease-out) forwards;

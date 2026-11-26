@@ -8,7 +8,6 @@ import SimboloLogo from "@/components/SimboloLogo";
 export default function MolduraAuth({ titulo, subtitulo, children, rodape }) {
   return (
     <main className={styles.pagina}>
-      <div className={styles.fundo} aria-hidden="true"></div>
 
       <Link href="/" className={`entrar ${styles.logo}`}>
         <SimboloLogo tamanho={26} className={styles.simbolo} />
