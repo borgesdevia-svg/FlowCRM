@@ -40,6 +40,10 @@ responsável, aviso no telemóvel e uma página no painel com as próximas marca
 - [x] Extra: a equipa marca reuniões na ficha do lead
 - [x] Extra: landing com "Marcações online" e "Meta do mês"
 - [x] Extra: tirado o brilho verde do login/registo/recuperação
+- [x] Extra: a empresa escreve o título e o texto da página de marcações (migração 37 aplicada)
+- [x] Extra: passo "Marcações" no tutorial; avisos no separador dizem de onde veio o lead
+- [x] Volta por todas as páginas do painel com sessão (conta de teste): sem erros na consola nem
+      no servidor; corrigido o cabeçalho de "A minha conta" no telemóvel (email partido)
 
 ## Notas
 - Testado na empresa de teste (teste-qa-lda): email inválido recusado, marcação criada com lead,
