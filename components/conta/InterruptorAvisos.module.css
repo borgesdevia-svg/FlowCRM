@@ -1,0 +1,86 @@
+/* Interruptor "Avisos de leads novos" (A minha conta). O desenho do interruptor é o mesmo das Automações. */
+.bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.linha {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.texto strong {
+  font-weight: 600;
+}
+
+.texto span,
+.nota {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.interruptor {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* a caixa verdadeira fica invisível por cima do desenho: continua a funcionar com teclado */
+.interruptor input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.interruptor input:disabled {
+  cursor: default;
+}
+
+.trilho {
+  display: block;
+  width: 46px;
+  height: 28px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.14);
+  transition: background 0.2s var(--curva);
+}
+
+.bola {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s var(--curva);
+}
+
+.interruptor input:checked + .trilho {
+  background: var(--cor-destaque);
+}
+
+.interruptor input:checked + .trilho .bola {
+  transform: translateX(18px);
+}
+
+.interruptor input:disabled + .trilho {
+  opacity: 0.5;
+}
+
+.interruptor input:focus-visible + .trilho {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 3px;
+}

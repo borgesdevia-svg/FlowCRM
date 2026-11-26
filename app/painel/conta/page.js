@@ -6,6 +6,7 @@ import { iniciais } from "@/lib/texto";
 import { FormPerfil, FormPassword } from "@/components/conta/FormsConta";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
 import BlocoChave from "@/components/conta/BlocoChave";
+import InterruptorAvisos from "@/components/conta/InterruptorAvisos";
 import Icone from "@/components/Icone";
 import styles from "./conta.module.css";
 
@@ -137,6 +138,14 @@ export default async function PaginaConta({ searchParams }) {
                 Terminar em todos
               </button>
             </form>
+          </section>
+
+          <section className={styles.cartao} aria-labelledby="t-avisos">
+            <div className={styles.topoCartao}>
+              <h2 id="t-avisos">Avisos</h2>
+              <p>Recebe um aviso no telemóvel ou no computador mesmo com o FlowCRM fechado.</p>
+            </div>
+            <InterruptorAvisos />
           </section>
 
           <section className={styles.cartao} aria-labelledby="t-chave">
