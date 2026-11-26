@@ -254,6 +254,18 @@ export default async function PaginaCliente({ params, searchParams }) {
             )}
           </section>
 
+          {/* RGPD: o lead pode pedir uma cópia de tudo o que a empresa guarda sobre ele */}
+          <section className={`entrar ${styles.zonaDados}`} style={{ "--atraso": "180ms" }}>
+            <div>
+              <strong>Dados pessoais</strong>
+              <p>Se este lead pedir os seus dados (RGPD), descarrega tudo o que o CRM guarda sobre ele.</p>
+            </div>
+            {/* <a> normal (não <Link>) porque descarrega um ficheiro */}
+            <a href={`/painel/clientes/${cliente.id}/dados`} className="botao botao-secundario" download>
+              <Icone nome="folha" tamanho={15} /> Descarregar
+            </a>
+          </section>
+
           <section className={`entrar ${styles.zonaPerigo}`} style={{ "--atraso": "200ms" }}>
             <div>
               <strong>Apagar este lead</strong>
