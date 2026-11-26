@@ -71,6 +71,13 @@ function criarPassos(nome, eAdmin) {
         "As coisas que tens de fazer, cada uma com data: ligar a um lead, enviar uma proposta, marcar uma reunião. Se aqui aparecer um número vermelho, tens tarefas em atraso.",
     },
     {
+      alvo: "marcacoes",
+      titulo: "Marcações",
+      texto: eAdmin
+        ? "Os clientes marcam reuniões sozinhos, num link com as horas livres do teu horário. Liga as marcações aqui e escolhe os dias e as horas; cada reunião aparece também nas Tarefas."
+        : "As reuniões marcadas com os teus leads, dia a dia. Na ficha de cada lead também podes marcar uma reunião nas horas livres.",
+    },
+    {
       alvo: "sino",
       titulo: "Avisos",
       texto: eAdmin
