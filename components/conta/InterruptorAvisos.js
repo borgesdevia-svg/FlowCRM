@@ -82,9 +82,16 @@ export default function InterruptorAvisos() {
         setEstado("desligado");
       }
     } catch (e) {
-      // o nome do erro ajuda a perceber o que falhou (ex.: AbortError = serviço de avisos do browser)
       console.error("avisos:", e);
-      setErro(`Não foi possível mudar os avisos neste browser (${e?.name ?? "erro"}: ${e?.message ?? ""}).`);
+      // O Brave desliga por defeito o serviço de avisos (o da Google, o mesmo do Chrome):
+      // a subscrição falha com AbortError até a pessoa o ligar nas definições.
+      const eBrave = typeof navigator.brave?.isBrave === "function" && (await navigator.brave.isBrave());
+      if (eBrave && e?.name === "AbortError") {
+        setErro("brave");
+      } else {
+        // o nome do erro ajuda a perceber o que falhou
+        setErro(`Não foi possível mudar os avisos neste browser (${e?.name ?? "erro"}: ${e?.message ?? ""}).`);
+      }
     } finally {
       setPendente(false);
     }
@@ -125,10 +132,23 @@ export default function InterruptorAvisos() {
           (o cadeado ao lado do endereço) e volta a esta página.
         </p>
       )}
-      {erro && (
-        <p className="alerta alerta-erro" role="alert">
-          {erro}
-        </p>
+      {erro === "brave" ? (
+        <div className="alerta alerta-erro" role="alert">
+          <p>O Brave tem os avisos desligados por defeito. Para os ligar (só uma vez):</p>
+          <ol className={styles.passos}>
+            <li>
+              Abre <code>brave://settings/privacy</code> numa aba nova (escreve o endereço à mão).
+            </li>
+            <li>Liga &quot;Use Google services for push messaging&quot;.</li>
+            <li>Fecha e volta a abrir o Brave, e liga outra vez este interruptor.</li>
+          </ol>
+        </div>
+      ) : (
+        erro && (
+          <p className="alerta alerta-erro" role="alert">
+            {erro}
+          </p>
+        )
       )}
     </div>
   );

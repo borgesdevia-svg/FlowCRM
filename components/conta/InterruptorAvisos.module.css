@@ -84,3 +84,11 @@
   outline: 2px solid var(--cor-destaque);
   outline-offset: 3px;
 }
+
+/* passos para ligar os avisos no Brave */
+.passos {
+  margin: 8px 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
