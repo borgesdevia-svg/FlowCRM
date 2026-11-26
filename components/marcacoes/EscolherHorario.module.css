@@ -1,0 +1,202 @@
+/* Página pública de marcações: dias numa fila que desliza, horas numa grelha,
+   e os dados por baixo. Usa a cor escolhida pela empresa (--form-cor), como o formulário. */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.passo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.passo legend {
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+/* ---------- dias ---------- */
+.dias {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.dia {
+  flex: 0 0 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--form-raio-campo, 6px);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  font: inherit;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: border-color 150ms, background-color 150ms;
+}
+
+.dia small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.75rem;
+  text-transform: lowercase;
+}
+
+.dia strong {
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- horas ---------- */
+.horas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+}
+
+.hora {
+  padding: 10px 4px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--form-raio-campo, 6px);
+  background: var(--cor-cartao);
+  color: var(--cor-texto);
+  font: inherit;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: border-color 150ms, background-color 150ms;
+}
+
+@media (hover: hover) {
+  .dia:hover,
+  .hora:hover {
+    border-color: var(--form-cor, var(--cor-destaque));
+  }
+}
+
+.dia:focus-visible,
+.hora:focus-visible {
+  outline: 2px solid var(--form-cor, var(--cor-destaque));
+  outline-offset: 2px;
+}
+
+.dia[aria-checked="true"],
+.hora[aria-checked="true"] {
+  border-color: var(--form-cor, var(--cor-destaque));
+  background: var(--form-cor, var(--cor-destaque));
+  color: var(--form-sobre-cor, var(--cor-sobre-destaque));
+}
+
+.dia[aria-checked="true"] small {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* ---------- resumo e dados ---------- */
+.resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: var(--form-raio-campo, 6px);
+  background: rgb(var(--form-cor-rgb, 16 24 40) / 0.08);
+}
+
+.resumo span {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+.resumo strong::first-letter {
+  text-transform: uppercase;
+}
+
+.opcional {
+  color: var(--cor-texto-fraco);
+  font-weight: 400;
+}
+
+.confirmar {
+  align-self: flex-start;
+  min-width: 220px;
+  justify-content: center;
+}
+
+@media (max-width: 520px) {
+  .confirmar {
+    align-self: stretch;
+  }
+}
+
+.privacidade,
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+}
+
+.vazio {
+  font-size: 0.95rem;
+  color: var(--cor-texto-suave);
+}
+
+.armadilha {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---------- marcação confirmada ---------- */
+.feito {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 8px 8px;
+  text-align: center;
+}
+
+.feito h2 {
+  font-size: 1.4rem;
+}
+
+.feito p {
+  color: var(--cor-texto-suave);
+}
+
+.visto {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: var(--form-cor, var(--cor-destaque));
+}
+
+.visto::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 11px;
+  width: 10px;
+  height: 18px;
+  border-right: 3px solid var(--form-sobre-cor, var(--cor-sobre-destaque));
+  border-bottom: 3px solid var(--form-sobre-cor, var(--cor-sobre-destaque));
+  transform: rotate(45deg);
+}

@@ -1,0 +1,31 @@
+.cancelar,
+.confirmar {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 150ms, color 150ms;
+}
+
+.cancelar:hover {
+  border-color: rgb(var(--rgb-tinta) / 0.25);
+  color: var(--cor-texto);
+}
+
+.confirmar {
+  border-color: var(--cor-perigo-texto);
+  color: var(--cor-perigo-texto);
+}
+
+.confirmar:hover {
+  background: rgb(var(--rgb-tinta) / 0.04);
+}
+
+.confirmacao {
+  display: flex;
+  gap: 6px;
+}

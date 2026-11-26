@@ -401,3 +401,38 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* ---------- marcações online do lead ---------- */
+.marcacoes {
+  list-style: none;
+}
+
+.marcacoes li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.marcacoes li:last-child {
+  border-bottom: none;
+}
+
+.marcacoes strong {
+  display: block;
+  font-weight: 600;
+}
+
+.marcacoes strong::first-letter {
+  text-transform: uppercase;
+}
+
+.marcacoes p {
+  margin-top: 2px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

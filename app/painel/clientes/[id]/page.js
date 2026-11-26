@@ -18,6 +18,8 @@ import { tempoRelativo } from "@/lib/datas";
 import { eEmail, eUuid } from "@/lib/validacao";
 import { nomeCanal } from "@/lib/canais";
 import { procurarDuplicado } from "@/lib/procurarDuplicado";
+import { textoMarcacao } from "@/lib/marcacoes";
+import BotaoCancelarMarcacao from "@/components/marcacoes/BotaoCancelarMarcacao";
 import styles from "../ficha.module.css";
 
 // Rota DINÂMICA /painel/clientes/[id] — a pasta [id] apanha qualquer valor no URL.
@@ -63,7 +65,7 @@ export default async function PaginaCliente({ params, searchParams }) {
       .select("id, cliente_id, responsavel_id, titulo, data_limite, concluida", { count: "exact" })
       .eq("cliente_id", id)
       .eq("concluida", concluida);
-  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes, canalRes] = await Promise.all([
+  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes, canalRes, marcacoesRes] = await Promise.all([
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
     supabase
       .from("interacoes")
@@ -85,7 +87,17 @@ export default async function PaginaCliente({ params, searchParams }) {
     cliente.origem === "formulario"
       ? supabase.from("clientes").select("canal").eq("id", id).maybeSingle()
       : Promise.resolve({ data: null }),
+    // próximas reuniões marcadas online (/m/<slug>, migração 36)
+    supabase
+      .from("marcacoes")
+      .select("id, inicio, nota")
+      .eq("cliente_id", id)
+      .eq("estado", "marcada")
+      .gte("fim", new Date().toISOString())
+      .order("inicio")
+      .limit(10),
   ]);
+  const marcacoes = marcacoesRes.data ?? [];
   const canal = nomeCanal(canalRes.data?.canal);
   // outro lead com o mesmo email ou telefone (ex.: a pessoa preencheu o formulário duas vezes)
   const duplicado = await procurarDuplicado(supabase, { email: cliente.email ?? "", telefone: cliente.telefone ?? "" }, cliente.id);
@@ -198,6 +210,28 @@ export default async function PaginaCliente({ params, searchParams }) {
       {/* ---------- duas colunas: dados + tarefas | histórico ---------- */}
       <div className={styles.colunas}>
         <div className={styles.coluna}>
+          {/* reuniões que o lead marcou online e ainda não aconteceram */}
+          {marcacoes.length > 0 && (
+            <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "50ms" }}>
+              <header className={styles.topoCartao}>
+                <h2>
+                  Marcações <span>{marcacoes.length}</span>
+                </h2>
+              </header>
+              <ul className={styles.marcacoes}>
+                {marcacoes.map((m) => (
+                  <li key={m.id}>
+                    <div>
+                      <strong>{textoMarcacao(m.inicio)}</strong>
+                      {m.nota && <p>{m.nota}</p>}
+                    </div>
+                    <BotaoCancelarMarcacao id={m.id} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           {/* respostas às perguntas extra do formulário público (se o cliente veio de lá) */}
           {cliente.respostas?.length > 0 && (
             <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "60ms" }}>

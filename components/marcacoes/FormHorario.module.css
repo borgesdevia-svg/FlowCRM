@@ -1,0 +1,170 @@
+/* Horário das marcações: uma caixa com o interruptor em cima e os ajustes por baixo
+   (o mesmo estilo das Automações). */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 18px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.titulo {
+  margin-bottom: 6px;
+  font-family: inherit;
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.texto {
+  max-width: 620px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+/* ---------- interruptor ---------- */
+.interruptor {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.interruptor input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.trilho {
+  display: block;
+  width: 46px;
+  height: 28px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.14);
+  transition: background 0.25s var(--curva);
+}
+
+.bola {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s var(--curva);
+}
+
+.interruptor input:checked + .trilho {
+  background: var(--cor-destaque);
+}
+
+.interruptor input:checked + .trilho .bola {
+  transform: translateX(18px);
+}
+
+.interruptor input:focus-visible + .trilho {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 3px;
+}
+
+/* ---------- dias da semana ---------- */
+.grupo {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.grupo legend {
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.dias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dia {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.dia:hover {
+  border-color: rgb(var(--rgb-tinta) / 0.18);
+}
+
+.dia:has(input:checked) {
+  border-color: rgb(var(--rgb-destaque) / 0.45);
+  background: rgb(var(--rgb-destaque) / 0.08);
+}
+
+.dia input {
+  accent-color: var(--cor-destaque);
+}
+
+/* ---------- horas e regras ---------- */
+.linhas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px 16px;
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.erro {
+  color: var(--cor-perigo-texto);
+  font-size: 0.88rem;
+}
+
+.sucesso {
+  color: var(--cor-destaque);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 600px) {
+  .form {
+    padding: 14px;
+  }
+
+  .topo {
+    gap: 14px;
+  }
+
+  .rodape {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .rodape :global(.botao) {
+    justify-content: center;
+  }
+}

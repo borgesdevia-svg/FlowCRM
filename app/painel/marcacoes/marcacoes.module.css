@@ -1,0 +1,163 @@
+.pagina {
+  max-width: 920px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ---------- cabeçalho (igual ao das outras páginas) ---------- */
+.cabecalho h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+}
+
+.pagina h2 {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+/* ---------- link público ---------- */
+.link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 16px 18px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.link h2 {
+  margin-bottom: 2px;
+  font-family: inherit;
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.link p {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.link code {
+  grid-column: 1;
+  padding: 9px 12px;
+  border-radius: 7px;
+  border: 1px dashed rgb(var(--rgb-destaque) / 0.35);
+  background: var(--cor-superficie-verde);
+  color: var(--cor-destaque);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.acoesLink {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .link {
+    grid-template-columns: 1fr;
+  }
+
+  .acoesLink :global(.botao) {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ---------- agenda ---------- */
+.vazio {
+  padding: 18px 0;
+  color: var(--cor-texto-fraco);
+  font-size: 0.92rem;
+}
+
+.dia + .dia {
+  margin-top: 22px;
+}
+
+.dia h3 {
+  margin-bottom: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.lista {
+  list-style: none;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.linha {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+/* reunião de hoje que já acabou: fica mais apagada */
+.linha[data-passou] {
+  opacity: 0.55;
+}
+
+.hora {
+  flex-shrink: 0;
+  width: 54px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.hora small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.quem {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nome {
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.nome:hover {
+  text-decoration: underline;
+}
+
+.quem p {
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+}
+
+.quem a[href^="tel:"] {
+  color: inherit;
+}
+
+.quem a[href^="tel:"]:hover {
+  color: var(--cor-texto);
+}
+
+.nota {
+  margin-top: 4px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

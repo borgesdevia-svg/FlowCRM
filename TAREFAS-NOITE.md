@@ -18,11 +18,17 @@ responsável, aviso no telemóvel e uma página no painel com as próximas marca
 ## Passos
 - [x] 1. Migração 36: tabelas `marcacoes_config` e `marcacoes`, com RLS
 - [x] 2. `lib/marcacoes.js`: horários livres de um dia (com testes, incluindo a mudança da hora)
-- [ ] 3. Página pública `/m/[slug]`: escolher dia, hora e deixar o contacto
-- [ ] 4. Server Action de marcar (validação, limite por IP, lead, tarefa, aviso)
-- [ ] 5. Painel `/painel/marcacoes`: próximas marcações + horário (admin) + cancelar
-- [ ] 6. Menu, ficha do lead (marcações do lead), link na Visão geral
+- [x] 3. Página pública `/m/[slug]`: escolher dia, hora e deixar o contacto
+- [x] 4. Server Action de marcar (validação, limite por IP, lead, tarefa, aviso)
+- [x] 5. Painel `/painel/marcacoes`: próximas marcações + horário (admin) + cancelar
+- [x] 6. Menu, ficha do lead (marcações do lead), link na Visão geral
 - [ ] 7. Testar no browser (página pública, computador e telemóvel)
 - [ ] 8. Rever erros, lint, testes, build, commit e push
 
 ## Notas
+- Testado na empresa de teste (teste-qa-lda): página pública no PC e no telemóvel, email inválido
+  recusado, marcação criada com lead + tarefa + histórico, hora ocupada sai da lista, o mesmo email
+  junta a marcação ao lead que já existia.
+- RLS testado com SQL: outra empresa não vê nada; o comercial só vê as marcações dos seus leads;
+  ninguém cria nem muda a hora pela API (só cancela); o comercial não muda o horário.
+- O erro "enviarAvisos is not a function" era cache do `npm run dev`: depois de reiniciar desapareceu.
