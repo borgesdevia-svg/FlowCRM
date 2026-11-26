@@ -147,9 +147,19 @@
 }
 
 /* pesquisa: campo "cheio", sem contorno, com a lupa dentro */
+/* à direita da barra: "Ordenar" + pesquisa */
+.direita {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex: 0 1 480px;
+  justify-content: flex-end;
+}
+
 .pesquisa {
   position: relative;
-  flex: 0 1 320px;
+  flex: 1 1 220px;
 }
 
 .lupa {
@@ -462,8 +472,13 @@ a.botaoPagina:hover {
     display: none;
   }
 
+  .direita,
   .pesquisa {
     flex-basis: 100%;
+  }
+
+  .direita {
+    justify-content: flex-start;
   }
 
   .tabela td,

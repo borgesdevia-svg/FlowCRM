@@ -1,0 +1,30 @@
+/* "Ordenar [Mais recentes v]" ao lado da pesquisa */
+.ordenar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.ordenar select {
+  appearance: none;
+  padding: 8px 32px 8px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  background-color: var(--cor-cartao);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23a1a1a1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  color: var(--cor-texto);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* telemóvel: 16px para o iPhone não fazer zoom ao tocar */
+@media (max-width: 700px) {
+  .ordenar select {
+    font-size: 16px;
+  }
+}

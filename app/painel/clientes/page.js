@@ -4,6 +4,8 @@ import { obterSessao } from "@/lib/sessao";
 import { ESTADOS, obterEstado, formatarEuros, formatarData } from "@/lib/estados";
 import { formatarTelefone, linkTelefone, termoPesquisa } from "@/lib/texto";
 import Icone from "@/components/Icone";
+import OrdenarLeads from "@/components/clientes/OrdenarLeads";
+import { obterOrdem } from "@/lib/ordemLeads";
 import styles from "./clientes.module.css";
 
 // Rota /painel/clientes — lista de clientes com pesquisa, filtro por estado e páginas.
@@ -28,7 +30,7 @@ const numero = (n) => new Intl.NumberFormat("pt-PT").format(n);
 
 // No Next.js 16, searchParams chega como uma Promise: por isso o "await"
 export default async function PaginaClientes({ searchParams }) {
-  const { q = "", estado = "", aviso = "", pagina = "1" } = await searchParams;
+  const { q = "", estado = "", aviso = "", pagina = "1", ordem = "" } = await searchParams;
   const { supabase, eAdmin } = await obterSessao();
 
   const estadoValido = ESTADOS.some((e) => e.chave === estado);
@@ -37,11 +39,14 @@ export default async function PaginaClientes({ searchParams }) {
   const numPagina = Math.max(1, Number.parseInt(pagina, 10) || 1);
   const inicio = (numPagina - 1) * POR_PAGINA;
 
-  // a lista: só uma página, mais recentes primeiro
+  // a lista: só uma página, pela ordem escolhida (mais recentes primeiro, por defeito).
+  // Leads sem valor ficam no fim quando se ordena pelo valor; o id desempata (páginas estáveis).
+  const ordemEscolhida = obterOrdem(ordem);
   let consulta = supabase
     .from("clientes")
     .select("id, nome, email, telefone, estado, valor_previsto, origem, criado_em, perfis(nome)")
-    .order("criado_em", { ascending: false })
+    .order(ordemEscolhida.coluna, { ascending: ordemEscolhida.ascendente, nullsFirst: false })
+    .order("id")
     .range(inicio, inicio + POR_PAGINA - 1);
   if (estadoValido) consulta = consulta.eq("estado", estado);
   if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
@@ -69,6 +74,7 @@ export default async function PaginaClientes({ searchParams }) {
     const params = new URLSearchParams();
     if (termo) params.set("q", termo);
     if (chave) params.set("estado", chave);
+    if (ordemEscolhida.chave !== "recentes") params.set("ordem", ordemEscolhida.chave);
     if (pag > 1) params.set("pagina", String(pag));
     const texto = params.toString();
     return `/painel/clientes${texto ? `?${texto}` : ""}`;
@@ -132,9 +138,12 @@ export default async function PaginaClientes({ searchParams }) {
           ))}
         </nav>
 
+        <div className={styles.direita}>
+        <OrdenarLeads ordem={ordemEscolhida.chave} />
         {/* pesquisa: um formulário GET normal, que só muda o URL (Enter para pesquisar) */}
         <form className={styles.pesquisa} role="search">
           {estadoValido && <input type="hidden" name="estado" value={estado} />}
+          {ordemEscolhida.chave !== "recentes" && <input type="hidden" name="ordem" value={ordemEscolhida.chave} />}
           <Icone nome="pesquisa" tamanho={16} className={styles.lupa} />
           <input
             type="search"
@@ -144,6 +153,7 @@ export default async function PaginaClientes({ searchParams }) {
             aria-label="Pesquisar leads"
           />
         </form>
+        </div>
       </div>
 
       {/* a lista */}
