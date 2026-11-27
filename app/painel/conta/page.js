@@ -3,7 +3,7 @@ import { obterSessao } from "@/lib/sessao";
 import { sair } from "@/lib/acoes/autenticacao";
 import { terminarSessoes } from "@/lib/acoes/conta";
 import { iniciais } from "@/lib/texto";
-import { FormPerfil, FormPassword } from "@/components/conta/FormsConta";
+import { FormPerfil, FormModeloEmail, FormPassword } from "@/components/conta/FormsConta";
 import BotaoCopiar from "@/components/painel/BotaoCopiar";
 import BlocoChave from "@/components/conta/BlocoChave";
 import InterruptorAvisos from "@/components/conta/InterruptorAvisos";
@@ -102,6 +102,17 @@ export default async function PaginaConta({ searchParams }) {
               <p>O nome, o cargo e o telefone que a tua equipa vê nos leads, nas tarefas e na página Equipa.</p>
             </div>
             <FormPerfil perfil={{ nome: perfil.nome, cargo: extra?.cargo, telefone: extra?.telefone }} />
+          </section>
+
+          <section className={styles.cartao} aria-labelledby="t-email">
+            <div className={styles.topoCartao}>
+              <h2 id="t-email">Definições de e-mail</h2>
+              <p>
+                O que escreves sempre no início dos e-mails. Ao carregar no email de um lead, o Gmail abre com este
+                texto já escrito: só tens de escrever o resto.
+              </p>
+            </div>
+            <FormModeloEmail modelo={perfil.email_modelo} />
           </section>
 
           <section className={styles.cartao} aria-labelledby="t-password">

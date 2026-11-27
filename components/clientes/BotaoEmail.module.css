@@ -1,0 +1,9 @@
+/* aviso "Email copiado", ao lado do botão; vazio não ocupa espaço */
+.copiado {
+  color: var(--cor-destaque-claro);
+  font-size: 0.86rem;
+}
+
+.copiado:empty {
+  display: none;
+}

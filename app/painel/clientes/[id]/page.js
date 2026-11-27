@@ -204,14 +204,14 @@ export default async function PaginaCliente({ params, searchParams }) {
 
             {/* contactos clicáveis: mailto abre o email, tel liga (no telemóvel) */}
             <div className={styles.contactos}>
-              {/* email: abre a janela com mensagens prontas (e regista no histórico) */}
+              {/* email: abre o Gmail a escrever para o lead (com o texto pré-escrito) e copia o email */}
               {cliente.email && (
                 <BotaoEmail
-                  clienteId={cliente.id}
-                  nome={cliente.nome}
                   email={cliente.email}
+                  nome={cliente.nome}
                   empresa={empresa.nome}
                   eu={perfil.nome}
+                  modelo={perfil.email_modelo}
                   className={`${styles.contacto} ${styles.contactoBotao}`}
                 />
               )}

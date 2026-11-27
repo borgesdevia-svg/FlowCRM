@@ -1,9 +1,10 @@
 "use client";
-// Os formulários da página "A minha conta" (perfil e password).
+// Os formulários da página "A minha conta" (perfil, texto do e-mail e password).
 // Cada um tem o seu useActionState, ligado à sua Server Action.
 
-import { useActionState } from "react";
-import { mudarPerfil, mudarPassword } from "@/lib/acoes/conta";
+import { useActionState, useRef } from "react";
+import { mudarPerfil, mudarModeloEmail, mudarPassword } from "@/lib/acoes/conta";
+import { MAX_MODELO_EMAIL, VARIAVEIS_EMAIL } from "@/lib/linkEmail";
 import CampoPassword from "@/components/CampoPassword";
 
 const estiloForm = { display: "flex", flexDirection: "column", gap: 14 };
@@ -53,6 +54,57 @@ export function FormPerfil({ perfil }) {
     </form>
   );
 }
+
+// Definições de e-mail: o texto que o botão de e-mail da ficha já escreve no Gmail.
+// Os botões das variáveis põem a palavra onde está o cursor (ex.: {nome}).
+export function FormModeloEmail({ modelo }) {
+  const [estado, accao, pendente] = useActionState(mudarModeloEmail, {});
+  const caixa = useRef(null);
+  const valor = estado.valores?.modelo ?? modelo ?? "";
+
+  function inserir(chave) {
+    const t = caixa.current;
+    if (!t) return;
+    t.focus();
+    // setRangeText troca a seleção (ou põe no cursor) e deixa o cursor a seguir à palavra
+    t.setRangeText(chave, t.selectionStart, t.selectionEnd, "end");
+  }
+
+  return (
+    <form action={accao} style={estiloForm}>
+      <Mensagem estado={estado} />
+      <div className="campo">
+        <label htmlFor="modelo-email">Texto pré-escrito</label>
+        <textarea
+          ref={caixa}
+          id="modelo-email"
+          name="modelo"
+          rows={6}
+          maxLength={MAX_MODELO_EMAIL}
+          placeholder={"{saudacao}, {nome}.\n\nAqui fala o {eu}, da {empresa}.\n"}
+          defaultValue={valor}
+        />
+      </div>
+      <div style={estiloVariaveis} aria-label="Palavras que se preenchem sozinhas">
+        {VARIAVEIS_EMAIL.map((v) => (
+          <button key={v.chave} type="button" className="botao botao-secundario" style={estiloVariavel} onClick={() => inserir(v.chave)} title={v.descricao}>
+            {v.chave}
+          </button>
+        ))}
+      </div>
+      <p style={estiloAjuda}>
+        {VARIAVEIS_EMAIL.map((v) => `${v.chave} = ${v.descricao}`).join(" · ")}. Deixa vazio para o Gmail abrir sem texto.
+      </p>
+      <button type="submit" className="botao" disabled={pendente} style={estiloBotao}>
+        {pendente ? "A guardar..." : "Guardar texto"}
+      </button>
+    </form>
+  );
+}
+
+const estiloVariaveis = { display: "flex", flexWrap: "wrap", gap: 8 };
+const estiloVariavel = { padding: "6px 10px", fontSize: "0.85rem" };
+const estiloAjuda = { color: "var(--cor-texto-suave)", fontSize: "0.85rem", margin: 0 };
 
 export function FormPassword() {
   const [estado, accao, pendente] = useActionState(mudarPassword, {});

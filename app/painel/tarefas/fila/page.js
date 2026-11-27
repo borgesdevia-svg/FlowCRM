@@ -153,11 +153,11 @@ export default async function PaginaFila({ searchParams }) {
               )}
               {tarefa.clientes?.email && (
                 <BotaoEmail
-                  clienteId={tarefa.cliente_id}
-                  nome={tarefa.clientes.nome}
                   email={tarefa.clientes.email}
+                  nome={tarefa.clientes.nome}
                   empresa={empresa.nome}
                   eu={perfil.nome}
+                  modelo={perfil.email_modelo}
                   className={`${styles.contacto} ${styles.contactoBotao}`}
                 />
               )}
