@@ -1,41 +1,73 @@
 /* Destaque: texto e botões centrados.
-   Fundo: grelha fina que se desvanece para baixo e um brilho verde suave no topo,
+   Fundo: duas manchas de cor (verde e azul) que deslizam devagar por trás do título,
    para a página não ser só preto liso. */
 .destaque {
   --altura-barra: 64px;
   position: relative;
   isolation: isolate; /* o fundo (z-index: -1) fica dentro da secção */
+  overflow: clip; /* as manchas, ao deslizar, não criam scroll para o lado */
   /* a secção sobe para trás da barra de topo (que é transparente) */
   margin-top: calc(var(--altura-barra) * -1);
   padding: calc(var(--altura-barra) + 80px) 16px 24px;
 }
 
+/* As manchas: cada uma é um gradiente radial que já se desvanece sozinho até transparente
+   (sem filter: blur, que seria pesado). Só se mexe o transform, que a placa gráfica faz
+   sem redesenhar: fica fluido mesmo no telemóvel.
+   Ficam na metade de cima da secção, para não serem cortadas no fundo. */
 .destaque::before,
 .destaque::after {
   content: "";
   position: absolute;
-  inset: 0;
   z-index: -1;
   pointer-events: none;
+  will-change: transform;
 }
 
-/* grelha: a mesma da demonstração, a desvanecer para baixo */
+/* mancha verde, à esquerda do centro */
 .destaque::before {
-  background-image:
-    linear-gradient(rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
-  background-position: center top;
-  mask-image: radial-gradient(ellipse 70% 90% at 50% 0%, #000 20%, transparent 85%);
+  top: -35%;
+  left: 8%;
+  width: 60%;
+  height: 110%;
+  background: radial-gradient(closest-side, rgb(var(--rgb-destaque) / 0.24), transparent);
+  animation: deriva-verde 18s ease-in-out infinite alternate;
 }
 
-/* brilho verde no topo, por trás do título */
+/* mancha azul, à direita do centro */
 .destaque::after {
-  background: radial-gradient(
-    ellipse 55% 60% at 50% 0%,
-    rgb(var(--rgb-destaque) / 0.14),
-    transparent 70%
-  );
+  top: -25%;
+  right: 6%;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(closest-side, rgb(56 132 246 / 0.16), transparent);
+  animation: deriva-azul 23s ease-in-out infinite alternate;
+}
+
+@keyframes deriva-verde {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(22%, 6%, 0) scale(1.12);
+  }
+}
+
+@keyframes deriva-azul {
+  from {
+    transform: translate3d(0, 4%, 0) scale(1.08);
+  }
+  to {
+    transform: translate3d(-26%, -4%, 0) scale(0.95);
+  }
+}
+
+/* "menos movimento": as manchas ficam paradas */
+@media (prefers-reduced-motion: reduce) {
+  .destaque::before,
+  .destaque::after {
+    animation: none;
+  }
 }
 
 .conteudo {

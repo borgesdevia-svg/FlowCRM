@@ -133,11 +133,18 @@ export default function Tour() {
   // classe de cada página: a ativa aparece, as outras escondem-se
   const classeEcra = (i) => (i === ecra ? `${styles.ecra} ${styles.ativo}` : styles.ecra);
 
+  // "movimento-suave": com "menos movimento" ligado, os fades continuam (ver globals.css)
   return (
-    <section id="demonstracao" ref={refSeccao} className={styles.tour} style={{ "--n": ECRAS.length }}>
+    <section
+      id="demonstracao"
+      ref={refSeccao}
+      className={`${styles.tour} movimento-suave`}
+      style={{ "--n": ECRAS.length }}
+    >
       {/* esta parte fica presa ao ecrã enquanto a secção passa */}
       <div className={styles.fixo}>
-        <div className={styles.palco}>
+        {/* a janela entra ao carregar a página, depois do título e dos botões, e sobe mais (40px) */}
+        <div className={`${styles.palco} entrar`} style={{ "--atraso": "350ms", "--subida": "40px" }}>
           <div className={styles.janela}>
             <div className={styles.barraJanela} aria-hidden="true">
               <span className={styles.pontos}>

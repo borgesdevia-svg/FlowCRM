@@ -432,16 +432,27 @@ label,
   animation-delay: var(--atraso, 0ms);
 }
 
+/* Sem filter: blur. O desfoque obriga o browser a redesenhar o elemento em cada imagem
+   e dava solavancos; opacity e transform são feitos pela placa gráfica e ficam fluidos.
+   --subida: quanto o elemento sobe (16px por omissão; a janela da demonstração sobe mais). */
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translateY(16px);
-    filter: blur(6px);
+    transform: translateY(var(--subida, 16px));
   }
   to {
     opacity: 1;
     transform: none;
-    filter: none;
+  }
+}
+
+/* versão para "menos movimento": só o fade, sem subir */
+@keyframes aparecer-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -512,21 +523,28 @@ summary:focus-visible {
 }
 
 /* Acessibilidade: quem pediu ao sistema operativo para reduzir o movimento
-   vê tudo sem animações. */
+   (ex.: Windows com "Efeitos de animação" desligados) vê tudo sem deslocações.
+   Exceções: a classe "entrar" e as zonas marcadas com "movimento-suave" (a página inicial)
+   continuam a fazer fades curtos, sem nada se mexer. Antes, esta regra cortava tudo
+   e na página inicial as coisas apareciam de repente, o que parecia travado. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  :not(.movimento-suave, .movimento-suave *, .entrar),
+  :not(.movimento-suave, .movimento-suave *)::before,
+  :not(.movimento-suave, .movimento-suave *)::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 
-  .entrar,
+  /* entrada: só o fade, no mesmo momento */
+  .entrar {
+    animation-name: aparecer-fade;
+  }
+
   .revelar {
     opacity: 1;
     transform: none;

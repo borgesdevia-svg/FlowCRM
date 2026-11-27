@@ -35,23 +35,6 @@
   gap: 18px;
 }
 
-/* fundo da parte presa: grelha fina que se desvanece nas bordas
-   (a máscara em elipse esconde as linhas longe do centro, por isso não há "costura"
-   com a grelha do destaque, que se desvanece para baixo) */
-.fixo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
-  background-position: center center;
-  mask-image: radial-gradient(ellipse 75% 70% at 50% 55%, #000 30%, transparent 100%);
-}
-
 .fixo > * {
   pointer-events: auto;
 }
