@@ -20,7 +20,7 @@
 }
 
 /* esta parte fica PRESA ao ecrã enquanto a secção passa:
-   separadores em cima, janela no meio, legenda em baixo */
+   só tem a janela (separadores e legenda estão dentro dela) */
 .fixo {
   position: sticky;
   top: 0;
@@ -35,14 +35,34 @@
   gap: 18px;
 }
 
+/* fundo da parte presa: grelha fina que se desvanece nas bordas
+   (a máscara em elipse esconde as linhas longe do centro, por isso não há "costura"
+   com a grelha do destaque, que se desvanece para baixo) */
+.fixo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center center;
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 55%, #000 30%, transparent 100%);
+}
+
 .fixo > * {
   pointer-events: auto;
 }
 
 /* ---------- separadores (um por página da app) ---------- */
+/* ficam dentro da janela, logo abaixo da barra do endereço */
 .separadores {
+  flex: none;
   display: flex;
   max-width: 100%;
+  padding: 0 10px;
   overflow-x: auto; /* no telemóvel, se não couberem, deslizam para o lado */
   scrollbar-width: none; /* sem barra de scroll à vista */
   border-bottom: 1px solid rgb(var(--rgb-tinta) / 0.08);
@@ -85,20 +105,45 @@
   background: var(--cor-destaque);
 }
 
-/* ---------- legenda por baixo da janela ---------- */
+/* ---------- legenda: faixa no fundo da janela ---------- */
 .legenda {
-  max-width: 620px;
-  text-align: center;
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 14px 22px;
+  border-top: 1px solid rgb(var(--rgb-tinta) / 0.08);
+  background: rgb(var(--rgb-tinta) / 0.025);
+}
+
+/* o texto anima ao trocar; a faixa fica parada */
+.legenda > * {
   animation: trocar 0.6s var(--curva);
 }
 
 .legenda h2 {
-  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
-  margin-bottom: 6px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+/* ponto verde antes do título */
+.legenda h2::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cor-destaque);
+  box-shadow: 0 0 10px rgb(var(--rgb-destaque) / 0.7);
 }
 
 .legenda p {
+  min-width: 0;
   color: var(--cor-texto-suave);
+  font-size: 0.92rem;
 }
 
 @keyframes trocar {
@@ -109,19 +154,36 @@
 }
 
 /* ---------- a janela ---------- */
+/* A largura é a menor de três: o ecrã, 1240px, ou a que dá 16:10 com a altura livre
+   (ecrã menos a barra de topo e uma margem). Assim a janela nunca fica achatada. */
 .palco {
   position: relative;
-  width: 100%;
-  max-width: 1080px;
+  width: min(100%, 1240px, (100svh - var(--altura-barra) - 32px) * 1.6);
+}
+
+/* brilho verde suave por trás da janela */
+.palco::before {
+  content: "";
+  position: absolute;
+  inset: 12% 8% -6%;
+  z-index: -1;
+  pointer-events: none;
+  /* sem filter: blur (pesado de desenhar numa área grande): o gradiente já é suave */
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgb(var(--rgb-destaque) / 0.16),
+    rgb(var(--rgb-destaque) / 0.05) 40%,
+    transparent 72%
+  );
 }
 
 .janela {
-  /* nunca mais alta do que o espaço livre no ecrã (barra + separadores + legenda) */
-  height: min(590px, calc(100svh - 250px));
+  /* proporção de monitor; a largura do .palco já garante que cabe na altura do ecrã */
+  aspect-ratio: 16 / 10;
   min-height: 320px;
   display: flex;
   flex-direction: column;
-  /* fundo liso: já não há brilho por trás para desfocar */
+  /* fundo liso; o brilho verde está no .palco::before */
   background: var(--cor-fundo-2);
   border: 1px solid rgb(var(--rgb-tinta) / 0.14);
   border-radius: 24px;
@@ -253,33 +315,42 @@
   gap: 14px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(16px) scale(0.99);
+  /* sem scale: escalar texto faz-o tremer e ficar desfocado durante a animação */
+  transform: translateY(10px);
+  /* a página que sai desaparece depressa, para não se misturar com a que entra */
   transition:
-    opacity 0.4s,
-    transform 0.6s var(--curva),
-    visibility 0s 0.4s;
+    opacity 0.18s ease-out,
+    transform 0.18s ease-out,
+    visibility 0s 0.18s;
 }
 
+/* a página que entra espera que a outra saia e depois sobe */
 .ativo {
   opacity: 1;
   visibility: visible;
   transform: none;
-  transition-delay: 0s;
+  transition:
+    opacity 0.3s ease-out 0.12s,
+    transform 0.5s var(--curva) 0.12s,
+    visibility 0s;
 }
 
 /* elementos que entram um a um (a ordem vem de --i) */
 .anima {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
   transition:
-    opacity 0.5s var(--curva),
-    transform 0.6s var(--curva);
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
 }
 
 .ativo .anima {
   opacity: 1;
   transform: none;
-  transition-delay: calc(var(--i, 0) * 70ms + 120ms);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.5s var(--curva);
+  transition-delay: calc(var(--i, 0) * 55ms + 160ms);
 }
 
 /* ---------- peças comuns ---------- */
@@ -351,7 +422,7 @@
 }
 
 .ativo .escrito {
-  animation: escrever 1s steps(14) 0.7s forwards;
+  animation: escrever 0.9s steps(14) 0.5s forwards;
 }
 
 @keyframes escrever {
@@ -406,7 +477,7 @@
 
 .ativo .traco {
   stroke-dashoffset: 0;
-  transition: stroke-dashoffset 1.4s var(--curva) 0.5s;
+  transition: stroke-dashoffset 1.1s var(--curva) 0.35s;
 }
 
 .area {
@@ -416,7 +487,7 @@
 
 .ativo .area {
   opacity: 1;
-  transition: opacity 0.8s 1.2s;
+  transition: opacity 0.6s ease-out 0.9s;
 }
 
 .barras {
@@ -516,7 +587,7 @@
 
 /* a linha da pesquisa fica realçada depois de o texto ser "escrito" */
 .ativo .linhaRealce {
-  animation: realcar 0.6s 1.7s forwards;
+  animation: realcar 0.4s ease-out 1.4s forwards;
 }
 
 @keyframes realcar {
@@ -641,7 +712,7 @@
 }
 
 .novaNota .escrito {
-  animation-delay: 1.3s !important;
+  animation-delay: 1s !important;
 }
 
 /* ============ Página 4: Pipeline ============ */
@@ -712,7 +783,7 @@
 }
 
 .ativo .aMover {
-  animation: mover 1.2s var(--curva) 1.2s forwards;
+  animation: mover 1s var(--curva) 0.8s forwards;
 }
 
 @keyframes mover {
@@ -765,43 +836,52 @@
   border: 1.5px solid rgb(var(--rgb-tinta) / 0.25);
 }
 
-/* o visto (desenhado com dois contornos rodados) */
+/* o fundo verde (::before) e o visto (::after) são duas camadas por cima da caixa
+   e usam a MESMA animação, com o mesmo tempo: o verde nunca aparece sem o visto */
+.caixa::before,
 .caixa::after {
   content: "";
   position: absolute;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.caixa::before {
+  inset: -1.5px; /* cobre também o contorno */
+  border-radius: 5px;
+  background: var(--cor-destaque);
+}
+
+/* o visto (desenhado com dois contornos rodados; a rotação está no "rotate") */
+.caixa::after {
   left: 5px;
   top: 1px;
   width: 4px;
   height: 9px;
   border-right: 2px solid #04130a;
   border-bottom: 2px solid #04130a;
-  transform: rotate(45deg) scale(0);
+  rotate: 45deg;
 }
 
-/* nas tarefas feitas, a caixa enche-se, aparece o visto e o texto é riscado,
-   cada uma no seu momento (--visto, definido no JS) */
-.ativo .feita .caixa {
-  animation: encher 0.3s var(--visto) forwards;
-}
-
+/* nas tarefas feitas, a caixa marca-se (verde + visto juntos, com um pequeno ressalto)
+   e o texto é riscado logo a seguir. --visto (no JS) dá o momento de cada uma */
+.ativo .feita .caixa::before,
 .ativo .feita .caixa::after {
-  animation: visto 0.3s var(--visto) forwards;
+  animation: marcar 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) var(--visto) forwards;
 }
 
 .ativo .feita strong {
-  animation: riscar 0.4s var(--visto) forwards;
+  animation: riscar 0.35s ease-out calc(var(--visto) + 0.12s) forwards;
 }
 
-@keyframes encher {
-  to {
-    background: var(--cor-destaque);
-    border-color: var(--cor-destaque);
+@keyframes marcar {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
   }
-}
-
-@keyframes visto {
   to {
-    transform: rotate(45deg) scale(1);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -1006,12 +1086,25 @@
     font-size: 0.85rem;
   }
 
+  /* no telemóvel o título fica por cima do texto */
+  .legenda {
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+
   .legenda p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  /* no telemóvel o ecrã é alto e estreito: sem 16:10, a janela ocupa a altura livre */
+  .palco {
+    width: 100%;
   }
 
   .janela {
-    height: min(440px, calc(100svh - 280px));
+    aspect-ratio: auto;
+    height: min(640px, calc(100svh - var(--altura-barra) - 28px));
     border-radius: 16px;
   }
 
@@ -1099,13 +1192,35 @@
   }
 }
 
-/* "menos movimento": as animações saltam logo para o fim */
+/* "menos movimento" (ex.: Windows com "Efeitos de animação" desligados).
+   Antes, tudo saltava para o fim, o que parecia travado. Agora nada se desloca, mas as
+   coisas continuam a aparecer com fades suaves, nos mesmos momentos. */
 @media (prefers-reduced-motion: reduce) {
-  .tour * {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
+  /* páginas e elementos: só opacidade, sem subir */
+  .tour .ecra,
+  .tour .anima {
+    transform: none;
+  }
+
+  /* o que só faz sentido com movimento fica logo no estado final (no momento certo) */
+  .tour .marcador,
+  .tour .barras span,
+  .tour .traco {
     transition-duration: 0.01ms !important;
-    transition-delay: 0s !important;
+  }
+
+  .tour .aMover {
+    animation-duration: 0.01ms !important;
+  }
+
+  /* tarefas: verde e visto aparecem juntos, sem ressalto (o "rotate" do visto mantém-se) */
+  .tour .caixa::before,
+  .tour .caixa::after {
+    transform: none !important;
+  }
+
+  .tour .legenda > * {
+    animation: none;
   }
 
   /* Personalizar: sem troca automática, fica o primeiro gráfico (Barras) escolhido */

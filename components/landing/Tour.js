@@ -7,6 +7,7 @@
 // Como funciona:
 //  - a secção é mais alta do que o ecrã; lá dentro, a janela fica PRESA ao ecrã
 //    (position: sticky, no CSS) enquanto o visitante faz scroll;
+//  - a janela é quase do tamanho do ecrã (16:10); separadores e legenda ficam dentro dela;
 //  - ao fazer scroll, medimos quanto da secção já passou (um número de 0 a 1);
 //  - esse número decide qual a página visível (estado "ecra", guardado com useState);
 //  - cada página "gasta" pouco scroll (ver --por-pagina no CSS), para não cansar;
@@ -136,25 +137,9 @@ export default function Tour() {
     <section id="demonstracao" ref={refSeccao} className={styles.tour} style={{ "--n": ECRAS.length }}>
       {/* esta parte fica presa ao ecrã enquanto a secção passa */}
       <div className={styles.fixo}>
-        {/* separadores: mostram em que página vamos; clicar salta para essa página */}
-        <div ref={refSeparadores} className={styles.separadores} role="tablist" aria-label="Páginas da app">
-          {ECRAS.map((e, i) => (
-            <button
-              key={e.separador}
-              type="button"
-              role="tab"
-              aria-selected={i === ecra}
-              onClick={() => irPara(i)}
-              className={i === ecra ? styles.separadorAtivo : ""}
-            >
-              {e.separador}
-            </button>
-          ))}
-        </div>
-
-        <div className={styles.palco} aria-hidden="true">
+        <div className={styles.palco}>
           <div className={styles.janela}>
-            <div className={styles.barraJanela}>
+            <div className={styles.barraJanela} aria-hidden="true">
               <span className={styles.pontos}>
                 <i></i>
                 <i></i>
@@ -163,7 +148,24 @@ export default function Tour() {
               <span className={styles.endereco}>{atual.url}</span>
             </div>
 
-            <div className={styles.corpo}>
+            {/* separadores: ficam no topo da janela, como os de um browser.
+                Mostram em que página vamos; clicar salta para essa página */}
+            <div ref={refSeparadores} className={styles.separadores} role="tablist" aria-label="Páginas da app">
+              {ECRAS.map((e, i) => (
+                <button
+                  key={e.separador}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === ecra}
+                  onClick={() => irPara(i)}
+                  className={i === ecra ? styles.separadorAtivo : ""}
+                >
+                  {e.separador}
+                </button>
+              ))}
+            </div>
+
+            <div className={styles.corpo} aria-hidden="true">
               {/* menu lateral: o fundo verde desliza até ao item da página atual */}
               <aside className={styles.lateral}>
                 <div className={styles.empresa}>
@@ -201,13 +203,14 @@ export default function Tour() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* legenda: a "key" faz o React recriar o bloco, o que repete a animação de entrada */}
-        <div key={ecra} className={styles.legenda} aria-live="polite">
-          <h2>{atual.titulo}</h2>
-          <p>{atual.texto}</p>
+            {/* legenda: faixa no fundo da janela.
+                A "key" faz o React recriar o bloco, o que repete a animação de entrada */}
+            <div key={ecra} className={styles.legenda} aria-live="polite">
+              <h2>{atual.titulo}</h2>
+              <p>{atual.texto}</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -451,7 +454,7 @@ function EcraTarefas() {
           <div
             key={t.titulo}
             className={t.feita ? `${styles.tarefa} ${styles.feita} ${styles.anima}` : `${styles.tarefa} ${styles.anima}`}
-            style={{ "--i": i + 1, "--visto": `${0.7 + i * 0.5}s` }}
+            style={{ "--i": i + 1, "--visto": `${0.55 + i * 0.35}s` }}
           >
             <span className={styles.caixa}></span>
             <div>

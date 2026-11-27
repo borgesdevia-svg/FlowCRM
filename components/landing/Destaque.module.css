@@ -1,10 +1,41 @@
-/* Destaque: texto e botões centrados, sobre o fundo preto da página (sem decoração). */
+/* Destaque: texto e botões centrados.
+   Fundo: grelha fina que se desvanece para baixo e um brilho verde suave no topo,
+   para a página não ser só preto liso. */
 .destaque {
   --altura-barra: 64px;
   position: relative;
+  isolation: isolate; /* o fundo (z-index: -1) fica dentro da secção */
   /* a secção sobe para trás da barra de topo (que é transparente) */
   margin-top: calc(var(--altura-barra) * -1);
   padding: calc(var(--altura-barra) + 80px) 16px 24px;
+}
+
+.destaque::before,
+.destaque::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* grelha: a mesma da demonstração, a desvanecer para baixo */
+.destaque::before {
+  background-image:
+    linear-gradient(rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--rgb-tinta) / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 70% 90% at 50% 0%, #000 20%, transparent 85%);
+}
+
+/* brilho verde no topo, por trás do título */
+.destaque::after {
+  background: radial-gradient(
+    ellipse 55% 60% at 50% 0%,
+    rgb(var(--rgb-destaque) / 0.14),
+    transparent 70%
+  );
 }
 
 .conteudo {
