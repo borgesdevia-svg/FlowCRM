@@ -4,8 +4,7 @@ Para continuar numa próxima conversa com o Claude: "Lê o RESUMO-SESSAO.md e co
 
 ## Estado atual
 
-- **Nada desta sessão tem commit**, exceto a limpeza (commit `140e2ee`). Tudo o resto está por fazer commit em `main`.
-- **Não houve push.**
+- **Tudo tem commit e push** para `origin/main`: commits `140e2ee` (limpeza), `f5b011f` (página inicial), `0652f9b` (e-mail) e o deste resumo.
 - A migração `38_email_modelo` **já está aplicada** na base de dados real do Supabase (projeto FlowCRM).
 - Testes: `npm test` passa (103/103). O lint dos ficheiros alterados passa.
 - **Ainda nada foi experimentado no browser.** É a primeira coisa a fazer.
@@ -77,7 +76,6 @@ Cada pessoa (admin ou comercial) guarda o início que escreve sempre nos e-mails
    - a página inicial (fundo e animações, também com "menos movimento" ligado no Windows);
    - A minha conta › Definições de e-mail (guardar e apagar o texto);
    - o botão de e-mail na ficha do lead e no modo fila.
-2. Se estiver tudo bem, fazer commit (em português, como os anteriores).
-3. **Ideias para depois, se o aluno quiser:**
+2. **Ideias para depois, se o aluno quiser:**
    - deixar a pessoa escolher entre Gmail e Outlook (`https://outlook.live.com/mail/0/deeplink/compose?to=…&body=…`);
    - voltar a registar no histórico do lead que se abriu um e-mail.
