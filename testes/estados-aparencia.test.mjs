@@ -41,11 +41,12 @@ test("normalizarAparencia: menu respeita a ordem e os nomes, sem repetidos nem i
     },
   });
   const ids = a.menu.principal.map((i) => i.id);
-  assert.deepEqual(ids.slice(0, 2), ["tarefas", "clientes"]);
+  // a Entrada (função nova, "antes: clientes") entra logo acima de Leads
+  assert.deepEqual(ids.slice(0, 3), ["tarefas", "entrada", "clientes"]);
   assert.equal(new Set(ids).size, MENU.principal.length);
   assert.ok(!ids.includes("hacker"));
   assert.equal(a.menu.principal[0].nome, "As minhas tarefas");
-  assert.equal(a.menu.principal[1].nome, "Leads"); // nome vazio volta ao padrão
+  assert.equal(a.menu.principal[2].nome, "Leads"); // nome vazio volta ao padrão
 });
 
 test("normalizarAparencia: nomes do menu cortados no máximo", () => {
@@ -69,5 +70,11 @@ test("cssAparencia: só gera CSS a partir das listas fixas", () => {
 test("normalizarAparencia: nomes de origem antigos guardados passam aos novos", () => {
   const a = normalizarAparencia({ menu: { principal: [{ id: "painel", nome: "Painel" }, { id: "clientes", nome: "Clientes" }] } });
   assert.equal(a.menu.principal[0].nome, "Visão geral");
-  assert.equal(a.menu.principal[1].nome, "Leads");
+  assert.equal(a.menu.principal[2].nome, "Leads"); // [1] é a Entrada
+});
+
+test("normalizarAparencia: menu personalizado sem Leads guardado: a Entrada fica logo acima de Leads", () => {
+  const a = normalizarAparencia({ menu: { principal: [{ id: "tarefas", nome: "Tarefas" }] } });
+  const ids = a.menu.principal.map((i) => i.id);
+  assert.ok(ids.indexOf("entrada") === ids.indexOf("clientes") - 1);
 });

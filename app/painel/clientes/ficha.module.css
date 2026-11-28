@@ -453,3 +453,102 @@
 .marcacoes + .marcarReuniao {
   margin-top: 10px;
 }
+
+/* ============ Ficha por separadores (components/Separadores.js) ============ */
+/* os detalhes do lead ocupam o ecrã todo */
+.pagina:has(.conteudoSeccao) {
+  max-width: none;
+  gap: 16px;
+}
+
+.pagina:has(.conteudoSeccao) .voltar {
+  margin-bottom: 0;
+}
+
+.conteudoSeccao {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* E-mails: ainda sem conta ligada */
+.semConta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+}
+
+/* E-mails: a conversa (o mais recente em cima); clicar abre o texto */
+.emails {
+  list-style: none;
+}
+
+.emails li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.emails li:last-child {
+  border-bottom: none;
+}
+
+.emails summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.emails summary::-webkit-details-marker {
+  display: none;
+}
+
+.emails summary strong {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.emails summary small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+/* recebidos (Fase 3) com uma linha verde à esquerda, para se distinguirem dos enviados */
+.emails li[data-direcao="recebido"] {
+  padding-left: 12px;
+  border-left: 2px solid var(--cor-destaque);
+}
+
+.corpoEmail {
+  margin-top: 10px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* "Responder" por baixo de um e-mail recebido */
+.responder {
+  margin-top: 8px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .responder:hover {
+    color: var(--cor-destaque);
+    border-color: rgb(var(--rgb-destaque) / 0.4);
+  }
+}

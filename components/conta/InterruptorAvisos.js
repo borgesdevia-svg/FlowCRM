@@ -1,5 +1,6 @@
 "use client";
 // Interruptor "Avisos de leads novos" em A minha conta (migração 34).
+// Por predefinição estão LIGADOS (components/painel/LigarAvisos.js); aqui a pessoa pode desligá-los.
 //
 // Dois modos, escolhidos sozinhos conforme o browser:
 //  - "ligado": avisos mesmo com o FlowCRM fechado (web push). Regista o service worker (/sw.js),
@@ -10,28 +11,9 @@
 // Cada browser é independente: ligar no telemóvel não liga no PC.
 
 import { useEffect, useState } from "react";
-import { ligarAvisos, desligarAvisos } from "@/lib/acoes/avisos";
-import { CHAVE_AVISOS_ABA } from "@/components/painel/VigiaLeads";
+import { desligarAvisos } from "@/lib/acoes/avisos";
+import { CHAVE_AVISOS_ABA, CHAVE_AVISOS_DESLIGADOS, ativarAvisos, registo, temPush } from "@/lib/avisosBrowser";
 import styles from "./InterruptorAvisos.module.css";
-
-// .trim() e sem aspas: uma chave colada na Vercel com um espaço ou aspas a mais estragava tudo
-const CHAVE_PUBLICA = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY?.trim().replace(/^["']|["']$/g, "");
-
-// a chave pública vem em base64url; o browser quer os bytes
-function chaveEmBytes(base64) {
-  const preenchimento = "=".repeat((4 - (base64.length % 4)) % 4);
-  const normal = (base64 + preenchimento).replace(/-/g, "+").replace(/_/g, "/");
-  return Uint8Array.from(atob(normal), (c) => c.charCodeAt(0));
-}
-
-const temPush = () => Boolean(CHAVE_PUBLICA) && "serviceWorker" in navigator && "PushManager" in window;
-
-// regista o service worker e espera que fique ATIVO: na primeira vez ainda está a instalar,
-// e o Chrome recusa criar a subscrição sem um service worker ativo
-async function registo() {
-  await navigator.serviceWorker.register("/sw.js", { scope: "/", updateViaCache: "none" });
-  return navigator.serviceWorker.ready;
-}
 
 async function eBrave() {
   try {
@@ -74,38 +56,15 @@ export default function InterruptorAvisos() {
   }, []);
 
   async function ligar() {
-    const permissao = await Notification.requestPermission();
-    if (permissao !== "granted") {
-      setEstado(permissao === "denied" ? "bloqueado" : "desligado");
-      return;
-    }
-    // 1.º tenta os avisos com o CRM fechado; se o browser não deixar, fica no modo "aba"
-    if (temPush()) {
-      try {
-        const reg = await registo();
-        const sub =
-          (await reg.pushManager.getSubscription()) ??
-          (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: chaveEmBytes(CHAVE_PUBLICA) }));
-        const resposta = await ligarAvisos(sub.toJSON());
-        if (resposta.erro) {
-          await sub.unsubscribe();
-          setErro(resposta.erro);
-          return;
-        }
-        localStorage.removeItem(CHAVE_AVISOS_ABA);
-        setEstado("ligado");
-        return;
-      } catch (e) {
-        // ex.: AbortError no Brave com o serviço de avisos desligado
-        console.warn("avisos com o CRM fechado indisponíveis:", e?.name, e?.message);
-      }
-    }
-    localStorage.setItem(CHAVE_AVISOS_ABA, "1");
-    setEstado("aba");
+    const r = await ativarAvisos(); // lib/avisosBrowser.js
+    if (r?.erro) setErro(r.erro);
+    else setEstado(r);
   }
 
   async function desligar() {
     localStorage.removeItem(CHAVE_AVISOS_ABA);
+    // fica desligado de propósito: o painel não os volta a ligar sozinho (components/painel/LigarAvisos.js)
+    localStorage.setItem(CHAVE_AVISOS_DESLIGADOS, "1");
     if (temPush()) {
       const sub = await (await registo()).pushManager.getSubscription();
       if (sub) {

@@ -137,7 +137,9 @@ export default async function PaginaPainel() {
   // ESCALA: a página não lê os clientes todos (com milhares, o Supabase corta em 1000 linhas
   // e os números ficavam errados). Cada número é pedido já contado à base de dados:
   // count: "exact" + head: true devolve só o número, sem as linhas.
-  const contarClientes = () => supabase.from("clientes").select("id", { count: "exact", head: true });
+  // só os leads aceites (os sem responsável estão na Entrada)
+  const contarClientes = () =>
+    supabase.from("clientes").select("id", { count: "exact", head: true }).not("responsavel_id", "is", null);
 
   // tudo ao mesmo tempo com Promise.all (o RLS já filtra: o admin conta a empresa, o comercial os seus)
   const [
@@ -163,6 +165,7 @@ export default async function PaginaPainel() {
     supabase
       .from("clientes")
       .select("id, nome, origem, criado_em")
+      .not("responsavel_id", "is", null)
       .order("criado_em", { ascending: false })
       .limit(10),
     supabase.from("perfis").select("id, nome, papel", { count: "exact" }),

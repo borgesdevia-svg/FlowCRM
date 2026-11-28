@@ -1,232 +1,108 @@
-/* Editor do formulário em três colunas: estrutura à esquerda, pré-visualização ao centro
-   (presa ao ecrã) e as opções da parte escolhida à direita. */
+/* Editor do formulário em duas colunas: a edição (larga, com separadores) à esquerda e a
+   pré-visualização (estreita, presa ao ecrã) à direita. Em ecrãs estreitos fica tudo numa
+   coluna e a pré-visualização passa para baixo, fechada até se carregar em "Pré-visualizar". */
 .editor {
   display: grid;
-  grid-template-columns: 230px minmax(0, 1fr) minmax(300px, 380px);
-  grid-template-areas:
-    "estrutura previa opcoes"
-    "estrutura previa guardar";
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
+  gap: 24px;
   align-items: start;
 }
 
-/* ---------- coluna da estrutura ---------- */
-.estrutura {
-  grid-area: estrutura;
-  position: sticky;
-  top: 16px;
+/* ================= coluna da edição ================= */
+.colunaEdicao {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  max-height: calc(100vh - 32px);
-  overflow-y: auto;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-  scrollbar-width: thin;
-}
-
-.tituloGrupo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 8px 4px;
-  color: var(--cor-texto-fraco);
-  font-size: 0.78rem;
-  font-weight: 500;
-}
-
-.tituloGrupo:first-child {
-  padding-top: 2px;
-}
-
-.item,
-.itemAtivo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 6px 8px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.92rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-.item:hover {
-  background: rgb(var(--rgb-tinta) / 0.04);
-  color: var(--cor-texto);
-}
-
-.itemAtivo {
-  background: rgb(var(--rgb-tinta) / 0.07);
-  color: var(--cor-texto);
-}
-
-.item > svg,
-.itemAtivo > svg {
-  flex-shrink: 0;
-  color: var(--cor-texto-fraco);
-}
-
-.textoItem {
-  display: flex;
-  flex: 1;
+  gap: 16px;
   min-width: 0;
-  flex-direction: column;
+  container: edicao / inline-size;
 }
 
-.textoItem,
-.textoItem em {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.textoItem em {
-  color: var(--cor-texto-fraco);
-}
-
-.textoItem small {
-  color: var(--cor-texto-fraco);
-  font-size: 0.78rem;
-}
-
-.contagem {
-  padding: 0 6px;
-  border-radius: 5px;
-  background: rgb(var(--rgb-tinta) / 0.07);
-  color: var(--cor-texto-suave);
-  font-size: 0.72rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.listaPerguntas {
+/* ---------- separadores (o mesmo desenho dos da ficha do lead: traço por baixo do ativo) ---------- */
+.separadores {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
-  list-style: none;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--cor-contorno);
 }
 
-.campoFixo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 8px;
-  color: var(--cor-texto-fraco);
-  font-size: 0.88rem;
+.separadores::-webkit-scrollbar {
+  display: none;
 }
 
-.campoFixo small {
-  margin-left: auto;
-  font-size: 0.74rem;
-}
-
-/* a pergunta que se está a arrastar fica mais apagada */
-.aArrastar {
-  opacity: 0.4;
-}
-
-.pega {
-  color: var(--cor-texto-fraco);
-  font-size: 0.7rem;
-  letter-spacing: -2px;
-  cursor: grab;
-}
-
-.numeroPergunta {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  background: rgb(var(--rgb-tinta) / 0.07);
-  color: var(--cor-texto-suave);
-  font-size: 0.74rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.juntar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 4px 0;
-  padding: 7px 8px;
-  border: 1px dashed var(--cor-contorno);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--cor-destaque);
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.juntar:hover {
-  border-color: rgb(var(--rgb-destaque) / 0.5);
-  background: rgb(var(--rgb-destaque) / 0.06);
-}
-
-.notaLista {
-  padding: 6px 8px;
-  color: var(--cor-texto-fraco);
-  font-size: 0.82rem;
-}
-
-/* ---------- coluna das opções ---------- */
-.colunaOpcoes {
-  grid-area: opcoes;
-  min-width: 0;
-  container: opcoes / inline-size;
-  border-radius: 8px;
-  border: 1px solid var(--cor-contorno);
-  background: var(--cor-cartao);
-}
-
-.topoPergunta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.botaoTexto {
+.separador {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
+  gap: 7px;
+  min-height: 46px;
+  padding: 12px 14px 11px;
   border: none;
-  border-radius: 6px;
-  background: transparent;
+  background: none;
   color: var(--cor-texto-suave);
   font: inherit;
-  font-size: 0.86rem;
+  font-size: 0.98rem;
+  font-weight: 500;
+  white-space: nowrap;
   cursor: pointer;
+  transition: color 150ms;
 }
 
-.botaoTexto:hover {
-  background: rgb(var(--rgb-tinta) / 0.06);
+.separador > svg {
+  color: var(--cor-texto-fraco);
+}
+
+/* número de perguntas, a cinzento ao lado do nome */
+.numeroSeparador {
+  color: var(--cor-texto-fraco);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.separador[aria-selected="true"] {
   color: var(--cor-texto);
+  font-weight: 600;
 }
 
+.separador[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--cor-destaque);
+}
+
+.separador:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .separador:hover {
+    color: var(--cor-texto);
+  }
+}
+
+/* ---------- o cartão com as opções do separador aberto ---------- */
 .painel {
   display: flex;
   flex-direction: column;
-  padding: 4px 18px 18px;
+  padding: 4px 28px 28px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
 }
 
 /* cada parte do separador, separada da seguinte por um traço fino */
 .seccao {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px 0;
+  gap: 16px;
+  padding: 24px 0;
   border-bottom: 1px solid var(--cor-contorno);
 }
 
@@ -237,15 +113,22 @@
 
 .seccao h2 {
   font-family: inherit;
-  font-size: 1.02rem;
+  font-size: 1.12rem;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
+/* título da secção com a explicação logo por baixo */
+.cabecaSeccao {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .explicacao {
-  margin-top: -6px;
   color: var(--cor-texto-suave);
-  font-size: 0.88rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 .explicacao a {
@@ -255,19 +138,453 @@
 
 .contador {
   color: var(--cor-texto-fraco);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
 }
 
-/* ---------- modelos ---------- */
+/* nota "isto é do Pro" dentro de uma secção */
+.notaPro {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.notaPro svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--cor-texto-fraco);
+}
+
+/* ---------- botões pequenos do editor ---------- */
+/* botão só com ícone (subir, descer, fechar, tirar opção): 40px para se acertar bem */
+.botaoIcone {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+}
+
+.botaoIcone:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* botão de texto discreto (Duplicar, Descartar, Cancelar) */
+.botaoTexto,
+.botaoApagar,
+.botaoDestaque {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.botaoApagar {
+  color: var(--cor-perigo-texto);
+}
+
+.botaoDestaque {
+  align-self: flex-start;
+  color: var(--cor-destaque);
+}
+
+.botaoTexto:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .botaoIcone:hover:not(:disabled),
+  .botaoTexto:hover:not(:disabled) {
+    background: rgb(var(--rgb-tinta) / 0.07);
+    color: var(--cor-texto);
+  }
+
+  .botaoApagar:hover {
+    background: rgba(248, 113, 113, 0.12);
+  }
+
+  .botaoDestaque:hover {
+    background: rgb(var(--rgb-destaque) / 0.1);
+  }
+}
+
+.botaoIcone:focus-visible,
+.botaoTexto:focus-visible,
+.botaoApagar:focus-visible,
+.botaoDestaque:focus-visible,
+.abrirPergunta:focus-visible,
+.modelo:focus-visible,
+.disposicao:focus-visible,
+.escolha:focus-visible,
+.aparelho:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* ================= separador Perguntas ================= */
+.topoPerguntas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px 20px;
+}
+
+.topoPerguntas .cabecaSeccao {
+  flex: 1 1 280px;
+}
+
+.acoesPerguntas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.acoesPerguntas :global(.botao) {
+  padding: 9px 16px;
+  font-size: 0.92rem;
+}
+
+.camposFixos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.9rem;
+}
+
+.semPerguntas {
+  padding: 28px 0;
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* a lista: cada pergunta numa linha, separadas por traços finos */
+.listaPerguntas {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  border-radius: 8px;
+  border: 1px solid var(--cor-contorno);
+}
+
+.pergunta {
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.pergunta:last-child {
+  border-bottom: none;
+}
+
+/* a pergunta aberta fica com um fundo ligeiro, para se ver o que se está a editar */
+.perguntaAberta {
+  background: rgb(var(--rgb-tinta) / 0.025);
+}
+
+/* a pergunta que se está a arrastar fica mais apagada */
+.aArrastar {
+  opacity: 0.4;
+}
+
+.linhaPergunta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px 6px 4px;
+}
+
+.pega {
+  flex-shrink: 0;
+  width: 24px;
+  color: var(--cor-texto-fraco);
+  font-size: 1rem;
+  letter-spacing: -2px;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+}
+
+/* a parte que se clica para abrir a pergunta: número, texto completo, tipo */
+.abrirPergunta {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .abrirPergunta:hover {
+    background: rgb(var(--rgb-tinta) / 0.04);
+  }
+}
+
+.numeroPergunta {
+  flex-shrink: 0;
+  min-width: 22px;
+  color: var(--cor-texto-fraco);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.textoPergunta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* o texto da pergunta aparece inteiro (passa para a linha seguinte se for comprido) */
+.textoPergunta strong {
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.textoPergunta em {
+  color: var(--cor-texto-fraco);
+  font-weight: 400;
+}
+
+.textoPergunta small {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+}
+
+/* "Editar" / "Fechar", à direita do texto da pergunta */
+.acaoPergunta {
+  flex-shrink: 0;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.abrirPergunta[aria-expanded="true"] .acaoPergunta {
+  color: var(--cor-texto);
+}
+
+/* as setas de mudar a ordem, separadas do resto da linha por um traço fino */
+.botoesOrdem {
+  display: flex;
+  flex-shrink: 0;
+  padding-left: 6px;
+  border-left: 1px solid var(--cor-contorno);
+}
+
+/* os campos da pergunta aberta, por baixo da linha */
+.corpoPergunta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 20px 16px 50px;
+  animation: abrir 0.25s var(--curva);
+}
+
+.linhaTipo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 24px;
+}
+
+.linhaTipo :global(.campo) {
+  flex: 1 1 240px;
+}
+
+/* interruptor (switch) "Obrigatória" */
+.interruptor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--cor-texto);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.interruptor input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interruptor span {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 25px;
+  border-radius: 999px;
+  background: rgb(var(--rgb-tinta) / 0.16);
+  transition: background 0.2s;
+}
+
+.interruptor span::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s var(--curva);
+}
+
+.interruptor input:checked + span {
+  background: var(--cor-destaque);
+}
+
+.interruptor input:checked + span::after {
+  transform: translateX(17px);
+}
+
+.interruptor input:focus-visible + span {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+/* opções de uma pergunta de escolha */
+.opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.opcoes legend {
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* a marca ao lado de cada opção mostra como o lead a vai ver */
+.bolinha {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgb(var(--rgb-tinta) / 0.3);
+}
+
+.quadrado {
+  border-radius: 4px;
+}
+
+.semMarca {
+  display: none;
+}
+
+.opcao input {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 12px;
+  border-radius: var(--raio);
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  background: rgb(var(--rgb-tinta) / 0.03);
+  color: var(--cor-texto);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.opcao input::placeholder {
+  color: var(--cor-texto-fraco);
+}
+
+.opcao input:focus {
+  outline: none;
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.2);
+}
+
+.rodapePergunta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+/* ---------- modelos prontos ---------- */
+.caixaModelos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-contorno);
+  background: rgb(var(--rgb-tinta) / 0.02);
+  animation: abrir 0.25s var(--curva);
+}
+
+.topoModelos {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topoModelos h3 {
+  margin-bottom: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.topoModelos .botaoIcone {
+  margin: -8px -10px 0 0;
+}
+
 /* modelos numa grelha que se ajusta à largura (sem ficar um sozinho na linha de baixo) */
 .modelos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
-/* com espaço, os 4 modelos ficam numa linha só */
-@container opcoes (min-width: 700px) {
+@container edicao (min-width: 720px) {
   .modelos {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -278,10 +595,11 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  padding: 10px 14px;
+  min-height: 64px;
+  padding: 12px 16px;
   border-radius: 8px;
   border: 1px solid var(--cor-contorno);
-  background: transparent;
+  background: var(--cor-cartao);
   color: var(--cor-texto);
   font: inherit;
   text-align: left;
@@ -292,18 +610,25 @@
 }
 
 .modelo strong {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
 }
 
 .modelo small {
-  color: var(--cor-texto-fraco);
-  font-size: 0.78rem;
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
 }
 
-.modelo:hover {
-  border-color: rgb(var(--rgb-destaque) / 0.45);
-  background: rgb(var(--rgb-destaque) / 0.06);
+.modelo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .modelo:hover:not(:disabled) {
+    border-color: rgb(var(--rgb-destaque) / 0.45);
+    background: rgb(var(--rgb-destaque) / 0.06);
+  }
 }
 
 .confirmarModelo {
@@ -311,10 +636,10 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  border-radius: 7px;
+  border-radius: 8px;
   border: 1px solid rgb(var(--rgb-destaque) / 0.35);
   background: rgb(var(--rgb-destaque) / 0.06);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   animation: abrir 0.25s var(--curva);
 }
 
@@ -327,21 +652,7 @@
 
 .botoesModelo :global(.botao) {
   padding: 9px 16px;
-  font-size: 0.88rem;
-}
-
-.cancelar {
-  padding: 8px 10px;
-  border: none;
-  background: none;
-  color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.88rem;
-  cursor: pointer;
-}
-
-.cancelar:hover {
-  color: var(--cor-texto);
+  font-size: 0.92rem;
 }
 
 @keyframes abrir {
@@ -351,233 +662,14 @@
   }
 }
 
-/* marcas das opções no editor: quadrado (várias escolhas) ou nada (lista) */
-.quadrado {
-  border-radius: 4px !important;
-}
-
-.semMarca {
-  visibility: hidden;
-  width: 0 !important;
-  margin-right: -6px;
-}
-
-.etiquetaAjuda {
-  color: var(--cor-texto-fraco);
-  font-size: 0.8rem !important;
-}
-
-/* ---------- depois de enviar ---------- */
+/* ================= separador Depois de enviar ================= */
 .linhaBotao {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
-  gap: 12px;
-}
-
-/* ---------- pré-visualização ---------- */
-.previa {
-  grid-area: previa;
-  position: sticky;
-  top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-}
-
-.topoPrevia {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.tituloPrevia {
-  color: var(--cor-texto-fraco);
-  font-size: 0.85rem;
-}
-
-.aparelhos {
-  display: flex;
-  padding: 2px;
-  border: 1px solid var(--cor-contorno);
-  border-radius: 7px;
-  background: var(--cor-cartao);
-}
-
-.aparelho {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 5px;
-  background: transparent;
-  color: var(--cor-texto-suave);
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.aparelho[aria-checked="true"] {
-  background: rgb(var(--rgb-tinta) / 0.08);
-  color: var(--cor-texto);
-}
-
-/* o "ecrã": no computador ocupa a coluna toda; no telemóvel fica com 390px, ao centro */
-.ecra {
-  width: 100%;
-  margin-inline: auto;
-  transition: max-width 0.25s var(--curva);
-}
-
-.ecra[data-aparelho="telemovel"] {
-  max-width: 390px;
-}
-
-/* "ecrã" onde o formulário aparece, com o mesmo fundo da página pública.
-   Fica preso ao ecrã e, se o formulário for comprido, desliza por dentro. */
-.moldura {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: calc(100vh - 140px);
-  max-height: calc(100vh - 90px);
-  padding: 32px 24px;
-  border-radius: 8px;
-  border: 1px solid var(--cor-contorno);
-  /* o fundo vem do design do formulário (CenaFormulario): cinzento, cor, escuro... */
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-
-.ecra[data-aparelho="telemovel"] .moldura {
-  padding: 16px 12px;
-  border-radius: 22px;
-  border-width: 6px;
-}
-
-/* na pré-visualização, o formulário ocupa a largura da moldura */
-.ecra[data-aparelho="telemovel"] .cartaoPrevia {
-  max-width: none;
-}
-
-/* ---------- barra de guardar, presa ao fundo do ecrã ---------- */
-/* só na coluna das opções: nunca tapa a pré-visualização */
-.barraGuardar {
-  position: sticky;
-  bottom: 16px;
-  z-index: 5;
-  grid-area: guardar;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 10px 10px 18px;
-  border-radius: 7px;
-  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
-  background: var(--cor-elevado);
-  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.7);
-  color: var(--cor-texto-suave);
-  font-size: 0.9rem;
-  animation: subir 0.3s var(--curva);
-}
-
-@keyframes subir {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-}
-
-.botoesGuardar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.erro {
-  color: var(--cor-perigo-texto);
-}
-
-.ok {
-  color: var(--cor-destaque);
-}
-
-/* ---------- ecrãs mais pequenos ---------- */
-/* até 1280px: estrutura + opções lado a lado, a pré-visualização por baixo */
-@media (max-width: 1280px) {
-  .editor {
-    grid-template-columns: 220px minmax(0, 1fr);
-    grid-template-areas:
-      "estrutura opcoes"
-      "estrutura guardar"
-      "previa previa";
-  }
-
-  .previa {
-    position: static;
-  }
-
-  .moldura {
-    min-height: 0;
-    max-height: none;
-  }
-}
-
-/* telemóvel: tudo numa coluna */
-@media (max-width: 760px) {
-  .editor {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "estrutura"
-      "opcoes"
-      "guardar"
-      "previa";
-  }
-
-  .estrutura {
-    position: static;
-    max-height: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .painel {
-    padding: 4px 18px 20px;
-  }
-
-  .linhaBotao {
-    grid-template-columns: 1fr;
-  }
-
-  .moldura {
-    padding: 16px 10px;
-  }
+  gap: 14px;
 }
 
 /* ================= separador Design (CRM Pro) ================= */
-.modelo:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.modelo:disabled:hover {
-  border-color: var(--cor-contorno);
-  background: transparent;
-}
-
-/* nota "isto é do Pro" dentro de uma secção */
-.notaPro {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--cor-texto-suave);
-  font-size: 0.85rem;
-}
-
 /* o fieldset só serve para desligar tudo de uma vez quando não há Pro */
 .grupoDesign {
   min-width: 0;
@@ -598,10 +690,10 @@
 .disposicoes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
-@container opcoes (min-width: 700px) {
+@container edicao (min-width: 720px) {
   .disposicoes {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -612,7 +704,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
-  padding: 10px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--cor-contorno);
   background: transparent;
@@ -626,19 +718,21 @@
 }
 
 .disposicao strong {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
 }
 
 .disposicao small {
-  color: var(--cor-texto-fraco);
-  font-size: 0.76rem;
-  line-height: 1.35;
+  color: var(--cor-texto-suave);
+  font-size: 0.84rem;
+  line-height: 1.4;
 }
 
-.disposicao:hover,
-.escolha:hover {
-  border-color: rgb(var(--rgb-destaque) / 0.45);
+@media (hover: hover) and (pointer: fine) {
+  .disposicao:hover,
+  .escolha:hover {
+    border-color: rgb(var(--rgb-destaque) / 0.45);
+  }
 }
 
 .disposicao[aria-pressed="true"],
@@ -652,8 +746,8 @@
   position: relative;
   width: 100%;
   height: 64px;
-  margin-bottom: 4px;
-  border-radius: 8px;
+  margin-bottom: 6px;
+  border-radius: 6px;
   background: rgb(var(--rgb-tinta) / 0.08);
   overflow: hidden;
 }
@@ -685,12 +779,12 @@
 .cores {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .amostraCor {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid transparent;
   background: var(--amostra);
@@ -705,12 +799,38 @@
   }
 }
 
-.amostraCor[aria-checked="true"] {
+.amostraCor[aria-checked="true"],
+.amostraCor:focus-visible {
   outline: 2px solid var(--amostra);
   outline-offset: 3px;
 }
 
-/* escolhas simples (Logótipo, Fundo, Cantos, Letra...) */
+/* as escolhas simples (Logótipo, Fundo, Cantos, Letra...) em duas colunas quando cabem */
+.grelhaEscolhas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px 32px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+@container edicao (min-width: 640px) {
+  .grelhaEscolhas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.seccaoEscolhas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seccaoEscolhas h3 {
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
 .escolhas {
   display: flex;
   flex-wrap: wrap;
@@ -718,15 +838,236 @@
 }
 
 .escolha {
-  padding: 7px 14px;
-  border-radius: 7px;
+  min-height: 40px;
+  padding: 8px 16px;
+  border-radius: 8px;
   border: 1px solid var(--cor-contorno);
   background: transparent;
   color: var(--cor-texto);
   font: inherit;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   cursor: pointer;
   transition:
     border-color 0.2s,
     background 0.2s;
+}
+
+/* ---------- barra de guardar, presa ao fundo do ecrã (só na coluna da edição) ---------- */
+.barraGuardar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 10px 20px;
+  border-radius: 10px;
+  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
+  background: var(--cor-elevado);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.45);
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+  animation: subir 0.3s var(--curva);
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.botoesGuardar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.erro {
+  color: var(--cor-perigo-texto);
+}
+
+.ok {
+  color: var(--cor-destaque);
+}
+
+/* ================= pré-visualização ================= */
+.previa {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.topoPrevia {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 46px; /* fica à mesma altura que os separadores ao lado */
+}
+
+.tituloPrevia {
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.subtituloPrevia {
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+}
+
+/* o botão "Pré-visualizar" só aparece nos ecrãs estreitos */
+.botaoPrevia {
+  display: none;
+}
+
+.corpoPrevia {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Telemóvel / Computador */
+.aparelhos {
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--cor-contorno);
+  border-radius: 8px;
+  background: var(--cor-cartao);
+}
+
+.aparelho {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.aparelho[aria-checked="true"] {
+  background: rgb(var(--rgb-tinta) / 0.08);
+  color: var(--cor-texto);
+  font-weight: 500;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .aparelho:hover {
+    color: var(--cor-texto);
+  }
+}
+
+/* O "ecrã": tem a largura da coluna e uma altura máxima; o formulário (encolhido com zoom)
+   desliza por dentro se for comprido. */
+.ecra {
+  width: 100%;
+  max-height: calc(100dvh - 190px);
+  margin-inline: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid var(--cor-contorno);
+  scrollbar-width: thin;
+}
+
+/* no telemóvel: moldura mais grossa e cantos redondos, como um telemóvel */
+.ecra[data-aparelho="telemovel"] {
+  max-width: 402px;
+  border: 6px solid rgb(var(--rgb-tinta) / 0.1);
+  border-radius: 26px;
+}
+
+.conteudoEcra {
+  max-width: none;
+}
+
+/* "ecrã" onde o formulário aparece, com o mesmo fundo da página pública
+   (o fundo vem do design do formulário, em CenaFormulario: cinzento, cor, escuro...) */
+.moldura {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 700px;
+  padding: 48px 40px;
+}
+
+.ecra[data-aparelho="telemovel"] .moldura {
+  min-height: 760px;
+  padding: 0;
+}
+
+/* no telemóvel, o formulário ocupa o ecrã todo (como na página pública num telemóvel) */
+.ecra[data-aparelho="telemovel"] .cartaoPrevia {
+  max-width: none;
+  min-height: 760px;
+  padding: 32px 22px 36px;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ================= ecrãs mais pequenos ================= */
+/* até 1100px: tudo numa coluna; a pré-visualização fica por baixo, fechada até se pedir */
+@media (max-width: 1100px) {
+  .editor {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .previa {
+    position: static;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--cor-contorno);
+    background: var(--cor-cartao);
+  }
+
+  .botaoPrevia {
+    display: inline-flex;
+    padding: 9px 16px;
+    font-size: 0.92rem;
+  }
+
+  .previa[data-aberta="false"] .corpoPrevia {
+    display: none;
+  }
+
+  .aparelhos {
+    align-self: center;
+    width: min(100%, 360px);
+  }
+
+  .ecra {
+    max-height: 80dvh;
+  }
+}
+
+@media (max-width: 600px) {
+  .painel {
+    padding: 4px 18px 22px;
+  }
+
+  .linhaBotao {
+    grid-template-columns: 1fr;
+  }
+
+  .corpoPergunta {
+    padding: 8px 14px 16px;
+  }
+
+  .botoesOrdem .botaoIcone {
+    width: 36px;
+  }
 }

@@ -22,7 +22,7 @@ export async function GET(request, { params }) {
     .maybeSingle();
   if (!lead) return new Response("Lead não encontrado.", { status: 404 });
 
-  const [{ data: historico }, { data: tarefas }, { data: propostas }] = await Promise.all([
+  const [{ data: historico }, { data: tarefas }, { data: propostas }, { data: documentos }] = await Promise.all([
     supabase.from("interacoes").select("tipo, nota, criado_em").eq("cliente_id", id).order("criado_em").limit(5000),
     supabase.from("tarefas").select("titulo, data_limite, concluida, criado_em").eq("cliente_id", id).order("criado_em").limit(5000),
     supabase
@@ -31,6 +31,8 @@ export async function GET(request, { params }) {
       .eq("cliente_id", id)
       .order("criado_em")
       .limit(500),
+    // só a lista (nome, categoria, data); os ficheiros abrem-se na ficha do lead
+    supabase.from("documentos").select("nome, categoria, tamanho, criado_em").eq("cliente_id", id).order("criado_em").limit(5000),
   ]);
 
   const dados = {
@@ -49,6 +51,7 @@ export async function GET(request, { params }) {
     historico: (historico ?? []).map(semIds),
     tarefas: (tarefas ?? []).map(semIds),
     propostas: (propostas ?? []).map(semIds),
+    documentos: documentos ?? [],
   };
 
   // nome do ficheiro: "dados-marta-silva.json" (só letras simples, números e traços)

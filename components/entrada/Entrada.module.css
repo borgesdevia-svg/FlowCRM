@@ -1,0 +1,250 @@
+/* Página Entrada (/painel/entrada) e aviso de lead novo no ecrã */
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cabecalho h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.resumo {
+  color: var(--cor-texto-suave);
+  font-size: 0.92rem;
+}
+
+.lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* cada lead: dados à esquerda, ações à direita (no telemóvel uns por baixo dos outros) */
+.lead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding: 16px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  background: var(--cor-cartao);
+}
+
+.dados {
+  flex: 1 1 340px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.linhaNome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.nome {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  overflow-wrap: anywhere;
+}
+
+.linhaNome small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nome:hover {
+    color: var(--cor-destaque);
+  }
+}
+
+.contactos {
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+  overflow-wrap: anywhere;
+}
+
+.espera {
+  color: var(--cor-estado-negociacao);
+  font-size: 0.82rem;
+}
+
+.respostas {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+.respostas div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+
+.respostas dt {
+  color: var(--cor-texto-fraco);
+}
+
+.respostas dd {
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
+}
+
+/* ações: escolher + Aceitar + Rejeitar */
+.acoes {
+  flex: 0 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.acoes :global(.campo) {
+  margin: 0;
+  min-width: 220px;
+}
+
+.acoes :global(.botao) {
+  padding: 9px 18px;
+  font-size: 0.88rem;
+}
+
+.acoes :global(.erro-campo) {
+  flex-basis: 100%;
+}
+
+.rejeitar,
+.confirmar {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: border-color 150ms, color 150ms;
+}
+
+.confirmar {
+  border-color: var(--cor-perigo-texto);
+  color: var(--cor-perigo-texto);
+}
+
+.pergunta {
+  color: var(--cor-texto-suave);
+  font-size: 0.88rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rejeitar:hover {
+    border-color: rgb(var(--rgb-tinta) / 0.25);
+    color: var(--cor-texto);
+  }
+
+  .confirmar:hover {
+    background: rgb(var(--rgb-tinta) / 0.04);
+  }
+}
+
+/* ---------- aviso de lead novo no ecrã (AvisoEntrada) ---------- */
+.avisos {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 40px));
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 14px 14px 16px;
+  border-radius: 8px;
+  border: 1px solid rgb(var(--rgb-destaque) / 0.35);
+  background: var(--cor-cartao);
+  box-shadow: 0 12px 40px -12px rgb(0 0 0 / 0.5);
+  animation: avisoEntra 260ms var(--ease-out, ease-out);
+}
+
+@keyframes avisoEntra {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso {
+    animation: none;
+  }
+}
+
+.textoAviso {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.textoAviso strong {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.textoAviso small {
+  color: var(--cor-texto-suave);
+  font-size: 0.84rem;
+}
+
+.textoAviso a {
+  margin-top: 4px;
+  color: var(--cor-destaque);
+  font-size: 0.88rem;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.fechar {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cor-texto-fraco);
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .textoAviso a:hover {
+    text-decoration: underline;
+  }
+
+  .fechar:hover {
+    color: var(--cor-texto);
+  }
+}

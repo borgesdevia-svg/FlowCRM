@@ -47,7 +47,9 @@ export default async function PaginaClientes({ searchParams }) {
     .select("id, nome, email, telefone, estado, valor_previsto, origem, criado_em, perfis(nome)")
     .order(ordemEscolhida.coluna, { ascending: ordemEscolhida.ascendente, nullsFirst: false })
     .order("id")
-    .range(inicio, inicio + POR_PAGINA - 1);
+    .range(inicio, inicio + POR_PAGINA - 1)
+    // os leads sem responsável estão na Entrada (só aparecem aqui depois de aceites)
+    .not("responsavel_id", "is", null);
   if (estadoValido) consulta = consulta.eq("estado", estado);
   if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);
 
@@ -195,6 +197,9 @@ export default async function PaginaClientes({ searchParams }) {
                   <th className={styles.colValor}>Valor</th>
                   <th className={styles.colEstado}>Estado</th>
                   <th className={styles.colData}>Criado</th>
+                  <th className={styles.colEmail}>
+                    <span className="so-leitores">Enviar e-mail</span>
+                  </th>
                   <th className={styles.colSeta}>
                     <span className="so-leitores">Abrir</span>
                   </th>
@@ -245,6 +250,14 @@ export default async function PaginaClientes({ searchParams }) {
                         </span>
                       </td>
                       <td className={styles.colData}>{formatarData(c.criado_em)}</td>
+                      <td className={styles.colEmail}>
+                        {/* abre a ficha no separador E-mails, pronto a escrever (fica por cima do link da linha) */}
+                        {c.email && (
+                          <Link href={`/painel/clientes/${c.id}?sec=emails`} className={styles.botaoEmail}>
+                            Email
+                          </Link>
+                        )}
+                      </td>
                       <td aria-hidden="true" className={styles.colSeta}>
                         <svg width="8" height="13" viewBox="0 0 8 13">
                           <path

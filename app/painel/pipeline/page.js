@@ -42,6 +42,7 @@ export default async function PaginaPipeline({ searchParams }) {
         .from("clientes")
         .select("id, nome, email, estado, valor_previsto, perfis(nome)")
         .eq("estado", e.chave)
+        .not("responsavel_id", "is", null) // os sem responsável estão na Entrada
         .order("criado_em", { ascending: false })
         .limit(CARREGAR);
       if (procura) consulta = consulta.like("pesquisa", `%${procura}%`);

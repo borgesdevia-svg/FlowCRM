@@ -101,7 +101,7 @@
   background: rgb(var(--rgb-destaque) / 0.07);
 }
 
-/* ---------- círculo: um clique conclui ---------- */
+/* ---------- círculo: um clique seleciona (a barra tem "Marcar como feita") ---------- */
 .circulo,
 .zonaCirculo {
   flex-shrink: 0;
@@ -137,15 +137,9 @@
   transition: stroke-dashoffset 0.3s var(--curva) 0.05s;
 }
 
-/* passar o rato: o círculo fica verde e mostra um visto clarinho (para se perceber o que faz) */
+/* passar o rato: o contorno fica verde (sem o visto: clicar só seleciona, não conclui) */
 .circulo:hover {
   border-color: var(--cor-destaque);
-}
-
-.circulo:hover svg {
-  stroke: var(--cor-destaque);
-  stroke-dashoffset: 0;
-  opacity: 0.6;
 }
 
 .circulo:active {
@@ -163,6 +157,23 @@
   stroke: var(--cor-sobre-destaque);
   stroke-dashoffset: 0;
   opacity: 1;
+}
+
+/* selecionada: anel de destaque com um ponto no meio (diferente do visto de "feita") */
+.circuloMarcado,
+.circuloMarcado:hover {
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 3px rgb(var(--rgb-destaque) / 0.22);
+  background: radial-gradient(circle, var(--cor-destaque) 0 4px, transparent 4.5px);
+}
+
+.circuloMarcado:not(.circuloFeito) svg,
+.circuloMarcado:not(.circuloFeito):hover svg {
+  opacity: 0;
+}
+
+.circuloFeito.circuloMarcado {
+  background: var(--cor-destaque);
 }
 
 /* ---------- texto ---------- */
@@ -231,62 +242,6 @@
   color: var(--cor-destaque);
 }
 
-/* ---------- aviso "Concluída · Desfazer", preso ao fundo do ecrã ---------- */
-.aviso {
-  position: fixed;
-  z-index: 50;
-  left: 50%;
-  bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  max-width: calc(100vw - 32px);
-  padding: 12px 14px 12px 18px;
-  border-radius: 7px;
-  border: 1px solid rgb(var(--rgb-tinta) / 0.1);
-  background: var(--cor-elevado);
-  box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.75);
-  font-size: 0.9rem;
-  transform: translateX(-50%);
-  animation: subir 0.3s var(--curva);
-}
-
-@keyframes subir {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 12px);
-  }
-}
-
-.textoAviso {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--cor-texto-suave);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.textoAviso strong {
-  color: var(--cor-texto);
-  font-weight: 500;
-}
-
-.desfazer {
-  flex-shrink: 0;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: none;
-  background: rgb(var(--rgb-destaque) / 0.14);
-  color: var(--cor-destaque);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.desfazer:hover {
-  background: rgb(var(--rgb-destaque) / 0.22);
-}
-
 /* ---------- telemóvel: o prazo passa para baixo dos detalhes ---------- */
 @media (max-width: 560px) {
   .linha {
@@ -308,8 +263,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .circulo,
-  .circulo svg,
-  .aviso {
+  .circulo svg {
     transition: none;
     animation: none;
   }

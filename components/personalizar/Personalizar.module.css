@@ -94,14 +94,3 @@
   opacity: 0.55;
   cursor: default;
 }
-
-.perguntas {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.perguntas:empty {
-  display: none;
-}

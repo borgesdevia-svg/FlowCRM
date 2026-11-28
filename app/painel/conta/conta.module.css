@@ -112,6 +112,15 @@
   font-weight: 600;
 }
 
+/* subtítulo dentro de um cartão (ex.: "Texto pré-escrito" nas Definições de e-mail) */
+.topoCartao h3 {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cor-contorno);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .topoCartao p {
   margin-top: 2px;
   color: var(--cor-texto-suave);
@@ -223,5 +232,16 @@
 
   .numero:first-child {
     border-top: 0;
+  }
+}
+
+/* link dentro do texto de um cartão (ex.: "página E-mails") */
+.topoCartao p a {
+  color: var(--cor-destaque);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .topoCartao p a:hover {
+    text-decoration: underline;
   }
 }

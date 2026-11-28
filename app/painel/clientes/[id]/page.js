@@ -10,8 +10,10 @@ import FormTarefa from "@/components/tarefas/FormTarefa";
 import ListaTarefas from "@/components/tarefas/ListaTarefas";
 import Icone from "@/components/Icone";
 import BotaoWhatsapp from "@/components/clientes/BotaoWhatsapp";
-import BotaoEmail from "@/components/clientes/BotaoEmail";
+import EmailsLead from "@/components/clientes/EmailsLead";
+import { Separadores, LinkSeparador, Painel } from "@/components/Separadores";
 import ListaPropostas from "@/components/propostas/ListaPropostas";
+import Documentos from "@/components/clientes/Documentos";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import { tempoRelativo } from "@/lib/datas";
@@ -57,7 +59,7 @@ async function horasLivresDaEquipa(supabase, empresaId) {
 
 export default async function PaginaCliente({ params, searchParams }) {
   const { id } = await params;
-  const { historico = "", proposta = "" } = await searchParams;
+  const { historico = "", proposta = "", sec = "" } = await searchParams;
   // quantos registos mostrar: número do URL, entre HISTORICO e MAX_HISTORICO
   const nHistorico = Math.min(MAX_HISTORICO, Math.max(HISTORICO, Number.parseInt(historico, 10) || HISTORICO));
   if (!eUuid(id)) notFound();
@@ -86,7 +88,7 @@ export default async function PaginaCliente({ params, searchParams }) {
       .select("id, cliente_id, responsavel_id, titulo, data_limite, concluida", { count: "exact" })
       .eq("cliente_id", id)
       .eq("concluida", concluida);
-  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes, canalRes, marcacoesRes] = await Promise.all([
+  const [membrosRes, { data: interacoes, count: totalHistorico }, porFazerRes, feitasRes, propostasRes, canalRes, marcacoesRes, documentosRes, espacoRes, emailsRes, contaRes, modelosRes, sincRes] = await Promise.all([
     eAdmin ? supabase.from("perfis").select("id, nome").order("nome") : Promise.resolve({ data: null }),
     supabase
       .from("interacoes")
@@ -117,7 +119,47 @@ export default async function PaginaCliente({ params, searchParams }) {
       .gte("fim", new Date().toISOString())
       .order("inicio")
       .limit(10),
+    // documentos do lead (migração 39), do mais recente para o mais antigo, com quem carregou
+    supabase
+      .from("documentos")
+      .select("id, nome, categoria, tamanho, tipo_mime, criado_em, autor_id, perfis(nome)")
+      .eq("cliente_id", id)
+      .order("criado_em", { ascending: false })
+      .limit(200),
+    // espaço usado por TODA a empresa ("X de 200 MB"): o comercial só vê os documentos dos seus
+    // leads pelo RLS, por isso soma-se com a chave secreta (só os tamanhos, nada mais)
+    criarClienteAdmin().from("documentos").select("tamanho").eq("empresa_id", perfil.empresa_id).limit(100000),
+    // e-mails trocados com o lead (enviados pelo CRM; recebidos na Fase 3), do mais recente para o mais antigo
+    supabase
+      .from("emails")
+      .select("id, direcao, de, assunto, corpo, anexos, message_id, enviado_em, perfis(nome)")
+      .eq("cliente_id", id)
+      .order("enviado_em", { ascending: false })
+      .limit(50),
+    // a conta de e-mail ligada da própria pessoa (sem a password; a tabela não é visível ao browser)
+    criarClienteAdmin()
+      .from("contas_email")
+      .select("email, nome_remetente, assinatura")
+      .eq("perfil_id", perfil.id)
+      .maybeSingle(),
+    // os modelos de e-mail da pessoa (página E-mails, migração 43), para "Usar um modelo"
+    supabase.from("email_modelos").select("id, nome, assunto, corpo").eq("perfil_id", perfil.id).order("nome").limit(100),
+    // quando a caixa de e-mail foi vista pela última vez (migração 42). Pedido à parte: se as colunas
+    // não existirem, vem um erro e a ficha mostra-se na mesma, só sem esta linha.
+    criarClienteAdmin()
+      .from("contas_email")
+      .select("sincronizada_em, erro_sincronizacao")
+      .eq("perfil_id", perfil.id)
+      .maybeSingle(),
   ]);
+  const modelosEmail = modelosRes.data ?? [];
+  const sincronizacao = sincRes.data
+    ? { em: sincRes.data.sincronizada_em, erro: sincRes.data.erro_sincronizacao }
+    : null;
+  const emails = emailsRes.data ?? [];
+  const contaEmail = contaRes.data ?? null;
+  const documentos = documentosRes.data ?? [];
+  const espacoUsado = (espacoRes.data ?? []).reduce((soma, d) => soma + d.tamanho, 0);
   const marcacoes = marcacoesRes.data ?? [];
   const diasLivres = await horasLivresDaEquipa(supabase, perfil.empresa_id);
   const canal = nomeCanal(canalRes.data?.canal);
@@ -137,35 +179,18 @@ export default async function PaginaCliente({ params, searchParams }) {
   const ultimoContacto = (interacoes ?? []).find((i) => i.tipo !== "sistema");
   const est = obterEstado(cliente.estado);
 
-  // cartão das reuniões: as marcadas (online ou pela equipa) e "Marcar reunião" nas horas livres.
-  // Fica no topo quando há reuniões; sem reuniões, fica discreto a seguir às tarefas.
-  const cartaoMarcacoes = (
-    <section className={`entrar ${styles.cartao}`} style={{ "--atraso": marcacoes.length ? "50ms" : "160ms" }}>
-      <header className={styles.topoCartao}>
-        <h2>
-          Reuniões {marcacoes.length > 0 && <span>{marcacoes.length}</span>}
-        </h2>
-      </header>
-      {marcacoes.length > 0 && (
-        <ul className={styles.marcacoes}>
-          {marcacoes.map((m) => (
-            <li key={m.id}>
-              <div>
-                <strong>{textoMarcacao(m.inicio)}</strong>
-                {m.nota && <p>{m.nota}</p>}
-              </div>
-              <BotaoCancelarMarcacao id={m.id} />
-            </li>
-          ))}
-        </ul>
-      )}
-      <details className={styles.marcarReuniao}>
-        <summary>Marcar reunião</summary>
-        <FormMarcarReuniao clienteId={cliente.id} dias={diasLivres} />
-      </details>
-    </section>
-  );
   const responsavel = cliente.perfis?.nome;
+
+  // separadores da ficha (o 1.º é o de entrada). O número ao lado diz quantos há.
+  const seccoes = [
+    { chave: "atividade", texto: "Atividade", numero: porFazer + marcacoes.length },
+    { chave: "emails", texto: "E-mails", numero: emails.length },
+    { chave: "documentos", texto: "Documentos e propostas", numero: documentos.length + propostas.length },
+    { chave: "dados", texto: "Dados" },
+  ];
+  // separador de entrada (depois quem escolhe é o browser, sem voltar ao servidor: components/Separadores.js).
+  // ?proposta=nova vem de criar uma proposta: abre logo o separador das propostas
+  const ativa = seccoes.some((s) => s.chave === sec) ? sec : proposta ? "documentos" : "atividade";
 
   return (
     <div className={styles.pagina}>
@@ -204,16 +229,12 @@ export default async function PaginaCliente({ params, searchParams }) {
 
             {/* contactos clicáveis: mailto abre o email, tel liga (no telemóvel) */}
             <div className={styles.contactos}>
-              {/* email: abre o Gmail a escrever para o lead (com o texto pré-escrito) e copia o email */}
+              {/* email: abre o separador E-mails, para escrever pelo CRM */}
               {cliente.email && (
-                <BotaoEmail
-                  email={cliente.email}
-                  nome={cliente.nome}
-                  empresa={empresa.nome}
-                  eu={perfil.nome}
-                  modelo={perfil.email_modelo}
-                  className={`${styles.contacto} ${styles.contactoBotao}`}
-                />
+                <LinkSeparador chave="emails" className={styles.contacto}>
+                  <Icone nome="email" tamanho={15} />
+                  {cliente.email}
+                </LinkSeparador>
               )}
               {cliente.telefone && (
                 <a href={linkTelefone(cliente.telefone)} className={styles.contacto}>
@@ -260,42 +281,121 @@ export default async function PaginaCliente({ params, searchParams }) {
         </div>
       </header>
 
-      {/* ---------- duas colunas: dados + tarefas | histórico ---------- */}
-      <div className={styles.colunas}>
-        <div className={styles.coluna}>
-          {/* com reuniões marcadas, o cartão fica no topo */}
-          {marcacoes.length > 0 && cartaoMarcacoes}
+      {/* ---------- separadores: só a secção escolhida aparece (antes era tudo numa página enorme) ---------- */}
+      <Separadores seccoes={seccoes} inicial={ativa} rotulo="Secções do lead">
+      <div className={styles.conteudoSeccao}>
+        {/* Atividade: tarefas e reuniões à esquerda, histórico à direita */}
+        <Painel chave="atividade">
+          <div className={styles.colunas}>
+            <div className={styles.coluna}>
+              <section className={`entrar ${styles.cartao}`}>
+                <header className={styles.topoCartao}>
+                  <h2>
+                    Tarefas <span>{porFazer} por fazer</span>
+                  </h2>
+                </header>
+                <FormTarefa clienteId={cliente.id} />
+                <ListaTarefas
+                  tarefas={listaTarefas}
+                  mensagemVazia="Sem tarefas para este lead."
+                  membros={membros}
+                  perfilId={perfil.id}
+                />
+                {tarefasEscondidas > 0 && (
+                  <p className={styles.notaTarefas}>
+                    {tarefasEscondidas === 1 ? "Há mais 1 tarefa" : `Há mais ${tarefasEscondidas} tarefas`} deste lead
+                    (as feitas mais antigas) que não aparecem aqui.
+                  </p>
+                )}
+              </section>
+              <section className={`entrar ${styles.cartao}`}>
+                <header className={styles.topoCartao}>
+                  <h2>
+                    Reuniões {marcacoes.length > 0 && <span>{marcacoes.length}</span>}
+                  </h2>
+                </header>
+                {marcacoes.length > 0 ? (
+                  <ul className={styles.marcacoes}>
+                    {marcacoes.map((m) => (
+                      <li key={m.id}>
+                        <div>
+                          <strong>{textoMarcacao(m.inicio)}</strong>
+                          {m.nota && <p>{m.nota}</p>}
+                        </div>
+                        <BotaoCancelarMarcacao id={m.id} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className={styles.notaTarefas}>Não há reuniões marcadas com este lead.</p>
+                )}
+                <details className={styles.marcarReuniao} open={marcacoes.length === 0}>
+                  <summary>Marcar reunião</summary>
+                  <FormMarcarReuniao clienteId={cliente.id} dias={diasLivres} />
+                </details>
+              </section>
+            </div>
+          <div className={`entrar ${styles.cartao}`}>
+            <Historico
+              clienteId={cliente.id}
+              interacoes={interacoes ?? []}
+              total={totalHistorico ?? 0}
+              linkMais={`/painel/clientes/${cliente.id}?historico=${nHistorico + HISTORICO}`}
+              perfilId={perfil.id}
+              eAdmin={eAdmin}
+            />
+          </div>
+          </div>
+        </Painel>
 
-          {/* respostas às perguntas extra do formulário público (se o cliente veio de lá) */}
-          {cliente.respostas?.length > 0 && (
-            <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "60ms" }}>
-              <header className={styles.topoCartao}>
-                <h2>Respostas do formulário</h2>
-              </header>
-              <dl className={styles.respostas}>
-                {cliente.respostas.map((r, i) => (
-                  <div key={i}>
-                    <dt>{r.pergunta}</dt>
-                    <dd>
-                      {/* sites e emails das perguntas "Site ou link" e "Email" abrem-se com um clique */}
-                      {/^https?:\/\/\S+$/.test(r.resposta) ? (
-                        <a href={r.resposta} target="_blank" rel="noopener noreferrer nofollow">
-                          {r.resposta}
-                        </a>
-                      ) : eEmail(r.resposta) ? (
-                        <a href={`mailto:${r.resposta}`}>{r.resposta}</a>
-                      ) : (
-                        r.resposta
-                      )}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          )}
+        {/* E-mails: escrever à esquerda, a conversa à direita */}
+        <Painel chave="emails">
+          <EmailsLead
+            clienteId={cliente.id}
+            para={cliente.email}
+            nome={cliente.nome}
+            empresa={empresa.nome}
+            eu={perfil.nome}
+            inicio={perfil.email_modelo}
+            conta={contaEmail}
+            documentos={documentos.map(({ id, nome, tamanho }) => ({ id, nome, tamanho }))}
+            modelos={modelosEmail}
+            emails={emails}
+            sincronizacao={sincronizacao}
+            alternativa={
+              !cliente.email ? (
+                <p className={styles.notaTarefas}>
+                  Este lead não tem e-mail. Acrescenta-o no separador <LinkSeparador chave="dados">Dados</LinkSeparador>.
+                </p>
+              ) : (
+                <div className={styles.semConta}>
+                  <p>
+                    Para enviar e-mails pelo CRM, liga primeiro a tua conta de e-mail (Gmail ou o e-mail da empresa). Os
+                    e-mails saem em teu nome e ficam guardados aqui.
+                  </p>
+                  <Link href="/painel/conta?sec=email" className="botao">
+                    Ligar a minha conta
+                  </Link>
+                </div>
+              )
+            }
+          />
+        </Painel>
 
-          {/* propostas com aceitação online (CRM Pro) */}
-          <section id="propostas" className={`entrar ${styles.cartao}`} style={{ "--atraso": "70ms" }}>
+        {/* Documentos: ficheiros do lead e propostas lado a lado */}
+        <Painel chave="documentos">
+          <div className={styles.colunas}>
+          <section id="documentos" className={`entrar ${styles.cartao}`}>
+            <Documentos
+              clienteId={cliente.id}
+              documentos={documentos}
+              pro={plano.pro}
+              perfilId={perfil.id}
+              eAdmin={eAdmin}
+              usado={espacoUsado}
+            />
+          </section>
+          <section id="propostas" className={`entrar ${styles.cartao}`}>
             <header className={`${styles.topoCartao} ${styles.topoComBotao}`}>
               <h2>
                 Propostas {propostas.length > 0 && <span>{propostas.length}</span>}
@@ -325,69 +425,72 @@ export default async function PaginaCliente({ params, searchParams }) {
               </p>
             )}
           </section>
+          </div>
+        </Painel>
 
-          <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "80ms" }}>
-            <header className={styles.topoCartao}>
-              <h2>Dados do lead</h2>
-            </header>
-            <FormCliente cliente={cliente} membros={membros} />
-          </section>
+        {/* Dados: o formulário do lead à esquerda; respostas, RGPD e apagar à direita */}
+        <Painel chave="dados">
+          <div className={styles.colunas}>
+            <section className={`entrar ${styles.cartao}`}>
+              <header className={styles.topoCartao}>
+                <h2>Dados do lead</h2>
+              </header>
+              <FormCliente cliente={cliente} membros={membros} />
+            </section>
+            <div className={styles.coluna}>
+                {/* respostas às perguntas extra do formulário público (se o lead veio de lá) */}
+                {cliente.respostas?.length > 0 && (
+                  <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "40ms" }}>
+                    <header className={styles.topoCartao}>
+                      <h2>Respostas do formulário</h2>
+                    </header>
+                    <dl className={styles.respostas}>
+                      {cliente.respostas.map((r, i) => (
+                        <div key={i}>
+                          <dt>{r.pergunta}</dt>
+                          <dd>
+                            {/* sites e emails das perguntas "Site ou link" e "Email" abrem-se com um clique */}
+                            {/^https?:\/\/\S+$/.test(r.resposta) ? (
+                              <a href={r.resposta} target="_blank" rel="noopener noreferrer nofollow">
+                                {r.resposta}
+                              </a>
+                            ) : eEmail(r.resposta) ? (
+                              <a href={`mailto:${r.resposta}`}>{r.resposta}</a>
+                            ) : (
+                              r.resposta
+                            )}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                )}
 
-          <section className={`entrar ${styles.cartao}`} style={{ "--atraso": "140ms" }}>
-            <header className={styles.topoCartao}>
-              <h2>
-                Tarefas <span>{porFazer} por fazer</span>
-              </h2>
-            </header>
-            <FormTarefa clienteId={cliente.id} />
-            <ListaTarefas
-              tarefas={listaTarefas}
-              mensagemVazia="Sem tarefas para este lead."
-              membros={membros}
-              perfilId={perfil.id}
-            />
-            {tarefasEscondidas > 0 && (
-              <p className={styles.notaTarefas}>
-                {tarefasEscondidas === 1 ? "Há mais 1 tarefa" : `Há mais ${tarefasEscondidas} tarefas`} deste lead
-                (as feitas mais antigas) que não aparecem aqui.
-              </p>
-            )}
-          </section>
+                {/* RGPD: o lead pode pedir uma cópia de tudo o que a empresa guarda sobre ele */}
+                <section className={`entrar ${styles.zonaDados}`} style={{ "--atraso": "80ms" }}>
+                  <div>
+                    <strong>Dados pessoais</strong>
+                    <p>Se este lead pedir os seus dados (RGPD), descarrega tudo o que o CRM guarda sobre ele.</p>
+                  </div>
+                  {/* <a> normal (não <Link>) porque descarrega um ficheiro */}
+                  <a href={`/painel/clientes/${cliente.id}/dados`} className="botao botao-secundario" download>
+                    <Icone nome="folha" tamanho={15} /> Descarregar
+                  </a>
+                </section>
 
-          {marcacoes.length === 0 && cartaoMarcacoes}
-
-          {/* RGPD: o lead pode pedir uma cópia de tudo o que a empresa guarda sobre ele */}
-          <section className={`entrar ${styles.zonaDados}`} style={{ "--atraso": "180ms" }}>
-            <div>
-              <strong>Dados pessoais</strong>
-              <p>Se este lead pedir os seus dados (RGPD), descarrega tudo o que o CRM guarda sobre ele.</p>
+                <section className={`entrar ${styles.zonaPerigo}`} style={{ "--atraso": "100ms" }}>
+                  <div>
+                    <strong>Apagar este lead</strong>
+                    <p>Apaga também as notas, as tarefas e os documentos. Não dá para desfazer.</p>
+                  </div>
+                  <BotaoApagarCliente id={cliente.id} nome={cliente.nome} />
+                </section>
+          
             </div>
-            {/* <a> normal (não <Link>) porque descarrega um ficheiro */}
-            <a href={`/painel/clientes/${cliente.id}/dados`} className="botao botao-secundario" download>
-              <Icone nome="folha" tamanho={15} /> Descarregar
-            </a>
-          </section>
-
-          <section className={`entrar ${styles.zonaPerigo}`} style={{ "--atraso": "200ms" }}>
-            <div>
-              <strong>Apagar este lead</strong>
-              <p>Apaga também as notas e as tarefas. Não dá para desfazer.</p>
-            </div>
-            <BotaoApagarCliente id={cliente.id} nome={cliente.nome} />
-          </section>
-        </div>
-
-        <div className={`entrar ${styles.cartao}`} style={{ "--atraso": "110ms" }}>
-          <Historico
-            clienteId={cliente.id}
-            interacoes={interacoes ?? []}
-            total={totalHistorico ?? 0}
-            linkMais={`/painel/clientes/${cliente.id}?historico=${nHistorico + HISTORICO}`}
-            perfilId={perfil.id}
-            eAdmin={eAdmin}
-          />
-        </div>
+          </div>
+        </Painel>
       </div>
+      </Separadores>
     </div>
   );
 }

@@ -16,6 +16,8 @@ import Tutorial from "@/components/painel/Tutorial";
 import BarraTopo from "@/components/painel/BarraTopo";
 import JanelaChave from "@/components/painel/JanelaChave";
 import VigiaLeads from "@/components/painel/VigiaLeads";
+import AvisoEntrada from "@/components/entrada/AvisoEntrada";
+import LigarAvisos from "@/components/painel/LigarAvisos";
 import BotaoInstalar from "@/components/painel/BotaoInstalar";
 import BotaoTema from "@/components/painel/BotaoTema";
 import { EtiquetaPro } from "@/components/painel/AvisoPro";
@@ -77,7 +79,7 @@ export default async function LayoutPainel({ children }) {
     { data: equipa },
     mostrarChave, // ainda não tem chave de recuperação guardada? (mostra a janela)
   ] = await Promise.all([
-    supabase.from("clientes").select("id", { count: "exact", head: true }),
+    supabase.from("clientes").select("id", { count: "exact", head: true }).not("responsavel_id", "is", null),
     supabase
       .from("tarefas")
       .select("id", { count: "exact", head: true })
@@ -117,6 +119,8 @@ export default async function LayoutPainel({ children }) {
   // "alerta: true" pinta-o de vermelho (tarefas em atraso).
   const contadores = {
     clientes: { contador: nClientes ?? null },
+    // leads à espera de ser aceites (só o admin vê a Entrada)
+    entrada: { contador: nSemResponsavel || null, alerta: true },
     tarefas: { contador: nAtrasadas || null, alerta: true },
     notificacoes: { contador: totalAvisos || null },
   };
@@ -269,6 +273,10 @@ export default async function LayoutPainel({ children }) {
       {mostrarChave && <JanelaChave email={perfil.email} />}
       {/* avisos de leads novos com o CRM aberto, nos browsers sem avisos com ele fechado (não desenha nada) */}
       {!bloqueada && <VigiaLeads />}
+      {/* avisos no ecrã: lead novo na Entrada (admin) e lead entregue a mim (todos) */}
+      {!bloqueada && <AvisoEntrada perfilId={perfil.id} eAdmin={eAdmin} />}
+      {/* avisos de leads novos ligados por predefinição (pede a permissão no 1.º toque) */}
+      {!bloqueada && <LigarAvisos />}
     </div>
   );
 }

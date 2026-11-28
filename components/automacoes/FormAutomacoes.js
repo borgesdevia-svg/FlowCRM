@@ -58,17 +58,17 @@ export default function FormAutomacoes({ inicial, equipa }) {
         <li className={styles.item}>
           <div className={styles.topo}>
             <div>
-              <h2 className={styles.titulo}>Distribuir os leads do formulário</h2>
+              <h2 className={styles.titulo}>Distribuir os leads à vez</h2>
               <p className={styles.texto}>
-                Quem preenche o formulário público é entregue logo a uma pessoa da equipa, à vez, em vez de ficar à
-                espera de um administrador.
+                Ao aceitares um lead na Entrada, a opção &quot;À vez pela equipa&quot; vem escolhida: o lead vai para a
+                próxima pessoa da lista, à vez, sem teres de pensar em quem fica com ele.
               </p>
             </div>
             <Interruptor
               nome="distribuir_ligada"
               ligado={distribuir}
               mudar={setDistribuir}
-              rotulo="Distribuir os leads do formulário"
+              rotulo="Distribuir os leads à vez"
             />
           </div>
 

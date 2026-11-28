@@ -4,13 +4,10 @@
 //
 // Cada linha: círculo · título (clicar abre o painel de editar) · cliente e responsável
 // por baixo · prazo à direita, com a cor da urgência.
-//  - Clicar no CÍRCULO conclui logo a tarefa (ou volta a pô-la por fazer, se já estava feita).
-//    Aparece um aviso em baixo com "Desfazer" durante alguns segundos.
-//    A tarefa NÃO sai logo da lista: fica no mesmo sítio, riscada, até se sair da página
-//    (senão parecia que tinha sido apagada, porque passa para o separador "Feitas").
-//    Um duplo clique conta como um clique só.
-//  - O botão "Selecionar" troca os círculos por caixas, para escolher várias tarefas;
-//    aparece então a barra de ações (Selecao.js): Marcar como feita, Adiar, Apagar...
+//  - Clicar no CÍRCULO só SELECIONA a tarefa (decisão do aluno, 2026-11-28: não pode ficar feita
+//    sem querer). Com alguma selecionada aparece a barra de ações (Selecao.js) com o botão
+//    "Marcar como feita", e também Adiar, Pôr por fazer e Apagar.
+//  - As tarefas feitas mostram o círculo cheio, com o visto.
 //
 // Props:
 //  - membros: a equipa (só o admin; permite mudar o responsável ao editar)
@@ -19,16 +16,11 @@
 //  - agrupar: false = sem títulos de dia (o Calendário já mostra o dia escolhido)
 // (o nome do ficheiro ficou "TabelaTarefas" de quando isto era uma tabela)
 
-import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { prazoRelativo } from "@/lib/datas";
-import { concluirTarefas, reabrirTarefas } from "@/lib/acoes/tarefas";
-import { BarraSelecao, Caixa, useSelecao } from "./Selecao";
+import { BarraSelecao, useSelecao } from "./Selecao";
 import EditarTarefa from "./EditarTarefa";
 import styles from "./TabelaTarefas.module.css";
-
-const SEGUNDOS_DESFAZER = 6;
-const MS_DUPLO_CLIQUE = 500; // dois cliques mais rápidos do que isto contam como um
 
 // dia (AAAA-MM-DD, em Portugal) em que uma tarefa feita foi concluída
 function diaEmPortugal(dataHora) {
@@ -80,111 +72,29 @@ function prazo(t, hoje) {
   return { texto: relativo[0].toUpperCase() + relativo.slice(1), classe: styles.prazoNormal };
 }
 
-// lista do servidor + as tarefas mudadas neste ecrã que o servidor já tirou desta vista
-// (ex.: concluídas no separador "Hoje"), de volta ao sítio onde estavam
-function juntarGuardadas(tarefas, guardadas) {
-  const lista = [...tarefas];
-  const presentes = new Set(tarefas.map((t) => t.id));
-  Object.values(guardadas)
-    .filter((g) => !presentes.has(g.tarefa.id))
-    .sort((a, b) => a.indice - b.indice)
-    .forEach((g) => lista.splice(Math.min(g.indice, lista.length), 0, g.tarefa));
-  return lista;
-}
-
-export default function TabelaTarefas({ tarefas: doServidor, hoje, mensagemVazia, membros = null, perfilId = "", mostrarResponsavel = false, agrupar = true }) {
-  // tarefas mudadas neste ecrã: { id: { tarefa, indice } } (a cópia e o lugar onde estava)
-  const [guardadas, setGuardadas] = useState({});
-  // tarefas acabadas de mudar neste ecrã: mostram logo o círculo cheio/vazio,
-  // antes de o servidor responder ({ id: true = feita / false = por fazer })
-  const [mudadas, setMudadas] = useState({});
-  const tarefas = juntarGuardadas(doServidor, guardadas).map((t) =>
-    t.id in mudadas ? { ...t, concluida: mudadas[t.id] } : t,
-  );
+export default function TabelaTarefas({ tarefas, hoje, mensagemVazia, membros = null, perfilId = "", mostrarResponsavel = false, agrupar = true }) {
   const selecao = useSelecao(tarefas);
-  const [aSelecionar, setASelecionar] = useState(false);
-  const [aviso, setAviso] = useState(null); // { ids, titulo, feita }
-  const [, iniciar] = useTransition();
-  const temporizador = useRef(null);
-  const ultimoClique = useRef({}); // id -> hora do último clique no círculo
-  // os pedidos ao servidor vão um de cada vez, pela ordem dos cliques
-  // (senão "concluir" e "pôr por fazer" seguidos podiam chegar trocados)
-  const fila = useRef(Promise.resolve());
-
-  function enviar(acao, ids) {
-    const pedido = fila.current.then(() => acao(ids)).catch(() => {});
-    fila.current = pedido;
-    iniciar(async () => {
-      await pedido;
-    });
-  }
-
-  // o aviso "Desfazer" desaparece sozinho
-  useEffect(() => {
-    if (!aviso) return;
-    clearTimeout(temporizador.current);
-    temporizador.current = setTimeout(() => setAviso(null), SEGUNDOS_DESFAZER * 1000);
-    return () => clearTimeout(temporizador.current);
-  }, [aviso]);
 
   if (tarefas.length === 0) return <p className={styles.vazio}>{mensagemVazia}</p>;
 
-  const feita = (t) => mudadas[t.id] ?? t.concluida;
-
-  // "agora" = hora do clique (evento.timeStamp, em milissegundos)
-  function alternar(t, agora) {
-    // duplo clique: o segundo clique é ignorado
-    if (agora - (ultimoClique.current[t.id] ?? 0) < MS_DUPLO_CLIQUE) return;
-    ultimoClique.current[t.id] = agora;
-
-    const passaAFeita = !feita(t);
-    // guarda a tarefa e o lugar dela, para continuar visível depois de o servidor a tirar
-    setGuardadas((g) => (g[t.id] ? g : { ...g, [t.id]: { tarefa: t, indice: tarefas.findIndex((x) => x.id === t.id) } }));
-    setMudadas((m) => ({ ...m, [t.id]: passaAFeita }));
-    setAviso({ ids: [t.id], titulo: t.titulo, feita: passaAFeita });
-    enviar(passaAFeita ? concluirTarefas : reabrirTarefas, [t.id]);
-  }
-
-  function desfazer() {
-    if (!aviso) return;
-    const { ids, feita: estavaAFicarFeita } = aviso;
-    setMudadas((m) => Object.fromEntries([...Object.entries(m), ...ids.map((id) => [id, !estavaAFicarFeita])]));
-    setAviso(null);
-    enviar(estavaAFicarFeita ? reabrirTarefas : concluirTarefas, ids);
-  }
-
-  function sairDaSelecao() {
-    selecao.limpar();
-    setASelecionar(false);
-  }
-
+  const temSelecionadas = selecao.escolhidas.length > 0;
   const grupos = agrupar ? agruparPorDia(tarefas, hoje) : [{ dia: null, titulo: null, tarefas }];
 
   return (
     <>
-      {/* topo da lista: Selecionar (ou, a selecionar, Selecionar todas / Concluído) */}
-      <div className={styles.topo}>
-        {aSelecionar ? (
-          <>
-            <button
-              type="button"
-              className={styles.botaoTexto}
-              onClick={() => (selecao.todas ? selecao.limpar() : selecao.selecionarTodas())}
-            >
-              {selecao.todas ? "Tirar seleção" : "Selecionar todas"}
-            </button>
-            <button type="button" className={styles.botaoTextoForte} onClick={sairDaSelecao}>
-              Concluído
-            </button>
-          </>
-        ) : (
-          <button type="button" className={styles.botaoTexto} onClick={() => setASelecionar(true)}>
-            Selecionar
+      {/* com tarefas selecionadas: Selecionar todas + a barra de ações (Marcar como feita, …) */}
+      {temSelecionadas && (
+        <div className={styles.topo}>
+          <button
+            type="button"
+            className={styles.botaoTexto}
+            onClick={() => (selecao.todas ? selecao.limpar() : selecao.selecionarTodas())}
+          >
+            {selecao.todas ? "Tirar seleção" : "Selecionar todas"}
           </button>
-        )}
-      </div>
-
-      {aSelecionar && <BarraSelecao selecao={selecao} className={styles.barra} />}
+        </div>
+      )}
+      <BarraSelecao selecao={selecao} className={styles.barra} />
 
       {grupos.map((g) => (
         <section key={`${g.dia}-${g.tarefas[0].id}`} className={styles.grupo} aria-label={g.titulo ?? undefined}>
@@ -199,36 +109,29 @@ export default function TabelaTarefas({ tarefas: doServidor, hoje, mensagemVazia
 
           <ul className={styles.lista}>
             {g.tarefas.map((t) => {
-              const estaFeita = feita(t);
-              const p = estaFeita ? { texto: "Feita", classe: styles.prazoFeito } : prazo({ ...t, concluida: false }, hoje);
+              const estaFeita = t.concluida;
+              const p = prazo(t, hoje);
               const marcada = selecao.marcada(t.id);
               return (
                 <li
                   key={t.id}
                   className={`${styles.linha} ${marcada ? styles.linhaMarcada : ""} ${estaFeita ? styles.linhaFeita : ""}`}
                 >
-                  {aSelecionar ? (
-                    <span className={styles.zonaCirculo}>
-                      <Caixa
-                        id={`tarefa-${t.id}`}
-                        marcada={marcada}
-                        onChange={() => selecao.alternar(t.id)}
-                        rotulo={`Selecionar: ${t.titulo}`}
-                      />
-                    </span>
-                  ) : (
-                    <button
-                      type="button"
-                      className={estaFeita ? `${styles.circulo} ${styles.circuloFeito}` : styles.circulo}
-                      onClick={(e) => alternar(t, e.timeStamp)}
-                      aria-label={estaFeita ? `Pôr por fazer: ${t.titulo}` : `Concluir: ${t.titulo}`}
-                      title={estaFeita ? "Pôr por fazer" : "Concluir"}
-                    >
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <polyline points="6 12.5 10 16.5 18 8.5" />
-                      </svg>
-                    </button>
-                  )}
+                  {/* o círculo só seleciona; "Marcar como feita" está na barra que aparece */}
+                  <button
+                    type="button"
+                    className={[styles.circulo, estaFeita && styles.circuloFeito, marcada && styles.circuloMarcado]
+                      .filter(Boolean)
+                      .join(" ")}
+                    onClick={() => selecao.alternar(t.id)}
+                    aria-pressed={marcada}
+                    aria-label={`${marcada ? "Tirar da seleção" : "Selecionar"}: ${t.titulo}${estaFeita ? " (feita)" : ""}`}
+                    title={marcada ? "Tirar da seleção" : "Selecionar"}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <polyline points="6 12.5 10 16.5 18 8.5" />
+                    </svg>
+                  </button>
 
                   <div className={styles.texto}>
                     <EditarTarefa
@@ -258,17 +161,6 @@ export default function TabelaTarefas({ tarefas: doServidor, hoje, mensagemVazia
         </section>
       ))}
 
-      {/* aviso com Desfazer, preso ao fundo do ecrã */}
-      {aviso && (
-        <div className={styles.aviso} role="status">
-          <span className={styles.textoAviso}>
-            {aviso.feita ? "Concluída" : "Por fazer"}: <strong>{aviso.titulo}</strong>
-          </span>
-          <button type="button" className={styles.desfazer} onClick={desfazer}>
-            Desfazer
-          </button>
-        </div>
-      )}
     </>
   );
 }

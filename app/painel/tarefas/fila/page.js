@@ -5,7 +5,6 @@ import { obterEstado } from "@/lib/estados";
 import { alternarTarefa, adiarTarefa } from "@/lib/acoes/tarefas";
 import FormNota from "@/components/clientes/FormNota";
 import BotaoWhatsapp from "@/components/clientes/BotaoWhatsapp";
-import BotaoEmail from "@/components/clientes/BotaoEmail";
 import Icone from "@/components/Icone";
 import { formatarTelefone, linkTelefone } from "@/lib/texto";
 import VistasTarefas from "@/components/tarefas/VistasTarefas";
@@ -152,14 +151,9 @@ export default async function PaginaFila({ searchParams }) {
                 />
               )}
               {tarefa.clientes?.email && (
-                <BotaoEmail
-                  email={tarefa.clientes.email}
-                  nome={tarefa.clientes.nome}
-                  empresa={empresa.nome}
-                  eu={perfil.nome}
-                  modelo={perfil.email_modelo}
-                  className={`${styles.contacto} ${styles.contactoBotao}`}
-                />
+                <Link href={`/painel/clientes/${tarefa.cliente_id}?sec=emails`} className={styles.contacto}>
+                  <Icone nome="email" tamanho={15} /> Enviar e-mail
+                </Link>
               )}
               {!tarefa.clientes?.telefone && !tarefa.clientes?.email && (
                 <span className={styles.fraco}>Sem contactos registados</span>

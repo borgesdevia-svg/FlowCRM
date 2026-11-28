@@ -1,0 +1,167 @@
+/* Cartão "Documentos" da ficha do lead (components/clientes/Documentos.js) */
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topo h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.topo h2 span {
+  color: var(--cor-texto-fraco);
+  font-size: 0.88rem;
+  font-weight: 400;
+}
+
+.espaco {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+}
+
+/* categoria | ficheiro | botão, lado a lado; no telemóvel uns por baixo dos outros */
+.formulario {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) 1fr auto;
+  align-items: end;
+  gap: 10px;
+}
+
+.formulario :global(.botao) {
+  padding: 9px 16px;
+  font-size: 0.88rem;
+}
+
+.ficheiro {
+  font: inherit;
+  font-size: 0.86rem;
+  min-width: 0;
+}
+
+.ficheiro::file-selector-button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 560px) {
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario :global(.botao) {
+    justify-self: start;
+  }
+}
+
+.vazio {
+  color: var(--cor-texto-fraco);
+  font-size: 0.86rem;
+}
+
+.lista {
+  list-style: none;
+}
+
+.lista li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cor-contorno);
+  color: var(--cor-texto-suave);
+}
+
+.lista li:last-child {
+  border-bottom: none;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.info a {
+  color: var(--cor-texto);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.info small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .info a:hover {
+    color: var(--cor-destaque);
+  }
+}
+
+/* apagar em dois toques: lixo -> "Sim, apagar" / "Não" */
+.apagar,
+.confirmar,
+.nao {
+  border: 1px solid var(--cor-contorno);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 150ms, color 150ms;
+}
+
+/* o lixo é só o ícone, sem caixa à volta */
+.apagar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-color: transparent;
+}
+
+.confirmar,
+.nao {
+  padding: 6px 10px;
+}
+
+.confirmar {
+  border-color: var(--cor-perigo-texto);
+  color: var(--cor-perigo-texto);
+}
+
+.confirmacao {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .apagar:hover,
+  .nao:hover {
+    border-color: rgb(var(--rgb-tinta) / 0.25);
+    color: var(--cor-texto);
+  }
+
+  .confirmar:hover {
+    background: rgb(var(--rgb-tinta) / 0.04);
+  }
+}

@@ -1,0 +1,182 @@
+/* Janela de escrever e-mail na ficha do lead (components/clientes/JanelaEmail.js) */
+
+.janela {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.janela textarea {
+  min-height: 200px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* botão Enviar: todo verde, com contorno verde mais escuro e o avião de papel */
+.enviar {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1.5px solid color-mix(in srgb, var(--cor-destaque) 70%, black);
+  border-radius: 8px;
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), filter 150ms;
+}
+
+.enviar svg {
+  transition: transform 200ms var(--ease-out);
+}
+
+.enviar:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.enviar:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .enviar:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+
+  /* o avião "levanta voo" um pouco ao passar o rato */
+  .enviar:hover:not(:disabled) svg {
+    transform: translate(2px, -2px);
+  }
+}
+
+/* De / Para: texto simples, sem caixas */
+.cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.88rem;
+}
+
+.cabecalho div {
+  display: flex;
+  gap: 10px;
+}
+
+.cabecalho dt {
+  width: 40px;
+  flex-shrink: 0;
+  color: var(--cor-texto-fraco);
+}
+
+.cabecalho dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--cor-texto);
+}
+
+.anexos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.anexos legend {
+  margin-bottom: 6px;
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+}
+
+.anexos label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.anexos label span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.anexos small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.enviado {
+  color: var(--cor-destaque);
+  font-size: 0.88rem;
+}
+
+/* "A responder ao e-mail do lead" + voltar a e-mail novo */
+.resposta {
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+}
+
+.linkBotao {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--cor-destaque);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* confirmação antes de trocar o texto escrito por um modelo */
+.confirmar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--cor-contorno);
+  font-size: 0.88rem;
+  color: var(--cor-texto-suave);
+}
+
+.confirmar div {
+  display: flex;
+  gap: 6px;
+}
+
+.sim,
+.nao {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sim {
+  border-color: var(--cor-destaque);
+  color: var(--cor-destaque);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .linkBotao:hover {
+    text-decoration: underline;
+  }
+
+  .nao:hover {
+    border-color: rgb(var(--rgb-tinta) / 0.25);
+    color: var(--cor-texto);
+  }
+
+  .sim:hover {
+    background: rgb(var(--rgb-destaque) / 0.08);
+  }
+}

@@ -1,0 +1,135 @@
+/* Lista de modelos de e-mail (components/emails/ModelosEmail.js) */
+.modelos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lista {
+  list-style: none;
+}
+
+.lista > li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cor-contorno);
+}
+
+.lista > li:first-child {
+  padding-top: 0;
+}
+
+.lista > li:last-child {
+  border-bottom: none;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.info strong {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.info small {
+  color: var(--cor-texto-fraco);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+/* as primeiras linhas do texto, em cinzento */
+.previa {
+  color: var(--cor-texto-suave);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.confirmacao {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.acao,
+.perigo {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-contorno);
+  background: transparent;
+  color: var(--cor-texto-suave);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 150ms, color 150ms;
+}
+
+.perigo {
+  border-color: var(--cor-perigo-texto);
+  color: var(--cor-perigo-texto);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .acao:hover:not(:disabled) {
+    border-color: rgb(var(--rgb-tinta) / 0.25);
+    color: var(--cor-texto);
+  }
+
+  .perigo:hover:not(:disabled) {
+    background: rgb(var(--rgb-tinta) / 0.04);
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.botoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ajuda {
+  color: var(--cor-texto-fraco);
+  font-size: 0.84rem;
+}
+
+.novo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cor-contorno);
+}
+
+.novo h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
